@@ -4,7 +4,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateIdTags = void 0;
 const graphql_1 = require("graphql");
 const react_1 = require("react");
-const utils_1 = require("../utils");
 async function apiQuery(query, options) {
     if (!process.env.DATOCMS_API_TOKEN)
         throw new Error('DATOCMS_API_TOKEN is not set');
@@ -62,7 +61,7 @@ const dedupedFetch = (0, react_1.cache)(async (options) => {
 });
 const generateIdTags = (data, tags, queryId) => {
     const allTags = [];
-    (0, utils_1.iterateObject)(data, (key, value) => {
+    iterateObject(data, (key, value) => {
         key === 'id' && allTags.push(value);
         return true;
     });
@@ -72,4 +71,20 @@ const generateIdTags = (data, tags, queryId) => {
     return idTags;
 };
 exports.generateIdTags = generateIdTags;
+function iterateObject(obj, fn) {
+    let i = 0, keys = [];
+    if (Array.isArray(obj)) {
+        for (; i < obj.length; ++i) {
+            if (fn(obj[i], i, obj) === false)
+                break;
+        }
+    }
+    else if (typeof obj === "object" && obj !== null) {
+        keys = Object.keys(obj);
+        for (; i < keys.length; ++i) {
+            if (fn(obj[keys[i]], keys[i], obj) === false)
+                break;
+        }
+    }
+}
 //# sourceMappingURL=api-query.js.map
