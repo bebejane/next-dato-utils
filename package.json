@@ -1,11 +1,11 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"description": "",
 	"main": "dist/index.js",
 	"scripts": {
 		"build": "npx tsc && npm i -g",
-		"pub": "npm version patch --force && npm run build && git add . && git commit -m \"updates\" && git push",
+		"pub": "npm version patch --force && npm run build && git add . && git commit -m \"updates\" && git push && git push",
 		"dev:cli": "tsx src/cli.ts",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
