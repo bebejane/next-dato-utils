@@ -1,7 +1,7 @@
 {
   "files.exclude": {
-    "node_modules": true,
-    ".vscode": true,
-    "dist": true
+    "node_modules": false,
+    ".vscode": false,
+    "dist": false
   }
 }
