@@ -8,7 +8,7 @@ import type { UrlObject } from 'url';
 import { Components } from "react-markdown";
 
 export type MarkdownProps = {
-  children?: React.ReactNode,
+  content?: string
   allowedElements?: string[]
   truncate?: number
   className?: string
@@ -29,17 +29,15 @@ const truncateSentances = (markdown: string, limit: number): string => {
   return sentances.length >= limit ? sentances.slice(0, limit).join(' ') + '...' : markdown
 }
 
-const Markdown = ({ children, truncate, className, components, sentances = 1, allowedElements, scroll = true, disableBreaks = false }: MarkdownProps) => {
-  if (!children)
-    return null
+const Markdown = ({ content, truncate, className, components, sentances = 1, allowedElements, scroll = true, disableBreaks = false }: MarkdownProps) => {
 
-  const content: string = (!truncate ? children ? truncateSentances(children as string, sentances) : children : markdownTruncate(children as string, { limit: truncate, ellipsis: true })) as string
+  const truncatedContent: string = (!truncate ? content ? truncateSentances(content as string, sentances) : content : markdownTruncate(content, { limit: truncate, ellipsis: true })) as string
 
   return (
     <ReactMarkdown
       remarkPlugins={disableBreaks ? [gfm] : [gfm, remarkBreaks]}
       className={className}
-      children={content}
+      children={truncatedContent}
       allowedElements={allowedElements}
       //@ts-ignore
       components={components ?? {
