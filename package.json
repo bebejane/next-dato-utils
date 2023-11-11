@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"description": "",
 	"main": "dist/index.js",
 	"scripts": {
@@ -16,22 +16,22 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"@datocms/cma-client-browser": "^3.0.4",
-		"@datocms/cma-client-node": "^3.0.4",
-		"@types/react": "^18.2.37",
-		"@types/react-dom": "^18.2.15",
 		"commander": "^11.1.0",
-		"datocms-structured-text-utils": "^2.0.4",
-		"dotenv": "^16.3.1",
-		"figlet": "^1.7.0",
-		"graphql": "^16.8.1",
-		"next": "^14.0.2",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
-		"sass": "^1.69.5"
+		"dotenv": "^16.3.1"
+	},
+	"peerDependencies": {
+		"@datocms/cma-client-browser": ">=3.0.0",
+		"@datocms/cma-client-node": ">=3.0.0",
+		"datocms-structured-text-utils": ">=2.0.0",
+		"react": ">=18.2.0",
+		"react-dom": ">=18.2.0",
+		"@types/react": ">=18.2.3",
+		"@types/react-dom": ">=18.2.1",
+		"next": ">=14.0.0",
+		"graphql": ">=16.8.0",
+		"sass": ">=1.69.0"
 	},
 	"devDependencies": {
-		"@types/figlet": "^1.5.8",
 		"@types/node": "^20.9.0",
 		"tsx": "^4.1.1",
 		"typescript": "^5.2.2"
