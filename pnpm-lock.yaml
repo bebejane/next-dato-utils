@@ -6,49 +6,43 @@ settings:
 
 dependencies:
   '@datocms/cma-client-browser':
-    specifier: ^3.0.4
+    specifier: '>=3.0.0'
     version: 3.0.4
   '@datocms/cma-client-node':
-    specifier: ^3.0.4
+    specifier: '>=3.0.0'
     version: 3.0.4
   '@types/react':
-    specifier: ^18.2.37
+    specifier: '>=18.2.3'
     version: 18.2.37
   '@types/react-dom':
-    specifier: ^18.2.15
+    specifier: '>=18.2.1'
     version: 18.2.15
   commander:
     specifier: ^11.1.0
     version: 11.1.0
   datocms-structured-text-utils:
-    specifier: ^2.0.4
+    specifier: '>=2.0.0'
     version: 2.0.4
   dotenv:
     specifier: ^16.3.1
     version: 16.3.1
-  figlet:
-    specifier: ^1.7.0
-    version: 1.7.0
   graphql:
-    specifier: ^16.8.1
+    specifier: '>=16.8.0'
     version: 16.8.1
   next:
-    specifier: ^14.0.2
+    specifier: '>=14.0.0'
     version: 14.0.2(react-dom@18.2.0)(react@18.2.0)(sass@1.69.5)
   react:
-    specifier: ^18.2.0
+    specifier: '>=18.2.0'
     version: 18.2.0
   react-dom:
-    specifier: ^18.2.0
+    specifier: '>=18.2.0'
     version: 18.2.0(react@18.2.0)
   sass:
-    specifier: ^1.69.5
+    specifier: '>=1.69.0'
     version: 1.69.5
 
 devDependencies:
-  '@types/figlet':
-    specifier: ^1.5.8
-    version: 1.5.8
   '@types/node':
     specifier: ^20.9.0
     version: 20.9.0
@@ -400,10 +394,6 @@ packages:
       '@types/responselike': 1.0.3
     dev: false
 
-  /@types/figlet@1.5.8:
-    resolution: {integrity: sha512-G22AUvy4Tl95XLE7jmUM8s8mKcoz+Hr+Xm9W90gJsppJq9f9tHvOGkrpn4gRX0q/cLtBdNkWtWCKDg2UDZoZvQ==}
-    dev: true
-
   /@types/http-cache-semantics@4.0.4:
     resolution: {integrity: sha512-1m0bIFVc7eJWyve9S0RnuRgcQqF/Xd5QsUZAZeQFr1Q3/p9JWoQQEqmVy+DPTNpGXwhgIetAoYF8JSc33q29QA==}
     dev: false
@@ -615,12 +605,6 @@ packages:
       '@esbuild/win32-ia32': 0.18.20
       '@esbuild/win32-x64': 0.18.20
     dev: true
-
-  /figlet@1.7.0:
-    resolution: {integrity: sha512-gO8l3wvqo0V7wEFLXPbkX83b7MVjRrk1oRLfYlZXol8nEpb/ON9pcKLI4qpBv5YtOTfrINtqb7b40iYY2FTWFg==}
-    engines: {node: '>= 0.4.0'}
-    hasBin: true
-    dev: false
 
   /fill-range@7.0.1:
     resolution: {integrity: sha512-qOo9F+dMUmC2Lcb4BbVvnKJxTPjCm+RRpe4gDuGrzkL7mEVl/djYSu2OdQ2Pa302N4oqkSg9ir6jaLWJ2USVpQ==}
