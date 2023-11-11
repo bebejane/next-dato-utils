@@ -7,7 +7,7 @@ export type MarkdownProps = {
     allowedElements?: string[];
     truncate?: number;
     className?: string;
-    sentances: number;
+    sentances?: number;
     components?: Partial<Omit<any, keyof Components> & Components>;
     scroll?: boolean;
     disableBreaks?: boolean;

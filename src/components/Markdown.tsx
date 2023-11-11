@@ -12,7 +12,7 @@ export type MarkdownProps = {
   allowedElements?: string[]
   truncate?: number
   className?: string
-  sentances: number
+  sentances?: number
   components?: Partial<Omit<any, keyof Components> & Components>
   scroll?: boolean,
   disableBreaks?: boolean
@@ -29,7 +29,7 @@ const truncateSentances = (markdown: string, limit: number): string => {
   return sentances.length >= limit ? sentances.slice(0, limit).join(' ') + '...' : markdown
 }
 
-const Markdown = ({ children, truncate, className, components, sentances, allowedElements, scroll = true, disableBreaks = false }: MarkdownProps) => {
+const Markdown = ({ children, truncate, className, components, sentances = 1, allowedElements, scroll = true, disableBreaks = false }: MarkdownProps) => {
   if (!children)
     return null
 

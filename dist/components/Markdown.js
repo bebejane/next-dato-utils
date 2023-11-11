@@ -15,7 +15,7 @@ const truncateSentances = (markdown, limit) => {
     const sentances = markdown.split('.');
     return sentances.length >= limit ? sentances.slice(0, limit).join(' ') + '...' : markdown;
 };
-const Markdown = ({ children, truncate, className, components, sentances, allowedElements, scroll = true, disableBreaks = false }) => {
+const Markdown = ({ children, truncate, className, components, sentances = 1, allowedElements, scroll = true, disableBreaks = false }) => {
     if (!children)
         return null;
     const content = (!truncate ? children ? truncateSentances(children, sentances) : children : (0, markdown_truncate_1.default)(children, { limit: truncate, ellipsis: true }));
