@@ -10,7 +10,7 @@ export default function DraftMode({ enabled, draftUrl, tag, path }) {
     const disable = async () => {
         console.log('disable draft mode');
         setLoading(true);
-        await disableDraftMode(pathname);
+        disableDraftMode(pathname);
         setLoading(false);
     };
     useEffect(() => {
