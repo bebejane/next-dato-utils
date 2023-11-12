@@ -12,12 +12,6 @@ const react_1 = require("react");
 function DraftMode({ enabled, draftUrl, tag, path }) {
     const pathname = (0, navigation_1.usePathname)();
     const [loading, setLoading] = (0, react_1.useState)(false);
-    const disable = async () => {
-        console.log('disable draft mode');
-        setLoading(true);
-        await (0, actions_1.disableDraftMode)(pathname);
-        setLoading(false);
-    };
     (0, react_1.useEffect)(() => {
         if (!draftUrl || !enabled)
             return;
@@ -39,10 +33,14 @@ function DraftMode({ enabled, draftUrl, tag, path }) {
         return () => {
             eventSource.close();
         };
-    }, [draftUrl, tag, path]);
+    }, [draftUrl, tag, path, enabled]);
     if (!enabled)
         return null;
-    return ((0, jsx_runtime_1.jsxs)("div", { className: DraftMode_module_scss_1.default.draftMode, children: [(0, jsx_runtime_1.jsxs)("div", { className: DraftMode_module_scss_1.default.label, children: [(0, jsx_runtime_1.jsx)("img", { width: "20", height: "20" }), (0, jsx_runtime_1.jsx)("div", { children: "Draft Mode" })] }), (0, jsx_runtime_1.jsxs)("button", { onClick: disable, children: ["Exit", loading && (0, jsx_runtime_1.jsx)("div", { className: DraftMode_module_scss_1.default.loading, children: (0, jsx_runtime_1.jsx)("div", { className: DraftMode_module_scss_1.default.loader }) })] })] }));
+    return ((0, jsx_runtime_1.jsxs)("div", { className: DraftMode_module_scss_1.default.draftMode, children: [(0, jsx_runtime_1.jsxs)("div", { className: DraftMode_module_scss_1.default.label, children: [(0, jsx_runtime_1.jsx)("img", { width: "20", height: "20" }), (0, jsx_runtime_1.jsx)("div", { children: "Draft Mode" })] }), (0, jsx_runtime_1.jsxs)("button", { onClick: () => (0, react_1.startTransition)(() => {
+                    setLoading(true);
+                    (0, actions_1.disableDraftMode)(pathname);
+                    setLoading(false);
+                }), children: ["Exit", loading && (0, jsx_runtime_1.jsx)("div", { className: DraftMode_module_scss_1.default.loading, children: (0, jsx_runtime_1.jsx)("div", { className: DraftMode_module_scss_1.default.loader }) })] })] }));
 }
 exports.default = DraftMode;
 //# sourceMappingURL=DraftMode.js.map

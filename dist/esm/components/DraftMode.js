@@ -3,16 +3,10 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import s from './DraftMode.module.scss';
 import { usePathname } from 'next/navigation';
 import { revalidateTag, revalidatePath, disableDraftMode } from '../actions';
-import { useEffect, useState } from 'react';
+import { startTransition, useEffect, useState } from 'react';
 export default function DraftMode({ enabled, draftUrl, tag, path }) {
     const pathname = usePathname();
     const [loading, setLoading] = useState(false);
-    const disable = async () => {
-        console.log('disable draft mode');
-        setLoading(true);
-        await disableDraftMode(pathname);
-        setLoading(false);
-    };
     useEffect(() => {
         if (!draftUrl || !enabled)
             return;
@@ -34,9 +28,13 @@ export default function DraftMode({ enabled, draftUrl, tag, path }) {
         return () => {
             eventSource.close();
         };
-    }, [draftUrl, tag, path]);
+    }, [draftUrl, tag, path, enabled]);
     if (!enabled)
         return null;
-    return (_jsxs("div", { className: s.draftMode, children: [_jsxs("div", { className: s.label, children: [_jsx("img", { width: "20", height: "20" }), _jsx("div", { children: "Draft Mode" })] }), _jsxs("button", { onClick: disable, children: ["Exit", loading && _jsx("div", { className: s.loading, children: _jsx("div", { className: s.loader }) })] })] }));
+    return (_jsxs("div", { className: s.draftMode, children: [_jsxs("div", { className: s.label, children: [_jsx("img", { width: "20", height: "20" }), _jsx("div", { children: "Draft Mode" })] }), _jsxs("button", { onClick: () => startTransition(() => {
+                    setLoading(true);
+                    disableDraftMode(pathname);
+                    setLoading(false);
+                }), children: ["Exit", loading && _jsx("div", { className: s.loading, children: _jsx("div", { className: s.loader }) })] })] }));
 }
 //# sourceMappingURL=DraftMode.js.map
