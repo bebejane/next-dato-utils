@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "dist/esm",
+    "outDir": "./dist/esm",
     "strict": true,
     "target": "ES2021",
     "module": "ES2020",
