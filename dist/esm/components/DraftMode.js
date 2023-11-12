@@ -1,11 +1,10 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-//import s from './DraftMode.module.scss'
+import s from './DraftMode.module.scss';
 import { usePathname } from 'next/navigation';
 import { revalidateTag, revalidatePath, disableDraftMode } from '../actions';
 import { useEffect, useState } from 'react';
 export default function DraftMode({ draftMode, draftUrl, tag, path }) {
-    const s = {};
     const pathname = usePathname();
     const [loading, setLoading] = useState(false);
     const disable = async () => {
@@ -38,6 +37,6 @@ export default function DraftMode({ draftMode, draftUrl, tag, path }) {
     }, [draftUrl, tag, path]);
     if (!draftMode)
         return null;
-    return (_jsxs("button", { onClick: disable, children: [_jsxs("label", { children: ["Exit draft", loading && _jsx("div", { children: "X" })] }), _jsx("img", { width: "20", height: "20" })] }));
+    return (_jsxs("button", { className: s.draftMode, onClick: disable, children: [_jsxs("label", { children: ["Exit draft", loading && _jsx("div", { className: s.loading, children: "X" })] }), _jsx("img", { width: "20", height: "20" })] }));
 }
 //# sourceMappingURL=DraftMode.js.map
