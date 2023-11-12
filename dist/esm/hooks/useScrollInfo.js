@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useState, useRef, useCallback } from "react";
 export default function useScrollInfo(pageBottomLimit = 0) {
     const isServer = typeof window === 'undefined';

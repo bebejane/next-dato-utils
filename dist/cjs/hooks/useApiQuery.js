@@ -1,4 +1,5 @@
 "use strict";
+'use client';
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = require("react");
 const index_js_1 = require("../api/index.js");

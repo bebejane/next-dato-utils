@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useState, useCallback } from "react";
 import { apiQuery } from '../api/index.js';
 const useApiQuery = (document, { variables, initialData, pageSize = 100, includeDrafts = false } = {}) => {
