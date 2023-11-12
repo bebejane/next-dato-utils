@@ -1,8 +1,8 @@
 'use client'
 
+import { revalidateTag, revalidatePath, disableDraftMode } from '../actions'
 import s from './DraftMode.module.scss'
 import { usePathname } from 'next/navigation'
-import { revalidateTag, revalidatePath, disableDraftMode } from '../actions'
 import { startTransition, useEffect, useState } from 'react'
 
 export type DraftModeProps = {
@@ -54,7 +54,7 @@ export default function DraftMode({ enabled, draftUrl, tag, path }: DraftModePro
       <div className={s.label}><img width="20" height="20" /><div>Draft Mode</div></div>
       <button onClick={() => startTransition(() => {
         setLoading(true)
-        disableDraftMode(pathname)
+        //disableDraftMode(pathname)
         setLoading(false)
       })}>
         Exit

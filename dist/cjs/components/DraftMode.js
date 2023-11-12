@@ -5,9 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
+const actions_1 = require("../actions");
 const DraftMode_module_scss_1 = __importDefault(require("./DraftMode.module.scss"));
 const navigation_1 = require("next/navigation");
-const actions_1 = require("../actions");
 const react_1 = require("react");
 function DraftMode({ enabled, draftUrl, tag, path }) {
     const pathname = (0, navigation_1.usePathname)();
@@ -38,7 +38,7 @@ function DraftMode({ enabled, draftUrl, tag, path }) {
         return null;
     return ((0, jsx_runtime_1.jsxs)("div", { className: DraftMode_module_scss_1.default.draftMode, children: [(0, jsx_runtime_1.jsxs)("div", { className: DraftMode_module_scss_1.default.label, children: [(0, jsx_runtime_1.jsx)("img", { width: "20", height: "20" }), (0, jsx_runtime_1.jsx)("div", { children: "Draft Mode" })] }), (0, jsx_runtime_1.jsxs)("button", { onClick: () => (0, react_1.startTransition)(() => {
                     setLoading(true);
-                    (0, actions_1.disableDraftMode)(pathname);
+                    //disableDraftMode(pathname)
                     setLoading(false);
                 }), children: ["Exit", loading && (0, jsx_runtime_1.jsx)("div", { className: DraftMode_module_scss_1.default.loading, children: (0, jsx_runtime_1.jsx)("div", { className: DraftMode_module_scss_1.default.loader }) })] })] }));
 }
