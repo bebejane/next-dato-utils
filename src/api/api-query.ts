@@ -3,7 +3,6 @@
 import type { DocumentNode } from 'graphql';
 import { print } from 'graphql';
 import { cache } from 'react';
-//import { iterateObject } from '../utils';
 
 export type ApiQueryOptions<V> = {
   variables?: V;
@@ -38,7 +37,6 @@ export default async function apiQuery<T, V>(query: DocumentNode, options: ApiQu
   const tags = options.generateTags ? generateIdTags(await dedupedFetch(dedupeOptions), options.tags ?? null, queryId) : options.tags
   const res = options.includeDrafts ? await dedupedFetch({ ...dedupeOptions, url: 'https://graphql-listen.datocms.com/preview' }) : {}
   const { data } = await dedupedFetch({ ...dedupeOptions, tags });
-
   return { ...data, draftUrl: res.url ?? null }
 }
 
