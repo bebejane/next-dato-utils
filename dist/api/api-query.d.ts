@@ -21,4 +21,3 @@ export type DedupeOptions = {
     tags?: string[] | undefined;
     queryId: string;
 };
-export declare const generateIdTags: (data: any, tags: string[] | null, queryId: string) => string[];

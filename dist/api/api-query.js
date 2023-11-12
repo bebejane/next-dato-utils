@@ -1,7 +1,6 @@
 "use strict";
 'use server';
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateIdTags = void 0;
 const graphql_1 = require("graphql");
 const react_1 = require("react");
 async function apiQuery(query, options) {
@@ -20,7 +19,7 @@ async function apiQuery(query, options) {
         tags: options.tags ?? undefined,
         queryId
     };
-    const tags = options.generateTags ? (0, exports.generateIdTags)(await dedupedFetch(dedupeOptions), options.tags ?? null, queryId) : options.tags;
+    const tags = options.generateTags ? generateIdTags(await dedupedFetch(dedupeOptions), options.tags ?? null, queryId) : options.tags;
     const res = options.includeDrafts ? await dedupedFetch({ ...dedupeOptions, url: 'https://graphql-listen.datocms.com/preview' }) : {};
     const { data } = await dedupedFetch({ ...dedupeOptions, tags });
     return { ...data, draftUrl: res.url ?? null };
@@ -70,8 +69,7 @@ const generateIdTags = (data, tags, queryId) => {
     console.log('idTags', queryId, idTags);
     return idTags;
 };
-exports.generateIdTags = generateIdTags;
-function iterateObject(obj, fn) {
+const iterateObject = (obj, fn) => {
     let i = 0, keys = [];
     if (Array.isArray(obj)) {
         for (; i < obj.length; ++i) {
@@ -86,5 +84,5 @@ function iterateObject(obj, fn) {
                 break;
         }
     }
-}
+};
 //# sourceMappingURL=api-query.js.map

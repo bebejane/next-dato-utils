@@ -106,7 +106,7 @@ const dedupedFetch = cache(async (options: DedupeOptions) => {
   return responseBody;
 })
 
-export const generateIdTags = (data: any, tags: string[] | null, queryId: string): string[] => {
+const generateIdTags = (data: any, tags: string[] | null, queryId: string): string[] => {
 
   const allTags: string[] = []
 
@@ -122,7 +122,7 @@ export const generateIdTags = (data: any, tags: string[] | null, queryId: string
 
 }
 
-function iterateObject(obj: any, fn: (key: string, value: any, obj: any) => boolean) {
+const iterateObject = (obj: any, fn: (key: string, value: any, obj: any) => boolean) => {
   let i = 0
     , keys = []
     ;
