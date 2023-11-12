@@ -1,6 +1,6 @@
 'use client'
 
-import s from './DraftMode.module.scss'
+//import s from './DraftMode.module.scss'
 import { usePathname } from 'next/navigation'
 import { revalidateTag, revalidatePath, disableDraftMode } from '../actions'
 import { useEffect, useState } from 'react'
@@ -14,7 +14,7 @@ export type DraftModeProps = {
 }
 
 export default function DraftMode({ draftMode, draftUrl, tag, path }: DraftModeProps) {
-
+  const s = {}
   const pathname = usePathname()
   const [loading, setLoading] = useState(false)
 
@@ -54,10 +54,10 @@ export default function DraftMode({ draftMode, draftUrl, tag, path }: DraftModeP
   if (!draftMode) return null
 
   return (
-    <button className={s.draftMode} onClick={disable}>
+    <button onClick={disable}>
       <label>
         Exit draft
-        {loading && <div className={s.loading}>X</div>}
+        {loading && <div >X</div>}
       </label>
       <img width="20" height="20" />
     </button>
