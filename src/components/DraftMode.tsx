@@ -55,7 +55,7 @@ export default function DraftMode({ enabled, draftUrl, tag, path }: DraftModePro
       <button onClick={() => startTransition(() => {
         setLoading(true)
         //disableDraftMode(pathname)
-        revalidateTag(tag as string)
+        revalidatePath('/')
         setLoading(false)
       })}>
         Exit
