@@ -15,7 +15,7 @@ function DraftMode({ enabled, draftUrl, tag, path }) {
     const disable = async () => {
         console.log('disable draft mode');
         setLoading(true);
-        (0, actions_1.disableDraftMode)(pathname);
+        await (0, actions_1.disableDraftMode)(pathname);
         setLoading(false);
     };
     (0, react_1.useEffect)(() => {

@@ -20,7 +20,7 @@ export default function DraftMode({ enabled, draftUrl, tag, path }: DraftModePro
   const disable = async () => {
     console.log('disable draft mode')
     setLoading(true)
-    disableDraftMode(pathname)
+    await disableDraftMode(pathname)
     setLoading(false)
   }
 
