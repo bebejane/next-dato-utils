@@ -3,4 +3,4 @@ export * from './route-handlers';
 export * from './components';
 export * from './utils';
 export * from './hooks';
-export * from './api';
+export { default as apiQuery } from './api/api-query';
