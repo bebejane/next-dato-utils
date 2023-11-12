@@ -1,4 +1,3 @@
-'use server';
-export { revalidateTag, revalidatePath } from './revalidate';
-export { disableDraftMode } from './draft';
+export * from './revalidate';
+export * from './draft';
 //# sourceMappingURL=index.js.map
