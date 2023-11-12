@@ -37,6 +37,6 @@ export default function DraftMode({ enabled, draftUrl, tag, path }) {
     }, [draftUrl, tag, path]);
     if (!enabled)
         return null;
-    return (_jsxs("div", { className: s.draftMode, onClick: disable, children: [_jsxs("div", { className: s.label, children: [_jsx("img", { width: "20", height: "20" }), " Draft Mode"] }), _jsxs("button", { children: ["Exit", loading && _jsx("div", { className: s.loading, children: _jsx("div", { className: s.loader }) })] })] }));
+    return (_jsxs("div", { className: s.draftMode, onClick: disable, children: [_jsxs("div", { className: s.label, children: [_jsx("img", { width: "20", height: "20" }), _jsx("div", { children: "Draft Mode" })] }), _jsxs("button", { children: ["Exit", loading && _jsx("div", { className: s.loading, children: _jsx("div", { className: s.loader }) })] })] }));
 }
 //# sourceMappingURL=DraftMode.js.map
