@@ -11,7 +11,7 @@ export default async function draft(request: Request): Promise<Response | void> 
   const maxAge = searchParams.get('max-age')
   const exit = searchParams.get('exit')
 
-  if (exit) {
+  if (exit === 'true') {
     console.log('Disabling draft mode')
     await disableDraftMode()
     return new Response('Preview mode disabled', { status: 200 })

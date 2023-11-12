@@ -10,7 +10,7 @@ async function draft(request) {
     const slug = searchParams.get('slug');
     const maxAge = searchParams.get('max-age');
     const exit = searchParams.get('exit');
-    if (exit) {
+    if (exit === 'true') {
         console.log('Disabling draft mode');
         await (0, draft_1.disableDraftMode)();
         return new Response('Preview mode disabled', { status: 200 });
