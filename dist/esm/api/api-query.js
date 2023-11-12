@@ -1,5 +1,5 @@
 'use server';
-import { print } from 'graphql';
+import { print } from 'graphql/language/printer';
 import { cache } from 'react';
 export default async function apiQuery(query, options) {
     options = options ?? {};

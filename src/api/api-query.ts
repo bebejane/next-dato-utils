@@ -1,7 +1,7 @@
 'use server'
 
 import type { DocumentNode } from 'graphql';
-import { print } from 'graphql';
+import { print } from 'graphql/language/printer';
 import { cache } from 'react';
 
 export type ApiQueryOptions<V> = {

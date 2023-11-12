@@ -1,7 +1,7 @@
 "use strict";
 'use server';
 Object.defineProperty(exports, "__esModule", { value: true });
-const graphql_1 = require("graphql");
+const printer_1 = require("graphql/language/printer");
 const react_1 = require("react");
 async function apiQuery(query, options) {
     options = options ?? {};
@@ -12,7 +12,7 @@ async function apiQuery(query, options) {
     const queryId = (query.definitions?.[0]).name?.value;
     const revalidate = options?.includeDrafts ? 0 : typeof options?.revalidate === 'number' ? options.revalidate : parseInt(process.env.REVALIDATE_TIME) ?? 3600;
     const dedupeOptions = {
-        body: JSON.stringify({ query: (0, graphql_1.print)(query), variables: options?.variables }),
+        body: JSON.stringify({ query: (0, printer_1.print)(query), variables: options?.variables }),
         includeDrafts: options.includeDrafts ?? false,
         excludeInvalid: options.excludeInvalid ?? true,
         visualEditingBaseUrl: options.visualEditingBaseUrl ?? undefined,
