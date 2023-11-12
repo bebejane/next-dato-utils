@@ -67,7 +67,7 @@ const generateIdTags = (data, tags, queryId) => {
     });
     tags?.length && allTags.push.apply(allTags, tags);
     const idTags = allTags.filter((value, index, self) => self.indexOf(value) === index); // dedupe
-    console.log('idTags', queryId, idTags);
+    //console.log('idTags', queryId, idTags)
     return idTags;
 };
 const iterateObject = (obj, fn) => {

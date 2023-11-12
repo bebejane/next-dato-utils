@@ -117,15 +117,13 @@ const generateIdTags = (data: any, tags: string[] | null, queryId: string): stri
 
   tags?.length && allTags.push.apply(allTags, tags)
   const idTags = allTags.filter((value, index, self) => self.indexOf(value) === index) // dedupe
-  console.log('idTags', queryId, idTags)
+  //console.log('idTags', queryId, idTags)
   return idTags
 
 }
 
 const iterateObject = (obj: any, fn: (key: string, value: any, obj: any) => boolean) => {
-  let i = 0
-    , keys = []
-    ;
+  let i = 0, keys = [];
 
   if (Array.isArray(obj)) {
     for (; i < obj.length; ++i) {
