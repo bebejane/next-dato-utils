@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.36",
+	"version": "1.0.37",
 	"description": "",
 	"main": "./dist/cjs/index.js",
 	"module": "./dist/esm/index.js",
@@ -17,15 +17,10 @@
 		"tsc": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json"
 	},
 	"bin": {
-		"nextdato": "./dist/cli.js"
-	},
-	"exports": {
-		".": {
-			"import": "./index.js"
-		}
+		"nextdato": "./dist/cjs/cli.js"
 	},
 	"engines": {
-		"node": ">=0.16"
+		"node": ">=0.18"
 	},
 	"keywords": [],
 	"author": "",
