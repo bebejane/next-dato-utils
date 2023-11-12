@@ -8,7 +8,7 @@ export type ApiQueryOptions<V> = {
     tags?: string[] | undefined;
     generateTags?: boolean;
 };
-export default function apiQuery<T, V>(query: DocumentNode, options: ApiQueryOptions<V>): Promise<T & {
+export default function apiQuery<T, V>(query: DocumentNode, options?: ApiQueryOptions<V>): Promise<T & {
     draftUrl: string | null;
 }>;
 export type DedupeOptions = {

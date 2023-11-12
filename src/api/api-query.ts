@@ -14,7 +14,9 @@ export type ApiQueryOptions<V> = {
   generateTags?: boolean
 };
 
-export default async function apiQuery<T, V>(query: DocumentNode, options: ApiQueryOptions<V>): Promise<T & { draftUrl: string | null }> {
+export default async function apiQuery<T, V>(query: DocumentNode, options?: ApiQueryOptions<V>): Promise<T & { draftUrl: string | null }> {
+
+  options = options ?? {}
 
   if (!process.env.DATOCMS_API_TOKEN)
     throw new Error('DATOCMS_API_TOKEN is not set')
@@ -22,10 +24,10 @@ export default async function apiQuery<T, V>(query: DocumentNode, options: ApiQu
     throw new Error('DATOCMS_ENVIRONMENT is not set')
 
   const queryId = (query.definitions?.[0] as any).name?.value as string
-  const revalidate = options.includeDrafts ? 0 : typeof options.revalidate === 'number' ? options.revalidate : parseInt(process.env.REVALIDATE_TIME) ?? 3600
+  const revalidate = options?.includeDrafts ? 0 : typeof options?.revalidate === 'number' ? options.revalidate : parseInt(process.env.REVALIDATE_TIME) ?? 3600
 
   const dedupeOptions: DedupeOptions = {
-    body: JSON.stringify({ query: print(query), variables: options.variables }) as string,
+    body: JSON.stringify({ query: print(query), variables: options?.variables }) as string,
     includeDrafts: options.includeDrafts ?? false,
     excludeInvalid: options.excludeInvalid ?? true,
     visualEditingBaseUrl: options.visualEditingBaseUrl ?? undefined,

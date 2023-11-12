@@ -2,14 +2,15 @@
 import { print } from 'graphql';
 import { cache } from 'react';
 export default async function apiQuery(query, options) {
+    options = options ?? {};
     if (!process.env.DATOCMS_API_TOKEN)
         throw new Error('DATOCMS_API_TOKEN is not set');
     if (!process.env.DATOCMS_ENVIRONMENT)
         throw new Error('DATOCMS_ENVIRONMENT is not set');
     const queryId = (query.definitions?.[0]).name?.value;
-    const revalidate = options.includeDrafts ? 0 : typeof options.revalidate === 'number' ? options.revalidate : parseInt(process.env.REVALIDATE_TIME) ?? 3600;
+    const revalidate = options?.includeDrafts ? 0 : typeof options?.revalidate === 'number' ? options.revalidate : parseInt(process.env.REVALIDATE_TIME) ?? 3600;
     const dedupeOptions = {
-        body: JSON.stringify({ query: print(query), variables: options.variables }),
+        body: JSON.stringify({ query: print(query), variables: options?.variables }),
         includeDrafts: options.includeDrafts ?? false,
         excludeInvalid: options.excludeInvalid ?? true,
         visualEditingBaseUrl: options.visualEditingBaseUrl ?? undefined,
