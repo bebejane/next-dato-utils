@@ -2,16 +2,20 @@
 	"name": "next-dato-utils",
 	"version": "1.0.35",
 	"description": "",
-	"types": "./dist/index.d.ts",
-	"main": "./dist/index.js",
+	"types": "dist/index.d.ts",
+	"main": "dist/index.js",
+	"module": "dist/index.js",
 	"type": "module",
 	"scripts": {
-		"build": "npm run clean && npx tsc --declaration --allowJs -m umd && npm i -g",
+		"build": "npm run clean && npx tsc --declaration --allowJs -m ES2020 && npm i -g",
 		"pub": "npm version patch --force && npm run build && git add . && git commit -m \"updates\" && git push",
 		"dev:cli": "tsx src/cli.ts",
 		"clean": "rm -rf ./dist",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
+	"files": [
+		"dist"
+	],
 	"bin": {
 		"nextdato": "./dist/cli.js"
 	},
