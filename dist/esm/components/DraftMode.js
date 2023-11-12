@@ -34,6 +34,7 @@ export default function DraftMode({ enabled, draftUrl, tag, path }) {
     return (_jsxs("div", { className: s.draftMode, children: [_jsxs("div", { className: s.label, children: [_jsx("img", { width: "20", height: "20" }), _jsx("div", { children: "Draft Mode" })] }), _jsxs("button", { onClick: () => startTransition(() => {
                     setLoading(true);
                     //disableDraftMode(pathname)
+                    revalidateTag(tag);
                     setLoading(false);
                 }), children: ["Exit", loading && _jsx("div", { className: s.loading, children: _jsx("div", { className: s.loader }) })] })] }));
 }
