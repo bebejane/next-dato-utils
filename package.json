@@ -1,10 +1,9 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.34",
+	"version": "1.0.35",
 	"description": "",
 	"types": "./dist/index.d.ts",
 	"main": "./dist/index.js",
-	"module": "./dist/index.js",
 	"type": "module",
 	"scripts": {
 		"build": "npm run clean && npx tsc --declaration --allowJs -m umd && npm i -g",
@@ -18,7 +17,7 @@
 	},
 	"exports": {
 		".": {
-			"import": "./dist/index.js"
+			"import": "./index.js"
 		}
 	},
 	"engines": {
