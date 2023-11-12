@@ -6,13 +6,13 @@ import { revalidateTag, revalidatePath, disableDraftMode } from '../actions'
 import { useEffect, useState } from 'react'
 
 export type DraftModeProps = {
-  draftMode: boolean
+  enabled: boolean
   draftUrl?: string,
   tag?: string
   path?: string
 }
 
-export default function DraftMode({ draftMode, draftUrl, tag, path }: DraftModeProps) {
+export default function DraftMode({ enabled, draftUrl, tag, path }: DraftModeProps) {
 
   const pathname = usePathname()
   const [loading, setLoading] = useState(false)
@@ -26,7 +26,7 @@ export default function DraftMode({ draftMode, draftUrl, tag, path }: DraftModeP
 
   useEffect(() => {
 
-    if (!draftUrl) return
+    if (!draftUrl || !enabled) return
 
     let updates = 0;
     const eventSource = new EventSource(draftUrl)
@@ -50,13 +50,13 @@ export default function DraftMode({ draftMode, draftUrl, tag, path }: DraftModeP
 
   }, [draftUrl, tag, path])
 
-  if (!draftMode) return null
+  if (!enabled) return null
 
   return (
     <button className={s.draftMode} onClick={disable}>
       <label>
         Exit draft
-        {loading && <div className={s.loading}>X</div>}
+        {loading && <div className={s.loading}><div className={s.loader}></div></div>}
       </label>
       <img width="20" height="20" />
     </button>

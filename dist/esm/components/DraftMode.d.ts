@@ -1,7 +1,7 @@
 export type DraftModeProps = {
-    draftMode: boolean;
+    enabled: boolean;
     draftUrl?: string;
     tag?: string;
     path?: string;
 };
-export default function DraftMode({ draftMode, draftUrl, tag, path }: DraftModeProps): import("react/jsx-runtime").JSX.Element | null;
+export default function DraftMode({ enabled, draftUrl, tag, path }: DraftModeProps): import("react/jsx-runtime").JSX.Element | null;

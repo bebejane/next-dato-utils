@@ -9,7 +9,7 @@ const DraftMode_module_scss_1 = __importDefault(require("./DraftMode.module.scss
 const navigation_1 = require("next/navigation");
 const actions_1 = require("../actions");
 const react_1 = require("react");
-function DraftMode({ draftMode, draftUrl, tag, path }) {
+function DraftMode({ enabled, draftUrl, tag, path }) {
     const pathname = (0, navigation_1.usePathname)();
     const [loading, setLoading] = (0, react_1.useState)(false);
     const disable = async () => {
@@ -19,7 +19,7 @@ function DraftMode({ draftMode, draftUrl, tag, path }) {
         setLoading(false);
     };
     (0, react_1.useEffect)(() => {
-        if (!draftUrl)
+        if (!draftUrl || !enabled)
             return;
         let updates = 0;
         const eventSource = new EventSource(draftUrl);
@@ -40,9 +40,9 @@ function DraftMode({ draftMode, draftUrl, tag, path }) {
             eventSource.close();
         };
     }, [draftUrl, tag, path]);
-    if (!draftMode)
+    if (!enabled)
         return null;
-    return ((0, jsx_runtime_1.jsxs)("button", { className: DraftMode_module_scss_1.default.draftMode, onClick: disable, children: [(0, jsx_runtime_1.jsxs)("label", { children: ["Exit draft", loading && (0, jsx_runtime_1.jsx)("div", { className: DraftMode_module_scss_1.default.loading, children: "X" })] }), (0, jsx_runtime_1.jsx)("img", { width: "20", height: "20" })] }));
+    return ((0, jsx_runtime_1.jsxs)("button", { className: DraftMode_module_scss_1.default.draftMode, onClick: disable, children: [(0, jsx_runtime_1.jsxs)("label", { children: ["Exit draft", loading && (0, jsx_runtime_1.jsx)("div", { className: DraftMode_module_scss_1.default.loading, children: (0, jsx_runtime_1.jsx)("div", { className: DraftMode_module_scss_1.default.loader }) })] }), (0, jsx_runtime_1.jsx)("img", { width: "20", height: "20" })] }));
 }
 exports.default = DraftMode;
 //# sourceMappingURL=DraftMode.js.map
