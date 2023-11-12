@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.38",
+	"version": "1.0.39",
 	"description": "",
 	"main": "./dist/cjs/index.js",
 	"module": "./dist/esm/index.js",
@@ -9,7 +9,8 @@
 	],
 	"type": "module",
 	"scripts": {
-		"build": "npm run clean && npm run tsc && npm i -g",
+		"build": "npm run clean && npm run tsc && npm run copy-files",
+		"copy-files": "copyfiles -u 1 src/**/*.scss dist/esm && copyfiles -u 1 src/**/*.scss dist/cjs",
 		"pub": "npm version patch --force && npm run build && git add . && git commit -m \"updates\" && git push",
 		"dev:cli": "tsx src/cli.ts",
 		"clean": "rm -rf ./dist",
@@ -38,15 +39,16 @@
 		"@types/react": ">=18.2.3",
 		"@types/react-dom": ">=18.2.1",
 		"datocms-structured-text-utils": ">=2.0.0",
-		"react-datocms": ">=4.0.0",
 		"graphql": ">=16.8.0",
 		"next": ">=14.0.0",
 		"react": ">=18.2.0",
+		"react-datocms": ">=4.0.0",
 		"react-dom": ">=18.2.0",
 		"sass": ">=1.69.0"
 	},
 	"devDependencies": {
 		"@types/node": "^20.9.0",
+		"copyfiles": "^2.4.1",
 		"tsx": "^4.1.1",
 		"typescript": "^5.2.2"
 	}
