@@ -1,9 +1,10 @@
 "use strict";
+'use server';
 Object.defineProperty(exports, "__esModule", { value: true });
 const headers_1 = require("next/headers");
 const navigation_1 = require("next/navigation");
 const headers_2 = require("next/headers");
-const draft_1 = require("../actions/draft");
+const actions_1 = require("../actions");
 async function draft(request) {
     const { searchParams } = new URL(request.url);
     const secret = searchParams.get('secret');
@@ -12,7 +13,7 @@ async function draft(request) {
     const exit = searchParams.get('exit');
     if (exit === 'true') {
         console.log('Disabling draft mode');
-        await (0, draft_1.disableDraftMode)();
+        await (0, actions_1.disableDraftMode)();
         return new Response('Preview mode disabled', { status: 200 });
     }
     if (secret !== process.env.DATOCMS_PREVIEW_SECRET || !slug)

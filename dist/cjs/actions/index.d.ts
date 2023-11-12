@@ -1,2 +1,3 @@
-export { revalidatePath, revalidateTag } from './revalidate';
-export { disableDraftMode } from './draft';
+export declare function disableDraftMode(pathname?: string): Promise<void>;
+export declare function revalidateTag(tag: string): Promise<void>;
+export declare function revalidatePath(path: string): Promise<void>;

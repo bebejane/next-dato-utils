@@ -1,7 +1,9 @@
+'use server'
+
 import { draftMode } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
-import { disableDraftMode } from '../actions/draft'
+import { disableDraftMode } from '../actions'
 
 export default async function draft(request: Request): Promise<Response | void> {
 
