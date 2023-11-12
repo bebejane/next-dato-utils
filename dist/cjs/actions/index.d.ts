@@ -1,2 +1,2 @@
-export * from './revalidate';
-export * from './draft';
+export { revalidatePath, revalidateTag } from './revalidate';
+export { disableDraftMode } from './draft';
