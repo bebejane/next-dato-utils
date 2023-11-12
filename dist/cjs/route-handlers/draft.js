@@ -17,7 +17,7 @@ async function draft(request) {
     }
     if (secret !== process.env.DATOCMS_PREVIEW_SECRET || !slug)
         return new Response('Invalid token', { status: 401 });
-    console.log('Disabling draft mode');
+    console.log('Enabling draft mode');
     (0, headers_1.draftMode)().enable();
     if (maxAge) {
         const bypassCookie = (0, headers_2.cookies)().get('__prerender_bypass');
