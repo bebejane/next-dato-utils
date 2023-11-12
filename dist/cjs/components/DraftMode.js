@@ -9,10 +9,9 @@ const actions_1 = require("../actions");
 const DraftMode_module_scss_1 = __importDefault(require("./DraftMode.module.scss"));
 const navigation_1 = require("next/navigation");
 const react_1 = require("react");
-const DraftModeServer_1 = __importDefault(require("./DraftModeServer"));
 function DraftMode({ enabled, draftUrl, tag, path }) {
     const pathname = (0, navigation_1.usePathname)();
-    const [loading, setLoading] = (0, react_1.useState)(false);
+    const [loading, startTransition] = (0, react_1.useTransition)();
     (0, react_1.useEffect)(() => {
         if (!draftUrl || !enabled)
             return;
@@ -24,12 +23,12 @@ function DraftMode({ enabled, draftUrl, tag, path }) {
         eventSource.addEventListener("update", async (event) => {
             if (++updates <= 1)
                 return;
-            setLoading(true);
-            if (tag)
-                await (0, actions_1.revalidateTag)(tag);
-            if (path)
-                await (0, actions_1.revalidatePath)(path);
-            setLoading(false);
+            startTransition(() => {
+                if (tag)
+                    (0, actions_1.revalidateTag)(tag);
+                if (path)
+                    (0, actions_1.revalidatePath)(path);
+            });
         });
         return () => {
             eventSource.close();
@@ -37,7 +36,7 @@ function DraftMode({ enabled, draftUrl, tag, path }) {
     }, [draftUrl, tag, path, enabled]);
     if (!enabled)
         return null;
-    return ((0, jsx_runtime_1.jsxs)("div", { className: DraftMode_module_scss_1.default.draftMode, children: [(0, jsx_runtime_1.jsxs)("div", { className: DraftMode_module_scss_1.default.label, children: [(0, jsx_runtime_1.jsx)("img", { width: "20", height: "20" }), (0, jsx_runtime_1.jsx)("div", { children: "Draft Mode" })] }), (0, jsx_runtime_1.jsx)(DraftModeServer_1.default, { path: pathname })] }));
+    return ((0, jsx_runtime_1.jsxs)("div", { className: DraftMode_module_scss_1.default.draftMode, children: [(0, jsx_runtime_1.jsxs)("div", { className: DraftMode_module_scss_1.default.label, children: [(0, jsx_runtime_1.jsx)("img", { width: "20", height: "20" }), (0, jsx_runtime_1.jsx)("div", { children: "Draft Mode" })] }), (0, jsx_runtime_1.jsxs)("button", { onClick: () => startTransition(() => (0, actions_1.disableDraftMode)(pathname)), children: ["Exit", loading && (0, jsx_runtime_1.jsx)("div", { className: DraftMode_module_scss_1.default.loading, children: (0, jsx_runtime_1.jsx)("div", { className: DraftMode_module_scss_1.default.loader }) })] })] }));
 }
 exports.default = DraftMode;
 //# sourceMappingURL=DraftMode.js.map

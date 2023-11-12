@@ -1,16 +1,13 @@
 'use client'
 
-import { DraftMode as DraftModeType } from 'next/dist/client/components/draft-mode'
 import { revalidateTag, revalidatePath, disableDraftMode } from '../actions'
 import s from './DraftMode.module.scss'
 import { usePathname } from 'next/navigation'
-import { startTransition, useEffect, useState } from 'react'
-import DraftModeServer from './DraftModeServer'
+import { useEffect, useTransition } from 'react'
 
 export type DraftModeProps = {
   enabled: boolean
   draftUrl?: string,
-  draftMode?: DraftModeType
   tag?: string
   path?: string
 }
@@ -18,7 +15,8 @@ export type DraftModeProps = {
 export default function DraftMode({ enabled, draftUrl, tag, path }: DraftModeProps) {
 
   const pathname = usePathname()
-  const [loading, setLoading] = useState(false)
+  const [loading, startTransition] = useTransition();
+
 
   useEffect(() => {
 
@@ -34,15 +32,12 @@ export default function DraftMode({ enabled, draftUrl, tag, path }: DraftModePro
     eventSource.addEventListener("update", async (event) => {
       if (++updates <= 1) return
 
-      setLoading(true)
-
-      if (tag)
-        await revalidateTag(tag)
-      if (path)
-        await revalidatePath(path)
-
-      setLoading(false)
-
+      startTransition(() => {
+        if (tag)
+          revalidateTag(tag)
+        if (path)
+          revalidatePath(path)
+      })
     });
     return () => {
       eventSource.close()
@@ -55,7 +50,10 @@ export default function DraftMode({ enabled, draftUrl, tag, path }: DraftModePro
   return (
     <div className={s.draftMode} >
       <div className={s.label}><img width="20" height="20" /><div>Draft Mode</div></div>
-      <DraftModeServer path={pathname} />
+      <button onClick={() => startTransition(() => disableDraftMode(pathname))}>
+        Exit
+        {loading && <div className={s.loading}><div className={s.loader}></div></div>}
+      </button>
     </div>
   )
 }
