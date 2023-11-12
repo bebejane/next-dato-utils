@@ -1,6 +1,8 @@
+import { DraftMode as DraftModeType } from 'next/dist/client/components/draft-mode';
 export type DraftModeProps = {
     enabled: boolean;
     draftUrl?: string;
+    draftMode?: DraftModeType;
     tag?: string;
     path?: string;
 };

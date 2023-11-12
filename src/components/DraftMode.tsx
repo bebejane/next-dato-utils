@@ -1,13 +1,16 @@
 'use client'
 
+import { DraftMode as DraftModeType } from 'next/dist/client/components/draft-mode'
 import { revalidateTag, revalidatePath, disableDraftMode } from '../actions'
 import s from './DraftMode.module.scss'
 import { usePathname } from 'next/navigation'
 import { startTransition, useEffect, useState } from 'react'
+import { draftMode } from 'next/headers'
 
 export type DraftModeProps = {
   enabled: boolean
   draftUrl?: string,
+  draftMode?: DraftModeType
   tag?: string
   path?: string
 }
@@ -55,7 +58,7 @@ export default function DraftMode({ enabled, draftUrl, tag, path }: DraftModePro
       <button onClick={() => startTransition(() => {
         setLoading(true)
         //disableDraftMode(pathname)
-        revalidatePath('/')
+        draftMode && draftMode().disable()
         setLoading(false)
       })}>
         Exit

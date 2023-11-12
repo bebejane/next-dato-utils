@@ -9,6 +9,7 @@ const actions_1 = require("../actions");
 const DraftMode_module_scss_1 = __importDefault(require("./DraftMode.module.scss"));
 const navigation_1 = require("next/navigation");
 const react_1 = require("react");
+const headers_1 = require("next/headers");
 function DraftMode({ enabled, draftUrl, tag, path }) {
     const pathname = (0, navigation_1.usePathname)();
     const [loading, setLoading] = (0, react_1.useState)(false);
@@ -39,7 +40,7 @@ function DraftMode({ enabled, draftUrl, tag, path }) {
     return ((0, jsx_runtime_1.jsxs)("div", { className: DraftMode_module_scss_1.default.draftMode, children: [(0, jsx_runtime_1.jsxs)("div", { className: DraftMode_module_scss_1.default.label, children: [(0, jsx_runtime_1.jsx)("img", { width: "20", height: "20" }), (0, jsx_runtime_1.jsx)("div", { children: "Draft Mode" })] }), (0, jsx_runtime_1.jsxs)("button", { onClick: () => (0, react_1.startTransition)(() => {
                     setLoading(true);
                     //disableDraftMode(pathname)
-                    (0, actions_1.revalidatePath)('/');
+                    headers_1.draftMode && (0, headers_1.draftMode)().disable();
                     setLoading(false);
                 }), children: ["Exit", loading && (0, jsx_runtime_1.jsx)("div", { className: DraftMode_module_scss_1.default.loading, children: (0, jsx_runtime_1.jsx)("div", { className: DraftMode_module_scss_1.default.loader }) })] })] }));
 }

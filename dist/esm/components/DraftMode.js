@@ -4,6 +4,7 @@ import { revalidateTag, revalidatePath } from '../actions';
 import s from './DraftMode.module.scss';
 import { usePathname } from 'next/navigation';
 import { startTransition, useEffect, useState } from 'react';
+import { draftMode } from 'next/headers';
 export default function DraftMode({ enabled, draftUrl, tag, path }) {
     const pathname = usePathname();
     const [loading, setLoading] = useState(false);
@@ -34,7 +35,7 @@ export default function DraftMode({ enabled, draftUrl, tag, path }) {
     return (_jsxs("div", { className: s.draftMode, children: [_jsxs("div", { className: s.label, children: [_jsx("img", { width: "20", height: "20" }), _jsx("div", { children: "Draft Mode" })] }), _jsxs("button", { onClick: () => startTransition(() => {
                     setLoading(true);
                     //disableDraftMode(pathname)
-                    revalidatePath('/');
+                    draftMode && draftMode().disable();
                     setLoading(false);
                 }), children: ["Exit", loading && _jsx("div", { className: s.loading, children: _jsx("div", { className: s.loader }) })] })] }));
 }
