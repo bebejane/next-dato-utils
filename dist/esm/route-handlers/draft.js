@@ -9,11 +9,13 @@ export default async function draft(request) {
     const maxAge = searchParams.get('max-age');
     const exit = searchParams.get('exit');
     if (exit) {
+        console.log('Disabling draft mode');
         await disableDraftMode();
         return new Response('Preview mode disabled', { status: 200 });
     }
     if (secret !== process.env.DATOCMS_PREVIEW_SECRET || !slug)
         return new Response('Invalid token', { status: 401 });
+    console.log('Disabling draft mode');
     draftMode().enable();
     if (maxAge) {
         const bypassCookie = cookies().get('__prerender_bypass');
