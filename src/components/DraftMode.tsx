@@ -53,12 +53,12 @@ export default function DraftMode({ enabled, draftUrl, tag, path }: DraftModePro
   if (!enabled) return null
 
   return (
-    <button className={s.draftMode} onClick={disable}>
-      <label>
-        Exit draft
+    <div className={s.draftMode} onClick={disable}>
+      <div className={s.label}><img width="20" height="20" /> Draft Mode</div>
+      <button>
+        Exit
         {loading && <div className={s.loading}><div className={s.loader}></div></div>}
-      </label>
-      <img width="20" height="20" />
-    </button>
+      </button>
+    </div>
   )
 }
