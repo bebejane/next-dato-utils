@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.webPreviews = exports.vercelCronAuth = exports.test = exports.revalidate = exports.middleware = exports.cors = exports.basicAuth = exports.backup = void 0;
+exports.draft = exports.webPreviews = exports.vercelCronAuth = exports.test = exports.revalidate = exports.middleware = exports.cors = exports.basicAuth = exports.backup = void 0;
 var backup_1 = require("./backup");
 Object.defineProperty(exports, "backup", { enumerable: true, get: function () { return __importDefault(backup_1).default; } });
 var basic_auth_1 = require("./basic-auth");
@@ -20,4 +20,6 @@ var vercel_cron_auth_1 = require("./vercel-cron-auth");
 Object.defineProperty(exports, "vercelCronAuth", { enumerable: true, get: function () { return __importDefault(vercel_cron_auth_1).default; } });
 var web_previews_1 = require("./web-previews");
 Object.defineProperty(exports, "webPreviews", { enumerable: true, get: function () { return __importDefault(web_previews_1).default; } });
+var draft_1 = require("./draft");
+Object.defineProperty(exports, "draft", { enumerable: true, get: function () { return __importDefault(draft_1).default; } });
 //# sourceMappingURL=index.js.map
