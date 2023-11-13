@@ -1,2 +1,2 @@
-export { default as DraftMode } from './DraftMode'
+export { default as DraftMode } from './draft-mode'
 export { default as Markdown } from './Markdown'

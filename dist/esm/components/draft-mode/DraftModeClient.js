@@ -1,10 +1,9 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import s from './DraftMode.module.scss';
-import { revalidateTag, revalidatePath, disableDraftMode } from '../actions';
+import s from './DraftModeClient.module.scss';
 import { usePathname } from 'next/navigation';
 import { useEffect, useTransition } from 'react';
-export default function DraftMode({ enabled, draftUrl, tag, path }) {
+export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
     const pathname = usePathname();
     const [loading, startTransition] = useTransition();
     console.log('draft mode', enabled, draftUrl, tag, path);
@@ -21,9 +20,9 @@ export default function DraftMode({ enabled, draftUrl, tag, path }) {
                 return;
             startTransition(() => {
                 if (tag)
-                    revalidateTag(tag);
+                    actions.revalidateTag(tag);
                 if (path)
-                    revalidatePath(path);
+                    actions.revalidatePath(path);
             });
         });
         return () => {
@@ -34,7 +33,7 @@ export default function DraftMode({ enabled, draftUrl, tag, path }) {
         return null;
     return (_jsxs("div", { className: s.draftMode, children: [_jsxs("div", { className: s.label, children: [_jsx("img", { width: "20", height: "20" }), _jsx("div", { children: "Draft Mode" })] }), _jsxs("button", { onClick: () => startTransition(() => {
                     console.log('exit draft mode');
-                    disableDraftMode(pathname);
+                    actions.disableDraftMode(pathname);
                 }), children: ["Exit", loading && _jsx("div", { className: s.loading, children: _jsx("div", { className: s.loader }) })] })] }));
 }
-//# sourceMappingURL=DraftMode.js.map
+//# sourceMappingURL=DraftModeClient.js.map
