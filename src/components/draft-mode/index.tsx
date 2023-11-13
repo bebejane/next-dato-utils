@@ -9,7 +9,7 @@ type Props = {
   tag?: string
   path?: string
 }
-export default function DraftMode({ enabled, draftUrl, tag, path }: Props) {
+export default async function DraftMode({ enabled, draftUrl, tag, path }: Props) {
 
   return (
     <DraftModeClient

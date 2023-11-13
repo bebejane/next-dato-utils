@@ -4,5 +4,5 @@ type Props = {
     tag?: string;
     path?: string;
 };
-export default function DraftMode({ enabled, draftUrl, tag, path }: Props): import("react/jsx-runtime").JSX.Element;
+export default function DraftMode({ enabled, draftUrl, tag, path }: Props): Promise<import("react/jsx-runtime").JSX.Element>;
 export {};
