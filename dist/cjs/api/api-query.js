@@ -13,11 +13,12 @@ async function apiQuery(query, options) {
     const queryId = (query.definitions?.[0]).name?.value;
     const revalidate = options?.includeDrafts ? 0 : typeof options?.revalidate === 'number' ? options.revalidate : parseInt(process.env.REVALIDATE_TIME) ?? 3600;
     let includeDrafts = options.includeDrafts ?? false;
-    if (typeof options.includeDrafts === 'undefined')
-        try {
-            includeDrafts = (0, headers_1.draftMode)().isEnabled;
-        }
-        catch (e) { }
+    console.log(typeof options.includeDrafts);
+    //if (typeof options.includeDrafts === 'undefined')
+    try {
+        includeDrafts = (0, headers_1.draftMode)().isEnabled;
+    }
+    catch (e) { }
     const dedupeOptions = {
         body: JSON.stringify({ query: (0, printer_1.print)(query), variables: options?.variables }),
         includeDrafts,
