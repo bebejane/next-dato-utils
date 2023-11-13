@@ -11,12 +11,11 @@ export default async function apiQuery(query, options) {
     const queryId = (query.definitions?.[0]).name?.value;
     const revalidate = options?.includeDrafts ? 0 : typeof options?.revalidate === 'number' ? options.revalidate : parseInt(process.env.REVALIDATE_TIME) ?? 3600;
     let includeDrafts = options.includeDrafts ?? false;
-    console.log(typeof options.includeDrafts);
-    //if (typeof options.includeDrafts === 'undefined')
-    try {
-        includeDrafts = draftMode().isEnabled;
-    }
-    catch (e) { }
+    if (typeof options.includeDrafts === 'undefined')
+        try {
+            includeDrafts = draftMode().isEnabled;
+        }
+        catch (e) { }
     const dedupeOptions = {
         body: JSON.stringify({ query: print(query), variables: options?.variables }),
         includeDrafts,
@@ -27,7 +26,7 @@ export default async function apiQuery(query, options) {
         queryId
     };
     const tags = options.generateTags ? generateIdTags(await dedupedFetch(dedupeOptions), options.tags ?? null, queryId) : options.tags;
-    const res = options.includeDrafts ? await dedupedFetch({ ...dedupeOptions, url: 'https://graphql-listen.datocms.com/preview' }) : {};
+    const res = includeDrafts ? await dedupedFetch({ ...dedupeOptions, url: 'https://graphql-listen.datocms.com/preview' }) : {};
     const { data } = await dedupedFetch({ ...dedupeOptions, tags });
     return { ...data, draftUrl: res.url ?? null };
 }

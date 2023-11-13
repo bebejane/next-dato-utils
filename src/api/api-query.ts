@@ -28,9 +28,8 @@ export default async function apiQuery<T, V>(query: DocumentNode, options?: ApiQ
   const revalidate = options?.includeDrafts ? 0 : typeof options?.revalidate === 'number' ? options.revalidate : parseInt(process.env.REVALIDATE_TIME) ?? 3600
   let includeDrafts = options.includeDrafts ?? false;
 
-  console.log(typeof options.includeDrafts)
-  //if (typeof options.includeDrafts === 'undefined')
-  try { includeDrafts = draftMode().isEnabled } catch (e) { }
+  if (typeof options.includeDrafts === 'undefined')
+    try { includeDrafts = draftMode().isEnabled } catch (e) { }
 
   const dedupeOptions: DedupeOptions = {
     body: JSON.stringify({ query: print(query), variables: options?.variables }) as string,
@@ -43,7 +42,7 @@ export default async function apiQuery<T, V>(query: DocumentNode, options?: ApiQ
   }
 
   const tags = options.generateTags ? generateIdTags(await dedupedFetch(dedupeOptions), options.tags ?? null, queryId) : options.tags
-  const res = options.includeDrafts ? await dedupedFetch({ ...dedupeOptions, url: 'https://graphql-listen.datocms.com/preview' }) : {}
+  const res = includeDrafts ? await dedupedFetch({ ...dedupeOptions, url: 'https://graphql-listen.datocms.com/preview' }) : {}
   const { data } = await dedupedFetch({ ...dedupeOptions, tags });
   return { ...data, draftUrl: res.url ?? null }
 }
