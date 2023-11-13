@@ -22,6 +22,7 @@ function DraftMode({ enabled, draftUrl, tag, path, actions }) {
         eventSource.addEventListener("update", async (event) => {
             if (++updates <= 1)
                 return;
+            console.log(event);
             startTransition(() => {
                 if (tag)
                     actions.revalidateTag(tag);

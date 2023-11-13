@@ -34,6 +34,7 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }: Dra
 
     eventSource.addEventListener("update", async (event) => {
       if (++updates <= 1) return
+      console.log(event)
 
       startTransition(() => {
         if (tag)
@@ -41,6 +42,7 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }: Dra
         if (path)
           actions.revalidatePath(path)
       })
+
     });
     return () => {
       eventSource.close()
