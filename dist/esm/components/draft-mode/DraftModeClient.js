@@ -12,6 +12,7 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
         if (!draftUrl || !enabled || listener?.current)
             return;
         const connect = () => {
+            console.log('connecting to channel');
             let updates = 0;
             listener.current = new EventSource(draftUrl);
             listener.current.addEventListener("open", () => {

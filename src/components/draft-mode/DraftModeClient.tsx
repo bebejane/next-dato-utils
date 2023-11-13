@@ -28,7 +28,7 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }: Dra
     if (!draftUrl || !enabled || listener?.current) return
 
     const connect = () => {
-
+      console.log('connecting to channel')
       let updates = 0;
       listener.current = new EventSource(draftUrl)
 
@@ -71,8 +71,6 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }: Dra
       }
       await sleep(1000)
     }
-
-
 
     return () => { disconnect() }
 
