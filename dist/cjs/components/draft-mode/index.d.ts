@@ -1,8 +1,7 @@
 type Props = {
-    enabled: boolean;
-    draftUrl?: string;
+    url?: string;
     tag?: string;
     path?: string;
 };
-export default function DraftMode({ draftUrl, tag, path }: Props): Promise<import("react/jsx-runtime").JSX.Element>;
+export default function DraftMode({ url, tag, path }: Props): Promise<import("react/jsx-runtime").JSX.Element>;
 export {};
