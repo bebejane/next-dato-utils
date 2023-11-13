@@ -1,8 +1,8 @@
 'use server';
 import { jsx as _jsx } from "react/jsx-runtime";
-import ReactMarkdown from "react-markdown";
+import { default as ReactMarkdown } from 'react-markdown';
 import gfm from 'remark-gfm';
-import Link from "next/link.js";
+import Link from "next/link";
 import markdownTruncate from '../utils/markdown-truncate';
 import remarkBreaks from 'remark-breaks';
 const truncateSentances = (markdown, limit) => {

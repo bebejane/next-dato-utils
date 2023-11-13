@@ -1,6 +1,6 @@
 /// <reference types="node" />
+import { Components } from 'react-markdown';
 import type { UrlObject } from 'url';
-import { Components } from "react-markdown";
 export type MarkdownProps = {
     content?: string;
     allowedElements?: string[];

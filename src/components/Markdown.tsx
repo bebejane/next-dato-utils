@@ -1,12 +1,11 @@
 'use server'
 
-import ReactMarkdown from "react-markdown";
+import { default as ReactMarkdown, Components } from 'react-markdown';
 import gfm from 'remark-gfm'
-import Link from "next/link.js";
+import Link from "next/link";
 import markdownTruncate from '../utils/markdown-truncate'
 import remarkBreaks from 'remark-breaks'
 import type { UrlObject } from 'url';
-import { Components } from "react-markdown";
 
 export type MarkdownProps = {
   content?: string
