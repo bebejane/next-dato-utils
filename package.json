@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.88",
+	"version": "1.0.89",
 	"description": "",
 	"main": "./dist/cjs/index.js",
 	"module": "./dist/esm/index.js",
