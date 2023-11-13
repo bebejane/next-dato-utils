@@ -15,5 +15,4 @@ export type AnchorProp = {
     children: any[];
     href: UrlObject;
 };
-declare const Markdown: ({ content, truncate, className, components, sentances, allowedElements, scroll, disableBreaks }: MarkdownProps) => import("react/jsx-runtime").JSX.Element;
-export default Markdown;
+export default function Markdown({ content, truncate, className, components, sentances, allowedElements, scroll, disableBreaks }: MarkdownProps): Promise<import("react/jsx-runtime").JSX.Element>;

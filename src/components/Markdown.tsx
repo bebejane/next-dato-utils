@@ -28,7 +28,7 @@ const truncateSentances = (markdown: string, limit: number): string => {
   return sentances.length >= limit ? sentances.slice(0, limit).join(' ') + '...' : markdown
 }
 
-const Markdown = ({ content, truncate, className, components, sentances = 1, allowedElements, scroll = true, disableBreaks = false }: MarkdownProps) => {
+export default async function Markdown({ content, truncate, className, components, sentances = 1, allowedElements, scroll = true, disableBreaks = false }: MarkdownProps) {
 
   const truncatedContent: string = (!truncate ? content ? truncateSentances(content as string, sentances) : content : markdownTruncate(content, { limit: truncate, ellipsis: true })) as string
 
@@ -45,6 +45,3 @@ const Markdown = ({ content, truncate, className, components, sentances = 1, all
     />
   )
 }
-
-export default Markdown
-

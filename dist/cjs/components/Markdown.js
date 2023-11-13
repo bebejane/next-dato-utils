@@ -15,13 +15,13 @@ const truncateSentances = (markdown, limit) => {
     const sentances = markdown.split('.');
     return sentances.length >= limit ? sentances.slice(0, limit).join(' ') + '...' : markdown;
 };
-const Markdown = ({ content, truncate, className, components, sentances = 1, allowedElements, scroll = true, disableBreaks = false }) => {
+async function Markdown({ content, truncate, className, components, sentances = 1, allowedElements, scroll = true, disableBreaks = false }) {
     const truncatedContent = (!truncate ? content ? truncateSentances(content, sentances) : content : (0, markdown_truncate_1.default)(content, { limit: truncate, ellipsis: true }));
     return ((0, jsx_runtime_1.jsx)(react_markdown_1.default, { remarkPlugins: disableBreaks ? [remark_gfm_1.default] : [remark_gfm_1.default, remark_breaks_1.default], className: className, children: truncatedContent, allowedElements: allowedElements, 
         //@ts-ignore
         components: components ?? {
             a: ({ children, href }) => (0, jsx_runtime_1.jsx)(link_js_1.default, { scroll: scroll, href: href, children: children[0] })
         } }));
-};
+}
 exports.default = Markdown;
 //# sourceMappingURL=Markdown.js.map
