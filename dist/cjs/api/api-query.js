@@ -14,14 +14,15 @@ async function apiQuery(query, options) {
     const revalidate = options?.includeDrafts ? 0 : typeof options?.revalidate === 'number' ? options.revalidate : parseInt(process.env.REVALIDATE_TIME) ?? 3600;
     let includeDrafts = false;
     try {
-        includeDrafts = (0, headers_1.draftMode)().isEnabled;
+        if (typeof includeDrafts === 'undefined')
+            includeDrafts = (0, headers_1.draftMode)().isEnabled;
     }
     catch (e) {
-        console.error(e);
+        //console.log('draftMode noat available')
     }
     const dedupeOptions = {
         body: JSON.stringify({ query: (0, printer_1.print)(query), variables: options?.variables }),
-        includeDrafts: includeDrafts,
+        includeDrafts,
         excludeInvalid: options.excludeInvalid ?? true,
         visualEditingBaseUrl: options.visualEditingBaseUrl ?? undefined,
         revalidate,
