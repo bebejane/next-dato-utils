@@ -1,3 +1,4 @@
+'use server';
 import { jsx as _jsx } from "react/jsx-runtime";
 import ReactMarkdown from "react-markdown";
 import gfm from 'remark-gfm';

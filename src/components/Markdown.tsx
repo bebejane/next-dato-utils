@@ -1,3 +1,5 @@
+'use server'
+
 import ReactMarkdown from "react-markdown";
 import gfm from 'remark-gfm'
 import Link from "next/link.js";
