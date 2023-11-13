@@ -17,7 +17,6 @@ export default function DraftMode({ enabled, draftUrl, tag, path }: DraftModePro
   const pathname = usePathname()
   const [loading, startTransition] = useTransition();
 
-
   useEffect(() => {
 
     if (!draftUrl || !enabled) return
