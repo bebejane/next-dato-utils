@@ -16,6 +16,7 @@ export default function DraftMode({ enabled, draftUrl, tag, path }: DraftModePro
 
   const pathname = usePathname()
   const [loading, startTransition] = useTransition();
+  console.log('draft mode', enabled, draftUrl, tag, path)
 
   useEffect(() => {
 
@@ -49,7 +50,10 @@ export default function DraftMode({ enabled, draftUrl, tag, path }: DraftModePro
   return (
     <div className={s.draftMode} >
       <div className={s.label}><img width="20" height="20" /><div>Draft Mode</div></div>
-      <button onClick={() => startTransition(() => disableDraftMode(pathname))}>
+      <button onClick={() => startTransition(() => {
+        console.log('exit draft mode')
+        disableDraftMode(pathname)
+      })}>
         Exit
         {loading && <div className={s.loading}><div className={s.loader}></div></div>}
       </button>
