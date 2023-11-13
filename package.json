@@ -1,13 +1,13 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.82",
+	"version": "1.0.83",
 	"description": "",
 	"main": "./dist/cjs/index.js",
 	"module": "./dist/esm/index.js",
 	"exports": {
 		"./draft": {
-			"require": "./cjs/components/DraftMode.js",
-			"import": "./esm/components/DraftMode.js"
+			"require": "./dist/cjs/components/DraftMode.js",
+			"import": "./dist/esm/components/DraftMode.js"
 		},
 		".": {
 			"require": "./dist/cjs/index.js",
