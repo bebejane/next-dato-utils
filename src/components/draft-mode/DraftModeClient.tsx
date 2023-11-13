@@ -72,6 +72,8 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }: Dra
       await sleep(1000)
     }
 
+    connect()
+
     return () => { disconnect() }
 
   }, [draftUrl, tag, path, enabled])

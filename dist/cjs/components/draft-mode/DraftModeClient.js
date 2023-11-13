@@ -54,6 +54,7 @@ function DraftMode({ enabled, draftUrl, tag, path, actions }) {
             }
             await (0, utils_1.sleep)(1000);
         };
+        connect();
         return () => { disconnect(); };
     }, [draftUrl, tag, path, enabled]);
     if (!enabled)

@@ -49,6 +49,7 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
             }
             await sleep(1000);
         };
+        connect();
         return () => { disconnect(); };
     }, [draftUrl, tag, path, enabled]);
     if (!enabled)
