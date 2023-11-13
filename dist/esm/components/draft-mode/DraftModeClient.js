@@ -30,9 +30,6 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
     }, [draftUrl, tag, path, enabled]);
     if (!enabled)
         return null;
-    return (_jsxs("div", { className: s.draftMode, children: [_jsxs("div", { className: s.label, children: [_jsx("img", { width: "20", height: "20" }), _jsx("div", { children: "Draft Mode" })] }), _jsxs("button", { onClick: () => startTransition(() => {
-                    console.log('exit draft mode');
-                    actions.disableDraftMode(pathname);
-                }), children: ["Exit", loading && _jsx("div", { className: s.loading, children: _jsx("div", { className: s.loader }) })] })] }));
+    return (_jsxs("div", { className: s.draftMode, children: [_jsxs("div", { className: s.label, children: [_jsx("img", { width: "20", height: "20" }), _jsx("div", { children: "Draft Mode" })] }), _jsx("div", { className: s.button, children: _jsxs("button", { onClick: () => startTransition(() => actions.disableDraftMode(pathname)), children: ["Exit", loading && _jsx("div", { className: s.loading, children: _jsx("div", { className: s.loader }) })] }) })] }));
 }
 //# sourceMappingURL=DraftModeClient.js.map
