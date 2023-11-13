@@ -1,5 +1,5 @@
 'use server'
-
+import { draftMode } from 'next/headers'
 import { revalidateTag, revalidatePath, disableDraftMode } from '../../actions'
 import DraftModeClient from './DraftModeClient'
 
@@ -9,11 +9,11 @@ type Props = {
   tag?: string
   path?: string
 }
-export default async function DraftMode({ enabled, draftUrl, tag, path }: Props) {
+export default async function DraftMode({ draftUrl, tag, path }: Props) {
 
   return (
     <DraftModeClient
-      enabled={enabled}
+      enabled={draftMode().isEnabled}
       draftUrl={draftUrl}
       tag={tag}
       path={path}
