@@ -1,5 +1,3 @@
-'use server'
-
 import { default as ReactMarkdown, Components } from 'react-markdown';
 import gfm from 'remark-gfm'
 import Link from "next/link";
