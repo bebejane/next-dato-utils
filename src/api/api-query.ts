@@ -1,5 +1,6 @@
 'use server'
 
+import { draftMode } from 'next/headers';
 import type { DocumentNode } from 'graphql';
 import { print } from 'graphql/language/printer';
 import { cache } from 'react';
@@ -28,7 +29,7 @@ export default async function apiQuery<T, V>(query: DocumentNode, options?: ApiQ
 
   const dedupeOptions: DedupeOptions = {
     body: JSON.stringify({ query: print(query), variables: options?.variables }) as string,
-    includeDrafts: options.includeDrafts ?? false,
+    includeDrafts: draftMode().isEnabled,//options.includeDrafts ?? false,
     excludeInvalid: options.excludeInvalid ?? true,
     visualEditingBaseUrl: options.visualEditingBaseUrl ?? undefined,
     revalidate,

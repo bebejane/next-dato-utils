@@ -1,4 +1,5 @@
 'use server';
+import { draftMode } from 'next/headers';
 import { print } from 'graphql/language/printer';
 import { cache } from 'react';
 export default async function apiQuery(query, options) {
@@ -11,7 +12,7 @@ export default async function apiQuery(query, options) {
     const revalidate = options?.includeDrafts ? 0 : typeof options?.revalidate === 'number' ? options.revalidate : parseInt(process.env.REVALIDATE_TIME) ?? 3600;
     const dedupeOptions = {
         body: JSON.stringify({ query: print(query), variables: options?.variables }),
-        includeDrafts: options.includeDrafts ?? false,
+        includeDrafts: draftMode().isEnabled,
         excludeInvalid: options.excludeInvalid ?? true,
         visualEditingBaseUrl: options.visualEditingBaseUrl ?? undefined,
         revalidate,
