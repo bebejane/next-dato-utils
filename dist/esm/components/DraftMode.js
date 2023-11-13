@@ -1,7 +1,7 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { revalidateTag, revalidatePath, disableDraftMode } from '../actions';
 import s from './DraftMode.module.scss';
+import { revalidateTag, revalidatePath, disableDraftMode } from '../actions';
 import { usePathname } from 'next/navigation';
 import { useEffect, useTransition } from 'react';
 export default function DraftMode({ enabled, draftUrl, tag, path }) {

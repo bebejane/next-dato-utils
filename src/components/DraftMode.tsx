@@ -1,7 +1,7 @@
 'use client'
 
-import { revalidateTag, revalidatePath, disableDraftMode } from '../actions'
 import s from './DraftMode.module.scss'
+import { revalidateTag, revalidatePath, disableDraftMode } from '../actions'
 import { usePathname } from 'next/navigation'
 import { useEffect, useTransition } from 'react'
 
