@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.114",
+	"version": "1.0.115",
 	"description": "",
 	"type": "module",
 	"scripts": {
@@ -36,6 +36,7 @@
 	"license": "ISC",
 	"dependencies": {
 		"commander": "^11.1.0",
+		"datocms-listen": "^0.1.15",
 		"dedent-js": "^1.0.1",
 		"dotenv": "^16.3.1",
 		"react-markdown": "^9.0.1",
