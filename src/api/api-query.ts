@@ -26,14 +26,11 @@ export default async function apiQuery<T, V>(query: DocumentNode, options?: ApiQ
 
   const queryId = (query.definitions?.[0] as any).name?.value as string
   const revalidate = options?.includeDrafts ? 0 : typeof options?.revalidate === 'number' ? options.revalidate : parseInt(process.env.REVALIDATE_TIME) ?? 3600
-  let includeDrafts = false;
+  let includeDrafts = options.includeDrafts ?? false;
 
-  try {
-    if (typeof includeDrafts === 'undefined')
-      includeDrafts = draftMode().isEnabled
-  } catch (e) {
-    //console.log('draftMode noat available')
-  }
+  if (typeof options.includeDrafts === 'undefined')
+    try { includeDrafts = draftMode().isEnabled } catch (e) { }
+
   const dedupeOptions: DedupeOptions = {
     body: JSON.stringify({ query: print(query), variables: options?.variables }) as string,
     includeDrafts,

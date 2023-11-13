@@ -12,14 +12,12 @@ async function apiQuery(query, options) {
         throw new Error('DATOCMS_ENVIRONMENT is not set');
     const queryId = (query.definitions?.[0]).name?.value;
     const revalidate = options?.includeDrafts ? 0 : typeof options?.revalidate === 'number' ? options.revalidate : parseInt(process.env.REVALIDATE_TIME) ?? 3600;
-    let includeDrafts = false;
-    try {
-        if (typeof includeDrafts === 'undefined')
+    let includeDrafts = options.includeDrafts ?? false;
+    if (typeof options.includeDrafts === 'undefined')
+        try {
             includeDrafts = (0, headers_1.draftMode)().isEnabled;
-    }
-    catch (e) {
-        //console.log('draftMode noat available')
-    }
+        }
+        catch (e) { }
     const dedupeOptions = {
         body: JSON.stringify({ query: (0, printer_1.print)(query), variables: options?.variables }),
         includeDrafts,
