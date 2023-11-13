@@ -44,6 +44,10 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }: Dra
       })
 
     });
+    eventSource.addEventListener("error", (err) => {
+      console.log('channel error')
+      console.log(err)
+    })
     return () => {
       eventSource.close()
     }
