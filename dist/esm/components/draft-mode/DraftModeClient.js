@@ -6,7 +6,6 @@ import { useEffect, useTransition } from 'react';
 export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
     const pathname = usePathname();
     const [loading, startTransition] = useTransition();
-    console.log('draft mode', enabled, draftUrl, tag, path);
     useEffect(() => {
         if (!draftUrl || !enabled)
             return;

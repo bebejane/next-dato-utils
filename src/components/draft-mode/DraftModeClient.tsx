@@ -20,7 +20,6 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }: Dra
 
   const pathname = usePathname()
   const [loading, startTransition] = useTransition();
-  console.log('draft mode', enabled, draftUrl, tag, path)
 
   useEffect(() => {
 

@@ -11,7 +11,6 @@ const react_1 = require("react");
 function DraftMode({ enabled, draftUrl, tag, path, actions }) {
     const pathname = (0, navigation_1.usePathname)();
     const [loading, startTransition] = (0, react_1.useTransition)();
-    console.log('draft mode', enabled, draftUrl, tag, path);
     (0, react_1.useEffect)(() => {
         if (!draftUrl || !enabled)
             return;
