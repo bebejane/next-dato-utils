@@ -2,7 +2,7 @@
 import { draftMode } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
-import { disableDraftMode } from '../actions';
+import { disableDraftMode } from '../server-actions';
 export default async function draft(request) {
     const { searchParams } = new URL(request.url);
     const secret = searchParams.get('secret');

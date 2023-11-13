@@ -19,5 +19,5 @@ __exportStar(require("./components"), exports);
 __exportStar(require("./utils"), exports);
 __exportStar(require("./hooks"), exports);
 __exportStar(require("./api"), exports);
-__exportStar(require("./actions"), exports);
+__exportStar(require("./server-actions"), exports);
 //# sourceMappingURL=index.js.map
