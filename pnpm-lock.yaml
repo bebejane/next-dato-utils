@@ -8,6 +8,7 @@ specifiers:
   '@types/react-dom': ^18.2.15
   commander: ^11.1.0
   copyfiles: ^2.4.1
+  datocms-listen: ^0.1.15
   datocms-structured-text-utils: ^2.0.4
   dedent-js: ^1.0.1
   dotenv: ^16.3.1
@@ -27,6 +28,7 @@ specifiers:
 
 dependencies:
   commander: 11.1.0
+  datocms-listen: 0.1.15_graphql@16.8.1
   dedent-js: 1.0.1
   dotenv: 16.3.1
   react-markdown: 9.0.1_u5zja476buyywzbvglb2fbhaii
@@ -63,7 +65,6 @@ packages:
         optional: true
     dependencies:
       graphql: 16.8.1
-    dev: true
 
   /@babel/runtime/7.23.2:
     resolution: {integrity: sha512-mM8eg4yl5D6i3lu2QKPuPH4FArvJ8KhTofbE7jwMUv9KX5mBvwPAqnV3MlyBNqdp9RyRKP6Yck8TrfYrPvX3bg==}
@@ -679,7 +680,6 @@ packages:
       '@0no-co/graphql.web': 1.0.4_graphql@16.8.1
     transitivePeerDependencies:
       - graphql
-    dev: true
 
   /datocms-structured-text-generic-html-renderer/2.0.4:
     resolution: {integrity: sha512-Rv5Y1eC9NZXNSz3FHvHGFvGnKEEbvG1kQWlylpCSoeDBZPBwSWAFD/ixIAOfa8Yk1EVpmoQd3KQd725WKYJwRQ==}
@@ -894,7 +894,6 @@ packages:
   /graphql/16.8.1:
     resolution: {integrity: sha512-59LZHPdGZVh695Ud9lRzPBVTtlX9ZCV150Er2W43ro37wVof0ctenSaskPPjN7lVTIN8mSZt8PHUNKZuNQUuxw==}
     engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
-    dev: true
 
   /has-flag/3.0.0:
     resolution: {integrity: sha512-sKJf1+ceQBr4SMkvQnBDNDtf4TXpVhVGateu0t918bl30FnbE2m4vNLX+VWe/dpjlb+HugGYzW7uQXH98HPEYw==}
