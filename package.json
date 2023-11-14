@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.144",
+	"version": "1.0.145",
 	"description": "",
 	"type": "module",
 	"scripts": {
@@ -20,13 +20,13 @@
 	"typings": "./dist/index.d.ts",
 	"exports": {
 		".": {
-			"import": "./index.esm.js",
-			"require": "./index.js"
+			"import": "./dist/index.esm.js",
+			"require": "./dist/index.js"
 		},
 		"./package.json": "./package.json"
 	},
 	"files": [
-		"dist/*"
+		"dist"
 	],
 	"bin": {
 		"nextdato": "./dist/esm//cli/index.js"
