@@ -29,7 +29,7 @@ const parseDelay = (entity) => {
     const updated_at = entity.meta?.updated_at ?? entity.attributes?.updated_at ?? null;
     const published_at = entity.meta?.published_at ?? entity.attributes?.published_at ?? null;
     const created_at = entity.meta?.created_at ?? entity.attributes?.created_at ?? null;
-    if (!updated_at || !published_at || !created_at)
+    if (!updated_at && !published_at && !created_at)
         return 0;
     return Date.now() - Math.max(new Date(updated_at).getTime(), new Date(published_at).getTime(), new Date(created_at).getTime());
 };
