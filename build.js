@@ -21,7 +21,7 @@ esbuild
 		...config,
 		target: ["node16"],
 		tsconfig: "tsconfig.json",
-		outfile: "./dist/index.esm.js",
+		outfile: "./dist/esm/index.js",
 		platform: "neutral",
 		format: "esm",
 	})
@@ -34,7 +34,7 @@ esbuild
 	.build({
 		...config,
 		tsconfig: "tsconfig-cjs.json",
-		outfile: "./dist/index.js",
+		outfile: "./dist/cjs/index.js",
 		platform: "node",
 	})
 	.catch((err) => {
