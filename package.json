@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.142",
+	"version": "1.0.143",
 	"description": "",
 	"type": "module",
 	"scripts": {
@@ -15,14 +15,15 @@
 		"tsc": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
 		"esbuild": "esbuild src/**/*.ts --bundle --tsconfig=tsconfig.json --platform=browser --out=dist/esm/index.js --minify --sourcemap --target=es2017"
 	},
-	"module": "dist/index.esm.js",
-	"main": "dist/index.js",
-	"typings": "dist/index.d.ts",
+	"module": "./dist/index.esm.js",
+	"main": "./dist/index.js",
+	"typings": "./dist/index.d.ts",
 	"exports": {
 		".": {
 			"import": "./dist/index.esm.js",
 			"require": "./dist/index.js"
-		}
+		},
+		"./package.json": "./package.json"
 	},
 	"files": [
 		"dist/*"
