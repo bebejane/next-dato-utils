@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.308",
+	"version": "1.0.309",
 	"description": "",
 	"type": "module",
 	"scripts": {
@@ -41,6 +41,7 @@
 		"dedent-js": "^1.0.1",
 		"dotenv": "^16.3.1",
 		"is-integer": "^1.0.7",
+		"object-traversal": "^1.0.1",
 		"react-markdown": "^9.0.1",
 		"remark-breaks": "^4.0.0",
 		"remark-gfm": "^4.0.0",
