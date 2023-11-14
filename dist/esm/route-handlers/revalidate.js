@@ -5,8 +5,8 @@ export default async function revalidate(req, callback) {
     if (!payload || !payload?.entity)
         return new Response('Payload empty or missing entity', { status: 400 });
     const { entity, related_entities, event_type, entity_type } = payload;
-    const api_key = related_entities.find(({ id }) => id === entity.relationships?.item_type?.data?.id)?.attributes?.api_key;
-    const delay = Date.now() - Math.max(new Date(entity.meta.updated_at).getTime(), new Date(entity.meta.published_at).getTime(), new Date(entity.meta.created_at).getTime());
+    const api_key = related_entities?.find(({ id }) => id === entity.relationships?.item_type?.data?.id)?.attributes?.api_key;
+    const delay = parseDelay(entity);
     const now = Date.now();
     const response = { revalidated: false, event_type, entity_type, api_key, delay, now };
     const transformedPayload = { entity, event_type, entity_type, api_key };
@@ -25,4 +25,12 @@ export default async function revalidate(req, callback) {
         }
     });
 }
+const parseDelay = (entity) => {
+    const updated_at = entity.meta?.updated_at ?? entity.attributes?.updated_at ?? null;
+    const published_at = entity.meta?.published_at ?? entity.attributes?.published_at ?? null;
+    const created_at = entity.meta?.created_at ?? entity.attributes?.created_at ?? null;
+    if (!updated_at || !published_at || !created_at)
+        return 0;
+    return Date.now() - Math.max(new Date(updated_at).getTime(), new Date(published_at).getTime(), new Date(created_at).getTime());
+};
 //# sourceMappingURL=revalidate.js.map

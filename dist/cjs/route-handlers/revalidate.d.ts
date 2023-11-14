@@ -27,7 +27,7 @@ export type DatoWebhookPayload = {
                 };
             };
         };
-        meta: {
+        meta?: {
             created_at: string;
             updated_at: string;
             published_at: string;
