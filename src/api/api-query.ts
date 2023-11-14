@@ -57,7 +57,7 @@ export default async function apiQuery<T, V>(query: DocumentNode, options?: ApiQ
     ...opt,
     queryId
   }
-
+  console.log(dedupeOptions)
   const tags = opt.generateTags ? generateIdTags(await dedupedFetch(dedupeOptions), opt.tags, queryId) : opt.tags
   const res = includeDrafts ? await dedupedFetch({ ...dedupeOptions, url: 'https://graphql-listen.datocms.com/preview' }) : {}
   const { data } = await dedupedFetch({ ...dedupeOptions, tags });

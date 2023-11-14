@@ -24,7 +24,6 @@ async function apiQuery(query, options) {
     if (!process.env.DATOCMS_ENVIRONMENT)
         throw new Error('DATOCMS_ENVIRONMENT is not set');
     const queryId = (query.definitions?.[0]).name?.value;
-    const revalidate = opt.includeDrafts ? 0 : opt.revalidate;
     let includeDrafts = opt.includeDrafts ?? false;
     if (typeof opt.includeDrafts === 'undefined')
         try {
@@ -36,6 +35,7 @@ async function apiQuery(query, options) {
         ...opt,
         queryId
     };
+    console.log(dedupeOptions);
     const tags = opt.generateTags ? generateIdTags(await dedupedFetch(dedupeOptions), opt.tags, queryId) : opt.tags;
     const res = includeDrafts ? await dedupedFetch({ ...dedupeOptions, url: 'https://graphql-listen.datocms.com/preview' }) : {};
     const { data } = await dedupedFetch({ ...dedupeOptions, tags });
@@ -81,7 +81,7 @@ const generateIdTags = (data, tags, queryId) => {
     });
     tags?.length && allTags.push.apply(allTags, tags);
     const idTags = allTags.filter((value, index, self) => self.indexOf(value) === index); // dedupe
-    console.log('idTags', queryId, idTags);
+    console.log(queryId, tags, idTags);
     return idTags;
 };
 const iterateObject = (obj, fn) => {
