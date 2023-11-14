@@ -4,13 +4,14 @@
     "outDir": "./dist/esm",
     "strict": true,
     "target": "ES2021",
-    "module": "ES2020",
+    "module": "NodeNext",
     "jsx": "react-jsx",
     "sourceMap": true,
     "esModuleInterop": true,
-    "moduleResolution": "node",
+    "moduleResolution": "NodeNext",
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
+    "noEmit": true,
     "resolveJsonModule": true
   },
   "include": [
