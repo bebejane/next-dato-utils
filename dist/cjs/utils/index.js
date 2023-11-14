@@ -18,9 +18,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.iterateObject = exports.markdownTruncate = void 0;
-var markdown_truncate_1 = require("./markdown-truncate");
-Object.defineProperty(exports, "markdownTruncate", { enumerable: true, get: function () { return __importDefault(markdown_truncate_1).default; } });
-var iterate_object_1 = require("./iterate-object");
-Object.defineProperty(exports, "iterateObject", { enumerable: true, get: function () { return __importDefault(iterate_object_1).default; } });
-__exportStar(require("./utils"), exports);
+var markdown_truncate_js_1 = require("./markdown-truncate.js");
+Object.defineProperty(exports, "markdownTruncate", { enumerable: true, get: function () { return __importDefault(markdown_truncate_js_1).default; } });
+var iterate_object_js_1 = require("./iterate-object.js");
+Object.defineProperty(exports, "iterateObject", { enumerable: true, get: function () { return __importDefault(iterate_object_js_1).default; } });
+__exportStar(require("./utils.js"), exports);
 //# sourceMappingURL=index.js.map

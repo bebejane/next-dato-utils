@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const cache_1 = require("next/cache");
+const cache_js_1 = require("next/cache.js");
 //import basicAuth from "./basic-auth";
 async function revalidate(req, callback) {
     const payload = await req.json();
@@ -18,8 +18,8 @@ async function revalidate(req, callback) {
         try {
             if ((!paths && !tags) || (!paths.length && !tags.length))
                 return new Response(JSON.stringify(response), { status: 200, headers: { 'content-type': 'application/json' } });
-            paths?.forEach(p => (0, cache_1.revalidatePath)(p));
-            tags?.forEach(t => (0, cache_1.revalidateTag)(t));
+            paths?.forEach(p => (0, cache_js_1.revalidatePath)(p));
+            tags?.forEach(t => (0, cache_js_1.revalidateTag)(t));
             return new Response(JSON.stringify({ ...response, revalidated: true, paths, tags }), { status: 200, headers: { 'content-type': 'application/json' } });
         }
         catch (error) {

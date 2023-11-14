@@ -1,8 +1,8 @@
 'use server'
 
-import { draftMode } from 'next/headers';
-import type { DocumentNode } from 'graphql';
-import { print } from 'graphql/language/printer';
+import { draftMode } from 'next/headers.js'
+import type { DocumentNode } from 'graphql'
+import { print } from 'graphql/language/printer.js'
 import { cache } from 'react';
 
 export type ApiQueryOptions<V> = {

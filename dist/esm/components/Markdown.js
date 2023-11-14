@@ -1,8 +1,8 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { default as ReactMarkdown } from 'react-markdown';
 import gfm from 'remark-gfm';
-import Link from "next/link";
-import markdownTruncate from '../utils/markdown-truncate';
+import Link from 'next/link.js';
+import markdownTruncate from '../utils/markdown-truncate.js';
 import remarkBreaks from 'remark-breaks';
 const truncateSentances = (markdown, limit) => {
     if (!markdown)
@@ -15,6 +15,7 @@ export default async function Markdown({ content, truncate, className, component
     return (_jsx(ReactMarkdown, { remarkPlugins: disableBreaks ? [gfm] : [gfm, remarkBreaks], className: className, children: truncatedContent, allowedElements: allowedElements, 
         //@ts-ignore
         components: components ?? {
+            //@ts-ignore
             a: ({ children, href }) => _jsx(Link, { scroll: scroll, href: href, children: children[0] })
         } }));
 }

@@ -1,4 +1,4 @@
-import basicAuth from './basic-auth';
+import basicAuth from './basic-auth.js';
 import { buildClient } from '@datocms/cma-client-browser';
 const tests = async (req) => {
     return await basicAuth(req, async (req) => {

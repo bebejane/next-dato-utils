@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest } from 'next/server.js';
 export type PreviewLink = {
     label: string;
     url: string;

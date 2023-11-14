@@ -1,2 +1,2 @@
-export { default as useScrollInfo } from './useScrollInfo';
-export { default as useApiQuery } from './useApiQuery';
+export { default as useScrollInfo } from './useScrollInfo.js';
+export { default as useApiQuery } from './useApiQuery.js';

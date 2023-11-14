@@ -44,7 +44,7 @@ const useApiQuery = <T, V>(document: DocumentNode, { variables, initialData, pag
     setLoading(true)
 
     return apiQuery<T, V>(document, { variables: { ...variables, ...vars }, includeDrafts })
-      .then(res => {
+      .then((res: any) => {
         const d = mergeData(res, data)
         setData(d)
         return d

@@ -1,9 +1,9 @@
 'use server'
 
-import { draftMode } from 'next/headers'
-import { redirect } from 'next/navigation'
-import { cookies } from 'next/headers'
-import { disableDraftMode } from '../server-actions'
+import { draftMode } from 'next/headers.js'
+import { redirect } from 'next/navigation.js'
+import { cookies } from 'next/headers.js'
+import { disableDraftMode } from '../server-actions/index.js'
 
 export default async function draft(request: Request): Promise<Response | void> {
 

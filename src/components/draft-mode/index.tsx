@@ -1,8 +1,8 @@
 'use server'
 
-import { draftMode } from 'next/headers'
-import { revalidateTag, revalidatePath, disableDraftMode } from '../../server-actions'
-import DraftModeClient from './DraftModeClient'
+import { draftMode } from 'next/headers.js'
+import { revalidateTag, revalidatePath, disableDraftMode } from '../../server-actions/index.js'
+import DraftModeClient from './DraftModeClient.js'
 
 export type Props = {
   url?: string,

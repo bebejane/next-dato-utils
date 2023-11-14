@@ -22,7 +22,7 @@ const useApiQuery = (document, { variables, initialData, pageSize = 100, include
     const load = useCallback((vars) => {
         setLoading(true);
         return apiQuery(document, { variables: { ...variables, ...vars }, includeDrafts })
-            .then(res => {
+            .then((res) => {
             const d = mergeData(res, data);
             setData(d);
             return d;

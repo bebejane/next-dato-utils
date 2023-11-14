@@ -1,7 +1,7 @@
 'use server';
-import { draftMode } from 'next/headers';
-import { redirect } from 'next/navigation';
-import { revalidateTag as rt, revalidatePath as rp } from 'next/cache';
+import { draftMode } from 'next/headers.js';
+import { redirect } from 'next/navigation.js';
+import { revalidateTag as rt, revalidatePath as rp } from 'next/cache.js';
 export async function disableDraftMode(pathname) {
     console.log('disableDraftMode', pathname);
     draftMode().disable();

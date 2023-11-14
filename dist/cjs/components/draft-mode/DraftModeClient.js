@@ -6,11 +6,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const DraftModeClient_module_scss_1 = __importDefault(require("./DraftModeClient.module.scss"));
-const navigation_1 = require("next/navigation");
+const navigation_js_1 = require("next/navigation.js");
 const react_1 = require("react");
-const utils_1 = require("../../utils");
+const index_js_1 = require("../../utils/index.js");
 function DraftMode({ enabled, draftUrl, tag, path, actions }) {
-    const pathname = (0, navigation_1.usePathname)();
+    const pathname = (0, navigation_js_1.usePathname)();
     const [loading, startTransition] = (0, react_1.useTransition)();
     const listener = (0, react_1.useRef)(null);
     (0, react_1.useEffect)(() => {
@@ -52,7 +52,7 @@ function DraftMode({ enabled, draftUrl, tag, path, actions }) {
                 listener.current.close();
                 listener.current = null;
             }
-            await (0, utils_1.sleep)(1000);
+            await (0, index_js_1.sleep)(1000);
         };
         connect();
         return () => { disconnect(); };

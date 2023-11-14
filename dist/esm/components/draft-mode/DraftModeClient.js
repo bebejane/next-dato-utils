@@ -1,9 +1,9 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import s from './DraftModeClient.module.scss';
-import { usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation.js';
 import { useEffect, useTransition, useRef } from 'react';
-import { sleep } from '../../utils';
+import { sleep } from '../../utils/index.js';
 export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
     const pathname = usePathname();
     const [loading, startTransition] = useTransition();

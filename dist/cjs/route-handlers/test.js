@@ -4,10 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.testResultsToHtml = exports.testResultsToString = exports.testApiEndpoints = void 0;
-const basic_auth_1 = __importDefault(require("./basic-auth"));
+const basic_auth_js_1 = __importDefault(require("./basic-auth.js"));
 const cma_client_browser_1 = require("@datocms/cma-client-browser");
 const tests = async (req) => {
-    return await (0, basic_auth_1.default)(req, async (req) => {
+    return await (0, basic_auth_js_1.default)(req, async (req) => {
         const results = await testApiEndpoints();
         const params = new URLSearchParams(req.url.split('?')[1]);
         if (params.get('json'))
