@@ -2,11 +2,12 @@ export default function revalidate(req: Request, callback: (payload: RevalidateP
 export type RevalidatePayload = {
     event_type: DatoWebhookPayload['event_type'];
     entity: DatoWebhookPayload['entity'];
-    api_key: string;
+    entity_type: DatoWebhookPayload['entity_type'];
+    api_key?: string;
 };
 export type DatoWebhookPayload = {
     environment: string;
-    entity_type: string;
+    entity_type: 'item' | 'item_type' | 'upload';
     event_type: 'create' | 'update' | 'publish' | 'unpublish' | 'delete';
     entity: {
         id: string;

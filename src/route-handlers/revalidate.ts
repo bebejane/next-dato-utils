@@ -18,6 +18,7 @@ export default async function revalidate(req: Request, callback: (payload: Reval
 
   return await callback(transformedPayload, async (paths, tags) => {
     try {
+
       if ((!paths && !tags) || (!paths.length && !tags.length))
         return new Response(JSON.stringify(response), { status: 200, headers: { 'content-type': 'application/json' } })
 
