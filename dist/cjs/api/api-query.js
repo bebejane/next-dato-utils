@@ -1,33 +1,42 @@
 "use strict";
 'use server';
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const headers_js_1 = require("next/headers.js");
 const printer_js_1 = require("graphql/language/printer.js");
 const react_1 = require("react");
+const is_integer_1 = __importDefault(require("is-integer"));
+const defaultOptions = {
+    variables: undefined,
+    includeDrafts: false,
+    excludeInvalid: true,
+    visualEditingBaseUrl: undefined,
+    revalidate: (0, is_integer_1.default)(process.env.REVALIDATE_TIME) ? parseInt(process.env.REVALIDATE_TIME) : 3600,
+    tags: undefined,
+    generateTags: true
+};
 async function apiQuery(query, options) {
-    options = options ?? {};
+    const opt = Object.assign(defaultOptions, options ?? {});
     if (!process.env.DATOCMS_API_TOKEN)
         throw new Error('DATOCMS_API_TOKEN is not set');
     if (!process.env.DATOCMS_ENVIRONMENT)
         throw new Error('DATOCMS_ENVIRONMENT is not set');
     const queryId = (query.definitions?.[0]).name?.value;
-    const revalidate = options?.includeDrafts ? 0 : typeof options?.revalidate === 'number' ? options.revalidate : parseInt(process.env.REVALIDATE_TIME) ?? 3600;
-    let includeDrafts = options.includeDrafts ?? false;
-    if (typeof options.includeDrafts === 'undefined')
+    const revalidate = opt.includeDrafts ? 0 : opt.revalidate;
+    let includeDrafts = opt.includeDrafts ?? false;
+    if (typeof opt.includeDrafts === 'undefined')
         try {
             includeDrafts = (0, headers_js_1.draftMode)().isEnabled;
         }
         catch (e) { }
     const dedupeOptions = {
         body: JSON.stringify({ query: (0, printer_js_1.print)(query), variables: options?.variables }),
-        includeDrafts,
-        excludeInvalid: options.excludeInvalid ?? true,
-        visualEditingBaseUrl: options.visualEditingBaseUrl ?? undefined,
-        revalidate,
-        tags: options.tags ?? undefined,
+        ...opt,
         queryId
     };
-    const tags = options.generateTags ? generateIdTags(await dedupedFetch(dedupeOptions), options.tags ?? null, queryId) : options.tags;
+    const tags = opt.generateTags ? generateIdTags(await dedupedFetch(dedupeOptions), opt.tags, queryId) : opt.tags;
     const res = includeDrafts ? await dedupedFetch({ ...dedupeOptions, url: 'https://graphql-listen.datocms.com/preview' }) : {};
     const { data } = await dedupedFetch({ ...dedupeOptions, tags });
     return { ...data, draftUrl: res.url ?? null };
@@ -49,9 +58,7 @@ const dedupedFetch = (0, react_1.cache)(async (options) => {
             ? { 'X-Environment': process.env.DATOCMS_ENVIRONMENT }
             : {}),
     };
-    const next = {};
-    if (revalidate !== null)
-        next['revalidate'] = revalidate;
+    const next = { revalidate };
     if (tags && tags?.length > 0)
         next['tags'] = tags;
     const response = await fetch(url ?? 'https://graphql.datocms.com/', {
@@ -74,7 +81,7 @@ const generateIdTags = (data, tags, queryId) => {
     });
     tags?.length && allTags.push.apply(allTags, tags);
     const idTags = allTags.filter((value, index, self) => self.indexOf(value) === index); // dedupe
-    //console.log('idTags', queryId, idTags)
+    console.log('idTags', queryId, idTags);
     return idTags;
 };
 const iterateObject = (obj, fn) => {
