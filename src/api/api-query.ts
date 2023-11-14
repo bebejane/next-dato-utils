@@ -25,6 +25,7 @@ export type DefaultApiQueryOptions = ApiQueryOptions<any> & {
   revalidate: number | undefined,
   tags: string[] | undefined,
   generateTags: boolean,
+  logs?: boolean
 }
 
 const defaultOptions: DefaultApiQueryOptions = {
@@ -34,7 +35,8 @@ const defaultOptions: DefaultApiQueryOptions = {
   visualEditingBaseUrl: undefined,
   revalidate: isInteger(process.env.REVALIDATE_TIME) ? parseInt(process.env.REVALIDATE_TIME) : 3600,
   tags: undefined,
-  generateTags: true
+  generateTags: true,
+  logs: false
 };
 
 
@@ -73,7 +75,8 @@ export type DedupeOptions = {
   visualEditingBaseUrl: string | undefined;
   revalidate?: number;
   tags?: string[] | undefined
-  queryId: string
+  queryId: string,
+  logs?: boolean
 }
 
 const dedupedFetch = cache(async (options: DedupeOptions) => {
@@ -85,7 +88,8 @@ const dedupedFetch = cache(async (options: DedupeOptions) => {
     visualEditingBaseUrl,
     revalidate,
     tags,
-    queryId
+    queryId,
+    logs
   } = options;
 
   const headers = {
@@ -124,7 +128,7 @@ const dedupedFetch = cache(async (options: DedupeOptions) => {
       )}`,
     );
   }
-  console.log(queryId, options.tags, response.headers.get('x-cache'))
+  logs && console.log(queryId, { ...options, body: undefined }, response.headers.get('x-cache'))
   return responseBody;
 })
 

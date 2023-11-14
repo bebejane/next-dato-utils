@@ -16,6 +16,7 @@ export type DefaultApiQueryOptions = ApiQueryOptions<any> & {
     revalidate: number | undefined;
     tags: string[] | undefined;
     generateTags: boolean;
+    logs?: boolean;
 };
 export default function apiQuery<T, V>(query: DocumentNode, options?: ApiQueryOptions<V>): Promise<T & {
     draftUrl: string | null;
@@ -29,4 +30,5 @@ export type DedupeOptions = {
     revalidate?: number;
     tags?: string[] | undefined;
     queryId: string;
+    logs?: boolean;
 };

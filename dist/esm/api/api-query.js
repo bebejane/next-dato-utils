@@ -11,7 +11,8 @@ const defaultOptions = {
     visualEditingBaseUrl: undefined,
     revalidate: isInteger(process.env.REVALIDATE_TIME) ? parseInt(process.env.REVALIDATE_TIME) : 3600,
     tags: undefined,
-    generateTags: true
+    generateTags: true,
+    logs: false
 };
 export default async function apiQuery(query, options) {
     const opt = Object.assign(defaultOptions, options ?? {});
@@ -37,7 +38,7 @@ export default async function apiQuery(query, options) {
     return { ...data, draftUrl: res.url ?? null };
 }
 const dedupedFetch = cache(async (options) => {
-    const { url, body, includeDrafts, excludeInvalid, visualEditingBaseUrl, revalidate, tags, queryId } = options;
+    const { url, body, includeDrafts, excludeInvalid, visualEditingBaseUrl, revalidate, tags, queryId, logs } = options;
     const headers = {
         'Authorization': `Bearer ${process.env.DATOCMS_API_TOKEN}`,
         ...(includeDrafts ? { 'X-Include-Drafts': 'true' } : {}),
@@ -65,7 +66,7 @@ const dedupedFetch = cache(async (options) => {
     if (!response.ok) {
         throw new Error(`${response.status} ${response.statusText}: ${JSON.stringify(responseBody)}`);
     }
-    console.log(queryId, options.tags, response.headers.get('x-cache'));
+    logs && console.log(queryId, { ...options, body: undefined }, response.headers.get('x-cache'));
     return responseBody;
 });
 const generateIdTags = (data, tags, queryId) => {
