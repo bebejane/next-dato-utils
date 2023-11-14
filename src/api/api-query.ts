@@ -60,8 +60,8 @@ export default async function apiQuery<T, V>(query: DocumentNode, options?: ApiQ
   }
 
   const tags = opt.generateTags ? generateIdTags(await dedupedFetch(dedupeOptions), opt.tags, queryId) : opt.tags
+  const { data } = await dedupedFetch({ ...dedupeOptions });
   const res = includeDrafts ? await dedupedFetch({ ...dedupeOptions, tags, url: 'https://graphql-listen.datocms.com/preview' }) : {}
-  const { data } = await dedupedFetch({ ...dedupeOptions, tags });
   return { ...data, draftUrl: res.url ?? null }
 }
 
@@ -124,7 +124,7 @@ const dedupedFetch = cache(async (options: DedupeOptions) => {
       )}`,
     );
   }
-  console.log(queryId, options)
+  console.log(queryId, { ...options, body: undefined })
   return responseBody;
 })
 
