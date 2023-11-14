@@ -1,7 +1,7 @@
 import esbuild from "esbuild";
 import { sassPlugin } from "esbuild-sass-plugin";
+import { default as Generator } from "npm-dts";
 import pckg from "./package.json" assert { type: "json" };
-import * as dts from "npm-dts";
 
 const config = {
 	entryPoints: ["src/index.ts"],
@@ -11,9 +11,9 @@ const config = {
 	external: Object.keys(pckg.devDependencies).concat(Object.keys(pckg.peerDependencies)),
 	plugins: [sassPlugin()],
 };
-new dts.default.Generator({
+const g = new Generator({
 	entry: "src/index.ts",
-	output: "dist/esm/index.d.ts",
+	output: "./dist/index.d.ts",
 }).generate();
 
 esbuild
