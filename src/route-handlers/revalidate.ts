@@ -10,11 +10,11 @@ export default async function revalidate(req: Request, callback: (payload: Reval
 
   const { entity, related_entities, event_type, entity_type } = payload
   const api_key = related_entities.find(({ id }) => id === entity.relationships?.item_type?.data?.id)?.attributes?.api_key
-
-  const transformedPayload: RevalidatePayload = { entity, event_type, entity_type, api_key }
   const delay = Date.now() - Math.max(new Date(entity.meta.updated_at).getTime(), new Date(entity.meta.published_at).getTime(), new Date(entity.meta.created_at).getTime())
   const now = Date.now()
   const response = { revalidated: false, event_type, entity_type, api_key, delay, now }
+
+  const transformedPayload: RevalidatePayload = { entity, event_type, entity_type, api_key }
 
   return await callback(transformedPayload, async (paths, tags) => {
     try {
@@ -38,7 +38,7 @@ export type RevalidatePayload = {
   event_type: DatoWebhookPayload['event_type']
   entity: DatoWebhookPayload['entity']
   entity_type: DatoWebhookPayload['entity_type']
-  api_key?: string
+  api_key?: string | undefined
 }
 
 export type DatoWebhookPayload = {

@@ -3,7 +3,7 @@ export type RevalidatePayload = {
     event_type: DatoWebhookPayload['event_type'];
     entity: DatoWebhookPayload['entity'];
     entity_type: DatoWebhookPayload['entity_type'];
-    api_key?: string;
+    api_key?: string | undefined;
 };
 export type DatoWebhookPayload = {
     environment: string;
