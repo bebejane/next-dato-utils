@@ -34,11 +34,10 @@ export default async function apiQuery(query, options) {
     const tags = opt.generateTags ? generateIdTags(await dedupedFetch(dedupeOptions), opt.tags, queryId) : opt.tags;
     const res = includeDrafts ? await dedupedFetch({ ...dedupeOptions, tags, url: 'https://graphql-listen.datocms.com/preview' }) : {};
     const { data } = await dedupedFetch({ ...dedupeOptions, tags });
-    console.log(queryId, { ...opt, tags });
     return { ...data, draftUrl: res.url ?? null };
 }
 const dedupedFetch = cache(async (options) => {
-    const { url, body, includeDrafts, excludeInvalid, visualEditingBaseUrl, revalidate, tags } = options;
+    const { url, body, includeDrafts, excludeInvalid, visualEditingBaseUrl, revalidate, tags, queryId } = options;
     const headers = {
         'Authorization': `Bearer ${process.env.DATOCMS_API_TOKEN}`,
         ...(includeDrafts ? { 'X-Include-Drafts': 'true' } : {}),
@@ -66,6 +65,7 @@ const dedupedFetch = cache(async (options) => {
     if (!response.ok) {
         throw new Error(`${response.status} ${response.statusText}: ${JSON.stringify(responseBody)}`);
     }
+    console.log(queryId, options);
     return responseBody;
 });
 const generateIdTags = (data, tags, queryId) => {
