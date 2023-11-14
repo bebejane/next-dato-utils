@@ -4,6 +4,7 @@ import { draftMode } from 'next/headers.js'
 import type { DocumentNode } from 'graphql'
 import { print } from 'graphql/language/printer.js'
 import { cache } from 'react';
+import { traverse } from 'object-traversal';
 import isInteger from 'is-integer';
 
 export type ApiQueryOptions<V> = {
@@ -128,33 +129,13 @@ const dedupedFetch = cache(async (options: DedupeOptions) => {
 
 const generateIdTags = (data: any, tags: string[] | undefined, queryId: string): string[] => {
 
-  const allTags: string[] = []
+  const allTags: string[] = tags?.length ? tags : []
 
-  iterateObject(data, (key, value) => {
+  traverse(data, ({ key, value }) => {
     key === 'id' && allTags.push(value)
-    return true
   })
 
-  tags?.length && allTags.push.apply(allTags, tags)
-  const idTags = allTags.filter((value, index, self) => self.indexOf(value) === index) // dedupe
-  console.log(queryId, tags, idTags)
-  return idTags
-
-}
-
-const iterateObject = (obj: any, fn: (key: string, value: any, obj: any) => boolean) => {
-  let i = 0, keys = [];
-
-  if (Array.isArray(obj)) {
-    for (; i < obj.length; ++i) {
-      if (fn(obj[i], i, obj) === false)
-        break;
-    }
-  } else if (typeof obj === "object" && obj !== null) {
-    keys = Object.keys(obj);
-    for (; i < keys.length; ++i) {
-      if (fn(obj[keys[i]], keys[i], obj) === false)
-        break;
-    }
-  }
+  const uniqueTags = allTags.filter((value, index, self) => self.indexOf(value) === index).filter(t => t)
+  console.log(queryId, 'tags: ', uniqueTags)
+  return uniqueTags
 }

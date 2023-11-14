@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const headers_js_1 = require("next/headers.js");
 const printer_js_1 = require("graphql/language/printer.js");
 const react_1 = require("react");
+const object_traversal_1 = require("object-traversal");
 const is_integer_1 = __importDefault(require("is-integer"));
 const defaultOptions = {
     variables: undefined,
@@ -74,30 +75,12 @@ const dedupedFetch = (0, react_1.cache)(async (options) => {
     return responseBody;
 });
 const generateIdTags = (data, tags, queryId) => {
-    const allTags = [];
-    iterateObject(data, (key, value) => {
+    const allTags = tags?.length ? tags : [];
+    (0, object_traversal_1.traverse)(data, ({ key, value }) => {
         key === 'id' && allTags.push(value);
-        return true;
     });
-    tags?.length && allTags.push.apply(allTags, tags);
-    const idTags = allTags.filter((value, index, self) => self.indexOf(value) === index); // dedupe
-    console.log(queryId, tags, idTags);
-    return idTags;
-};
-const iterateObject = (obj, fn) => {
-    let i = 0, keys = [];
-    if (Array.isArray(obj)) {
-        for (; i < obj.length; ++i) {
-            if (fn(obj[i], i, obj) === false)
-                break;
-        }
-    }
-    else if (typeof obj === "object" && obj !== null) {
-        keys = Object.keys(obj);
-        for (; i < keys.length; ++i) {
-            if (fn(obj[keys[i]], keys[i], obj) === false)
-                break;
-        }
-    }
+    const uniqueTags = allTags.filter((value, index, self) => self.indexOf(value) === index).filter(t => t);
+    console.log(queryId, 'tags: ', uniqueTags);
+    return uniqueTags;
 };
 //# sourceMappingURL=api-query.js.map
