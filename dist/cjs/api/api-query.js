@@ -37,7 +37,7 @@ async function apiQuery(query, options) {
         queryId
     };
     const tags = opt.generateTags ? generateIdTags(await dedupedFetch(dedupeOptions), opt.tags, queryId) : opt.tags;
-    const { data } = await dedupedFetch({ ...dedupeOptions });
+    const { data } = await dedupedFetch({ ...dedupeOptions, tags });
     const res = includeDrafts ? await dedupedFetch({ ...dedupeOptions, tags, url: 'https://graphql-listen.datocms.com/preview' }) : {};
     return { ...data, draftUrl: res.url ?? null };
 }
@@ -71,7 +71,7 @@ const dedupedFetch = (0, react_1.cache)(async (options) => {
     if (!response.ok) {
         throw new Error(`${response.status} ${response.statusText}: ${JSON.stringify(responseBody)}`);
     }
-    console.log(queryId, { ...options, body: undefined });
+    console.log(queryId, options.tags, responseBody.status);
     return responseBody;
 });
 const generateIdTags = (data, tags, queryId) => {
