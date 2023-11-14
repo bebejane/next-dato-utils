@@ -124,7 +124,7 @@ const dedupedFetch = cache(async (options: DedupeOptions) => {
       )}`,
     );
   }
-  console.log(queryId, options.tags, responseBody.status)
+  console.log(queryId, options.tags, response.headers.get('x-cache'))
   return responseBody;
 })
 

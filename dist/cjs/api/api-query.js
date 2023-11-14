@@ -71,7 +71,7 @@ const dedupedFetch = (0, react_1.cache)(async (options) => {
     if (!response.ok) {
         throw new Error(`${response.status} ${response.statusText}: ${JSON.stringify(responseBody)}`);
     }
-    console.log(queryId, options.tags, responseBody.status);
+    console.log(queryId, options.tags, response.headers.get('x-cache'));
     return responseBody;
 });
 const generateIdTags = (data, tags, queryId) => {
