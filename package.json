@@ -1,13 +1,13 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.138",
+	"version": "1.0.139",
 	"description": "",
 	"type": "module",
 	"scripts": {
 		"build": "npm run clean && npm run tsc && npm run copy-files",
 		"build:esbuild": "npm run clean && npm run esbuild && npm run copy-files",
 		"copy-files": "copyfiles -u 1 src/**/*.scss dist/esm && copyfiles -u 1 src/**/*.scss dist/cjs",
-		"pub": "npm version patch --force && npm run build:esbuild && git add . && git commit -m \"updates\" && git push",
+		"pub": "npm version patch --force && node build && git add . && git commit -m \"updates\" && git push",
 		"dev": "npx nodemon --watch \"src/**/*\" --watch \"./package.json\" -e tsx,ts,scss,json --exec \"npm run build\"",
 		"dev:cli": "tsx src/cli/index.ts",
 		"clean": "rm -rf ./dist",
