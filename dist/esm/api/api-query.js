@@ -31,10 +31,10 @@ export default async function apiQuery(query, options) {
         ...opt,
         queryId
     };
-    console.log(dedupeOptions);
     const tags = opt.generateTags ? generateIdTags(await dedupedFetch(dedupeOptions), opt.tags, queryId) : opt.tags;
     const res = includeDrafts ? await dedupedFetch({ ...dedupeOptions, url: 'https://graphql-listen.datocms.com/preview' }) : {};
     const { data } = await dedupedFetch({ ...dedupeOptions, tags });
+    console.log(queryId, opt, tags);
     return { ...data, draftUrl: res.url ?? null };
 }
 const dedupedFetch = cache(async (options) => {
@@ -70,11 +70,8 @@ const dedupedFetch = cache(async (options) => {
 });
 const generateIdTags = (data, tags, queryId) => {
     const allTags = tags?.length ? tags : [];
-    traverse(data, ({ key, value }) => {
-        key === 'id' && allTags.push(value);
-    });
+    traverse(data, ({ key, value }) => key === 'id' && allTags.push(value));
     const uniqueTags = allTags.filter((value, index, self) => self.indexOf(value) === index).filter(t => t);
-    console.log(queryId, 'tags: ', uniqueTags);
     return uniqueTags;
 };
 //# sourceMappingURL=api-query.js.map
