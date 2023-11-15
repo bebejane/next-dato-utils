@@ -33,8 +33,8 @@ export default async function apiQuery(query, options) {
         queryId
     };
     const tags = opt.generateTags ? generateIdTags(await dedupedFetch(dedupeOptions), opt.tags, queryId) : opt.tags;
-    const { data } = await dedupedFetch({ ...dedupeOptions, tags });
     const res = includeDrafts ? await dedupedFetch({ ...dedupeOptions, tags, url: 'https://graphql-listen.datocms.com/preview' }) : {};
+    const { data } = await dedupedFetch({ ...dedupeOptions, tags });
     return { ...data, draftUrl: res.url ?? null };
 }
 const dedupedFetch = cache(async (options) => {
