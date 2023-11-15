@@ -11,15 +11,16 @@ async function draft(request) {
     const slug = searchParams.get('slug');
     const maxAge = searchParams.get('max-age');
     const exit = searchParams.get('exit');
+    if (secret !== process.env.DATOCMS_PREVIEW_SECRET)
+        return new Response('Invalid token', { status: 401 });
     if (exit === 'true') {
         console.log('Disabling draft mode');
         await (0, index_js_1.disableDraftMode)();
-        return new Response('Preview mode disabled', { status: 200 });
     }
-    if (secret !== process.env.DATOCMS_PREVIEW_SECRET || !slug)
-        return new Response('Invalid token', { status: 401 });
-    console.log('Enabling draft mode');
-    (0, headers_js_1.draftMode)().enable();
+    else {
+        console.log('Enabling draft mode');
+        (0, headers_js_1.draftMode)().enable();
+    }
     if (maxAge) {
         const bypassCookie = (0, headers_js_2.cookies)().get('__prerender_bypass');
         if (!bypassCookie)
@@ -32,7 +33,10 @@ async function draft(request) {
             maxAge: parseInt(maxAge)
         });
     }
-    (0, navigation_js_1.redirect)(slug);
+    if (slug)
+        (0, navigation_js_1.redirect)(slug);
+    else
+        return new Response('OK', { status: 200 });
 }
 exports.default = draft;
 //# sourceMappingURL=draft.js.map
