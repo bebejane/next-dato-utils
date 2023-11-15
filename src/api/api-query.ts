@@ -15,6 +15,7 @@ export type ApiQueryOptions<V> = {
   revalidate?: number | undefined;
   tags?: string[] | undefined,
   generateTags?: boolean
+  logs?: boolean
 };
 
 export type DefaultApiQueryOptions = ApiQueryOptions<any> & {
