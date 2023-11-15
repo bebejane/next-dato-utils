@@ -18,7 +18,7 @@ export default async function draft(request: Request): Promise<Response | void> 
 
   if (exit !== null) {
     console.log('Disabling draft mode')
-    await disableDraftMode()
+    draftMode().disable()
   } else {
     console.log('Enabling draft mode')
     draftMode().enable()

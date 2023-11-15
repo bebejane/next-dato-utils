@@ -2,7 +2,6 @@
 import { draftMode } from 'next/headers.js';
 import { redirect } from 'next/navigation.js';
 import { cookies } from 'next/headers.js';
-import { disableDraftMode } from '../server-actions/index.js';
 export default async function draft(request) {
     const { searchParams } = new URL(request.url);
     const secret = searchParams.get('secret');
@@ -13,7 +12,7 @@ export default async function draft(request) {
         return new Response('Invalid token', { status: 401 });
     if (exit !== null) {
         console.log('Disabling draft mode');
-        await disableDraftMode();
+        draftMode().disable();
     }
     else {
         console.log('Enabling draft mode');

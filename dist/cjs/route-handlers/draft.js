@@ -4,7 +4,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const headers_js_1 = require("next/headers.js");
 const navigation_js_1 = require("next/navigation.js");
 const headers_js_2 = require("next/headers.js");
-const index_js_1 = require("../server-actions/index.js");
 async function draft(request) {
     const { searchParams } = new URL(request.url);
     const secret = searchParams.get('secret');
@@ -15,7 +14,7 @@ async function draft(request) {
         return new Response('Invalid token', { status: 401 });
     if (exit !== null) {
         console.log('Disabling draft mode');
-        await (0, index_js_1.disableDraftMode)();
+        (0, headers_js_1.draftMode)().disable();
     }
     else {
         console.log('Enabling draft mode');
