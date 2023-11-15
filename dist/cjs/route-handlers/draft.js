@@ -13,7 +13,7 @@ async function draft(request) {
     const exit = searchParams.get('exit');
     if (secret !== process.env.DATOCMS_PREVIEW_SECRET)
         return new Response('Invalid token', { status: 401 });
-    if (exit === 'true') {
+    if (exit !== null) {
         console.log('Disabling draft mode');
         await (0, index_js_1.disableDraftMode)();
     }

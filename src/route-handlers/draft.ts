@@ -16,10 +16,9 @@ export default async function draft(request: Request): Promise<Response | void> 
   if (secret !== process.env.DATOCMS_PREVIEW_SECRET)
     return new Response('Invalid token', { status: 401 })
 
-  if (exit === 'true') {
+  if (exit !== null) {
     console.log('Disabling draft mode')
     await disableDraftMode()
-
   } else {
     console.log('Enabling draft mode')
     draftMode().enable()
