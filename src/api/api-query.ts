@@ -51,10 +51,9 @@ export default async function apiQuery<T, V>(query: DocumentNode, options?: ApiQ
     throw new Error('DATOCMS_ENVIRONMENT is not set')
 
   const queryId = (query.definitions?.[0] as any).name?.value as string
-  let includeDrafts = opt.includeDrafts ?? false;
 
   if (typeof options?.includeDrafts === 'undefined')
-    try { includeDrafts = draftMode().isEnabled } catch (e) { }
+    try { opt.includeDrafts = draftMode().isEnabled } catch (e) { }
 
   const dedupeOptions: DedupeOptions = {
     body: JSON.stringify({ query: print(query), variables: options?.variables }) as string,
@@ -63,7 +62,7 @@ export default async function apiQuery<T, V>(query: DocumentNode, options?: ApiQ
   }
 
   const tags = opt.generateTags ? generateIdTags(await dedupedFetch(dedupeOptions), opt.tags, queryId) : opt.tags
-  const res = includeDrafts ? await dedupedFetch({ ...dedupeOptions, tags, url: 'https://graphql-listen.datocms.com/preview' }) : {}
+  const res = opt.includeDrafts ? await dedupedFetch({ ...dedupeOptions, tags, url: 'https://graphql-listen.datocms.com/preview' }) : {}
   const { data } = await dedupedFetch({ ...dedupeOptions, tags });
   return { ...data, draftUrl: res.url ?? null }
 }
