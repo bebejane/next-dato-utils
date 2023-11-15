@@ -53,7 +53,7 @@ export default async function apiQuery<T, V>(query: DocumentNode, options?: ApiQ
   const queryId = (query.definitions?.[0] as any).name?.value as string
   let includeDrafts = opt.includeDrafts ?? false;
 
-  if (typeof opt.includeDrafts === 'undefined')
+  if (typeof options?.includeDrafts === 'undefined')
     try { includeDrafts = draftMode().isEnabled } catch (e) { }
 
   const dedupeOptions: DedupeOptions = {

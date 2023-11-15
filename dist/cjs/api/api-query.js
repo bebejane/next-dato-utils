@@ -27,7 +27,7 @@ async function apiQuery(query, options) {
         throw new Error('DATOCMS_ENVIRONMENT is not set');
     const queryId = (query.definitions?.[0]).name?.value;
     let includeDrafts = opt.includeDrafts ?? false;
-    if (typeof opt.includeDrafts === 'undefined')
+    if (typeof options?.includeDrafts === 'undefined')
         try {
             includeDrafts = (0, headers_js_1.draftMode)().isEnabled;
         }
