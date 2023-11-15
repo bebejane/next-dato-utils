@@ -26,7 +26,7 @@ export type DefaultApiQueryOptions = ApiQueryOptions<any> & {
   revalidate: number | undefined,
   tags: string[] | undefined,
   generateTags: boolean,
-  logs?: boolean
+  logs: boolean
 }
 
 const defaultOptions: DefaultApiQueryOptions = {
@@ -77,7 +77,7 @@ export type DedupeOptions = {
   revalidate?: number;
   tags?: string[] | undefined
   queryId: string,
-  logs?: boolean
+  logs: boolean
 }
 
 const dedupedFetch = cache(async (options: DedupeOptions) => {
@@ -129,6 +129,7 @@ const dedupedFetch = cache(async (options: DedupeOptions) => {
       )}`,
     );
   }
+  console.log('logs', logs)
   logs && console.log(queryId, { ...options, body: undefined }, response.headers.get('x-cache'))
   return responseBody;
 })
