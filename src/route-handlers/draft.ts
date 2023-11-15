@@ -13,6 +13,7 @@ export default async function draft(request: Request): Promise<Response | void> 
   const maxAge = searchParams.get('max-age')
   const exit = searchParams.get('exit')
 
+  console.log(secret, process.env.DATOCMS_PREVIEW_SECRET)
   if (secret !== process.env.DATOCMS_PREVIEW_SECRET)
     return new Response('Invalid token', { status: 401 })
 
@@ -23,8 +24,6 @@ export default async function draft(request: Request): Promise<Response | void> 
     console.log('Enabling draft mode')
     draftMode().enable()
   }
-
-
 
   if (maxAge) {
     const bypassCookie = cookies().get('__prerender_bypass');
