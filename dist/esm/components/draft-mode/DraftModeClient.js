@@ -9,8 +9,10 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
     const [loading, startTransition] = useTransition();
     const listener = useRef(null);
     useEffect(() => {
-        if (!draftUrl || !enabled || listener?.current)
+        if (!draftUrl || !enabled || listener?.current) {
+            console.log('not connecting to channel', { draftUrl, enabled, listener: listener?.current });
             return;
+        }
         const connect = () => {
             console.log('connecting to channel');
             let updates = 0;

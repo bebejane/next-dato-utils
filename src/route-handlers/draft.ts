@@ -13,7 +13,6 @@ export default async function draft(request: Request): Promise<Response | void> 
   const maxAge = searchParams.get('max-age')
   const exit = searchParams.get('exit')
 
-  console.log(secret, process.env.DATOCMS_PREVIEW_SECRET)
   if (secret !== process.env.DATOCMS_PREVIEW_SECRET)
     return new Response('Invalid token', { status: 401 })
 
