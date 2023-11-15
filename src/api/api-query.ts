@@ -43,7 +43,7 @@ const defaultOptions: DefaultApiQueryOptions = {
 
 export default async function apiQuery<T, V>(query: DocumentNode, options?: ApiQueryOptions<V>): Promise<T & { draftUrl: string | null }> {
 
-  const opt = Object.assign(defaultOptions, options ?? {});
+  const opt = { ...defaultOptions, ...(options ?? {}) };
 
   if (!process.env.DATOCMS_API_TOKEN)
     throw new Error('DATOCMS_API_TOKEN is not set')
