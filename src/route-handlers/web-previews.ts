@@ -31,7 +31,7 @@ export default async function webPreviews(req: NextRequest, generatePreviewUrl: 
   }
 
   if (path) {
-    previewLinks.push({ label: 'Live', url: `${baseUrl}${path}` })
+    previewLinks.push({ label: 'Live', url: `${baseUrl}${path}?secret=${process.env.DATOCMS_PREVIEW_SECRET}` })
     previewLinks.push({ label: 'Draft', url: `${baseUrl}/api/draft?slug=${path}&secret=${process.env.DATOCMS_PREVIEW_SECRET}` })
   }
 
