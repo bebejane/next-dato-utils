@@ -1,4 +1,4 @@
-/// <reference types="node" />
+/// <reference types="node" resolution-mode="require"/>
 import { Components } from 'react-markdown';
 import type { UrlObject } from 'url';
 export type MarkdownProps = {
@@ -15,4 +15,4 @@ export type AnchorProp = {
     children: any[];
     href: UrlObject;
 };
-export default function Markdown({ content, truncate, className, components, sentances, allowedElements, scroll, disableBreaks }: MarkdownProps): Promise<import("react/jsx-runtime.js").JSX.Element>;
+export default function Markdown({ content, truncate, className, components, sentances, allowedElements, scroll, disableBreaks }: MarkdownProps): Promise<import("react/jsx-runtime").JSX.Element>;
