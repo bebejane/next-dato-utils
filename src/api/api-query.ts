@@ -91,6 +91,10 @@ const paginatedQuery = async <T, V>(query: DocumentNode, options: ApiQueryOption
     throw new Error('Query must have first and skip variables')
 
   const pageKeys = Object.keys(data).filter(k => k.startsWith('_all') && k.endsWith('Meta'))
+
+  if (pageKeys.length === 0)
+    throw new Error('Query must have at least one paginated field')
+
   const pageKeyMap = pageKeys.reduce<{ [key: string]: string }>((acc, cur) => {
     acc[cur] = `${cur.substring(1, cur.length - 'Meta'.length)}`
     return acc
