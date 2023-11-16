@@ -198,6 +198,7 @@ const dedupedFetch = cache(async (options: DedupeOptions) => {
     method: 'POST',
     headers,
     body,
+    //@ts-ignore
     next,
   });
 

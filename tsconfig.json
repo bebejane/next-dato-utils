@@ -4,23 +4,18 @@
     "outDir": "./dist/esm",
     "strict": true,
     "target": "ES2021",
-    "module": "ESNext",
+    "module": "ES2020",
     "jsx": "react-jsx",
     "sourceMap": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "skipLibCheck": true
   },
   "include": [
     "./src",
-    "./index.d.ts"
-  ],
-  "exclude": [
-    "./node_modules",
-    "./dist",
-    "./.vscode",
-    "./.git"
+    "./"
   ]
 }

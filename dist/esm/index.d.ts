@@ -14,3 +14,10 @@ export { default as useScrollInfo } from './hooks/useScrollInfo.js';
 export { default as apiQuery } from './api/api-query.js';
 export { disableDraftMode, revalidatePath, revalidateTag } from './server-actions/index.js';
 export { awaitElement, capitalize, chunkArray, isEmpty, isServer, parseDatoCMSApiError, parseDatoError, rInt, sleep, sortSwedish, truncateParagraph, truncateWords } from "./utils/index.js";
+declare global {
+    namespace NodeJS {
+        interface ProcessEnv {
+            [key: string]: string;
+        }
+    }
+}

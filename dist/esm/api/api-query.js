@@ -116,6 +116,7 @@ const dedupedFetch = cache(async (options) => {
         method: 'POST',
         headers,
         body,
+        //@ts-ignore
         next,
     });
     const responseBody = await response.json();

@@ -122,6 +122,7 @@ const dedupedFetch = (0, react_1.cache)(async (options) => {
         method: 'POST',
         headers,
         body,
+        //@ts-ignore
         next,
     });
     const responseBody = await response.json();
