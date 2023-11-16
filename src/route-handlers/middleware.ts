@@ -22,3 +22,5 @@ export const handler = (...middleware: Middleware[]) =>
 
     throw new Error('Your handler or middleware must return a NextResponse!');
   };
+
+export default handler;

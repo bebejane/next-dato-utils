@@ -16,6 +16,7 @@ export type ApiQueryOptions<V> = {
   tags?: string[] | undefined,
   generateTags?: boolean
   logs?: boolean
+  all?: boolean
 };
 
 export type DefaultApiQueryOptions = ApiQueryOptions<any> & {
@@ -27,6 +28,7 @@ export type DefaultApiQueryOptions = ApiQueryOptions<any> & {
   tags: string[] | undefined,
   generateTags: boolean,
   logs: boolean
+  all: boolean
 }
 
 const defaultOptions: DefaultApiQueryOptions = {
@@ -37,7 +39,8 @@ const defaultOptions: DefaultApiQueryOptions = {
   revalidate: isInteger(process.env.REVALIDATE_TIME) ? parseInt(process.env.REVALIDATE_TIME) : 3600,
   tags: undefined,
   generateTags: true,
-  logs: false
+  logs: false,
+  all: false
 };
 
 
@@ -64,6 +67,19 @@ export default async function apiQuery<T, V>(query: DocumentNode, options?: ApiQ
   const tags = opt.generateTags ? generateIdTags(await dedupedFetch(dedupeOptions), opt.tags, queryId) : opt.tags
   const res = opt.includeDrafts ? await dedupedFetch({ ...dedupeOptions, tags, url: 'https://graphql-listen.datocms.com/preview' }) : {}
   const { data } = await dedupedFetch({ ...dedupeOptions, tags });
+
+  if (opt.all) {
+    console.log('running all')
+    const pageKeys = Object.keys(data).filter(k => k.startsWith('_all') && !k.endsWith('Meta'))
+    const pageKeyMap = pageKeys.reduce<{ [key: string]: string }>((acc, cur) => {
+      acc[cur] = `${cur.substring(1, cur.length - 'Meta'.length)}`
+      return acc
+    }, {})
+
+    console.log(pageKeys, pageKeyMap)
+    Object.keys(pageKeyMap).forEach(k => console.log(k, data[k]?.count))
+  }
+
   return { ...data, draftUrl: res.url ?? null }
 }
 

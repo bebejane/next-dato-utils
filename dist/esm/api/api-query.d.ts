@@ -8,6 +8,7 @@ export type ApiQueryOptions<V> = {
     tags?: string[] | undefined;
     generateTags?: boolean;
     logs?: boolean;
+    all?: boolean;
 };
 export type DefaultApiQueryOptions = ApiQueryOptions<any> & {
     variables: undefined;
@@ -18,6 +19,7 @@ export type DefaultApiQueryOptions = ApiQueryOptions<any> & {
     tags: string[] | undefined;
     generateTags: boolean;
     logs: boolean;
+    all: boolean;
 };
 export default function apiQuery<T, V>(query: DocumentNode, options?: ApiQueryOptions<V>): Promise<T & {
     draftUrl: string | null;

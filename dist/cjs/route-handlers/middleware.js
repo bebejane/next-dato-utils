@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.handler = void 0;
 const handler = (...middleware) => async (request) => {
     let result;
     for (let i = 0; i < middleware.length; i++) {
@@ -16,5 +17,6 @@ const handler = (...middleware) => async (request) => {
         return result;
     throw new Error('Your handler or middleware must return a NextResponse!');
 };
-exports.default = handler;
+exports.handler = handler;
+exports.default = exports.handler;
 //# sourceMappingURL=middleware.js.map

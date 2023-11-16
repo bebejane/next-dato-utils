@@ -17,7 +17,8 @@ const defaultOptions = {
     revalidate: (0, is_integer_1.default)(process.env.REVALIDATE_TIME) ? parseInt(process.env.REVALIDATE_TIME) : 3600,
     tags: undefined,
     generateTags: true,
-    logs: false
+    logs: false,
+    all: false
 };
 async function apiQuery(query, options) {
     const opt = { ...defaultOptions, ...(options ?? {}) };
@@ -39,6 +40,16 @@ async function apiQuery(query, options) {
     const tags = opt.generateTags ? generateIdTags(await dedupedFetch(dedupeOptions), opt.tags, queryId) : opt.tags;
     const res = opt.includeDrafts ? await dedupedFetch({ ...dedupeOptions, tags, url: 'https://graphql-listen.datocms.com/preview' }) : {};
     const { data } = await dedupedFetch({ ...dedupeOptions, tags });
+    if (opt.all) {
+        console.log('running all');
+        const pageKeys = Object.keys(data).filter(k => k.startsWith('_all') && !k.endsWith('Meta'));
+        const pageKeyMap = pageKeys.reduce((acc, cur) => {
+            acc[cur] = `${cur.substring(1, cur.length - 'Meta'.length)}`;
+            return acc;
+        }, {});
+        console.log(pageKeys, pageKeyMap);
+        Object.keys(pageKeyMap).forEach(k => console.log(k, data[k]?.count));
+    }
     return { ...data, draftUrl: res.url ?? null };
 }
 exports.default = apiQuery;

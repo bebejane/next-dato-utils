@@ -1,4 +1,4 @@
-const handler = (...middleware) => async (request) => {
+export const handler = (...middleware) => async (request) => {
     let result;
     for (let i = 0; i < middleware.length; i++) {
         let nextInvoked = false;
