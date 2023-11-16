@@ -3,7 +3,7 @@
     "rootDir": "src",
     "outDir": "./dist/esm",
     "strict": true,
-    "target": "ES2021",
+    "target": "ESNext",
     "module": "NodeNext",
     "jsx": "react-jsx",
     "sourceMap": true,
