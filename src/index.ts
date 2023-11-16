@@ -31,11 +31,3 @@ export {
   truncateParagraph,
   truncateWords
 } from "./utils/index.js";
-
-declare global {
-  namespace NodeJS {
-    interface ProcessEnv {
-      [key: string]: string;
-    }
-  }
-}
