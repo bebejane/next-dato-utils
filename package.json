@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.334",
+	"version": "1.0.335",
 	"description": "",
 	"type": "module",
 	"scripts": {
@@ -22,6 +22,7 @@
 		},
 		"./package.json": "./package.json"
 	},
+	"sideEffects": false,
 	"files": [
 		"dist/"
 	],
