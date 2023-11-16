@@ -1,11 +1,12 @@
 'use server'
 
 import { draftMode } from 'next/headers.js'
-import type { DocumentNode, FieldNode, OperationDefinitionNode } from 'graphql'
+import type { DocumentNode, FieldNode, OperationDefinitionNode, VariableDefinitionNode } from 'graphql'
 import { print } from 'graphql/language/printer.js'
 import { cache } from 'react';
 import { traverse } from 'object-traversal';
 import isInteger from 'is-integer';
+
 
 export type ApiQueryOptions<V> = {
   variables?: V | undefined;
@@ -89,8 +90,8 @@ const paginatedQuery = async <T, V>(query: DocumentNode, options: ApiQueryOption
     if (!operation)
       throw new Error('Query must have an operation definition')
 
-    const firstVariable = operation.variableDefinitions?.find(v => v.variable.name.value === 'first') as VariableDefinition
-    const skipVariable = operation.variableDefinitions?.find(v => v.variable.name.value === 'skip') as VariableDefinition
+    const firstVariable = operation.variableDefinitions?.find(v => v.variable.name.value === 'first') as VariableDefinitionNode
+    const skipVariable = operation.variableDefinitions?.find(v => v.variable.name.value === 'skip') as VariableDefinitionNode
 
     if (!firstVariable || !skipVariable)
       throw new Error(`Query must have first and skip variables`)
@@ -113,7 +114,7 @@ const paginatedQuery = async <T, V>(query: DocumentNode, options: ApiQueryOption
         throw new Error(`Query must have same filter argument on ${k} and ${pageKeyMap[k]}`)
     })
 
-    const first = options.variables?.first ?? firstVariable.defaultValue.value ?? 100
+    const first = options.variables?.first ?? (firstVariable?.defaultValue as any)?.value ?? 100
 
     if (first > 100)
       throw new Error('"first" variable must be less than or equal to 100')
@@ -222,24 +223,3 @@ const generateIdTags = (data: any, tags: string[] | undefined, queryId: string):
   return uniqueTags
 }
 
-type VariableDefinition = {
-  'kind': 'VariableDefinition',
-  'variable': {
-    'kind': 'Variable',
-    'name': {
-      'kind': 'Name',
-      'value': string
-    }
-  },
-  'type': {
-    'kind': 'NamedType',
-    'name': {
-      'kind': string,
-      'value': string
-    }
-  },
-  'defaultValue': {
-    'kind': string,
-    'value': string
-  }
-}
