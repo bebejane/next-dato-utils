@@ -1,14 +1,12 @@
 declare module '*.scss' {
-  const content: Record<string, string>;
-  export default content;
+    const content: Record<string, string>;
+    export default content;
 }
-
 declare global {
-  namespace NodeJS {
-    interface ProcessEnv {
-      [key: string]: string
+    namespace NodeJS {
+        interface ProcessEnv {
+            [key: string]: string;
+        }
     }
-  }
 }
-
-export { };
+export {};
