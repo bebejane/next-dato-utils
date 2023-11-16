@@ -45,10 +45,11 @@ const paginatedQuery = async (query, options, data, queryId) => {
     try {
         if (typeof data !== 'object' || data === null || data === undefined)
             throw new Error('Data must be an object');
-        //@ts-ignore
-        const firstVariable = query.definitions?.find(({ kind }) => kind === 'OperationDefinition')?.variableDefinitions?.find(v => v.variable.name.value === 'first');
-        //@ts-ignore
-        const skipVariable = query.definitions?.find(({ kind }) => kind === 'OperationDefinition')?.variableDefinitions?.find(v => v.variable.name.value === 'skip');
+        const operation = query.definitions?.find(({ kind }) => kind === 'OperationDefinition');
+        if (!operation)
+            throw new Error('Query must have an operation definition');
+        const firstVariable = operation.variableDefinitions?.find(v => v.variable.name.value === 'first');
+        const skipVariable = operation.variableDefinitions?.find(v => v.variable.name.value === 'skip');
         if (!firstVariable || !skipVariable)
             throw new Error(`Query must have first and skip variables`);
         const pageKeys = Object.keys(data).filter(k => k.startsWith('_all') && k.endsWith('Meta'));
@@ -58,6 +59,12 @@ const paginatedQuery = async (query, options, data, queryId) => {
             acc[cur] = `${cur.substring(1, cur.length - 'Meta'.length)}`;
             return acc;
         }, {});
+        Object.keys(pageKeyMap).forEach(k => {
+            const filter = operation.selectionSet.selections.find(s => s.name.value === k)?.arguments?.find(a => a.name.value === 'filter');
+            const metaFilter = operation.selectionSet.selections.find(s => s.name.value === pageKeyMap[k])?.arguments?.find(a => a.name.value === 'filter');
+            if (filter !== metaFilter || JSON.stringify(filter) !== JSON.stringify(metaFilter))
+                throw new Error(`Query must have same filter argument on ${k} and ${pageKeyMap[k]}`);
+        });
         const first = options.variables?.first ?? firstVariable.defaultValue.value ?? 100;
         if (first > 100)
             throw new Error('"first" variable must be less than or equal to 100');

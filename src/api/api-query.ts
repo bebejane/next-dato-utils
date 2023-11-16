@@ -1,7 +1,7 @@
 'use server'
 
 import { draftMode } from 'next/headers.js'
-import type { DocumentNode } from 'graphql'
+import type { DocumentNode, ExecutableDefinitionNode, FieldNode, OperationDefinitionNode, SelectionNode } from 'graphql'
 import { print } from 'graphql/language/printer.js'
 import { cache } from 'react';
 import { traverse } from 'object-traversal';
@@ -84,10 +84,13 @@ const paginatedQuery = async <T, V>(query: DocumentNode, options: ApiQueryOption
     if (typeof data !== 'object' || data === null || data === undefined)
       throw new Error('Data must be an object')
 
-    //@ts-ignore
-    const firstVariable = query.definitions?.find(({ kind }) => kind === 'OperationDefinition')?.variableDefinitions?.find(v => v.variable.name.value === 'first') as VariableDefinition
-    //@ts-ignore
-    const skipVariable = query.definitions?.find(({ kind }) => kind === 'OperationDefinition')?.variableDefinitions?.find(v => v.variable.name.value === 'skip') as VariableDefinition
+    const operation = query.definitions?.find(({ kind }) => kind === 'OperationDefinition') as OperationDefinitionNode
+
+    if (!operation)
+      throw new Error('Query must have an operation definition')
+
+    const firstVariable = operation.variableDefinitions?.find(v => v.variable.name.value === 'first') as VariableDefinition
+    const skipVariable = operation.variableDefinitions?.find(v => v.variable.name.value === 'skip') as VariableDefinition
 
     if (!firstVariable || !skipVariable)
       throw new Error(`Query must have first and skip variables`)
@@ -101,6 +104,13 @@ const paginatedQuery = async <T, V>(query: DocumentNode, options: ApiQueryOption
       acc[cur] = `${cur.substring(1, cur.length - 'Meta'.length)}`
       return acc
     }, {})
+
+    Object.keys(pageKeyMap).forEach(k => {
+      const filter = (operation.selectionSet.selections.find(s => (s as FieldNode).name.value === k) as FieldNode)?.arguments?.find(a => a.name.value === 'filter')
+      const metaFilter = (operation.selectionSet.selections.find(s => (s as FieldNode).name.value === pageKeyMap[k]) as FieldNode)?.arguments?.find(a => a.name.value === 'filter')
+      if (filter !== metaFilter || JSON.stringify(filter) !== JSON.stringify(metaFilter))
+        throw new Error(`Query must have same filter argument on ${k} and ${pageKeyMap[k]}`)
+    })
 
     const first = options.variables?.first ?? firstVariable.defaultValue.value ?? 100
 
