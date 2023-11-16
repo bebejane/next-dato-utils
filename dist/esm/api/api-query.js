@@ -59,11 +59,10 @@ const paginatedQuery = async (query, options, data, queryId) => {
             acc[cur] = `${cur.substring(1, cur.length - 'Meta'.length)}`;
             return acc;
         }, {});
+        // Check filter diff
         Object.keys(pageKeyMap).forEach(k => {
             const filter = operation.selectionSet.selections.find(s => s.name.value === k)?.arguments?.find(a => a.name.value === 'filter');
             const metaFilter = operation.selectionSet.selections.find(s => s.name.value === pageKeyMap[k])?.arguments?.find(a => a.name.value === 'filter');
-            console.log(filter);
-            console.log(metaFilter);
             if ((!filter && metaFilter) || (filter && !metaFilter) || JSON.stringify(filter) !== JSON.stringify(metaFilter))
                 throw new Error(`Query must have same filter argument on ${k} and ${pageKeyMap[k]}`);
         });
