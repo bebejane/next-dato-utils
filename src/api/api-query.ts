@@ -69,7 +69,7 @@ export default async function apiQuery<T, V>(query: DocumentNode, options?: ApiQ
   const { data } = await dedupedFetch({ ...dedupeOptions, tags });
 
   if (opt.all) {
-    const paginatedData = await paginatedQuery<T, V>(query, opt, data)
+    const paginatedData = await paginatedQuery<T, V>(query, opt, data, queryId)
     return { ...paginatedData, draftUrl: res.url ?? null }
   }
 
@@ -77,59 +77,64 @@ export default async function apiQuery<T, V>(query: DocumentNode, options?: ApiQ
 }
 
 
-const paginatedQuery = async <T, V>(query: DocumentNode, options: ApiQueryOptions<any>, data: any): Promise<T> => {
+const paginatedQuery = async <T, V>(query: DocumentNode, options: ApiQueryOptions<any>, data: any, queryId: string): Promise<T> => {
 
-  if (typeof data !== 'object' || data === null || data === undefined)
-    throw new Error('Data must be an object')
+  try {
 
-  //@ts-ignore
-  const firstVariable = query.definitions?.find(({ kind }) => kind === 'OperationDefinition')?.variableDefinitions?.find(v => v.variable.name.value === 'first') as VariableDefinition
-  //@ts-ignore
-  const skipVariable = query.definitions?.find(({ kind }) => kind === 'OperationDefinition')?.variableDefinitions?.find(v => v.variable.name.value === 'skip') as VariableDefinition
+    if (typeof data !== 'object' || data === null || data === undefined)
+      throw new Error('Data must be an object')
 
-  if (!firstVariable || !skipVariable)
-    throw new Error('Query must have first and skip variables')
+    //@ts-ignore
+    const firstVariable = query.definitions?.find(({ kind }) => kind === 'OperationDefinition')?.variableDefinitions?.find(v => v.variable.name.value === 'first') as VariableDefinition
+    //@ts-ignore
+    const skipVariable = query.definitions?.find(({ kind }) => kind === 'OperationDefinition')?.variableDefinitions?.find(v => v.variable.name.value === 'skip') as VariableDefinition
 
-  const pageKeys = Object.keys(data).filter(k => k.startsWith('_all') && k.endsWith('Meta'))
+    if (!firstVariable || !skipVariable)
+      throw new Error(`Query must have first and skip variables`)
 
-  if (pageKeys.length === 0)
-    throw new Error('Query must have at least one paginated field')
+    const pageKeys = Object.keys(data).filter(k => k.startsWith('_all') && k.endsWith('Meta'))
 
-  const pageKeyMap = pageKeys.reduce<{ [key: string]: string }>((acc, cur) => {
-    acc[cur] = `${cur.substring(1, cur.length - 'Meta'.length)}`
-    return acc
-  }, {})
+    if (pageKeys.length === 0)
+      throw new Error('Query must have at least one paginated field')
 
-  const first = options.variables?.first ?? firstVariable.defaultValue.value ?? 100
+    const pageKeyMap = pageKeys.reduce<{ [key: string]: string }>((acc, cur) => {
+      acc[cur] = `${cur.substring(1, cur.length - 'Meta'.length)}`
+      return acc
+    }, {})
 
-  if (first > 100)
-    throw new Error('"first" variable must be less than or equal to 100')
+    const first = options.variables?.first ?? firstVariable.defaultValue.value ?? 100
 
-  let count = 0
-  while (Object.keys(pageKeyMap).some(k => data[k].count > data[pageKeyMap[k]].length)) {
-    const maxPageKey = pageKeyMap[Object.keys(pageKeyMap).sort((a, b) => data[a].count > data[b].count ? -1 : 1)[0]]
-    const skip = data[maxPageKey].length
+    if (first > 100)
+      throw new Error('"first" variable must be less than or equal to 100')
 
-    const pageData: any = await apiQuery(query, {
-      ...options,
-      all: false,
-      variables: {
-        ...options.variables,
-        first,
-        skip
-      } as V
-    })
+    let count = 0
+    while (Object.keys(pageKeyMap).some(k => data[k].count > data[pageKeyMap[k]].length)) {
+      const maxPageKey = pageKeyMap[Object.keys(pageKeyMap).sort((a, b) => data[a].count > data[b].count ? -1 : 1)[0]]
+      const skip = data[maxPageKey].length
 
-    Object.keys(pageKeyMap).forEach(k =>
-      data[pageKeyMap[k]] = [...data[pageKeyMap[k]], ...pageData[pageKeyMap[k]]]
-    )
+      const pageData: any = await apiQuery(query, {
+        ...options,
+        all: false,
+        variables: {
+          ...options.variables,
+          first,
+          skip
+        } as V
+      })
 
-    if (++count > 1000) {
-      throw new Error('Paginated query exceeded 1000 requests')
+      Object.keys(pageKeyMap).forEach(k =>
+        data[pageKeyMap[k]] = [...data[pageKeyMap[k]], ...pageData[pageKeyMap[k]]]
+      )
+
+      if (++count > 1000) {
+        throw new Error('Paginated query exceeded 1000 requests')
+      }
     }
-  }
 
-  return data
+    return data
+  } catch (e) {
+    throw new Error(`${queryId}: ${(e as Error).message}`)
+  }
 }
 
 export type DedupeOptions = {
