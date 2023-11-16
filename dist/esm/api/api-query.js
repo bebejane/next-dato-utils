@@ -42,7 +42,6 @@ export default async function apiQuery(query, options) {
     return { ...data, draftUrl: res.url ?? null };
 }
 const paginatedQuery = async (query, options, data) => {
-    console.log('paginate query');
     if (typeof data !== 'object' || data === null || data === undefined)
         throw new Error('Data must be an object');
     //@ts-ignore

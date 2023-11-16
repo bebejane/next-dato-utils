@@ -79,8 +79,6 @@ export default async function apiQuery<T, V>(query: DocumentNode, options?: ApiQ
 
 const paginatedQuery = async <T, V>(query: DocumentNode, options: ApiQueryOptions<any>, data: any): Promise<T> => {
 
-  console.log('paginate query')
-
   if (typeof data !== 'object' || data === null || data === undefined)
     throw new Error('Data must be an object')
 
