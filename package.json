@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.420",
+	"version": "1.0.421",
 	"description": "",
 	"type": "module",
 	"scripts": {
@@ -19,10 +19,6 @@
 		".": {
 			"require": "./dist/cjs/index.js",
 			"import": "./dist/esm/index.js"
-		},
-		"./api": {
-			"require": "./cjs/api/index.js",
-			"import": "./esm/api/index.js"
 		},
 		"./package.json": "./package.json"
 	},
