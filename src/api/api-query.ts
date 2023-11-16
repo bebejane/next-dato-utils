@@ -69,18 +69,65 @@ export default async function apiQuery<T, V>(query: DocumentNode, options?: ApiQ
   const { data } = await dedupedFetch({ ...dedupeOptions, tags });
 
   if (opt.all) {
-    console.log('running all')
-    const pageKeys = Object.keys(data).filter(k => k.startsWith('_all') && !k.endsWith('Meta'))
-    const pageKeyMap = pageKeys.reduce<{ [key: string]: string }>((acc, cur) => {
-      acc[cur] = `${cur.substring(1, cur.length - 'Meta'.length)}`
-      return acc
-    }, {})
-
-    console.log(pageKeys, pageKeyMap)
-    Object.keys(pageKeyMap).forEach(k => console.log(k, data[k]?.count))
+    const paginatedData = await paginatedQuery<T, V>(query, opt, data)
+    return { ...paginatedData, draftUrl: res.url ?? null }
   }
 
   return { ...data, draftUrl: res.url ?? null }
+}
+
+
+const paginatedQuery = async <T, V>(query: DocumentNode, options: ApiQueryOptions<any>, data: any): Promise<T> => {
+
+  console.log('paginate query')
+
+  if (typeof data !== 'object' || data === null || data === undefined)
+    throw new Error('Data must be an object')
+
+  //@ts-ignore
+  const firstVariable = query.definitions?.find(({ kind }) => kind === 'OperationDefinition')?.variableDefinitions?.find(v => v.variable.name.value === 'first') as VariableDefinition
+  //@ts-ignore
+  const skipVariable = query.definitions?.find(({ kind }) => kind === 'OperationDefinition')?.variableDefinitions?.find(v => v.variable.name.value === 'skip') as VariableDefinition
+
+  if (!firstVariable || !skipVariable)
+    throw new Error('Query must have first and skip variables')
+
+  const pageKeys = Object.keys(data).filter(k => k.startsWith('_all') && k.endsWith('Meta'))
+  const pageKeyMap = pageKeys.reduce<{ [key: string]: string }>((acc, cur) => {
+    acc[cur] = `${cur.substring(1, cur.length - 'Meta'.length)}`
+    return acc
+  }, {})
+
+  const first = options.variables?.first ?? firstVariable.defaultValue.value ?? 100
+
+  if (first > 100)
+    throw new Error('"first" variable must be less than or equal to 100')
+
+  let count = 0
+  while (Object.keys(pageKeyMap).some(k => data[k].count > data[pageKeyMap[k]].length)) {
+    const maxPageKey = pageKeyMap[Object.keys(pageKeyMap).sort((a, b) => data[a].count > data[b].count ? -1 : 1)[0]]
+    const skip = data[maxPageKey].length
+
+    const pageData: any = await apiQuery(query, {
+      ...options,
+      all: false,
+      variables: {
+        ...options.variables,
+        first,
+        skip
+      } as V
+    })
+
+    Object.keys(pageKeyMap).forEach(k =>
+      data[pageKeyMap[k]] = [...data[pageKeyMap[k]], ...pageData[pageKeyMap[k]]]
+    )
+
+    if (++count > 1000) {
+      throw new Error('Paginated query exceeded 1000 requests')
+    }
+  }
+
+  return data
 }
 
 export type DedupeOptions = {
@@ -155,4 +202,26 @@ const generateIdTags = (data: any, tags: string[] | undefined, queryId: string):
   traverse(data, ({ key, value }) => key === 'id' && allTags.push(value))
   const uniqueTags = allTags.filter((value, index, self) => self.indexOf(value) === index).filter(t => t)
   return uniqueTags
+}
+
+type VariableDefinition = {
+  'kind': 'VariableDefinition',
+  'variable': {
+    'kind': 'Variable',
+    'name': {
+      'kind': 'Name',
+      'value': string
+    }
+  },
+  'type': {
+    'kind': 'NamedType',
+    'name': {
+      'kind': string,
+      'value': string
+    }
+  },
+  'defaultValue': {
+    'kind': string,
+    'value': string
+  }
 }
