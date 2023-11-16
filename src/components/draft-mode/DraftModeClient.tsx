@@ -25,10 +25,7 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }: Dra
 
   useEffect(() => {
 
-    if (!draftUrl || !enabled || listener?.current) {
-      console.log('not connecting to channel', { draftUrl, enabled, listener: listener?.current })
-      return
-    }
+    if (!draftUrl || !enabled || listener?.current) return
 
     const connect = () => {
       console.log('connecting to channel')
