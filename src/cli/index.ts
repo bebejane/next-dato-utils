@@ -31,9 +31,14 @@ if (options.info)
   info();
 
 async function info() {
-  const site = await client.site.find();
-  const usage = await client.dailyUsages.list();
-  const itemTypes = await client.itemTypes.list();
+  const [site, usage, itemTypes, webhooks, plugins] = await Promise.all([
+    client.site.find(),
+    client.dailyUsages.list(),
+    client.itemTypes.list(),
+    client.webhooks.list(),
+    client.plugins.list(),
+  ])
+
   const usageTotal = {
     last: {
       cda: usage.filter(el => new Date(el.date).getMonth() < new Date().getMonth()).reduce((acc, el) => acc + el.cda_api_calls + el.cma_api_calls, 0),
@@ -49,7 +54,7 @@ async function info() {
     ...usage.map(el => [el.date, el.cda_api_calls, el.cma_api_calls])
   ]
 
-  console.log(dedent(`
+  const text = dedent(`
     ${site.name}
     -------------------------------
     Timezone: ${site.timezone}
@@ -63,11 +68,19 @@ async function info() {
     -------------------------------
     ${itemTypes.filter(el => el.modular_block).map(itemType => itemType.api_key).join('\n')}
 
-    
-    ${table(usageTable, { header: { alignment: 'center', content: 'Usage (CDA / CMA)' } })}
-    Last month:\t${usageTotal.last.cda} / ${usageTotal.last.cma}
-    Current:\t${usageTotal.curreent.cda} / ${usageTotal.curreent.cma}
+    Webhooks
+    -------------------------------
+    ${webhooks.map(webhook => `${webhook.name}: ${webhook.url}`).join('\n')}
 
-  `))
+    Plugins
+    -------------------------------
+    ${plugins.map(plugin => `${plugin.name}`).join('\n')}
+
+    ${table(usageTable, { header: { alignment: 'center', content: 'Usage (CDA / CMA)' } })}
+    Last month:\t${usageTotal.last.cda} CDA / ${usageTotal.last.cma} CMA
+    Current:\t${usageTotal.curreent.cda} CDA / ${usageTotal.curreent.cma} CMA
+
+  `)
+  console.log(text)
 
 }
