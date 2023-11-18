@@ -91,10 +91,14 @@ async function usage() {
       cma: usage.filter(el => new Date(el.date).getMonth() === new Date().getMonth()).reduce((acc, el) => acc + el.cma_api_calls, 0),
     }
   }
-  console.log(usageTotal)
+
   const usageTable = [
     ['Date', 'CDA', 'CMA'],
-    ...usage.map(el => [el.date, el.cda_api_calls.toLocaleString(), el.cma_api_calls.toLocaleString()])
+    ...usage.filter(el => new Date(el.date).getMonth() === new Date().getMonth()).map(el => [
+      el.date,
+      el.cda_api_calls.toLocaleString(),
+      el.cma_api_calls.toLocaleString()
+    ])
   ]
 
   const text = dedent(`
@@ -103,7 +107,7 @@ async function usage() {
     ${table(usageTable, { header: { alignment: 'center', content: 'Usage (CDA / CMA)' } })}
     Last month:\t${fNumber(usageTotal.last.cda)} (${fNumber(usageTotal.last.cda / usageTotal.last.days)}) / ${fNumber(usageTotal.last.cma)} (${fNumber(usageTotal.last.cma / usageTotal.last.days)})
     Current:\t${fNumber(usageTotal.current.cda)} (${fNumber(usageTotal.current.cda / usageTotal.current.days)}) / ${fNumber(usageTotal.current.cma)} (${fNumber(usageTotal.current.cma / usageTotal.current.days)})
-    
+
   `)
   console.log(text)
 
