@@ -5,29 +5,67 @@ import { buildClient } from '@datocms/cma-client-node';
 import dedent from 'dedent-js';
 import { table } from 'table';
 const version = '1.0.0';
-if (!process.env.DATOCMS_API_TOKEN)
-    throw new Error('DATOCMS_API_TOKEN is required');
-const client = buildClient({
-    apiToken: process.env.DATOCMS_API_TOKEN,
-    environment: process.env.DATOCMS_ENVIRONMENT || 'main',
-});
 const program = new Command();
 program
     .version(version)
     .description(`next-dato-utils v${version}`)
     .option("-i, --info", "Info DatoCMS project")
+    .option("-u, --usage", "Usage DatoCMS project")
+    .option("-to, --token <value>", "Api token")
     .option("-t, --test <value>", "Test DatoCMS project")
     .parse(process.argv);
 const options = program.opts();
+const apiToken = options.token ?? process.env.DATOCMS_API_TOKEN;
+if (!apiToken)
+    throw new Error('DATOCMS_API_TOKEN is required');
+const client = buildClient({
+    apiToken,
+    environment: process.env.DATOCMS_ENVIRONMENT || 'main',
+});
 if (options.info)
     info();
+if (options.usage)
+    usage();
 async function info() {
-    const [site, usage, itemTypes, webhooks, plugins] = await Promise.all([
+    const [site, itemTypes, webhooks, plugins, buildTriggers] = await Promise.all([
         client.site.find(),
-        client.dailyUsages.list(),
         client.itemTypes.list(),
         client.webhooks.list(),
         client.plugins.list(),
+        client.buildTriggers.list(),
+    ]);
+    const text = dedent(`
+    ${site.name}
+    -------------------------------
+    Timezone: ${site.timezone}
+    Locales: ${site.locales}
+
+    Models
+    -------------------------------
+    ${itemTypes.filter(el => !el.modular_block).map(itemType => itemType.api_key).join('\n')}
+
+    Blocks
+    -------------------------------
+    ${itemTypes.filter(el => el.modular_block).map(itemType => itemType.api_key).join('\n')}
+
+    Webhooks
+    -------------------------------
+    ${webhooks.map(webhook => `${webhook.name}\n${webhook.url}`).join('\n\n')}
+
+    Build Triggers
+    -------------------------------
+    ${buildTriggers.map(t => `${t.name}\n${t.frontend_url}`).join('\n')}
+
+    Plugins
+    -------------------------------
+    ${plugins.map(plugin => `${plugin.name}`).join('\n')}
+  `);
+    console.log(text);
+}
+async function usage() {
+    const [site, usage] = await Promise.all([
+        client.site.find(),
+        client.dailyUsages.list()
     ]);
     const usageTotal = {
         last: {
@@ -45,30 +83,10 @@ async function info() {
     ];
     const text = dedent(`
     ${site.name}
-    -------------------------------
-    Timezone: ${site.timezone}
-    Locales: ${site.locales}
-
-    Models
-    -------------------------------
-    ${itemTypes.filter(el => !el.modular_block).map(itemType => itemType.api_key).join('\n')}
-
-    Blocks
-    -------------------------------
-    ${itemTypes.filter(el => el.modular_block).map(itemType => itemType.api_key).join('\n')}
-
-    Webhooks
-    -------------------------------
-    ${webhooks.map(webhook => `${webhook.name}: ${webhook.url}`).join('\n')}
-
-    Plugins
-    -------------------------------
-    ${plugins.map(plugin => `${plugin.name}`).join('\n')}
-
+    
     ${table(usageTable, { header: { alignment: 'center', content: 'Usage (CDA / CMA)' } })}
-    Last month:\t${usageTotal.last.cda} CDA / ${usageTotal.last.cma} CMA
-    Current:\t${usageTotal.curreent.cda} CDA / ${usageTotal.curreent.cma} CMA
-
+    Last month:\t${usageTotal.last.cda} / ${usageTotal.last.cma}
+    Current:\t${usageTotal.curreent.cda} / ${usageTotal.curreent.cma} 
   `);
     console.log(text);
 }

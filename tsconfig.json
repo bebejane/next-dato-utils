@@ -3,7 +3,7 @@
     "rootDir": "src",
     "outDir": "./dist/esm",
     "strict": true,
-    "target": "ESNext",
+    "target": "ES2022",
     "module": "NodeNext",
     "jsx": "react-jsx",
     "sourceMap": true,
