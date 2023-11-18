@@ -17,7 +17,7 @@ const defaultOptions = {
 };
 export default async function apiQuery(query, options) {
     const opt = { ...defaultOptions, ...(options ?? {}) };
-    opt.generateTags = false;
+    //opt.generateTags = false
     if (!process.env.DATOCMS_API_TOKEN)
         throw new Error('DATOCMS_API_TOKEN is not set');
     if (!process.env.DATOCMS_ENVIRONMENT)
