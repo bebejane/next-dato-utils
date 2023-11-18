@@ -9,6 +9,7 @@ const commander_1 = require("commander");
 const cma_client_node_1 = require("@datocms/cma-client-node");
 const dedent_js_1 = __importDefault(require("dedent-js"));
 const table_1 = require("table");
+const pretty_bytes_1 = __importDefault(require("pretty-bytes"));
 const version = '1.0.0';
 const program = new commander_1.Command();
 program
@@ -72,32 +73,41 @@ async function info() {
 async function usage() {
     const [site, usage] = await Promise.all([client.site.find(), client.dailyUsages.list()]);
     const fNumber = (num) => !num ? 0 : num.toLocaleString('en-US', { maximumFractionDigits: 0 });
+    const usageLast = usage.filter(el => new Date(el.date).getMonth() < new Date().getMonth());
+    const usageCurrent = usage.filter(el => new Date(el.date).getMonth() === new Date().getMonth());
     const usageTotal = {
         last: {
-            days: usage.filter(el => new Date(el.date).getMonth() < new Date().getMonth()).length,
-            cda: usage.filter(el => new Date(el.date).getMonth() < new Date().getMonth()).reduce((acc, el) => acc + el.cda_api_calls + el.cma_api_calls, 0),
-            cma: usage.filter(el => new Date(el.date).getMonth() < new Date().getMonth()).reduce((acc, el) => acc + el.cma_api_calls, 0),
+            days: usageLast.length,
+            cda: usageLast.reduce((acc, el) => acc + el.cda_api_calls + el.cma_api_calls, 0),
+            cma: usageLast.reduce((acc, el) => acc + el.cma_api_calls, 0),
+            bytes: usageLast.reduce((acc, el) => acc + el.assets_traffic_bytes, 0),
         },
         current: {
-            days: usage.filter(el => new Date(el.date).getMonth() === new Date().getMonth()).length,
-            cda: usage.filter(el => new Date(el.date).getMonth() === new Date().getMonth()).reduce((acc, el) => acc + el.cda_api_calls + el.cma_api_calls, 0),
-            cma: usage.filter(el => new Date(el.date).getMonth() === new Date().getMonth()).reduce((acc, el) => acc + el.cma_api_calls, 0),
+            days: usageCurrent.length,
+            cda: usageCurrent.reduce((acc, el) => acc + el.cda_api_calls + el.cma_api_calls, 0),
+            cma: usageCurrent.reduce((acc, el) => acc + el.cma_api_calls, 0),
+            bytes: usageCurrent.reduce((acc, el) => acc + el.assets_traffic_bytes, 0),
         }
     };
     const usageTable = [
-        ['Date', 'CDA', 'CMA'],
+        ['Date', 'CDA', 'CMA', "Traffic"],
         ...usage.filter(el => new Date(el.date).getMonth() === new Date().getMonth()).map(el => [
             el.date,
             fNumber(el.cda_api_calls),
-            fNumber(el.cma_api_calls)
+            fNumber(el.cma_api_calls),
+            (0, pretty_bytes_1.default)(el.assets_traffic_bytes, { maximumFractionDigits: 1 })
         ])
+    ];
+    const totalTable = [
+        ['Period', 'CDA', 'CDA (avg)', 'CMA', 'CMA (avg)', 'Traffic'],
+        ['Last month', fNumber(usageTotal.last.cda), fNumber(usageTotal.last.cda / usageTotal.last.days), fNumber(usageTotal.last.cma), fNumber(usageTotal.last.cma / usageTotal.last.days), (0, pretty_bytes_1.default)(usageTotal.last.bytes, { maximumFractionDigits: 1 })],
+        ['Current', fNumber(usageTotal.current.cda), fNumber(usageTotal.current.cda / usageTotal.current.days), fNumber(usageTotal.current.cma), fNumber(usageTotal.current.cma / usageTotal.current.days), (0, pretty_bytes_1.default)(usageTotal.current.bytes, { maximumFractionDigits: 1 })]
     ];
     const text = (0, dedent_js_1.default)(`
     ${site.name}
     
     ${(0, table_1.table)(usageTable, { header: { alignment: 'center', content: 'Usage (CDA / CMA)' } })}
-    Last month:\t${fNumber(usageTotal.last.cda)} (${fNumber(usageTotal.last.cda / usageTotal.last.days)}) / ${fNumber(usageTotal.last.cma)} (${fNumber(usageTotal.last.cma / usageTotal.last.days)})
-    Current:\t${fNumber(usageTotal.current.cda)} (${fNumber(usageTotal.current.cda / usageTotal.current.days)}) / ${fNumber(usageTotal.current.cma)} (${fNumber(usageTotal.current.cma / usageTotal.current.days)})
+    ${(0, table_1.table)(totalTable, { header: { alignment: 'center', content: `${site.name} - Totals` } })}
 
   `);
     console.log(text);
