@@ -66,7 +66,7 @@ async function info() {
 }
 async function usage() {
     const [site, usage] = await Promise.all([client.site.find(), client.dailyUsages.list()]);
-    const fNumber = (num) => num.toLocaleString('en-US', { maximumFractionDigits: 0 });
+    const fNumber = (num) => !num ? 0 : num.toLocaleString('en-US', { maximumFractionDigits: 0 });
     const usageTotal = {
         last: {
             days: usage.filter(el => new Date(el.date).getMonth() < new Date().getMonth()).length,
@@ -83,8 +83,8 @@ async function usage() {
         ['Date', 'CDA', 'CMA'],
         ...usage.filter(el => new Date(el.date).getMonth() === new Date().getMonth()).map(el => [
             el.date,
-            el.cda_api_calls.toLocaleString(),
-            el.cma_api_calls.toLocaleString()
+            fNumber(el.cda_api_calls),
+            fNumber(el.cma_api_calls)
         ])
     ];
     const text = dedent(`
