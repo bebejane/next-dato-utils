@@ -45,6 +45,8 @@ async function info() {
 
   const text = dedent(`
     ${site.name}
+    ${buildTriggers.find(t => t.frontend_url)?.frontend_url ?? 'No frontend url'}
+
     -------------------------------
     Timezone: ${site.timezone}
     Locales: ${site.locales}
@@ -74,21 +76,22 @@ async function info() {
 }
 
 async function usage() {
-  const [site, usage] = await Promise.all([
-    client.site.find(),
-    client.dailyUsages.list()
-  ])
+  const [site, usage] = await Promise.all([client.site.find(), client.dailyUsages.list()])
 
+  const fNumber = (num: number) => num.toLocaleString('en-US', { maximumFractionDigits: 0 })
   const usageTotal = {
     last: {
+      days: usage.filter(el => new Date(el.date).getMonth() < new Date().getMonth()).length,
       cda: usage.filter(el => new Date(el.date).getMonth() < new Date().getMonth()).reduce((acc, el) => acc + el.cda_api_calls + el.cma_api_calls, 0),
       cma: usage.filter(el => new Date(el.date).getMonth() < new Date().getMonth()).reduce((acc, el) => acc + el.cma_api_calls, 0),
     },
-    curreent: {
+    current: {
+      days: usage.filter(el => new Date(el.date).getMonth() === new Date().getMonth()).length,
       cda: usage.filter(el => new Date(el.date).getMonth() === new Date().getMonth()).reduce((acc, el) => acc + el.cda_api_calls + el.cma_api_calls, 0),
       cma: usage.filter(el => new Date(el.date).getMonth() === new Date().getMonth()).reduce((acc, el) => acc + el.cma_api_calls, 0),
     }
   }
+  console.log(usageTotal)
   const usageTable = [
     ['Date', 'CDA', 'CMA'],
     ...usage.map(el => [el.date, el.cda_api_calls.toLocaleString(), el.cma_api_calls.toLocaleString()])
@@ -98,8 +101,9 @@ async function usage() {
     ${site.name}
     
     ${table(usageTable, { header: { alignment: 'center', content: 'Usage (CDA / CMA)' } })}
-    Last month:\t${usageTotal.last.cda.toLocaleString()} / ${usageTotal.last.cma.toLocaleString()}
-    Current:\t${usageTotal.curreent.cda.toLocaleString()} / ${usageTotal.curreent.cma.toLocaleString()} 
+    Last month:\t${fNumber(usageTotal.last.cda)} (${fNumber(usageTotal.last.cda / usageTotal.last.days)}) / ${fNumber(usageTotal.last.cma)} (${fNumber(usageTotal.last.cma / usageTotal.last.days)})
+    Current:\t${fNumber(usageTotal.current.cda)} (${fNumber(usageTotal.current.cda / usageTotal.current.days)}) / ${fNumber(usageTotal.current.cma)} (${fNumber(usageTotal.current.cma / usageTotal.current.days)})
+    
   `)
   console.log(text)
 
