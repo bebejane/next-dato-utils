@@ -1,4 +1,4 @@
-export default function revalidate(req: Request, callback: (payload: RevalidatePayload, revalidate: (paths: string[], tags: string[]) => Promise<Response>) => Promise<Response>): Promise<Response>;
+export default function revalidate(req: Request, callback: (payload: RevalidatePayload, revalidate: (paths: string[], tags: string[], logs?: boolean) => Promise<Response>) => Promise<Response>): Promise<Response>;
 export type RevalidatePayload = {
     event_type: DatoWebhookPayload['event_type'];
     entity: DatoWebhookPayload['entity'];

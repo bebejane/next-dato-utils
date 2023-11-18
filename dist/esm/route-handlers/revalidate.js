@@ -10,8 +10,10 @@ export default async function revalidate(req, callback) {
     const now = Date.now();
     const response = { revalidated: false, event_type, entity_type, api_key, delay, now };
     const transformedPayload = { entity, event_type, entity_type, api_key };
-    return await callback(transformedPayload, async (paths, tags) => {
+    return await callback(transformedPayload, async (paths, tags, logs = false) => {
         try {
+            if (logs)
+                console.log('Revalidating', paths, tags, response);
             if ((!paths && !tags) || (!paths.length && !tags.length))
                 return new Response(JSON.stringify(response), { status: 200, headers: { 'content-type': 'application/json' } });
             paths?.forEach(p => revalidatePath(p));

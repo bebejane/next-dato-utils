@@ -1,7 +1,7 @@
 import { revalidatePath, revalidateTag } from 'next/cache.js';
 //import basicAuth from "./basic-auth";
 
-export default async function revalidate(req: Request, callback: (payload: RevalidatePayload, revalidate: (paths: string[], tags: string[]) => Promise<Response>) => Promise<Response>) {
+export default async function revalidate(req: Request, callback: (payload: RevalidatePayload, revalidate: (paths: string[], tags: string[], logs?: boolean) => Promise<Response>) => Promise<Response>) {
 
   const payload = await req.json() as DatoWebhookPayload
 
@@ -15,8 +15,11 @@ export default async function revalidate(req: Request, callback: (payload: Reval
   const response = { revalidated: false, event_type, entity_type, api_key, delay, now }
   const transformedPayload: RevalidatePayload = { entity, event_type, entity_type, api_key }
 
-  return await callback(transformedPayload, async (paths, tags) => {
+  return await callback(transformedPayload, async (paths, tags, logs = false) => {
     try {
+
+      if (logs)
+        console.log('Revalidating', paths, tags, response)
 
       if ((!paths && !tags) || (!paths.length && !tags.length))
         return new Response(JSON.stringify(response), { status: 200, headers: { 'content-type': 'application/json' } })
