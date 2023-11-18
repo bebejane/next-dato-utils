@@ -79,14 +79,14 @@ async function usage() {
     };
     const usageTable = [
         ['Date', 'CDA', 'CMA'],
-        ...usage.map(el => [el.date, el.cda_api_calls, el.cma_api_calls])
+        ...usage.map(el => [el.date, el.cda_api_calls.toLocaleString(), el.cma_api_calls.toLocaleString()])
     ];
     const text = dedent(`
     ${site.name}
     
     ${table(usageTable, { header: { alignment: 'center', content: 'Usage (CDA / CMA)' } })}
-    Last month:\t${usageTotal.last.cda} / ${usageTotal.last.cma}
-    Current:\t${usageTotal.curreent.cda} / ${usageTotal.curreent.cma} 
+    Last month:\t${usageTotal.last.cda.toLocaleString()} / ${usageTotal.last.cma.toLocaleString()}
+    Current:\t${usageTotal.curreent.cda.toLocaleString()} / ${usageTotal.curreent.cma.toLocaleString()} 
   `);
     console.log(text);
 }
