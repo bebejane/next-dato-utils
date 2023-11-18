@@ -1,6 +1,7 @@
 'use server'
 
 import { draftMode } from 'next/headers.js'
+import type { RequestInit } from 'next/dist/server/web/spec-extension/request.js'
 import type { DocumentNode, FieldNode, OperationDefinitionNode, VariableDefinitionNode } from 'graphql'
 import { print } from 'graphql/language/printer.js'
 import { cache } from 'react';
@@ -8,8 +9,8 @@ import { traverse } from 'object-traversal';
 import isInteger from 'is-integer';
 
 
-export type ApiQueryOptions<V> = {
-  variables?: V | undefined;
+export type ApiQueryOptions<V = void> = {
+  variables?: V;
   includeDrafts?: boolean;
   excludeInvalid?: boolean;
   visualEditingBaseUrl?: string | undefined;
@@ -20,7 +21,7 @@ export type ApiQueryOptions<V> = {
   all?: boolean
 };
 
-export type DefaultApiQueryOptions = ApiQueryOptions<any> & {
+export type DefaultApiQueryOptions = ApiQueryOptions & {
   variables: undefined,
   includeDrafts: boolean,
   excludeInvalid: boolean,
@@ -45,11 +46,9 @@ const defaultOptions: DefaultApiQueryOptions = {
 };
 
 
-export default async function apiQuery<T, V>(query: DocumentNode, options?: ApiQueryOptions<V>): Promise<T & { draftUrl: string | null }> {
+export default async function apiQuery<T, V = void>(query: DocumentNode, options?: ApiQueryOptions<V>): Promise<T & { draftUrl: string | null }> {
 
   const opt = { ...defaultOptions, ...(options ?? {}) };
-
-  //opt.generateTags = false
 
   if (!process.env.DATOCMS_API_TOKEN)
     throw new Error('DATOCMS_API_TOKEN is not set')
@@ -80,7 +79,7 @@ export default async function apiQuery<T, V>(query: DocumentNode, options?: ApiQ
 }
 
 
-const paginatedQuery = async <T, V>(query: DocumentNode, options: ApiQueryOptions<any>, data: any, queryId: string): Promise<T> => {
+const paginatedQuery = async <T, V = void>(query: DocumentNode, options: ApiQueryOptions<any>, data: any, queryId: string): Promise<T> => {
 
   try {
 
@@ -122,6 +121,7 @@ const paginatedQuery = async <T, V>(query: DocumentNode, options: ApiQueryOption
       throw new Error('"first" variable must be less than or equal to 100')
 
     let count = 0
+
     while (Object.keys(pageKeyMap).some(k => data[k].count > data[pageKeyMap[k]].length)) {
       const maxPageKey = pageKeyMap[Object.keys(pageKeyMap).sort((a, b) => data[a].count > data[b].count ? -1 : 1)[0]]
       const skip = data[maxPageKey].length
@@ -133,7 +133,7 @@ const paginatedQuery = async <T, V>(query: DocumentNode, options: ApiQueryOption
           ...options.variables,
           first,
           skip
-        } as V
+        }
       })
 
       Object.keys(pageKeyMap).forEach(k =>
@@ -191,28 +191,20 @@ const dedupedFetch = cache(async (options: DedupeOptions) => {
       : {}),
   } as unknown as HeadersInit
 
-  const next: { revalidate?: number, tags?: string[] } = { revalidate }
-
-  if (tags && tags?.length > 0)
-    next['tags'] = tags
-
   const response = await fetch(url ?? 'https://graphql.datocms.com/', {
     method: 'POST',
     headers,
     body,
-    //@ts-ignore
-    next,
-  });
+    next: {
+      revalidate,
+      tags: Array.isArray(tags) ? tags : undefined
+    }
+  } as RequestInit);
 
   const responseBody = await response.json();
 
-  if (!response.ok) {
-    throw new Error(
-      `${response.status} ${response.statusText}: ${JSON.stringify(
-        responseBody,
-      )}`,
-    );
-  }
+  if (!response.ok)
+    throw new Error(`${response.status} ${response.statusText}: ${JSON.stringify(responseBody)}`);
 
   logs && console.log(queryId, { ...options, body: undefined }, response.headers.get('x-cache'))
   return responseBody;

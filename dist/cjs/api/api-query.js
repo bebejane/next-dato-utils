@@ -22,7 +22,6 @@ const defaultOptions = {
 };
 async function apiQuery(query, options) {
     const opt = { ...defaultOptions, ...(options ?? {}) };
-    //opt.generateTags = false
     if (!process.env.DATOCMS_API_TOKEN)
         throw new Error('DATOCMS_API_TOKEN is not set');
     if (!process.env.DATOCMS_ENVIRONMENT)
@@ -116,20 +115,18 @@ const dedupedFetch = (0, react_1.cache)(async (options) => {
             ? { 'X-Environment': process.env.DATOCMS_ENVIRONMENT }
             : {}),
     };
-    const next = { revalidate };
-    if (tags && tags?.length > 0)
-        next['tags'] = tags;
     const response = await fetch(url ?? 'https://graphql.datocms.com/', {
         method: 'POST',
         headers,
         body,
-        //@ts-ignore
-        next,
+        next: {
+            revalidate,
+            tags: Array.isArray(tags) ? tags : undefined
+        }
     });
     const responseBody = await response.json();
-    if (!response.ok) {
+    if (!response.ok)
         throw new Error(`${response.status} ${response.statusText}: ${JSON.stringify(responseBody)}`);
-    }
     logs && console.log(queryId, { ...options, body: undefined }, response.headers.get('x-cache'));
     return responseBody;
 });
