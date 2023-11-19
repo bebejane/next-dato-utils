@@ -6,7 +6,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const headers_js_1 = require("next/headers.js");
 const printer_js_1 = require("graphql/language/printer.js");
-const react_1 = require("react");
+const cache_js_1 = require("next/cache.js");
 const object_traversal_1 = require("object-traversal");
 const is_integer_1 = __importDefault(require("is-integer"));
 const defaultOptions = {
@@ -100,7 +100,7 @@ const paginatedQuery = async (query, options, data, queryId) => {
         throw new Error(`${queryId}: ${e.message}`);
     }
 };
-const dedupedFetch = (0, react_1.cache)(async (options) => {
+const dedupedFetch = (0, cache_js_1.unstable_cache)(async (options) => {
     const { url, body, includeDrafts, excludeInvalid, visualEditingBaseUrl, revalidate, tags, queryId, logs } = options;
     const headers = {
         'Authorization': `Bearer ${process.env.DATOCMS_API_TOKEN}`,

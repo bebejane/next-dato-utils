@@ -1,7 +1,7 @@
 'use server';
 import { draftMode } from 'next/headers.js';
 import { print } from 'graphql/language/printer.js';
-import { cache } from 'react';
+import { unstable_cache as cache } from 'next/cache.js';
 import { traverse } from 'object-traversal';
 import isInteger from 'is-integer';
 const defaultOptions = {
