@@ -189,6 +189,7 @@ const dedupedFetch = cache(async (options: DedupeOptions) => {
     ...(process.env.DATOCMS_ENVIRONMENT
       ? { 'X-Environment': process.env.DATOCMS_ENVIRONMENT }
       : {}),
+    'Cache-Control': 'no-cache'
   } as unknown as HeadersInit
 
   const response = await fetch(url ?? 'https://graphql.datocms.com/', {

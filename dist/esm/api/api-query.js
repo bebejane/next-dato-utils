@@ -108,6 +108,7 @@ const dedupedFetch = cache(async (options) => {
         ...(process.env.DATOCMS_ENVIRONMENT
             ? { 'X-Environment': process.env.DATOCMS_ENVIRONMENT }
             : {}),
+        'Cache-Control': 'no-cache'
     };
     const response = await fetch(url ?? 'https://graphql.datocms.com/', {
         method: 'POST',

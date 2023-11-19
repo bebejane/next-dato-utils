@@ -1,6 +1,8 @@
 {
   "files.exclude": {
     "node_modules": true,
-    ".vscode": true
+    ".vscode": true,
+    "types": true,
+    "dist": true
   }
 }
