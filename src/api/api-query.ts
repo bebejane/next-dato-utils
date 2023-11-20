@@ -215,7 +215,7 @@ const dedupedFetch = cache(async (options: DedupeOptions) => {
 const generateIdTags = (data: any, tags: string[] | undefined, queryId: string): string[] => {
 
   const allTags: string[] = tags?.length ? tags : []
-  traverse(data, ({ key, value }) => key === 'id' && allTags.push(value))
+  traverse(data, ({ key, value }) => key === 'id' && allTags.push(String(value)))
   const uniqueTags = allTags.filter((value, index, self) => self.indexOf(value) === index).filter(t => t)
   return uniqueTags
 }

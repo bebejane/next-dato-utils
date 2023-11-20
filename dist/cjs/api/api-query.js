@@ -133,7 +133,7 @@ const dedupedFetch = (0, react_1.cache)(async (options) => {
 });
 const generateIdTags = (data, tags, queryId) => {
     const allTags = tags?.length ? tags : [];
-    (0, object_traversal_1.traverse)(data, ({ key, value }) => key === 'id' && allTags.push(value));
+    (0, object_traversal_1.traverse)(data, ({ key, value }) => key === 'id' && allTags.push(String(value)));
     const uniqueTags = allTags.filter((value, index, self) => self.indexOf(value) === index).filter(t => t);
     return uniqueTags;
 };
