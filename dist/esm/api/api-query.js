@@ -17,7 +17,7 @@ const defaultOptions = {
 };
 export default async function apiQuery(query, options) {
     const opt = { ...defaultOptions, ...(options ?? {}) };
-    if (!process.env.DATOCMS_API_TOKEN)
+    if (!process.env.DATOCMS_API_TOKEN && !process.env.NEXT_PUBLIC_DATOCMS_API_TOKEN)
         throw new Error('DATOCMS_API_TOKEN is not set');
     if (!process.env.DATOCMS_ENVIRONMENT)
         throw new Error('DATOCMS_ENVIRONMENT is not set');
@@ -97,7 +97,7 @@ const paginatedQuery = async (query, options, data, queryId) => {
 const dedupedFetch = cache(async (options) => {
     const { url, body, includeDrafts, excludeInvalid, visualEditingBaseUrl, revalidate, tags, queryId, logs } = options;
     const headers = {
-        'Authorization': `Bearer ${process.env.DATOCMS_API_TOKEN}`,
+        'Authorization': `Bearer ${process.env.DATOCMS_API_TOKEN ?? process.env.NEXT_PUBLIC_DATOCMS_API_TOKEN}`,
         ...(includeDrafts ? { 'X-Include-Drafts': 'true' } : {}),
         ...(excludeInvalid ? { 'X-Exclude-Invalid': 'true' } : {}),
         ...(visualEditingBaseUrl
