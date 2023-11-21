@@ -52,7 +52,7 @@ export default async function apiQuery<T, V = void>(query: DocumentNode, options
 
   if (!process.env.DATOCMS_API_TOKEN && !process.env.NEXT_PUBLIC_DATOCMS_API_TOKEN)
     throw new Error('DATOCMS_API_TOKEN is not set')
-  if (!process.env.DATOCMS_ENVIRONMENT)
+  if (!process.env.DATOCMS_ENVIRONMENT && !process.env.NEXT_PUBLIC_DATOCMS_ENVIRONMENT)
     throw new Error('DATOCMS_ENVIRONMENT is not set')
 
   const queryId = (query.definitions?.[0] as any).name?.value as string
@@ -189,7 +189,7 @@ const dedupedFetch = cache(async (options: DedupeOptions) => {
       }
       : {}),
     ...(process.env.DATOCMS_ENVIRONMENT
-      ? { 'X-Environment': process.env.DATOCMS_ENVIRONMENT }
+      ? { 'X-Environment': process.env.DATOCMS_ENVIRONMENT ?? process.env.NEXT_PUBLIC_DATOCMS_ENVIRONMENT }
       : {}),
   } as unknown as HeadersInit
 

@@ -24,7 +24,7 @@ async function apiQuery(query, options) {
     const opt = { ...defaultOptions, ...(options ?? {}) };
     if (!process.env.DATOCMS_API_TOKEN && !process.env.NEXT_PUBLIC_DATOCMS_API_TOKEN)
         throw new Error('DATOCMS_API_TOKEN is not set');
-    if (!process.env.DATOCMS_ENVIRONMENT)
+    if (!process.env.DATOCMS_ENVIRONMENT && !process.env.NEXT_PUBLIC_DATOCMS_ENVIRONMENT)
         throw new Error('DATOCMS_ENVIRONMENT is not set');
     const queryId = (query.definitions?.[0]).name?.value;
     if (typeof options?.includeDrafts === 'undefined')
@@ -113,7 +113,7 @@ const dedupedFetch = (0, react_1.cache)(async (options) => {
             }
             : {}),
         ...(process.env.DATOCMS_ENVIRONMENT
-            ? { 'X-Environment': process.env.DATOCMS_ENVIRONMENT }
+            ? { 'X-Environment': process.env.DATOCMS_ENVIRONMENT ?? process.env.NEXT_PUBLIC_DATOCMS_ENVIRONMENT }
             : {}),
     };
     const response = await fetch(url ?? 'https://graphql.datocms.com/', {
