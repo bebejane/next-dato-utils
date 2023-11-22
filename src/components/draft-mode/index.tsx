@@ -6,8 +6,8 @@ import DraftModeClient from './DraftModeClient.js'
 
 export type Props = {
   url?: string | undefined | null,
-  tag?: string | undefined | null
-  path?: string | undefined | null
+  tag?: string | string[] | undefined | null
+  path?: string | string[] | undefined | null
 }
 
 export default async function DraftMode({ url, tag, path }: Props) {

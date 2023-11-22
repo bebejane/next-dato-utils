@@ -10,10 +10,10 @@ export async function disableDraftMode(pathname?: string) {
   redirect(pathname ?? `/`)
 }
 
-export async function revalidateTag(tag: string) {
-  return rt(tag)
+export async function revalidateTag(tag: string | string[]): Promise<void> {
+  Array.isArray(tag) ? tag.forEach(t => rt(t)) : rt(tag)
 }
 
-export async function revalidatePath(path: string) {
-  return rp(path)
+export async function revalidatePath(path: string | string[]): Promise<void> {
+  Array.isArray(path) ? path.forEach(p => rp(p)) : rp(path)
 }

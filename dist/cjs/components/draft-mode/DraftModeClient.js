@@ -13,6 +13,8 @@ function DraftMode({ enabled, draftUrl, tag, path, actions }) {
     const pathname = (0, navigation_js_1.usePathname)();
     const [loading, startTransition] = (0, react_1.useTransition)();
     const listener = (0, react_1.useRef)(null);
+    const tags = tag ? Array.isArray(tag) ? tag : [tag] : [];
+    const paths = path ? Array.isArray(path) ? path : [path] : [];
     (0, react_1.useEffect)(() => {
         if (!draftUrl || !enabled || listener?.current)
             return;
@@ -28,10 +30,10 @@ function DraftMode({ enabled, draftUrl, tag, path, actions }) {
                     return;
                 console.log(event);
                 startTransition(() => {
-                    if (tag)
-                        actions.revalidateTag(tag);
-                    if (path)
-                        actions.revalidatePath(path);
+                    if (tags)
+                        actions.revalidateTag(tags);
+                    if (paths)
+                        actions.revalidatePath(paths);
                 });
             });
             listener.current.addEventListener("channelError", (err) => {

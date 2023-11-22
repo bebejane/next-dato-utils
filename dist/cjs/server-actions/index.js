@@ -12,11 +12,11 @@ async function disableDraftMode(pathname) {
 }
 exports.disableDraftMode = disableDraftMode;
 async function revalidateTag(tag) {
-    return (0, cache_js_1.revalidateTag)(tag);
+    Array.isArray(tag) ? tag.forEach(t => (0, cache_js_1.revalidateTag)(t)) : (0, cache_js_1.revalidateTag)(tag);
 }
 exports.revalidateTag = revalidateTag;
 async function revalidatePath(path) {
-    return (0, cache_js_1.revalidatePath)(path);
+    Array.isArray(path) ? path.forEach(p => (0, cache_js_1.revalidatePath)(p)) : (0, cache_js_1.revalidatePath)(path);
 }
 exports.revalidatePath = revalidatePath;
 //# sourceMappingURL=index.js.map

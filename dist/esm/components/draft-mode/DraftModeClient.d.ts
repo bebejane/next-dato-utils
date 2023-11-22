@@ -1,11 +1,11 @@
 export type DraftModeProps = {
     enabled: boolean;
     draftUrl?: string | null | undefined;
-    tag?: string | null | undefined;
-    path?: string | null | undefined;
+    tag?: string | string[] | null | undefined;
+    path?: string | string[] | null | undefined;
     actions: {
-        revalidateTag: (tag: string) => void;
-        revalidatePath: (path: string) => void;
+        revalidateTag: (tag: string | string[]) => void;
+        revalidatePath: (path: string | string[]) => void;
         disableDraftMode: (path: string) => void;
     };
 };

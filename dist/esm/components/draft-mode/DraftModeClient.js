@@ -8,6 +8,8 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
     const pathname = usePathname();
     const [loading, startTransition] = useTransition();
     const listener = useRef(null);
+    const tags = tag ? Array.isArray(tag) ? tag : [tag] : [];
+    const paths = path ? Array.isArray(path) ? path : [path] : [];
     useEffect(() => {
         if (!draftUrl || !enabled || listener?.current)
             return;
@@ -23,10 +25,10 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
                     return;
                 console.log(event);
                 startTransition(() => {
-                    if (tag)
-                        actions.revalidateTag(tag);
-                    if (path)
-                        actions.revalidatePath(path);
+                    if (tags)
+                        actions.revalidateTag(tags);
+                    if (paths)
+                        actions.revalidatePath(paths);
                 });
             });
             listener.current.addEventListener("channelError", (err) => {

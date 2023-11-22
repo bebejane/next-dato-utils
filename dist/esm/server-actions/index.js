@@ -8,9 +8,9 @@ export async function disableDraftMode(pathname) {
     redirect(pathname ?? `/`);
 }
 export async function revalidateTag(tag) {
-    return rt(tag);
+    Array.isArray(tag) ? tag.forEach(t => rt(t)) : rt(tag);
 }
 export async function revalidatePath(path) {
-    return rp(path);
+    Array.isArray(path) ? path.forEach(p => rp(p)) : rp(path);
 }
 //# sourceMappingURL=index.js.map
