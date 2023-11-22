@@ -1,5 +1,5 @@
 export type Props = {
-    url?: string | undefined;
+    url?: string | undefined | null;
     tag?: string;
     path?: string;
 };
