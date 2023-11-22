@@ -122,7 +122,8 @@ const dedupedFetch = cache(async (options) => {
     const responseBody = await response.json();
     if (!response.ok)
         throw new Error(`${response.status} ${response.statusText}: ${JSON.stringify(responseBody)}`);
-    logs && console.log(responseBody);
+    if (responseBody.errors)
+        throw new Error(`${queryId}: ${responseBody.errors.map((e) => e.message).join('.  ')}`);
     logs && console.log(queryId, { ...options, body: undefined }, response.headers.get('x-cache'));
     return responseBody;
 });
