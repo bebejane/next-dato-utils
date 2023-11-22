@@ -6,13 +6,13 @@ import DraftModeClient from './DraftModeClient.js'
 
 export type Props = {
   url?: string | undefined | null,
-  tag?: string
-  path?: string
+  tag?: string | undefined | null
+  path?: string | undefined | null
 }
 
 export default async function DraftMode({ url, tag, path }: Props) {
 
-  if (!url) return null
+  if (!url || (!tag && !path)) return null
 
   return (
     <DraftModeClient

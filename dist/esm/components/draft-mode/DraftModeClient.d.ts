@@ -1,8 +1,8 @@
 export type DraftModeProps = {
     enabled: boolean;
-    draftUrl?: string;
-    tag?: string;
-    path?: string;
+    draftUrl?: string | null | undefined;
+    tag?: string | null | undefined;
+    path?: string | null | undefined;
     actions: {
         revalidateTag: (tag: string) => void;
         revalidatePath: (path: string) => void;
