@@ -5,12 +5,14 @@ import { revalidateTag, revalidatePath, disableDraftMode } from '../../server-ac
 import DraftModeClient from './DraftModeClient.js'
 
 export type Props = {
-  url?: string,
+  url?: string | undefined,
   tag?: string
   path?: string
 }
 
 export default async function DraftMode({ url, tag, path }: Props) {
+
+  if (!url) return null
 
   return (
     <DraftModeClient
