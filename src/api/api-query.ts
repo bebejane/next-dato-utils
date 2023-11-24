@@ -8,7 +8,6 @@ import { cache } from 'react';
 import { traverse } from 'object-traversal';
 import isInteger from 'is-integer';
 
-
 export type ApiQueryOptions<V = void> = {
   variables?: V;
   includeDrafts?: boolean;
