@@ -7,7 +7,6 @@ function StructuredText({ content, className, onClick, blocks }) {
     if (!content)
         return null;
     return ((0, jsx_runtime_1.jsx)(react_datocms_1.StructuredText, { data: content, renderBlock: ({ record }) => {
-            console.log(record, blocks);
             const Block = blocks?.find(b => b?.valueOf() === record.__typename.replace('Record', ''));
             if (!Block)
                 return null;

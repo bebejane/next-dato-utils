@@ -6,7 +6,7 @@ export type Props = {
   content: any
   className?: string
   onClick?: (imageId: string) => void
-  blocks?: React.JSXElementConstructor<any>[]
+  blocks?: any[]
 }
 
 export default function StructuredText({ content, className, onClick, blocks }: Props) {
@@ -18,7 +18,6 @@ export default function StructuredText({ content, className, onClick, blocks }: 
     <DatoStructuredText
       data={content}
       renderBlock={({ record }) => {
-        console.log(record, blocks)
         const Block = blocks?.find(b => b?.valueOf() === record.__typename.replace('Record', ''))
         if (!Block) return null
         return <Block data={record} onClick={(id: string) => onClick?.(id)} />

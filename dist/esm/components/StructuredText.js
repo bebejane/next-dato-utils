@@ -5,7 +5,6 @@ export default function StructuredText({ content, className, onClick, blocks }) 
     if (!content)
         return null;
     return (_jsx(DatoStructuredText, { data: content, renderBlock: ({ record }) => {
-            console.log(record, blocks);
             const Block = blocks?.find(b => b?.valueOf() === record.__typename.replace('Record', ''));
             if (!Block)
                 return null;
