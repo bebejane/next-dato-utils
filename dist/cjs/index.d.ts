@@ -8,6 +8,7 @@ export { default as vercelCronAuth } from './route-handlers/vercel-cron-auth.js'
 export { default as webPreviews } from './route-handlers/web-previews.js';
 export { default as Markdown } from './components/Markdown.js';
 export { default as StructuredText } from './components/StructuredText.js';
+export { default as Block } from './components/Block.js';
 export { default as DraftMode } from './components/draft-mode/index.js';
 export { default as markdownTruncate } from './utils/markdown-truncate.js';
 export { default as useApiQuery } from './hooks/useApiQuery.js';

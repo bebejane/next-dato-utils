@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.truncateWords = exports.truncateParagraph = exports.sortSwedish = exports.sleep = exports.rInt = exports.parseDatoError = exports.parseDatoCMSApiError = exports.isServer = exports.isEmpty = exports.chunkArray = exports.capitalize = exports.awaitElement = exports.revalidateTag = exports.revalidatePath = exports.disableDraftMode = exports.apiQuery = exports.useScrollInfo = exports.useApiQuery = exports.markdownTruncate = exports.DraftMode = exports.StructuredText = exports.Markdown = exports.webPreviews = exports.vercelCronAuth = exports.test = exports.revalidate = exports.draft = exports.cors = exports.basicAuth = exports.backup = void 0;
+exports.truncateWords = exports.truncateParagraph = exports.sortSwedish = exports.sleep = exports.rInt = exports.parseDatoError = exports.parseDatoCMSApiError = exports.isServer = exports.isEmpty = exports.chunkArray = exports.capitalize = exports.awaitElement = exports.revalidateTag = exports.revalidatePath = exports.disableDraftMode = exports.apiQuery = exports.useScrollInfo = exports.useApiQuery = exports.markdownTruncate = exports.DraftMode = exports.Block = exports.StructuredText = exports.Markdown = exports.webPreviews = exports.vercelCronAuth = exports.test = exports.revalidate = exports.draft = exports.cors = exports.basicAuth = exports.backup = void 0;
 var backup_js_1 = require("./route-handlers/backup.js");
 Object.defineProperty(exports, "backup", { enumerable: true, get: function () { return __importDefault(backup_js_1).default; } });
 var basic_auth_js_1 = require("./route-handlers/basic-auth.js");
@@ -24,6 +24,8 @@ var Markdown_js_1 = require("./components/Markdown.js");
 Object.defineProperty(exports, "Markdown", { enumerable: true, get: function () { return __importDefault(Markdown_js_1).default; } });
 var StructuredText_js_1 = require("./components/StructuredText.js");
 Object.defineProperty(exports, "StructuredText", { enumerable: true, get: function () { return __importDefault(StructuredText_js_1).default; } });
+var Block_js_1 = require("./components/Block.js");
+Object.defineProperty(exports, "Block", { enumerable: true, get: function () { return __importDefault(Block_js_1).default; } });
 var index_js_1 = require("./components/draft-mode/index.js");
 Object.defineProperty(exports, "DraftMode", { enumerable: true, get: function () { return __importDefault(index_js_1).default; } });
 var markdown_truncate_js_1 = require("./utils/markdown-truncate.js");
