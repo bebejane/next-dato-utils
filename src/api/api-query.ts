@@ -40,8 +40,7 @@ const defaultOptions: DefaultApiQueryOptions = {
   revalidate: isInteger(process.env.REVALIDATE_TIME) ? parseInt(process.env.REVALIDATE_TIME) : 3600,
   tags: undefined,
   generateTags: true,
-  //logs: false,
-  logs: true,
+  logs: false,
   all: false
 };
 

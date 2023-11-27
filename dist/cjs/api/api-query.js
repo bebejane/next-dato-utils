@@ -17,8 +17,7 @@ const defaultOptions = {
     revalidate: (0, is_integer_1.default)(process.env.REVALIDATE_TIME) ? parseInt(process.env.REVALIDATE_TIME) : 3600,
     tags: undefined,
     generateTags: true,
-    //logs: false,
-    logs: true,
+    logs: false,
     all: false
 };
 async function apiQuery(query, options) {
