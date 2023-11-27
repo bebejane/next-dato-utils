@@ -40,7 +40,8 @@ const defaultOptions: DefaultApiQueryOptions = {
   revalidate: isInteger(process.env.REVALIDATE_TIME) ? parseInt(process.env.REVALIDATE_TIME) : 3600,
   tags: undefined,
   generateTags: true,
-  logs: false,
+  //logs: false,
+  logs: true,
   all: false
 };
 
@@ -68,7 +69,7 @@ export default async function apiQuery<T, V = void>(query: DocumentNode, options
   const tags = opt.generateTags ? generateIdTags(await dedupedFetch(dedupeOptions), opt.tags, queryId) : opt.tags
   const res = opt.includeDrafts ? await dedupedFetch({ ...dedupeOptions, tags, url: 'https://graphql-listen.datocms.com/preview' }) : {}
 
-  opt.logs && console.log('calling', queryId)
+  opt.logs && console.log('[api-query]', 'calling', queryId)
   const { data } = await dedupedFetch({ ...dedupeOptions, tags });
 
   if (opt.all) {
@@ -209,7 +210,7 @@ const dedupedFetch = cache(async (options: DedupeOptions) => {
   if (responseBody.errors)
     throw new Error(`${queryId}: ${responseBody.errors.map((e: any) => e.message).join('. ')}`);
 
-  logs && console.log(queryId, { ...options, body: undefined }, response.headers.get('x-cache'))
+  logs && console.log('[api-query]', queryId, { ...options, body: undefined }, `tags: ${tags?.length ?? 0}`, response.headers.get('x-cache'))
   return responseBody;
 })
 
