@@ -167,7 +167,7 @@ export type DedupeOptions = {
   logs: boolean
 }
 
-const dedupedFetch = cache(async (options: DedupeOptions) => {
+const dedupedFetch = async (options: DedupeOptions) => {
   const {
     url,
     body,
@@ -214,7 +214,7 @@ const dedupedFetch = cache(async (options: DedupeOptions) => {
 
   logs && console.log('[api-query]', queryId, { ...options, body: undefined }, `tags: ${tags?.length ?? 0}`, response.headers.get('x-cache'))
   return responseBody;
-})
+}
 
 const generateIdTags = (data: any, tags: string[] | undefined, maxTags: number): string[] => {
 
