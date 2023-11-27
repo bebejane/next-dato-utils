@@ -12,6 +12,7 @@ const defaultOptions = {
     revalidate: isInteger(process.env.REVALIDATE_TIME) ? parseInt(process.env.REVALIDATE_TIME) : 3600,
     tags: undefined,
     generateTags: true,
+    maxTags: 100,
     logs: false,
     all: false
 };
@@ -32,7 +33,7 @@ export default async function apiQuery(query, options) {
         ...opt,
         queryId
     };
-    const tags = opt.generateTags ? generateIdTags(await dedupedFetch(dedupeOptions), opt.tags, queryId) : opt.tags;
+    const tags = opt.generateTags ? generateIdTags(await dedupedFetch(dedupeOptions), opt.tags, opt.maxTags) : opt.tags;
     const res = opt.includeDrafts ? await dedupedFetch({ ...dedupeOptions, tags, url: 'https://graphql-listen.datocms.com/preview' }) : {};
     opt.logs && console.log('[api-query]', 'calling', queryId);
     const { data } = await dedupedFetch({ ...dedupeOptions, tags });
@@ -127,10 +128,10 @@ const dedupedFetch = cache(async (options) => {
     logs && console.log('[api-query]', queryId, { ...options, body: undefined }, `tags: ${tags?.length ?? 0}`, response.headers.get('x-cache'));
     return responseBody;
 });
-const generateIdTags = (data, tags, queryId) => {
+const generateIdTags = (data, tags, maxTags) => {
     const allTags = tags?.length ? tags : [];
     traverse(data, ({ key, value }) => key === 'id' && allTags.push(String(value)));
     const uniqueTags = allTags.filter((value, index, self) => self.indexOf(value) === index).filter(t => t);
-    return uniqueTags;
+    return uniqueTags.slice(0, maxTags);
 };
 //# sourceMappingURL=api-query.js.map

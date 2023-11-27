@@ -7,6 +7,7 @@ export type ApiQueryOptions<V = void> = {
     revalidate?: number | undefined;
     tags?: string[] | undefined;
     generateTags?: boolean;
+    maxTags?: number;
     logs?: boolean;
     all?: boolean;
 };
@@ -18,6 +19,7 @@ export type DefaultApiQueryOptions = ApiQueryOptions & {
     revalidate: number | undefined;
     tags: string[] | undefined;
     generateTags: boolean;
+    maxTags: number;
     logs: boolean;
     all: boolean;
 };

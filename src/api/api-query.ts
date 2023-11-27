@@ -16,6 +16,7 @@ export type ApiQueryOptions<V = void> = {
   revalidate?: number | undefined;
   tags?: string[] | undefined,
   generateTags?: boolean
+  maxTags?: number
   logs?: boolean
   all?: boolean
 };
@@ -28,6 +29,7 @@ export type DefaultApiQueryOptions = ApiQueryOptions & {
   revalidate: number | undefined,
   tags: string[] | undefined,
   generateTags: boolean,
+  maxTags: number,
   logs: boolean
   all: boolean
 }
@@ -40,6 +42,7 @@ const defaultOptions: DefaultApiQueryOptions = {
   revalidate: isInteger(process.env.REVALIDATE_TIME) ? parseInt(process.env.REVALIDATE_TIME) : 3600,
   tags: undefined,
   generateTags: true,
+  maxTags: 100,
   logs: false,
   all: false
 };
@@ -65,7 +68,7 @@ export default async function apiQuery<T, V = void>(query: DocumentNode, options
     queryId
   }
 
-  const tags = opt.generateTags ? generateIdTags(await dedupedFetch(dedupeOptions), opt.tags, queryId) : opt.tags
+  const tags = opt.generateTags ? generateIdTags(await dedupedFetch(dedupeOptions), opt.tags, opt.maxTags) : opt.tags
   const res = opt.includeDrafts ? await dedupedFetch({ ...dedupeOptions, tags, url: 'https://graphql-listen.datocms.com/preview' }) : {}
 
   opt.logs && console.log('[api-query]', 'calling', queryId)
@@ -213,11 +216,11 @@ const dedupedFetch = cache(async (options: DedupeOptions) => {
   return responseBody;
 })
 
-const generateIdTags = (data: any, tags: string[] | undefined, queryId: string): string[] => {
+const generateIdTags = (data: any, tags: string[] | undefined, maxTags: number): string[] => {
 
   const allTags: string[] = tags?.length ? tags : []
   traverse(data, ({ key, value }) => key === 'id' && allTags.push(String(value)))
   const uniqueTags = allTags.filter((value, index, self) => self.indexOf(value) === index).filter(t => t)
-  return uniqueTags
+  return uniqueTags.slice(0, maxTags)
 }
 
