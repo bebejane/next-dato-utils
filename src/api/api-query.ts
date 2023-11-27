@@ -39,7 +39,7 @@ const defaultOptions: DefaultApiQueryOptions = {
   visualEditingBaseUrl: undefined,
   revalidate: isInteger(process.env.REVALIDATE_TIME) ? parseInt(process.env.REVALIDATE_TIME) : 3600,
   tags: undefined,
-  generateTags: false,
+  generateTags: true,
   logs: false,
   all: false
 };
@@ -218,6 +218,6 @@ const generateIdTags = (data: any, tags: string[] | undefined, queryId: string):
   const allTags: string[] = tags?.length ? tags : []
   traverse(data, ({ key, value }) => key === 'id' && allTags.push(String(value)))
   const uniqueTags = allTags.filter((value, index, self) => self.indexOf(value) === index).filter(t => t)
-  return uniqueTags
+  return uniqueTags.slice(0, 10)
 }
 

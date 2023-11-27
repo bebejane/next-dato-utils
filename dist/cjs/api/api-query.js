@@ -16,7 +16,7 @@ const defaultOptions = {
     visualEditingBaseUrl: undefined,
     revalidate: (0, is_integer_1.default)(process.env.REVALIDATE_TIME) ? parseInt(process.env.REVALIDATE_TIME) : 3600,
     tags: undefined,
-    generateTags: false,
+    generateTags: true,
     logs: false,
     all: false
 };
@@ -137,6 +137,6 @@ const generateIdTags = (data, tags, queryId) => {
     const allTags = tags?.length ? tags : [];
     (0, object_traversal_1.traverse)(data, ({ key, value }) => key === 'id' && allTags.push(String(value)));
     const uniqueTags = allTags.filter((value, index, self) => self.indexOf(value) === index).filter(t => t);
-    return uniqueTags;
+    return uniqueTags.slice(0, 10);
 };
 //# sourceMappingURL=api-query.js.map
