@@ -11,7 +11,7 @@ const defaultOptions = {
     visualEditingBaseUrl: undefined,
     revalidate: isInteger(process.env.REVALIDATE_TIME) ? parseInt(process.env.REVALIDATE_TIME) : 3600,
     tags: undefined,
-    generateTags: true,
+    generateTags: false,
     logs: false,
     all: false
 };
