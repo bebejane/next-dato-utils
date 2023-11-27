@@ -1,10 +1,10 @@
 import { jsx as _jsx } from "react/jsx-runtime";
-import { StructuredText as DatoStructuredText, renderNodeRule } from 'react-datocms';
+import { StructuredText, renderNodeRule } from 'react-datocms';
 import { isParagraph, isRoot } from 'datocms-structured-text-utils';
-export default function StructuredText({ content, className, onClick, blocks }) {
+export default function StructuredContent({ content, className, onClick, blocks }) {
     if (!content)
         return null;
-    return (_jsx(DatoStructuredText, { data: content, renderBlock: ({ record }) => {
+    return (_jsx(StructuredText, { data: content, renderBlock: ({ record }) => {
             console.log(record.__typename, blocks);
             const Block = blocks?.find((b) => b?.valueOf() === record.__typename.replace('Record', ''));
             if (!Block)
@@ -60,4 +60,4 @@ export default function StructuredText({ content, className, onClick, blocks }) 
             }),
         ] }));
 }
-//# sourceMappingURL=StructuredText.js.map
+//# sourceMappingURL=StructuredContent.js.map

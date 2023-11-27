@@ -1,4 +1,4 @@
-import { StructuredText as DatoStructuredText, renderNodeRule } from 'react-datocms';
+import { StructuredText, renderNodeRule } from 'react-datocms';
 import { isParagraph, isRoot } from 'datocms-structured-text-utils';
 
 export type Props = {
@@ -9,13 +9,13 @@ export type Props = {
   blocks?: any
 }
 
-export default function StructuredText({ content, className, onClick, blocks }: Props) {
+export default function StructuredContent({ content, className, onClick, blocks }: Props) {
 
   if (!content)
     return null
 
   return (
-    <DatoStructuredText
+    <StructuredText
       data={content}
       renderBlock={({ record }) => {
         console.log(record.__typename, blocks)
