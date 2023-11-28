@@ -1,9 +1,6 @@
-/// <reference types="react" />
 export type BlockProps = {
     data: any;
     onClick?: (ids: string) => void;
-    components: {
-        [key: string]: JSX.Element;
-    };
+    components: any;
 };
 export default function Block({ data, onClick, components }: BlockProps): import("react/jsx-runtime").JSX.Element;
