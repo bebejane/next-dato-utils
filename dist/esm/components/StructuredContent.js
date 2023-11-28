@@ -5,8 +5,7 @@ export default function StructuredContent({ content, className, onClick, blocks 
     if (!content)
         return null;
     return (_jsx(StructuredText, { data: content, renderBlock: ({ record }) => {
-            console.log(record.__typename, blocks);
-            const Block = blocks?.find((b) => b?.valueOf() === record.__typename.replace('Record', ''));
+            const Block = blocks[record?.__typename?.replace('Record', '')];
             if (!Block)
                 return null;
             return _jsx(Block, { data: record, onClick: (id) => onClick?.(id) });

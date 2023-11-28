@@ -18,8 +18,7 @@ export default function StructuredContent({ content, className, onClick, blocks 
     <StructuredText
       data={content}
       renderBlock={({ record }) => {
-        console.log(record.__typename, blocks)
-        const Block = blocks?.find((b: any) => b?.valueOf() === record.__typename.replace('Record', ''))
+        const Block = blocks[record?.__typename?.replace('Record', '')]
         if (!Block) return null
         return <Block data={record} onClick={(id: string) => onClick?.(id)} />
       }}
