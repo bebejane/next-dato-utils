@@ -1,5 +1,4 @@
 export type Props = {
-    id: string;
     content: any;
     className?: string;
     onClick?: (imageId: string) => void;

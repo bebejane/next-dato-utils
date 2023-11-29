@@ -2,7 +2,6 @@ import { StructuredText, renderNodeRule } from 'react-datocms';
 import { isParagraph, isRoot } from 'datocms-structured-text-utils';
 
 export type Props = {
-  id: string
   content: any
   className?: string
   onClick?: (imageId: string) => void
