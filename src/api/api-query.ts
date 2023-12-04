@@ -52,6 +52,9 @@ export default async function apiQuery<T, V = void>(query: DocumentNode, options
 
   const opt = { ...defaultOptions, ...(options ?? {}) };
 
+  opt.generateTags = process.env.NEXT_DATO_UTILS_DISABLE_TAGS ? false : opt.generateTags
+  opt.logs = process.env.NEXT_DATO_UTILS_ENABLE_LOGS ? true : opt.logs
+
   if (!process.env.DATOCMS_API_TOKEN && !process.env.NEXT_PUBLIC_DATOCMS_API_TOKEN)
     throw new Error('DATOCMS_API_TOKEN is not set')
   if (!process.env.DATOCMS_ENVIRONMENT && !process.env.NEXT_PUBLIC_DATOCMS_ENVIRONMENT)
