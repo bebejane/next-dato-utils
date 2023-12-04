@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const react_datocms_1 = require("react-datocms");
 const datocms_structured_text_utils_1 = require("datocms-structured-text-utils");
-function StructuredContent({ content, className, onClick, blocks }) {
+function StructuredContent({ content, className, onClick, blocks, styleClasses }) {
     if (!content)
         return null;
     return ((0, jsx_runtime_1.jsx)(react_datocms_1.StructuredText, { data: content, renderBlock: ({ record }) => {
@@ -51,11 +51,13 @@ function StructuredContent({ content, className, onClick, blocks }) {
                 // If no children remove tag completely
                 if (!children?.length)
                     return null;
-                console.log(node);
+                const classNames = [];
+                (0, datocms_structured_text_utils_1.isRoot)(ancestors[0]) && className && classNames.push(className);
+                typeof node.style === 'string' && styleClasses?.[node.style] && classNames.push(styleClasses[node.style]);
                 // Return paragraph with sanitized children
                 return renderNode('p', {
                     key,
-                    className: (0, datocms_structured_text_utils_1.isRoot)(ancestors[0]) ? className : undefined
+                    className: classNames.length ? classNames.join(' ') : undefined,
                 }, children);
             }),
         ] }));

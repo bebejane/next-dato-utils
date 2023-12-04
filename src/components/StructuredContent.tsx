@@ -6,9 +6,10 @@ export type Props = {
   className?: string
   onClick?: (imageId: string) => void
   blocks?: any
+  styleClasses?: { [key: string]: string }
 }
 
-export default function StructuredContent({ content, className, onClick, blocks }: Props) {
+export default function StructuredContent({ content, className, onClick, blocks, styleClasses }: Props) {
 
   if (!content)
     return null
@@ -75,11 +76,14 @@ export default function StructuredContent({ content, className, onClick, blocks 
           // If no children remove tag completely
           if (!children?.length) return null
 
-          console.log(node)
+          const classNames = []
+          isRoot(ancestors[0]) && className && classNames.push(className)
+          typeof node.style === 'string' && styleClasses?.[node.style] && classNames.push(styleClasses[node.style])
+
           // Return paragraph with sanitized children
           return renderNode('p', {
             key,
-            className: isRoot(ancestors[0]) ? className : undefined
+            className: classNames.length ? classNames.join(' ') : undefined,
           }, children)
 
         }),

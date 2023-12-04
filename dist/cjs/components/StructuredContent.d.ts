@@ -3,5 +3,8 @@ export type Props = {
     className?: string;
     onClick?: (imageId: string) => void;
     blocks?: any;
+    styleClasses?: {
+        [key: string]: string;
+    };
 };
-export default function StructuredContent({ content, className, onClick, blocks }: Props): import("react/jsx-runtime").JSX.Element | null;
+export default function StructuredContent({ content, className, onClick, blocks, styleClasses }: Props): import("react/jsx-runtime").JSX.Element | null;

@@ -1,7 +1,7 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { StructuredText, renderNodeRule } from 'react-datocms';
 import { isParagraph, isRoot } from 'datocms-structured-text-utils';
-export default function StructuredContent({ content, className, onClick, blocks }) {
+export default function StructuredContent({ content, className, onClick, blocks, styleClasses }) {
     if (!content)
         return null;
     return (_jsx(StructuredText, { data: content, renderBlock: ({ record }) => {
@@ -49,11 +49,13 @@ export default function StructuredContent({ content, className, onClick, blocks 
                 // If no children remove tag completely
                 if (!children?.length)
                     return null;
-                console.log(node);
+                const classNames = [];
+                isRoot(ancestors[0]) && className && classNames.push(className);
+                typeof node.style === 'string' && styleClasses?.[node.style] && classNames.push(styleClasses[node.style]);
                 // Return paragraph with sanitized children
                 return renderNode('p', {
                     key,
-                    className: isRoot(ancestors[0]) ? className : undefined
+                    className: classNames.length ? classNames.join(' ') : undefined,
                 }, children);
             }),
         ] }));
