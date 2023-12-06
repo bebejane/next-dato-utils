@@ -1,7 +1,7 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { StructuredText, renderNodeRule } from 'react-datocms';
-import { isParagraph, isRoot } from 'datocms-structured-text-utils';
-export default function StructuredContent({ content, className, onClick, blocks, styleClasses }) {
+import { isParagraph, isSpan, isRoot } from 'datocms-structured-text-utils';
+export default function StructuredContent({ content, className, blocks, styles, marks, onClick }) {
     if (!content)
         return null;
     return (_jsx(StructuredText, { data: content, renderBlock: ({ record }) => {
@@ -51,13 +51,22 @@ export default function StructuredContent({ content, className, onClick, blocks,
                     return null;
                 const classNames = [];
                 isRoot(ancestors[0]) && className && classNames.push(className);
-                typeof node.style === 'string' && styleClasses?.[node.style] && classNames.push(styleClasses[node.style]);
+                typeof node.style === 'string' && styles?.[node.style] && classNames.push(styles[node.style]);
                 // Return paragraph with sanitized children
                 return renderNode('p', {
                     key,
                     className: classNames.length ? classNames.join(' ') : undefined,
                 }, children);
             }),
+            // Add mark classes
+            renderNodeRule(isSpan, ({ adapter: { renderNode }, node, children, key, ancestors }) => {
+                const classNames = [];
+                marks && node.marks?.length && node.marks.forEach(mark => marks[mark] && classNames.push(marks[mark]));
+                return renderNode('span', {
+                    key,
+                    className: classNames.length ? classNames.join(' ') : undefined,
+                }, children);
+            })
         ] }));
 }
 //# sourceMappingURL=StructuredContent.js.map

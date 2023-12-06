@@ -1,15 +1,23 @@
 import { StructuredText, renderNodeRule } from 'react-datocms';
-import { isParagraph, isRoot } from 'datocms-structured-text-utils';
+import { isParagraph, isSpan, isRoot } from 'datocms-structured-text-utils';
 
 export type Props = {
   content: any
   className?: string
   onClick?: (imageId: string) => void
   blocks?: any
-  styleClasses?: { [key: string]: string }
+  styles?: { [key: string]: string }
+  marks?: { [key: string]: string }
 }
 
-export default function StructuredContent({ content, className, onClick, blocks, styleClasses }: Props) {
+export default function StructuredContent({
+  content,
+  className,
+  blocks,
+  styles,
+  marks,
+  onClick
+}: Props) {
 
   if (!content)
     return null
@@ -38,7 +46,6 @@ export default function StructuredContent({ content, className, onClick, blocks,
         // Replace nbsp
         return text?.replace(/\s/g, ' ');
       }}
-
       customNodeRules={[
 
         // Clenup paragraphs
@@ -77,8 +84,9 @@ export default function StructuredContent({ content, className, onClick, blocks,
           if (!children?.length) return null
 
           const classNames = []
+
           isRoot(ancestors[0]) && className && classNames.push(className)
-          typeof node.style === 'string' && styleClasses?.[node.style] && classNames.push(styleClasses[node.style])
+          typeof node.style === 'string' && styles?.[node.style] && classNames.push(styles[node.style])
 
           // Return paragraph with sanitized children
           return renderNode('p', {
@@ -87,6 +95,17 @@ export default function StructuredContent({ content, className, onClick, blocks,
           }, children)
 
         }),
+        // Add mark classes
+        renderNodeRule(isSpan, ({ adapter: { renderNode }, node, children, key, ancestors }) => {
+
+          const classNames: string[] = []
+          marks && node.marks?.length && node.marks.forEach(mark => marks[mark] && classNames.push(marks[mark]))
+
+          return renderNode('span', {
+            key,
+            className: classNames.length ? classNames.join(' ') : undefined,
+          }, children)
+        })
       ]
       }
     />
