@@ -6,8 +6,5 @@ export type Props = {
     styles?: {
         [key: string]: string;
     };
-    marks?: {
-        [key: string]: string;
-    };
 };
-export default function StructuredContent({ content, className, blocks, styles, marks, onClick }: Props): import("react/jsx-runtime").JSX.Element | null;
+export default function StructuredContent({ content, className, blocks, styles, onClick }: Props): import("react/jsx-runtime").JSX.Element | null;

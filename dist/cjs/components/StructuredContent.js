@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const react_datocms_1 = require("react-datocms");
 const datocms_structured_text_utils_1 = require("datocms-structured-text-utils");
-function StructuredContent({ content, className, blocks, styles, marks, onClick }) {
+function StructuredContent({ content, className, blocks, styles, onClick }) {
     if (!content)
         return null;
     return ((0, jsx_runtime_1.jsx)(react_datocms_1.StructuredText, { data: content, renderBlock: ({ record }) => {
@@ -53,9 +53,18 @@ function StructuredContent({ content, className, blocks, styles, marks, onClick 
                     return null;
                 const classNames = [];
                 (0, datocms_structured_text_utils_1.isRoot)(ancestors[0]) && className && classNames.push(className);
-                typeof node.style === 'string' && styles?.[node.style] && classNames.push(styles[node.style]);
+                node.style && styles?.[node.style] && classNames.push(styles[node.style]);
                 // Return paragraph with sanitized children
                 return renderNode('p', {
+                    key,
+                    className: classNames.length ? classNames.join(' ') : undefined,
+                }, children);
+            }),
+            // Add H classes
+            (0, react_datocms_1.renderNodeRule)(datocms_structured_text_utils_1.isHeading, ({ adapter: { renderNode }, node, children, key, ancestors }) => {
+                const classNames = [];
+                node.style && styles?.[node.style] && classNames.push(styles[node.style]);
+                return renderNode(`h${node.level}`, {
                     key,
                     className: classNames.length ? classNames.join(' ') : undefined,
                 }, children);
@@ -63,12 +72,12 @@ function StructuredContent({ content, className, blocks, styles, marks, onClick 
             // Add mark classes
             (0, react_datocms_1.renderNodeRule)(datocms_structured_text_utils_1.isSpan, ({ adapter: { renderNode }, node, children, key, ancestors }) => {
                 const classNames = [];
-                marks && node.marks?.length && node.marks.forEach(mark => marks[mark] && classNames.push(marks[mark]));
+                styles && node.marks?.length && node.marks.forEach(mark => styles[mark] && classNames.push(styles[mark]));
                 return renderNode('span', {
                     key,
                     className: classNames.length ? classNames.join(' ') : undefined,
                 }, children);
-            })
+            }),
         ] }));
 }
 exports.default = StructuredContent;

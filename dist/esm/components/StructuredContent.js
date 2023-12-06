@@ -1,7 +1,7 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { StructuredText, renderNodeRule } from 'react-datocms';
-import { isParagraph, isSpan, isRoot } from 'datocms-structured-text-utils';
-export default function StructuredContent({ content, className, blocks, styles, marks, onClick }) {
+import { isParagraph, isSpan, isHeading, isRoot } from 'datocms-structured-text-utils';
+export default function StructuredContent({ content, className, blocks, styles, onClick }) {
     if (!content)
         return null;
     return (_jsx(StructuredText, { data: content, renderBlock: ({ record }) => {
@@ -51,9 +51,18 @@ export default function StructuredContent({ content, className, blocks, styles, 
                     return null;
                 const classNames = [];
                 isRoot(ancestors[0]) && className && classNames.push(className);
-                typeof node.style === 'string' && styles?.[node.style] && classNames.push(styles[node.style]);
+                node.style && styles?.[node.style] && classNames.push(styles[node.style]);
                 // Return paragraph with sanitized children
                 return renderNode('p', {
+                    key,
+                    className: classNames.length ? classNames.join(' ') : undefined,
+                }, children);
+            }),
+            // Add H classes
+            renderNodeRule(isHeading, ({ adapter: { renderNode }, node, children, key, ancestors }) => {
+                const classNames = [];
+                node.style && styles?.[node.style] && classNames.push(styles[node.style]);
+                return renderNode(`h${node.level}`, {
                     key,
                     className: classNames.length ? classNames.join(' ') : undefined,
                 }, children);
@@ -61,12 +70,12 @@ export default function StructuredContent({ content, className, blocks, styles, 
             // Add mark classes
             renderNodeRule(isSpan, ({ adapter: { renderNode }, node, children, key, ancestors }) => {
                 const classNames = [];
-                marks && node.marks?.length && node.marks.forEach(mark => marks[mark] && classNames.push(marks[mark]));
+                styles && node.marks?.length && node.marks.forEach(mark => styles[mark] && classNames.push(styles[mark]));
                 return renderNode('span', {
                     key,
                     className: classNames.length ? classNames.join(' ') : undefined,
                 }, children);
-            })
+            }),
         ] }));
 }
 //# sourceMappingURL=StructuredContent.js.map
