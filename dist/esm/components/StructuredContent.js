@@ -46,7 +46,6 @@ export default function StructuredContent({ content, className, blocks, styles, 
                 }
                 // Filter out empty paragraphs
                 children = children?.filter(c => !(typeof c === 'object' && c.props.children?.length === 1 && !c.props.children[0]));
-                console.log(children?.length);
                 // If no children remove tag completely
                 if (!children?.length)
                     return null;
