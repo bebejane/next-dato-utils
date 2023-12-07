@@ -54,6 +54,7 @@ function StructuredContent({ content, className, blocks, styles, onClick }) {
                 const classNames = [];
                 (0, datocms_structured_text_utils_1.isRoot)(ancestors[0]) && className && classNames.push(className);
                 node.style && styles?.[node.style] && classNames.push(styles[node.style]);
+                node.style && !styles?.[node.style] && console.warn(node.style, 'does not exist in styles', 'P');
                 // Return paragraph with sanitized children
                 return renderNode('p', {
                     key,
@@ -64,6 +65,7 @@ function StructuredContent({ content, className, blocks, styles, onClick }) {
             (0, react_datocms_1.renderNodeRule)(datocms_structured_text_utils_1.isHeading, ({ adapter: { renderNode }, node, children, key, ancestors }) => {
                 const classNames = [];
                 node.style && styles?.[node.style] && classNames.push(styles[node.style]);
+                node.style && !styles?.[node.style] && console.warn(node.style, 'does not exist in styles', 'H');
                 return renderNode(`h${node.level}`, {
                     key,
                     className: classNames.length ? classNames.join(' ') : undefined,
@@ -72,7 +74,10 @@ function StructuredContent({ content, className, blocks, styles, onClick }) {
             // Add mark classes
             (0, react_datocms_1.renderNodeRule)(datocms_structured_text_utils_1.isSpan, ({ adapter: { renderNode }, node, children, key, ancestors }) => {
                 const classNames = [];
-                styles && node.marks?.length && node.marks.forEach(mark => styles[mark] && classNames.push(styles[mark]));
+                styles && node.marks?.length && node.marks.forEach(mark => {
+                    styles[mark] && classNames.push(styles[mark]);
+                    !styles[mark] && console.warn(mark, 'does not exist in styles', 'SPAN');
+                });
                 return renderNode('span', {
                     key,
                     className: classNames.length ? classNames.join(' ') : undefined,
