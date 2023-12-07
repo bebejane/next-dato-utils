@@ -47,7 +47,8 @@ function StructuredContent({ content, className, blocks, styles, onClick }) {
                         Array.isArray(children[0].props.children) && children[0].props.children?.splice(0, index + 1);
                 }
                 // Filter out empty paragraphs
-                children = children?.filter(c => !(typeof c === 'object' && c.props.children.length === 1 && !c.props.children[0]));
+                children = children?.filter(c => !(typeof c === 'object' && c.props.children?.length === 1 && !c.props.children[0]));
+                console.log(children?.length);
                 // If no children remove tag completely
                 if (!children?.length)
                     return null;
@@ -76,7 +77,7 @@ function StructuredContent({ content, className, blocks, styles, onClick }) {
                 return renderNode('span', {
                     key,
                     className: classNames.length ? classNames.join(' ') : undefined,
-                }, children);
+                }, node.value);
             }),
         ] }));
 }
