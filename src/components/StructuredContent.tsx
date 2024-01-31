@@ -108,6 +108,8 @@ export default function StructuredContent({
         // Add mark classes
         renderNodeRule(isSpan, ({ adapter: { renderNode }, node, children, key, ancestors }) => {
 
+          if (node.value === '\n') return renderNode('br', { key })
+
           const classNames: string[] = []
           styles && node.marks?.length && node.marks.forEach(mark => {
             styles[mark] && classNames.push(styles[mark])
@@ -115,7 +117,6 @@ export default function StructuredContent({
           })
 
           return renderNode('span', {
-            key,
             className: classNames.length ? classNames.join(' ') : undefined,
           }, node.value)
         }),
