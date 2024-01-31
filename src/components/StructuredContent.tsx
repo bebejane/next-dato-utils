@@ -1,5 +1,5 @@
 import { StructuredText, renderNodeRule } from 'react-datocms';
-import { isParagraph, isSpan, isHeading, isRoot } from 'datocms-structured-text-utils';
+import { isParagraph, isSpan, isHeading, isRoot, isThematicBreak } from 'datocms-structured-text-utils';
 
 export type Props = {
   content: any
@@ -106,13 +106,14 @@ export default function StructuredContent({
           }, children)
         }),
         // Add mark classes
-        renderNodeRule(isSpan, ({ adapter: { renderNode }, node, key, ancestors }) => {
+        /*
+        renderNodeRule(isSpan, ({ adapter: { renderNode }, children, node, key, ancestors }) => {
 
           const classNames: string[] = []
           styles && node.marks?.length && node.marks.forEach(mark => {
             styles[mark] && classNames.push(styles[mark])
           })
-
+          //
           if (node.value === '\n')
             return renderNode('br', { key })
 
@@ -121,8 +122,9 @@ export default function StructuredContent({
           return renderNode('span', {
             key,
             className: classNames.length ? classNames.join(' ') : undefined,
-          }, content)
+          }, children)
         })
+        */
       ]}
     />
   );

@@ -1,6 +1,6 @@
-import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
+import { jsx as _jsx } from "react/jsx-runtime";
 import { StructuredText, renderNodeRule } from 'react-datocms';
-import { isParagraph, isSpan, isHeading, isRoot } from 'datocms-structured-text-utils';
+import { isParagraph, isHeading, isRoot } from 'datocms-structured-text-utils';
 export default function StructuredContent({ content, className, blocks, styles, onClick }) {
     if (!content)
         return null;
@@ -70,19 +70,25 @@ export default function StructuredContent({ content, className, blocks, styles, 
                 }, children);
             }),
             // Add mark classes
-            renderNodeRule(isSpan, ({ adapter: { renderNode }, node, key, ancestors }) => {
-                const classNames = [];
-                styles && node.marks?.length && node.marks.forEach(mark => {
-                    styles[mark] && classNames.push(styles[mark]);
-                });
-                if (node.value === '\n')
-                    return renderNode('br', { key });
-                const content = node.value.includes('\n') ? node.value.split('\n').map(t => t ? _jsxs(_Fragment, { children: [t, _jsx("br", {})] }) : null) : node.value;
-                return renderNode('span', {
-                    key,
-                    className: classNames.length ? classNames.join(' ') : undefined,
-                }, content);
+            /*
+            renderNodeRule(isSpan, ({ adapter: { renderNode }, children, node, key, ancestors }) => {
+    
+              const classNames: string[] = []
+              styles && node.marks?.length && node.marks.forEach(mark => {
+                styles[mark] && classNames.push(styles[mark])
+              })
+              //
+              if (node.value === '\n')
+                return renderNode('br', { key })
+    
+              const content = node.value.includes('\n') ? node.value.split('\n').map(t => t ? <>{t}<br /></> : null) : node.value
+    
+              return renderNode('span', {
+                key,
+                className: classNames.length ? classNames.join(' ') : undefined,
+              }, children)
             })
+            */
         ] }));
 }
 //# sourceMappingURL=StructuredContent.js.map

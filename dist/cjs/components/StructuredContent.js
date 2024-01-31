@@ -72,19 +72,25 @@ function StructuredContent({ content, className, blocks, styles, onClick }) {
                 }, children);
             }),
             // Add mark classes
-            (0, react_datocms_1.renderNodeRule)(datocms_structured_text_utils_1.isSpan, ({ adapter: { renderNode }, node, key, ancestors }) => {
-                const classNames = [];
-                styles && node.marks?.length && node.marks.forEach(mark => {
-                    styles[mark] && classNames.push(styles[mark]);
-                });
-                if (node.value === '\n')
-                    return renderNode('br', { key });
-                const content = node.value.includes('\n') ? node.value.split('\n').map(t => t ? (0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [t, (0, jsx_runtime_1.jsx)("br", {})] }) : null) : node.value;
-                return renderNode('span', {
-                    key,
-                    className: classNames.length ? classNames.join(' ') : undefined,
-                }, content);
+            /*
+            renderNodeRule(isSpan, ({ adapter: { renderNode }, children, node, key, ancestors }) => {
+    
+              const classNames: string[] = []
+              styles && node.marks?.length && node.marks.forEach(mark => {
+                styles[mark] && classNames.push(styles[mark])
+              })
+              //
+              if (node.value === '\n')
+                return renderNode('br', { key })
+    
+              const content = node.value.includes('\n') ? node.value.split('\n').map(t => t ? <>{t}<br /></> : null) : node.value
+    
+              return renderNode('span', {
+                key,
+                className: classNames.length ? classNames.join(' ') : undefined,
+              }, children)
             })
+            */
         ] }));
 }
 exports.default = StructuredContent;
