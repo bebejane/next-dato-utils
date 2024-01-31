@@ -106,20 +106,23 @@ export default function StructuredContent({
           }, children)
         }),
         // Add mark classes
-        renderNodeRule(isSpan, ({ adapter: { renderNode }, node, children, key, ancestors }) => {
-
-          if (node.value === '\n') return renderNode('br', { key })
+        renderNodeRule(isSpan, ({ adapter: { renderNode }, node, key, ancestors }) => {
 
           const classNames: string[] = []
           styles && node.marks?.length && node.marks.forEach(mark => {
             styles[mark] && classNames.push(styles[mark])
-            !styles[mark] && console.warn(mark, 'does not exist in styles', 'SPAN')
           })
 
+          if (node.value === '\n')
+            return renderNode('br', { key })
+
+          const content = node.value.includes('\n') ? node.value.split('\n').map(t => t ? <>{t}<br /></> : null) : node.value
+
           return renderNode('span', {
+            key,
             className: classNames.length ? classNames.join(' ') : undefined,
-          }, node.value)
-        }),
+          }, content)
+        })
       ]}
     />
   );
