@@ -20,8 +20,8 @@ export default function StructuredContent({ content, className, blocks, styles, 
                     return null;
             }
         }, renderText: (text) => {
-            // Replace nbsp
-            return text?.replace(/\s/g, ' ');
+            // Replace nbsp, quotes and multiple spaces
+            return text?.replace(/\s/g, ' ')?.replaceAll('"', '”');
         }, customNodeRules: [
             // Clenup paragraphs
             renderNodeRule(isParagraph, ({ adapter: { renderNode }, node, children, key, ancestors }) => {

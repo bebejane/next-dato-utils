@@ -41,8 +41,8 @@ export default function StructuredContent({
         }
       }}
       renderText={(text) => {
-        // Replace nbsp
-        return text?.replace(/\s/g, ' ');
+        // Replace nbsp, quotes and multiple spaces
+        return text?.replace(/\s/g, ' ')?.replaceAll('"', '”');
       }}
       customNodeRules={[
 

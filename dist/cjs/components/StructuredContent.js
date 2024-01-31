@@ -22,8 +22,8 @@ function StructuredContent({ content, className, blocks, styles, onClick }) {
                     return null;
             }
         }, renderText: (text) => {
-            // Replace nbsp
-            return text?.replace(/\s/g, ' ');
+            // Replace nbsp, quotes and multiple spaces
+            return text?.replace(/\s/g, ' ')?.replaceAll('"', '”');
         }, customNodeRules: [
             // Clenup paragraphs
             (0, react_datocms_1.renderNodeRule)(datocms_structured_text_utils_1.isParagraph, ({ adapter: { renderNode }, node, children, key, ancestors }) => {
