@@ -1,9 +1,12 @@
 import { jsx as _jsx } from "react/jsx-runtime";
-import { StructuredText, renderNodeRule } from 'react-datocms';
+import { StructuredText, renderNodeRule, renderMarkRule } from 'react-datocms';
 import { isParagraph, isHeading, isRoot } from 'datocms-structured-text-utils';
 export default function StructuredContent({ content, className, blocks, styles, onClick }) {
     if (!content)
         return null;
+    const customMarkRules = styles && Object.keys(styles).map(style => renderMarkRule(style, ({ mark, children, key }) => {
+        return _jsx("span", { className: styles[style], children: children }, key);
+    })) || [];
     return (_jsx(StructuredText, { data: content, renderBlock: ({ record }) => {
             const Block = blocks[record?.__typename?.replace('Record', '')];
             if (!Block)
@@ -22,7 +25,7 @@ export default function StructuredContent({ content, className, blocks, styles, 
         }, renderText: (text) => {
             // Replace nbsp, quotes and multiple spaces
             return text?.replace(/\s/g, ' ')?.replaceAll('"', '”');
-        }, customNodeRules: [
+        }, customMarkRules: customMarkRules, customNodeRules: [
             // Clenup paragraphs
             renderNodeRule(isParagraph, ({ adapter: { renderNode }, node, children, key, ancestors }) => {
                 const firstChild = node.children[0];
@@ -68,27 +71,7 @@ export default function StructuredContent({ content, className, blocks, styles, 
                     key,
                     className: classNames.length ? classNames.join(' ') : undefined,
                 }, children);
-            }),
-            // Add mark classes
-            /*
-            renderNodeRule(isSpan, ({ adapter: { renderNode }, children, node, key, ancestors }) => {
-    
-              const classNames: string[] = []
-              styles && node.marks?.length && node.marks.forEach(mark => {
-                styles[mark] && classNames.push(styles[mark])
-              })
-              //
-              if (node.value === '\n')
-                return renderNode('br', { key })
-    
-              const content = node.value.includes('\n') ? node.value.split('\n').map(t => t ? <>{t}<br /></> : null) : node.value
-    
-              return renderNode('span', {
-                key,
-                className: classNames.length ? classNames.join(' ') : undefined,
-              }, children)
             })
-            */
         ] }));
 }
 //# sourceMappingURL=StructuredContent.js.map
