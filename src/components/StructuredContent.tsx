@@ -4,7 +4,7 @@ import { isParagraph, isHeading, isRoot } from 'datocms-structured-text-utils';
 export type Props = {
   content: any
   className?: string
-  onClick?: (imageId: string) => void
+  //onClick?: (imageId: string) => void
   blocks?: any
   styles?: { [key: string]: string }
 }
@@ -14,7 +14,7 @@ export default function StructuredContent({
   className,
   blocks,
   styles,
-  onClick
+  //onClick
 }: Props) {
 
   if (!content)
@@ -30,7 +30,10 @@ export default function StructuredContent({
       renderBlock={({ record }) => {
         const Block = blocks[record?.__typename?.replace('Record', '')]
         if (!Block) return null
-        return <Block data={record} onClick={(id: string) => onClick?.(id)} />
+        return <Block
+          data={record}
+        //onClick={(id: string) => onClick?.(id)}
+        />
       }}
       renderInlineRecord={({ record }) => {
         switch (record.__typename) {
