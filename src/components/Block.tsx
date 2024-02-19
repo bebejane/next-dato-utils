@@ -6,8 +6,8 @@ export type BlockProps = {
 }
 
 export default function Block({ data, onClick, components, className }: BlockProps) {
-  const type = data.__typename.replace('Record', '');
-  const BlockComponent = components[type];
+  const type = data.__typename?.replace('Record', '');
+  const BlockComponent = components?.[type];
 
   if (!BlockComponent)
     return <div>No block match: {data.__typename}</div>
