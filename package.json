@@ -7,7 +7,7 @@
 		"build": "npm run clean && npm run tsc && npm run copy-files",
 		"build:micro": "bash build.sh && npm run copy-files",
 		"copy-files": "copyfiles -u 1 src/**/*.scss dist/esm && copyfiles -u 1 src/**/*.scss dist/cjs",
-		"pub": "npm version patch --force && npm run build && git add . && git commit -m \"updates\" && git push",
+		"pub": "npm version patch && npm run build && git add . && git commit -m \"updates\" && git push",
 		"dev": "npx nodemon --watch \"src/**/*\" --watch \"./package.json\" -e tsx,ts,scss,json --exec \"npm run build\"",
 		"dev:cli": "tsx src/cli/index.ts",
 		"clean": "rm -rf ./dist",
