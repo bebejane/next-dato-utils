@@ -1,12 +1,12 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.504",
+	"version": "1.0.497",
 	"description": "",
 	"type": "module",
 	"scripts": {
-		"build": "bash build.sh && npm run copy-files",
-		"build:test": "bash build.sh",
-		"copy-files": "copyfiles -u 1 src/**/*.scss ./",
+		"build": "npm run clean && npm run tsc && npm run copy-files",
+		"build:micro": "bash build.sh && npm run copy-files",
+		"copy-files": "copyfiles -u 1 src/**/*.scss dist/esm && copyfiles -u 1 src/**/*.scss dist/cjs",
 		"pub": "npm version patch --force && npm run build && git add . && git commit -m \"updates\" && git push",
 		"dev": "npx nodemon --watch \"src/**/*\" --watch \"./package.json\" -e tsx,ts,scss,json --exec \"npm run build\"",
 		"dev:cli": "tsx src/cli/index.ts",
@@ -16,10 +16,20 @@
 		"rename:cjs": "renamer --find js --replace cjs ./dist/cjs/**/*",
 		"rename:mjs": "renamer --find js --replace mjs ./dist/esm/**/*"
 	},
-	"types": "./index.d.ts",
-	"main": "./index.cjs",
-	"module": "./index.modern.mjs",
+	"main": "./dist/cjs/index.js",
+	"module": "./dist/esm/index.js",
 	"exports": {
+		".": {
+			"require": "./dist/cjs/index.js",
+			"import": "./dist/esm/index.js"
+		},
+		"./dist*": {
+			"require": "./dist",
+			"import": "./dist"
+		},
+		"./package.json": "./package.json"
+	},
+	"exports-micro": {
 		"./utils": {
 			"require": "./utils/index.cjs",
 			"import": "./utils/index.modern.mjs"
@@ -84,8 +94,6 @@
 		"copyfiles": "^2.4.1",
 		"datocms-structured-text-utils": "^2.1.12",
 		"graphql": "^16.8.1",
-		"microbundle": "^0.15.1",
-		"microbundle-crl": "^0.13.11",
 		"next": "14.0.2",
 		"nodemon": "^3.0.3",
 		"react": "^18.2.0",
