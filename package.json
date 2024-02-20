@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.507",
+	"version": "1.0.508",
 	"description": "",
 	"type": "module",
 	"scripts": {
@@ -23,40 +23,24 @@
 			"require": "./dist/cjs/index.js",
 			"import": "./dist/esm/index.js"
 		},
-		"./dist*": {
-			"require": "./dist",
-			"import": "./dist"
-		},
-		"./package.json": "./package.json"
-	},
-	"exports-micro": {
+		"./package.json": "./package.json",
 		"./utils": {
-			"require": "./utils/index.cjs",
-			"import": "./utils/index.modern.mjs"
+			"import": "./utils/index.js"
 		},
 		"./components": {
-			"require": "./components/index.cjs",
-			"import": "./components/index.modern.mjs"
+			"import": "./components/index.js"
 		},
 		"./hooks": {
-			"require": "./hooks/index.cjs",
-			"import": "./hooks/index.modern.mjs"
+			"import": "./hooks/index.js"
 		},
 		"./api": {
-			"require": "./api/index.cjs",
-			"import": "./api/index.modern.mjs"
+			"import": "./api/index.js"
 		},
 		"./route-handlers": {
-			"require": "./route-handlers/index.cjs",
-			"import": "./route-handlers/index.modern.mjs"
+			"import": "./route-handlers/index.js"
 		},
 		"./server-actions": {
-			"require": "./server-actions/index.cjs",
-			"import": "./server-actions/index.modern.mjs"
-		},
-		".": {
-			"require": "./index.cjs",
-			"import": "./index.modern.mjs"
+			"import": "./server-actions/index.js"
 		}
 	},
 	"files": [
