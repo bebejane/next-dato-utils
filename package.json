@@ -1,12 +1,12 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.509",
+	"version": "1.0.510",
 	"description": "",
 	"type": "module",
 	"scripts": {
-		"build": "npm run clean && npm run tsc && npm run copy-files",
+		"build": "node ./clean.js && npm run tsc && npm run copy-files",
 		"build:micro": "bash build.sh && npm run copy-files",
-		"copy-files": "copyfiles -u 1 src/**/*.scss dist/esm && copyfiles -u 1 src/**/*.scss dist/cjs",
+		"copy-files": "copyfiles -u 1 src/**/*.scss dist/esm && copyfiles -u 1 src/**/*.scss dist/cjs && rsync -a ./dist/esm/* ./",
 		"pub": "npm version patch --force && npm run build && git add . && git commit -m \"updates\" && git push",
 		"dev": "npx nodemon --watch \"src/**/*\" --watch \"./package.json\" -e tsx,ts,scss,json --exec \"npm run build\"",
 		"dev:cli": "tsx src/cli/index.ts",
@@ -16,8 +16,8 @@
 		"rename:cjs": "renamer --find js --replace cjs ./dist/cjs/**/*",
 		"rename:mjs": "renamer --find js --replace mjs ./dist/esm/**/*"
 	},
-	"main": "./dist/cjs/index.js",
-	"module": "./dist/esm/index.js",
+	"main": "./index.js",
+	"module": "./index.js",
 	"exports": {
 		"./package.json": "./package.json",
 		"./utils": {
