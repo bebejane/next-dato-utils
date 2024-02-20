@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.499",
+	"version": "1.0.500",
 	"description": "",
 	"type": "module",
 	"scripts": {
@@ -22,7 +22,7 @@
 			"require": "./dist/cjs/index.js",
 			"import": "./dist/esm/index.js"
 		},
-		"./route-handlers": {
+		"./dist/route-handlers": {
 			"require": "./dist/cjs/route-handlers/index.js",
 			"import": "./dist/esm/route-handlers/index.js"
 		},
