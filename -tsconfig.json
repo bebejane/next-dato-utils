@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "./dist/esm",
+    "strict": true,
+    "target": "ESNext",
+    "module": "NodeNext",
+    "jsx": "react-jsx",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "moduleResolution": "NodeNext",
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "./src",
+    "./types"
+  ]
+}
