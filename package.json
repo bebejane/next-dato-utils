@@ -1,11 +1,12 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.503",
+	"version": "1.0.504",
 	"description": "",
 	"type": "module",
 	"scripts": {
-		"build": "npm run clean && npm run tsc && npm run copy-files",
-		"copy-files": "copyfiles -u 1 src/**/*.scss dist/esm && copyfiles -u 1 src/**/*.scss dist/cjs",
+		"build": "bash build.sh && npm run copy-files",
+		"build:test": "bash build.sh",
+		"copy-files": "copyfiles -u 1 src/**/*.scss ./",
 		"pub": "npm version patch --force && npm run build && git add . && git commit -m \"updates\" && git push",
 		"dev": "npx nodemon --watch \"src/**/*\" --watch \"./package.json\" -e tsx,ts,scss,json --exec \"npm run build\"",
 		"dev:cli": "tsx src/cli/index.ts",
@@ -15,18 +16,38 @@
 		"rename:cjs": "renamer --find js --replace cjs ./dist/cjs/**/*",
 		"rename:mjs": "renamer --find js --replace mjs ./dist/esm/**/*"
 	},
-	"main": "./dist/cjs/index.js",
-	"module": "./dist/esm/index.js",
+	"types": "./index.d.ts",
+	"main": "./index.cjs",
+	"module": "./index.modern.mjs",
 	"exports": {
-		"./route-handlers/test": {
-			"types": "./dist/esm/route-handlers/test.d.ts",
-			"default": "./dist/esm/route-handlers/test.js"
+		"./utils": {
+			"require": "./utils/index.cjs",
+			"import": "./utils/index.modern.mjs"
+		},
+		"./components": {
+			"require": "./components/index.cjs",
+			"import": "./components/index.modern.mjs"
+		},
+		"./hooks": {
+			"require": "./hooks/index.cjs",
+			"import": "./hooks/index.modern.mjs"
+		},
+		"./api": {
+			"require": "./api/index.cjs",
+			"import": "./api/index.modern.mjs"
+		},
+		"./route-handlers": {
+			"require": "./route-handlers/index.cjs",
+			"import": "./route-handlers/index.modern.mjs"
+		},
+		"./server-actions": {
+			"require": "./server-actions/index.cjs",
+			"import": "./server-actions/index.modern.mjs"
 		},
 		".": {
-			"require": "./dist/cjs/index.js",
-			"import": "./dist/esm/index.js"
-		},
-		"./package.json": "./package.json"
+			"require": "./index.cjs",
+			"import": "./index.modern.mjs"
+		}
 	},
 	"files": [
 		"dist/"
@@ -63,6 +84,8 @@
 		"copyfiles": "^2.4.1",
 		"datocms-structured-text-utils": "^2.1.12",
 		"graphql": "^16.8.1",
+		"microbundle": "^0.15.1",
+		"microbundle-crl": "^0.13.11",
 		"next": "14.0.2",
 		"nodemon": "^3.0.3",
 		"react": "^18.2.0",
