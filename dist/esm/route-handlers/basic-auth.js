@@ -1,5 +1,5 @@
 export default async function basicAuth(req, callback, options) {
-    if (req.method === 'OPTIONS')
+    if (req.method === 'OPTIONS' || process.env.NODE_ENV === 'development')
         return callback ? await callback(req) : new Response('OK', { status: 200 });
     const basicAuth = req.headers.get('authorization');
     if (!basicAuth)
