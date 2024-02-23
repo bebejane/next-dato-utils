@@ -10,7 +10,7 @@ const truncateSentances = (markdown, limit) => {
     const sentances = markdown.split('.');
     return sentances.length >= limit ? sentances.slice(0, limit).join(' ') + '...' : markdown;
 };
-export default async function Markdown({ content, truncate, className, components, sentances = 1, allowedElements, scroll = true, disableBreaks = false }) {
+export default function Markdown({ content, truncate, className, components, sentances = 1, allowedElements, scroll = true, disableBreaks = false }) {
     const truncatedContent = (!truncate ? content ? truncateSentances(content, sentances) : content : markdownTruncate(content, { limit: truncate, ellipsis: true }));
     return (_jsx(ReactMarkdown, { remarkPlugins: disableBreaks ? [gfm] : [gfm, remarkBreaks], className: className, children: truncatedContent, allowedElements: allowedElements, 
         //@ts-ignore
