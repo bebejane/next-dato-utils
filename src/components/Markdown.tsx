@@ -29,7 +29,7 @@ const truncateSentances = (markdown: string, limit: number): string => {
 
 export default function Markdown({ content, truncate, className, components, sentances = 1, allowedElements, scroll = true, disableBreaks = false }: MarkdownProps) {
 
-  const truncatedContent: string = (!truncate ? content ? truncateSentances(content as string, sentances) : content : markdownTruncate(content, { limit: truncate, ellipsis: true })) as string
+  const truncatedContent: string = (!truncate ? content && truncate ? truncateSentances(content as string, sentances) : content : markdownTruncate(content, { limit: truncate, ellipsis: true })) as string
 
   return (
     <ReactMarkdown
