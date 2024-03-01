@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.awaitElement = exports.sortSwedish = exports.truncateWords = exports.truncateParagraph = exports.rInt = exports.sleep = exports.capitalize = exports.isEmpty = exports.parseDatoCMSApiError = exports.parseDatoError = exports.chunkArray = exports.isServer = void 0;
-const index_js_1 = require("@datocms/cma-client-browser/dist/types/index.js");
+const cma_client_1 = require("@datocms/cma-client");
 exports.isServer = typeof window === 'undefined';
 const chunkArray = (array, chunkSize) => {
     const newArr = [];
@@ -16,9 +16,9 @@ const parseDatoError = (err) => {
 };
 exports.parseDatoError = parseDatoError;
 const parseDatoCMSApiError = (e) => {
-    if (e instanceof index_js_1.ApiError === false)
+    if (e instanceof cma_client_1.ApiError === false)
         return typeof e === 'string' ? e : e.message || e.toString();
-    const err = new index_js_1.ApiError(e);
+    const err = new cma_client_1.ApiError(e);
     return err.errors.map(e => {
         let code = `${e.attributes.code}`;
         let errors = [];

@@ -1,4 +1,4 @@
-import { ApiError } from "@datocms/cma-client-browser/dist/types/index.js";
+import { ApiError } from "@datocms/cma-client";
 export const isServer = typeof window === 'undefined';
 export const chunkArray = (array, chunkSize) => {
     const newArr = [];
