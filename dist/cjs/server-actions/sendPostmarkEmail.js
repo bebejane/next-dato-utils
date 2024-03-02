@@ -40,7 +40,7 @@ async function sendPostmarkEmail(prevState, formData) {
         const text = formData.get('text');
         const template = formData.get('template');
         const templateData = formData.get('template_data') ? JSON.parse(formData.get('template_data')) : {};
-        const isTemplateEmail = template !== undefined;
+        const isTemplateEmail = typeof template === 'string';
         try {
             zod_1.z.string().email({ message: "Invalid e-mail address" }).parse(email);
             if (!isTemplateEmail) {

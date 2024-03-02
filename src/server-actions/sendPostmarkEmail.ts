@@ -20,7 +20,7 @@ export default async function sendPostmarkEmail(prevState: any, formData: FormDa
     const template = formData.get('template') as string
     const templateData = formData.get('template_data') ? JSON.parse(formData.get('template_data') as string) : {}
 
-    const isTemplateEmail = template !== undefined
+    const isTemplateEmail = typeof template === 'string'
 
     try {
       z.string().email({ message: "Invalid e-mail address" }).parse(email as string)
