@@ -13,18 +13,19 @@ export default async function sendPostmarkEmail(prevState: any, formData: FormDa
     if (!process.env.POSTMARK_FROM_NAME)
       throw new Error('POSTMARK_FROM_NAME is not set')
 
-    const email = formData.get('email') as string
     const subject = formData.get('subject') as string
     const html = formData.get('html') as string
     const text = formData.get('text') as string
     const template = formData.get('template') as string
-    const templateData = formData.get('template_data') ? JSON.parse(formData.get('template_data') as string) : {}
-
     const isTemplateEmail = typeof template === 'string'
+    const templateData: { [k: string]: string } = {}
+
+    if (isTemplateEmail) {
+      for (const [key, value] of formData.entries())
+        key !== 'template' && (templateData[key] = value as string)
+    }
 
     try {
-      z.string().email({ message: "Invalid e-mail address" }).parse(email as string)
-
       if (!isTemplateEmail) {
         z.string().min(1).parse(subject)
         z.string().min(1).parse(text)
@@ -38,12 +39,12 @@ export default async function sendPostmarkEmail(prevState: any, formData: FormDa
     const res = isTemplateEmail ?
       await postmarkClient.sendEmailWithTemplate({
         From: process.env.POSTMARK_FROM_EMAIL,
-        To: email,
+        To: process.env.POSTMARK_FROM_EMAIL,
         TemplateAlias: template,
         TemplateModel: templateData ?? {}
       }) : await postmarkClient.sendEmail({
         From: process.env.POSTMARK_FROM_EMAIL,
-        To: email,
+        To: process.env.POSTMARK_FROM_EMAIL,
         Subject: subject,
         HtmlBody: html,
         TextBody: text
