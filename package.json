@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.519",
+	"version": "1.0.520",
 	"description": "",
 	"type": "module",
 	"scripts": {
@@ -93,9 +93,11 @@
 		"@types/react-dom": ">=18.2.1",
 		"datocms-structured-text-utils": ">=2.0.0",
 		"graphql": ">=16.8.0",
+		"postmark": ">=4.0.0",
 		"react": ">=18.2.0",
 		"react-datocms": ">=4.0.0",
 		"react-dom": ">=18.2.0",
-		"sass": ">=1.69.0"
+		"sass": ">=1.69.0",
+		"zod": "^>=3.22.0"
 	}
 }
