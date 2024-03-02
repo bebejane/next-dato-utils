@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.522",
+	"version": "1.0.523",
 	"description": "",
 	"type": "module",
 	"scripts": {
@@ -37,6 +37,9 @@
 		},
 		"./server-actions": {
 			"import": "./server-actions/index.js"
+		},
+		"./server-actions*": {
+			"import": "./server-actions/*"
 		}
 	},
 	"files": [
