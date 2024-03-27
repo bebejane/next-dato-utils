@@ -69,7 +69,7 @@
     background-repeat: no-repeat;
     background-size: cover;
 
-    .loading {
+    &.loading {
       animation: pulse 1.5s infinite;
 
       @keyframes pulse {
