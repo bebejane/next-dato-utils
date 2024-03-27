@@ -84,11 +84,13 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }: Dra
 
   return (
     <div className={s.draftMode} >
-      <div className={s.label}><img width="20" height="20" /><div>Draft Mode</div></div>
+      <div className={s.label}>
+        <img className={loading ? s.loading : undefined} width="20" height="20" />
+        <div>Draft mode</div>
+      </div>
       <div className={s.button}>
         <button onClick={() => startTransition(() => actions.disableDraftMode(pathname))}>
           Exit
-          {loading && <div className={s.loading}><div className={s.loader}></div></div>}
         </button>
       </div>
     </div>

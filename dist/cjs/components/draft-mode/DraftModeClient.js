@@ -61,7 +61,7 @@ function DraftMode({ enabled, draftUrl, tag, path, actions }) {
     }, [draftUrl, tag, path, enabled]);
     if (!enabled)
         return null;
-    return ((0, jsx_runtime_1.jsxs)("div", { className: DraftModeClient_module_scss_1.default.draftMode, children: [(0, jsx_runtime_1.jsxs)("div", { className: DraftModeClient_module_scss_1.default.label, children: [(0, jsx_runtime_1.jsx)("img", { width: "20", height: "20" }), (0, jsx_runtime_1.jsx)("div", { children: "Draft Mode" })] }), (0, jsx_runtime_1.jsx)("div", { className: DraftModeClient_module_scss_1.default.button, children: (0, jsx_runtime_1.jsxs)("button", { onClick: () => startTransition(() => actions.disableDraftMode(pathname)), children: ["Exit", loading && (0, jsx_runtime_1.jsx)("div", { className: DraftModeClient_module_scss_1.default.loading, children: (0, jsx_runtime_1.jsx)("div", { className: DraftModeClient_module_scss_1.default.loader }) })] }) })] }));
+    return ((0, jsx_runtime_1.jsxs)("div", { className: DraftModeClient_module_scss_1.default.draftMode, children: [(0, jsx_runtime_1.jsxs)("div", { className: DraftModeClient_module_scss_1.default.label, children: [(0, jsx_runtime_1.jsx)("img", { className: loading ? DraftModeClient_module_scss_1.default.loading : undefined, width: "20", height: "20" }), (0, jsx_runtime_1.jsx)("div", { children: "Draft mode" })] }), (0, jsx_runtime_1.jsx)("div", { className: DraftModeClient_module_scss_1.default.button, children: (0, jsx_runtime_1.jsx)("button", { onClick: () => startTransition(() => actions.disableDraftMode(pathname)), children: "Exit" }) })] }));
 }
 exports.default = DraftMode;
 //# sourceMappingURL=DraftModeClient.js.map
