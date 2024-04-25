@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.529",
+	"version": "1.0.530",
 	"description": "",
 	"type": "module",
 	"scripts": {
@@ -101,6 +101,6 @@
 		"react-datocms": ">=4.0.0",
 		"react-dom": ">=18.2.0",
 		"sass": ">=1.69.0",
-		"zod": "^>=3.22.0"
+		"zod": ">=3.22.0"
 	}
 }
