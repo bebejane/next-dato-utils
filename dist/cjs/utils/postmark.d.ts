@@ -4,9 +4,7 @@ export type Props = {
     html: string;
     text: string;
     template: string;
-    templateData: {
-        [k: string]: string;
-    };
+    templateData: any;
 };
 export declare function sendPostmarkEmail({ to, subject, html, text, template, templateData }: Props): Promise<{
     success: boolean;

@@ -7,7 +7,7 @@ export type Props = {
   html: string
   text: string
   template: string
-  templateData: { [k: string]: string }
+  templateData: any
 }
 
 export async function sendPostmarkEmail({ to, subject, html, text, template, templateData }: Props): Promise<{ success: boolean, error?: string }> {
