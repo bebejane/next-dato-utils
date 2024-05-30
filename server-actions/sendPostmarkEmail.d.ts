@@ -1,4 +1,4 @@
-export default function sendPostmarkEmail(prevState: any, formData: FormData): Promise<{
+export default function sendPostmarkEmailServerAction(prevState: any, formData: FormData): Promise<{
     success: boolean;
     error?: string;
 }>;
