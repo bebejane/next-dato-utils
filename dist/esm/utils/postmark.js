@@ -24,7 +24,7 @@ export async function sendPostmarkEmail({ to, subject, html, text, template, tem
             }
         }
         catch (e) {
-            throw new Error("Invalid to e-mail address");
+            throw new Error("Invalid To e-mail address");
         }
         const postmarkClient = new postmark.ServerClient(process.env.POSTMARK_API_TOKEN);
         const res = isTemplateEmail ?

@@ -2,12 +2,12 @@ import { z } from 'zod'
 import * as postmark from 'postmark';
 
 export type Props = {
-  to?: string
   subject: string
-  html: string
-  text: string
-  template: string
-  templateData: any
+  to?: string
+  html?: string
+  text?: string
+  template?: string
+  templateData?: any
 }
 
 export async function sendPostmarkEmail({ to, subject, html, text, template, templateData }: Props): Promise<{ success: boolean, error?: string }> {
@@ -38,7 +38,7 @@ export async function sendPostmarkEmail({ to, subject, html, text, template, tem
       }
 
     } catch (e) {
-      throw new Error("Invalid to e-mail address")
+      throw new Error("Invalid To e-mail address")
     }
 
     const postmarkClient = new postmark.ServerClient(process.env.POSTMARK_API_TOKEN);
