@@ -40,7 +40,11 @@ export default function useScrollInfo(pageBottomLimit = 0) {
         setScrollInfo(scrollInfo);
         lastScrollInfo.current = {
             ...scrollInfo,
-            timer: setTimeout(() => setScrollInfo({ ...scrollInfo, isScrolling: false }), 100)
+            timer: setTimeout(() => setScrollInfo({
+                ...scrollInfo,
+                viewportHeight: isServer ? 0 : window.innerHeight,
+                isScrolling: false
+            }), 100)
         };
     }, [isServer, pageBottomLimit]);
     useEffect(() => {
