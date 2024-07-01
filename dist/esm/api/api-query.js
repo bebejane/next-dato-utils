@@ -1,7 +1,7 @@
 'use server';
 import { draftMode } from 'next/headers.js';
 import { print } from 'graphql/language/printer.js';
-import { cache } from 'react';
+//import { cache } from 'react';
 import { traverse } from 'object-traversal';
 import isInteger from 'is-integer';
 const defaultOptions = {
@@ -11,7 +11,7 @@ const defaultOptions = {
     visualEditingBaseUrl: undefined,
     revalidate: isInteger(process.env.REVALIDATE_TIME) ? parseInt(process.env.REVALIDATE_TIME) : 3600,
     tags: undefined,
-    generateTags: true,
+    generateTags: false,
     maxTags: 64,
     logs: false,
     all: false
@@ -97,7 +97,7 @@ const paginatedQuery = async (query, options, data, queryId) => {
         throw new Error(`${queryId}: ${e.message}`);
     }
 };
-const dedupedFetch = cache(async (options) => {
+const dedupedFetch = async (options) => {
     const { url, body, includeDrafts, excludeInvalid, visualEditingBaseUrl, revalidate, tags, queryId, logs } = options;
     const headers = {
         'Authorization': `Bearer ${process.env.DATOCMS_API_TOKEN ?? process.env.NEXT_PUBLIC_DATOCMS_API_TOKEN}`,
@@ -129,7 +129,7 @@ const dedupedFetch = cache(async (options) => {
         throw new Error(`${queryId}: ${responseBody.errors.map((e) => e.message).join('. ')}`);
     logs && console.log('[api-query]', queryId, { ...options, body: undefined }, `tags: ${tags?.length ?? 0}`, response.headers.get('x-cache'));
     return responseBody;
-});
+};
 const generateIdTags = (data, tags, maxTags) => {
     const allTags = tags?.length ? tags : [];
     traverse(data, ({ key, value }) => key === 'id' && allTags.push(String(value)));

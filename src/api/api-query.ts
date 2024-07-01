@@ -4,7 +4,7 @@ import { draftMode } from 'next/headers.js'
 import type { RequestInit } from 'next/dist/server/web/spec-extension/request.js'
 import type { DocumentNode, FieldNode, OperationDefinitionNode, VariableDefinitionNode } from 'graphql'
 import { print } from 'graphql/language/printer.js'
-import { cache } from 'react';
+//import { cache } from 'react';
 import { traverse } from 'object-traversal';
 import isInteger from 'is-integer';
 
@@ -41,7 +41,7 @@ const defaultOptions: DefaultApiQueryOptions = {
   visualEditingBaseUrl: undefined,
   revalidate: isInteger(process.env.REVALIDATE_TIME) ? parseInt(process.env.REVALIDATE_TIME) : 3600,
   tags: undefined,
-  generateTags: true,
+  generateTags: false,
   maxTags: 64,
   logs: false,
   all: false
@@ -170,7 +170,7 @@ export type DedupeOptions = {
   logs: boolean
 }
 
-const dedupedFetch = cache(async (options: DedupeOptions) => {
+const dedupedFetch = async (options: DedupeOptions) => {
   const {
     url,
     body,
@@ -217,7 +217,7 @@ const dedupedFetch = cache(async (options: DedupeOptions) => {
 
   logs && console.log('[api-query]', queryId, { ...options, body: undefined }, `tags: ${tags?.length ?? 0}`, response.headers.get('x-cache'))
   return responseBody;
-})
+}
 
 const generateIdTags = (data: any, tags: string[] | undefined, maxTags: number): string[] => {
 

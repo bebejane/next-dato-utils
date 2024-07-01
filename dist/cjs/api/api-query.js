@@ -6,7 +6,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const headers_js_1 = require("next/headers.js");
 const printer_js_1 = require("graphql/language/printer.js");
-const react_1 = require("react");
+//import { cache } from 'react';
 const object_traversal_1 = require("object-traversal");
 const is_integer_1 = __importDefault(require("is-integer"));
 const defaultOptions = {
@@ -16,7 +16,7 @@ const defaultOptions = {
     visualEditingBaseUrl: undefined,
     revalidate: (0, is_integer_1.default)(process.env.REVALIDATE_TIME) ? parseInt(process.env.REVALIDATE_TIME) : 3600,
     tags: undefined,
-    generateTags: true,
+    generateTags: false,
     maxTags: 64,
     logs: false,
     all: false
@@ -103,7 +103,7 @@ const paginatedQuery = async (query, options, data, queryId) => {
         throw new Error(`${queryId}: ${e.message}`);
     }
 };
-const dedupedFetch = (0, react_1.cache)(async (options) => {
+const dedupedFetch = async (options) => {
     const { url, body, includeDrafts, excludeInvalid, visualEditingBaseUrl, revalidate, tags, queryId, logs } = options;
     const headers = {
         'Authorization': `Bearer ${process.env.DATOCMS_API_TOKEN ?? process.env.NEXT_PUBLIC_DATOCMS_API_TOKEN}`,
@@ -135,7 +135,7 @@ const dedupedFetch = (0, react_1.cache)(async (options) => {
         throw new Error(`${queryId}: ${responseBody.errors.map((e) => e.message).join('. ')}`);
     logs && console.log('[api-query]', queryId, { ...options, body: undefined }, `tags: ${tags?.length ?? 0}`, response.headers.get('x-cache'));
     return responseBody;
-});
+};
 const generateIdTags = (data, tags, maxTags) => {
     const allTags = tags?.length ? tags : [];
     (0, object_traversal_1.traverse)(data, ({ key, value }) => key === 'id' && allTags.push(String(value)));
