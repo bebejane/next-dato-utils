@@ -1,6 +1,4 @@
-'use server'
-
-//import { draftMode } from 'next/headers.js'
+import { draftMode } from 'next/headers.js'
 import type { RequestInit } from 'next/dist/server/web/spec-extension/request.js'
 import type { DocumentNode, FieldNode, OperationDefinitionNode, VariableDefinitionNode } from 'graphql'
 import { print } from 'graphql/language/printer.js'
@@ -61,8 +59,8 @@ export default async function apiQuery<T, V = void>(query: DocumentNode, options
 
   const queryId = (query.definitions?.[0] as any).name?.value as string
 
-  //if (typeof options?.includeDrafts === 'undefined')
-  //try { opt.includeDrafts = draftMode().isEnabled } catch (e) { }
+  if (typeof options?.includeDrafts === 'undefined')
+    try { opt.includeDrafts = draftMode().isEnabled } catch (e) { }
 
   const dedupeOptions: DedupeOptions = {
     body: JSON.stringify({ query: print(query), variables: options?.variables }) as string,
