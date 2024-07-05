@@ -4,9 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const headers_js_1 = require("next/headers.js");
 const printer_js_1 = require("graphql/language/printer.js");
-//import { cache } from 'react';
 const object_traversal_1 = require("object-traversal");
 const is_integer_1 = __importDefault(require("is-integer"));
 const defaultOptions = {
@@ -30,11 +28,8 @@ async function apiQuery(query, options) {
     if (!process.env.DATOCMS_ENVIRONMENT && !process.env.NEXT_PUBLIC_DATOCMS_ENVIRONMENT)
         throw new Error('DATOCMS_ENVIRONMENT is not set');
     const queryId = (query.definitions?.[0]).name?.value;
-    if (typeof options?.includeDrafts === 'undefined')
-        try {
-            opt.includeDrafts = (0, headers_js_1.draftMode)().isEnabled;
-        }
-        catch (e) { }
+    //if (typeof options?.includeDrafts === 'undefined')
+    //try { opt.includeDrafts = draftMode().isEnabled } catch (e) { }
     const dedupeOptions = {
         body: JSON.stringify({ query: (0, printer_js_1.print)(query), variables: options?.variables }),
         ...opt,

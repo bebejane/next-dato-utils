@@ -1,7 +1,5 @@
 'use server';
-import { draftMode } from 'next/headers.js';
 import { print } from 'graphql/language/printer.js';
-//import { cache } from 'react';
 import { traverse } from 'object-traversal';
 import isInteger from 'is-integer';
 const defaultOptions = {
@@ -25,11 +23,8 @@ export default async function apiQuery(query, options) {
     if (!process.env.DATOCMS_ENVIRONMENT && !process.env.NEXT_PUBLIC_DATOCMS_ENVIRONMENT)
         throw new Error('DATOCMS_ENVIRONMENT is not set');
     const queryId = (query.definitions?.[0]).name?.value;
-    if (typeof options?.includeDrafts === 'undefined')
-        try {
-            opt.includeDrafts = draftMode().isEnabled;
-        }
-        catch (e) { }
+    //if (typeof options?.includeDrafts === 'undefined')
+    //try { opt.includeDrafts = draftMode().isEnabled } catch (e) { }
     const dedupeOptions = {
         body: JSON.stringify({ query: print(query), variables: options?.variables }),
         ...opt,
