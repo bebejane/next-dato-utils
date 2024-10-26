@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation.js'
 import { revalidateTag as rt, revalidatePath as rp } from 'next/cache.js'
 
 export async function disableDraftMode(pathname?: string) {
-  draftMode().disable()
+  (await draftMode()).disable()
   redirect(pathname ?? `/`)
 }
 

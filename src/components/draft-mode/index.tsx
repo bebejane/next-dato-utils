@@ -14,9 +14,11 @@ export default async function DraftMode({ url, tag, path }: Props) {
 
   if (!url || (!tag && !path)) return null
 
+  const enabled = (await draftMode()).isEnabled
+
   return (
     <DraftModeClient
-      enabled={draftMode().isEnabled}
+      enabled={enabled}
       draftUrl={url}
       tag={tag}
       path={path}
