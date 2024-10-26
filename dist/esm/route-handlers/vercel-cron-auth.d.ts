@@ -1,1 +1,2 @@
-export default function vercelCronAuth(req: Request, callback: (req: Request) => Promise<Response>): Promise<Response>;
+import type { NextApiRequest, NextApiResponse } from 'next/types';
+export default function vercelCronAuth(callback: (req: NextApiRequest, res: NextApiResponse) => void): (req: NextApiRequest, res: NextApiResponse) => void;

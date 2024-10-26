@@ -30,10 +30,9 @@ export default function StructuredContent({
       renderBlock={({ record }) => {
         const Block = blocks[record?.__typename?.replace('Record', '')]
         if (!Block) return null
-        return <Block
-          data={record}
-        //onClick={(id: string) => onClick?.(id)}
-        />
+        return <Block key={record?.id} data={record} />
+        ////onClick={(id: string) => onClick?.(id)}
+
       }}
       renderInlineRecord={({ record }) => {
         switch (record.__typename) {

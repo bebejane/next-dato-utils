@@ -13,7 +13,8 @@ export default function StructuredContent({ content, className, blocks, styles,
             const Block = blocks[record?.__typename?.replace('Record', '')];
             if (!Block)
                 return null;
-            return _jsx(Block, { data: record });
+            return _jsx(Block, { data: record }, record?.id);
+            ////onClick={(id: string) => onClick?.(id)}
         }, renderInlineRecord: ({ record }) => {
             switch (record.__typename) {
                 default:
