@@ -21,7 +21,7 @@ function Markdown({ content, truncate, className, components, sentances = 1, all
         //@ts-ignore
         components: components ?? {
             //@ts-ignore
-            a: ({ children, href }) => (0, jsx_runtime_1.jsx)(link_js_1.default, { scroll: scroll, href: href, children: children[0] })
+            a: ({ children, href }) => (0, jsx_runtime_1.jsx)(link_js_1.default, { scroll: scroll, href: href, children: children })
         } }));
 }
 exports.default = Markdown;

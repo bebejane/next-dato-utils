@@ -16,7 +16,7 @@ export default function Markdown({ content, truncate, className, components, sen
         //@ts-ignore
         components: components ?? {
             //@ts-ignore
-            a: ({ children, href }) => _jsx(Link, { scroll: scroll, href: href, children: children[0] })
+            a: ({ children, href }) => _jsx(Link, { scroll: scroll, href: href, children: children })
         } }));
 }
 //# sourceMappingURL=Markdown.js.map
