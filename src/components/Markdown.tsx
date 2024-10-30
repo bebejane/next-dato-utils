@@ -40,7 +40,7 @@ export default function Markdown({ content, truncate, className, components, sen
       //@ts-ignore
       components={components ?? {
         //@ts-ignore
-        a: ({ children, href }: AnchorProp) => <Link scroll={scroll} href={href}>{children[0]}</ Link>
+        a: ({ children, href }: AnchorProp) => <Link scroll={scroll} href={href}>{children}</ Link>
       }}
     />
   )
