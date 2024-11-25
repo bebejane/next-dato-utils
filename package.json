@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.549",
+	"version": "1.0.552",
 	"description": "",
 	"type": "module",
 	"scripts": {
@@ -21,25 +21,25 @@
 	"exports": {
 		"./package.json": "./package.json",
 		"./utils": {
-			"import": "./utils/index.js"
+			"import": "./dist/esm/utils/index.js"
 		},
 		"./components": {
-			"import": "./components/index.js"
+			"import": "./dist/esm/components/index.js"
 		},
 		"./hooks": {
-			"import": "./hooks/index.js"
+			"import": "./dist/esm/hooks/index.js"
 		},
 		"./api": {
-			"import": "./api/index.js"
+			"import": "./dist/esm/api/index.js"
 		},
 		"./route-handlers": {
-			"import": "./route-handlers/index.js"
+			"import": "./dist/esm/route-handlers/index.js"
 		},
 		"./server-actions": {
-			"import": "./server-actions/index.js"
+			"import": "./dist/esm/server-actions/index.js"
 		},
 		"./server-actions*": {
-			"import": "./server-actions/*"
+			"import": "./dist/esm/server-actions/*"
 		}
 	},
 	"files": [
@@ -78,7 +78,7 @@
 		"copyfiles": "^2.4.1",
 		"datocms-structured-text-utils": "^2.1.12",
 		"graphql": "^16.8.1",
-		"next": "14.1.1",
+		"next": "15.0.1",
 		"nodemon": "^3.0.3",
 		"react": "^18.2.0",
 		"react-datocms": "^4.1.3",
