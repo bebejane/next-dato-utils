@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.547",
+	"version": "1.0.548",
 	"description": "",
 	"type": "module",
 	"scripts": {
@@ -21,25 +21,25 @@
 	"exports": {
 		"./package.json": "./package.json",
 		"./utils": {
-			"import": "./utils/index.js"
+			"import": "./dist/esm/utils/index.js"
 		},
 		"./components": {
-			"import": "./components/index.js"
+			"import": "./dist/esm/components/index.js"
 		},
 		"./hooks": {
-			"import": "./hooks/index.js"
+			"import": "./dist/esm/hooks/index.js"
 		},
 		"./api": {
-			"import": "./api/index.js"
+			"import": "./dist/esm/api/index.js"
 		},
 		"./route-handlers": {
-			"import": "./route-handlers/index.js"
+			"import": "./dist/esm/route-handlers/index.js"
 		},
 		"./server-actions": {
-			"import": "./server-actions/index.js"
+			"import": "./dist/esm/server-actions/index.js"
 		},
 		"./server-actions*": {
-			"import": "./server-actions/*"
+			"import": "./dist/esm/server-actions/*"
 		}
 	},
 	"files": [
