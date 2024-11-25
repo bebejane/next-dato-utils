@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.552",
+	"version": "1.0.553",
 	"description": "",
 	"type": "module",
 	"scripts": {
@@ -78,7 +78,7 @@
 		"copyfiles": "^2.4.1",
 		"datocms-structured-text-utils": "^2.1.12",
 		"graphql": "^16.8.1",
-		"next": "15.0.1",
+		"next": "14.1.1",
 		"nodemon": "^3.0.3",
 		"react": "^18.2.0",
 		"react-datocms": "^4.1.3",
