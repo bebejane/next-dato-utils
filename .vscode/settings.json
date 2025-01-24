@@ -1,15 +1,15 @@
 {
   "files.exclude": {
-    "node_modules": true,
-    ".vscode": true,
-    "types": true,
-    "dist": true,
-    "api": true,
-    "cli": true,
-    "components": true,
-    "hooks": true,
-    "route-handlers": true,
-    "server-actions": true,
-    "utils": true
+    "node_modules": false,
+    ".vscode": false,
+    "types": false,
+    "dist": false,
+    "api": false,
+    "cli": false,
+    "components": false,
+    "hooks": false,
+    "route-handlers": false,
+    "server-actions": false,
+    "utils": false
   }
 }
