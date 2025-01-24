@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.558",
+	"version": "1.0.559",
 	"description": "",
 	"type": "module",
 	"scripts": {
@@ -12,7 +12,7 @@
 		"clean": "rm -rf ./dist",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"tsc": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
-		"copy-files": "copyfiles -u 1 src/**/*.scss ./dist && rsync -a ./dist/* ./",
+		"copy-files": "copyfiles -u 1 src/**/*.scss ./build && rsync -a ./build/* ./",
 		"rename:cjs": "renamer --find js --replace cjs ./dist/cjs/**/*",
 		"rename:mjs": "renamer --find js --replace mjs ./dist/esm/**/*"
 	},
