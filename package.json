@@ -1,18 +1,18 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.553",
+	"version": "1.0.554",
 	"description": "",
 	"type": "module",
 	"scripts": {
 		"build": "node ./clean.js && npm run tsc && npm run copy-files",
 		"build:micro": "bash build.sh && npm run copy-files",
-		"copy-files": "copyfiles -u 1 src/**/*.scss dist/esm && copyfiles -u 1 src/**/*.scss dist/cjs && rsync -a ./dist/esm/* ./",
 		"pub": "npm version patch --force && npm run build && git add . && git commit -m \"updates\" && git push",
 		"dev": "npx nodemon --watch \"src/**/*\" --watch \"./package.json\" -e tsx,ts,scss,json --exec \"npm run build\"",
 		"dev:cli": "tsx src/cli/index.ts",
 		"clean": "rm -rf ./dist",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"tsc": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
+		"copy-files": "copyfiles -u 1 src/**/*.scss ./build && rsync -a ./build/* ./",
 		"rename:cjs": "renamer --find js --replace cjs ./dist/cjs/**/*",
 		"rename:mjs": "renamer --find js --replace mjs ./dist/esm/**/*"
 	},
@@ -21,24 +21,37 @@
 	"exports": {
 		"./package.json": "./package.json",
 		"./utils": {
+			"types": "./dist/esm/utils/index.d.ts",
+			"require": "./dist/cjs/utils/index.js",
 			"import": "./dist/esm/utils/index.js"
 		},
 		"./components": {
+			"types": "./dist/esm/components/index.d.ts",
+			"require": "./dist/cjs/components/index.js",
 			"import": "./dist/esm/components/index.js"
 		},
 		"./hooks": {
+			"types": "./dist/esm/hooks/index.d.ts",
+			"require": "./dist/cjs/hooks/index.js",
 			"import": "./dist/esm/hooks/index.js"
 		},
 		"./api": {
+			"types": "./dist/esm/api/index.d.ts",
+			"require": "./dist/cjs/api/index.js",
 			"import": "./dist/esm/api/index.js"
 		},
 		"./route-handlers": {
+			"types": "./dist/esm/route-handlers/index.d.ts",
+			"require": "./dist/cjs/route-handlers/index.js",
 			"import": "./dist/esm/route-handlers/index.js"
 		},
 		"./server-actions": {
+			"types": "./dist/esm/server-actions/index.d.ts",
+			"require": "./dist/cjs/server-actions/index.js",
 			"import": "./dist/esm/server-actions/index.js"
 		},
 		"./server-actions*": {
+			"require": "./dist/cjs/server-actions/*",
 			"import": "./dist/esm/server-actions/*"
 		}
 	},
