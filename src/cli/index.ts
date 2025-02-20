@@ -73,7 +73,6 @@ async function info() {
     ${plugins.map(plugin => `${plugin.name}`).join('\n')}
   `)
   console.log(text)
-
 }
 
 async function usage() {
