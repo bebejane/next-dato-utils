@@ -5,4 +5,4 @@ export type VideoPlayerProps = {
     muted?: boolean;
     autoPlay?: boolean;
 };
-export default function VideoPlayer({ data, className, loop, muted, autoPlay }: VideoPlayerProps): import("react/jsx-runtime").JSX.Element | null;
+export default function VideoPlayer({ data, className, loop, muted, autoPlay, }: VideoPlayerProps): import("react/jsx-runtime").JSX.Element | null;

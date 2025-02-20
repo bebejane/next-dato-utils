@@ -3,18 +3,19 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const react_1 = require("react");
-function VideoPlayer({ data, className, loop = true, muted = true, autoPlay = true }) {
+function VideoPlayer({ data, className, loop = true, muted = true, autoPlay = true, }) {
     if (!data?.video)
         return null;
     const [inView, setInView] = (0, react_1.useState)(false);
     const [hasAudio, setHasAudio] = (0, react_1.useState)(false);
     const videoRef = (0, react_1.useRef)(null);
     const posterRef = (0, react_1.useRef)(null);
-    const muteRef = (0, react_1.useRef)(null);
     const [active, setActive] = (0, react_1.useState)(false);
     const [showPoster, setShowPoster] = (0, react_1.useState)(false);
     const [quality, setQuality] = (0, react_1.useState)('high');
-    (0, react_1.useEffect)(() => { setActive(inView); }, [inView]);
+    (0, react_1.useEffect)(() => {
+        setActive(inView);
+    }, [inView]);
     (0, react_1.useEffect)(() => {
         if (!videoRef.current)
             return;
@@ -27,7 +28,9 @@ function VideoPlayer({ data, className, loop = true, muted = true, autoPlay = tr
         if (!videoRef.current)
             return;
         const loadedData = () => setHasAudio(videoHasAudio(videoRef.current));
-        const canPlay = () => { setShowPoster(false); };
+        const canPlay = () => {
+            setShowPoster(false);
+        };
         videoRef.current.addEventListener('loadeddata', loadedData);
         videoRef.current.addEventListener('canplay', canPlay);
         // Check if video is in view
