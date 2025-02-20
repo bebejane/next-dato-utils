@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.569",
+	"version": "1.0.570",
 	"description": "",
 	"type": "module",
 	"scripts": {
@@ -14,44 +14,52 @@
 		"tsc": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
 		"copy-files": "copyfiles -u 1 src/**/*.scss ./build && rsync -a ./build/* ./",
 		"rename:cjs": "renamer --find js --replace cjs ./dist/cjs/**/*",
-		"rename:mjs": "renamer --find js --replace mjs ./**/*"
+		"rename:mjs": "renamer --find js --replace mjs ./dist/esm/**/*"
 	},
-	"module": "./index.js",
+	"main": "./dist/cjs/index.js",
+	"module": "./dist/esm/index.js",
 	"exports": {
 		"./package.json": "./package.json",
 		"./utils": {
-			"types": "./utils/index.d.ts",
-			"import": "./utils/index.js"
+			"types": "./dist/esm/utils/index.d.ts",
+			"require": "./dist/cjs/utils/index.js",
+			"import": "./dist/esm/utils/index.js"
 		},
 		"./components": {
-			"types": "./components/index.d.ts",
-			"import": "./components/index.js"
+			"types": "./dist/esm/components/index.d.ts",
+			"require": "./dist/cjs/components/index.js",
+			"import": "./dist/esm/components/index.js"
 		},
 		"./hooks": {
-			"types": "./hooks/index.d.ts",
-			"import": "./hooks/index.js"
+			"types": "./dist/esm/hooks/index.d.ts",
+			"require": "./dist/cjs/hooks/index.js",
+			"import": "./dist/esm/hooks/index.js"
 		},
 		"./api": {
-			"types": "./api/index.d.ts",
-			"import": "./api/index.js"
+			"types": "./dist/esm/api/index.d.ts",
+			"require": "./dist/cjs/api/index.js",
+			"import": "./dist/esm/api/index.js"
 		},
 		"./route-handlers": {
-			"types": "./route-handlers/index.d.ts",
-			"import": "./route-handlers/index.js"
+			"types": "./dist/esm/route-handlers/index.d.ts",
+			"require": "./dist/cjs/route-handlers/index.js",
+			"import": "./dist/esm/route-handlers/index.js"
 		},
 		"./server-actions": {
-			"types": "./server-actions/index.d.ts",
-			"import": "./server-actions/index.js"
+			"types": "./dist/esm/server-actions/index.d.ts",
+			"require": "./dist/cjs/server-actions/index.js",
+			"import": "./dist/esm/server-actions/index.js"
 		},
 		"./server-actions*": {
-			"import": "./server-actions/*"
+			"require": "./dist/cjs/server-actions/*",
+			"import": "./dist/esm/server-actions/*"
 		}
 	},
 	"files": [
 		"dist/"
 	],
 	"bin": {
-		"nextdato": "./cli/index.js"
+		"nextdato": "./dist/esm//cli/index.js"
 	},
 	"engines": {
 		"node": ">=0.18"
