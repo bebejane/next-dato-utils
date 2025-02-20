@@ -25,7 +25,7 @@ export default async function apiQuery(query, options) {
     const queryId = (query.definitions?.[0]).name?.value;
     if (typeof options?.includeDrafts === 'undefined')
         try {
-            opt.includeDrafts = (await draftMode()).isEnabled;
+            opt.includeDrafts = draftMode().isEnabled;
         }
         catch (e) { }
     const dedupeOptions = {

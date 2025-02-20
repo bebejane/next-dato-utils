@@ -11,17 +11,18 @@ export default async function draft(request) {
     if (secret !== process.env.DATOCMS_PREVIEW_SECRET)
         return new Response('Invalid token', { status: 401 });
     if (exit !== null) {
-        (await draftMode()).disable();
+        console.log('Disabling draft mode');
+        draftMode().disable();
     }
     else {
-        (await draftMode()).enable();
+        console.log('Enabling draft mode');
+        draftMode().enable();
     }
     if (maxAge) {
-        const bypassCookie = (await cookies()).get('__prerender_bypass');
-        if (!bypassCookie) {
+        const bypassCookie = cookies().get('__prerender_bypass');
+        if (!bypassCookie)
             throw new Error('No bypass cookie found');
-        }
-        (await cookies()).set(bypassCookie.name, bypassCookie.value, {
+        cookies().set(bypassCookie.name, bypassCookie.value, {
             httpOnly: true,
             sameSite: 'none',
             secure: true,
