@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "./build",
+    "outDir": "./dist/esm",
     "strict": true,
     "target": "ESNext",
     "module": "NodeNext",
