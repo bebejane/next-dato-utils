@@ -1,109 +1,109 @@
 {
-  "name": "next-dato-utils",
-  "version": "1.0.564",
-  "description": "",
-  "type": "module",
-  "scripts": {
-    "build": "node ./clean.js && npm run tsc && npm run copy-files",
-    "build:micro": "bash build.sh && npm run copy-files",
-    "pub": "npm version patch --force && npm run build && git add . && git commit -m \"updates\" && git push",
-    "dev": "npx nodemon --watch \"src/**/*\" --watch \"./package.json\" -e tsx,ts,scss,json --exec \"npm run build\"",
-    "dev:cli": "tsx src/cli/index.ts",
-    "clean": "rm -rf ./dist",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "tsc": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
-    "copy-files": "copyfiles -u 1 src/**/*.scss ./build && rsync -a ./build/* ./",
-    "rename:cjs": "renamer --find js --replace cjs ./dist/cjs/**/*",
-    "rename:mjs": "renamer --find js --replace mjs .//**/*"
-  },
-  "main": "./index.js",
-  "module": "./index.js",
-  "exports": {
-    "./package.json": "./package.json",
-    "./utils": {
-      "types": "./utils/index.d.ts",
-      "import": "./utils/index.js"
-    },
-    "./components": {
-      "types": "./components/index.d.ts",
-      "import": "./components/index.js"
-    },
-    "./hooks": {
-      "types": "./hooks/index.d.ts",
-      "import": "./hooks/index.js"
-    },
-    "./api": {
-      "types": "./api/index.d.ts",
-      "import": "./api/index.js"
-    },
-    "./route-handlers": {
-      "types": "./route-handlers/index.d.ts",
-      "import": "./route-handlers/index.js"
-    },
-    "./server-actions": {
-      "types": "./server-actions/index.d.ts",
-      "import": "./server-actions/index.js"
-    },
-    "./server-actions*": {
-      "import": "./server-actions/*"
-    }
-  },
-  "bin": {
-    "nextdato": ".///cli/index.js"
-  },
-  "engines": {
-    "node": ">=0.18"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@types/is-integer": "^1.0.2",
-    "commander": "^11.1.0",
-    "datocms-listen": "^0.1.15",
-    "dedent-js": "^1.0.1",
-    "dotenv": "^16.4.4",
-    "is-integer": "^1.0.7",
-    "object-traversal": "^1.0.1",
-    "pretty-bytes": "^6.1.1",
-    "react-markdown": "^9.0.1",
-    "remark-breaks": "^4.0.0",
-    "remark-gfm": "^4.0.0",
-    "table": "^6.8.1"
-  },
-  "devDependencies": {
-    "@datocms/cma-client": "3.1.2",
-    "@datocms/cma-client-browser": "^3.1.2",
-    "@datocms/cma-client-node": "^3.1.2",
-    "@types/node": "^20.11.19",
-    "@types/react": "^18.2.56",
-    "@types/react-dom": "^18.2.19",
-    "copyfiles": "^2.4.1",
-    "datocms-structured-text-utils": "^4.1.2",
-    "graphql": "^16.8.1",
-    "next": "15.0.1",
-    "nodemon": "^3.0.3",
-    "react": "^18.2.0",
-    "react-datocms": "^8.0.0-1",
-    "react-dom": "^18.2.0",
-    "renamer": "^4.0.0",
-    "sass": "^1.71.0",
-    "tsx": "^4.7.1",
-    "typescript": "^5.3.3"
-  },
-  "peerDependencies": {
-    "@datocms/cma-client": ">=3.0.0",
-    "@datocms/cma-client-browser": ">=3.0.0",
-    "@datocms/cma-client-node": ">=3.0.0",
-    "@types/react": ">=18.2.3",
-    "@types/react-dom": ">=18.2.1",
-    "datocms-structured-text-utils": ">=2.0.0",
-    "graphql": ">=16.8.0",
-    "postmark": ">=4.0.0",
-    "react": ">=18.2.0",
-    "react-datocms": ">=4.0.0",
-    "react-dom": ">=18.2.0",
-    "sass": ">=1.69.0",
-    "zod": ">=3.22.0"
-  }
+	"name": "next-dato-utils",
+	"version": "1.0.569",
+	"description": "",
+	"type": "module",
+	"scripts": {
+		"build": "node ./clean.js && npm run tsc && npm run copy-files",
+		"build:micro": "bash build.sh && npm run copy-files",
+		"pub": "npm version patch --force && npm run build && git add . && git commit -m \"updates\" && git push",
+		"dev": "npx nodemon --watch \"src/**/*\" --watch \"./package.json\" -e tsx,ts,scss,json --exec \"npm run build\"",
+		"dev:cli": "tsx src/cli/index.ts",
+		"clean": "rm -rf ./dist",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"tsc": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
+		"copy-files": "copyfiles -u 1 src/**/*.scss ./build && rsync -a ./build/* ./",
+		"rename:cjs": "renamer --find js --replace cjs ./dist/cjs/**/*",
+		"rename:mjs": "renamer --find js --replace mjs .//**/*"
+	},
+	"main": "./index.js",
+	"module": "./index.js",
+	"exports": {
+		"./package.json": "./package.json",
+		"./utils": {
+			"types": "./utils/index.d.ts",
+			"import": "./utils/index.js"
+		},
+		"./components": {
+			"types": "./components/index.d.ts",
+			"import": "./components/index.js"
+		},
+		"./hooks": {
+			"types": "./hooks/index.d.ts",
+			"import": "./hooks/index.js"
+		},
+		"./api": {
+			"types": "./api/index.d.ts",
+			"import": "./api/index.js"
+		},
+		"./route-handlers": {
+			"types": "./route-handlers/index.d.ts",
+			"import": "./route-handlers/index.js"
+		},
+		"./server-actions": {
+			"types": "./server-actions/index.d.ts",
+			"import": "./server-actions/index.js"
+		},
+		"./server-actions*": {
+			"import": "./server-actions/*"
+		}
+	},
+	"bin": {
+		"nextdato": ".///cli/index.js"
+	},
+	"engines": {
+		"node": ">=0.18"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@types/is-integer": "^1.0.2",
+		"commander": "^11.1.0",
+		"datocms-listen": "^0.1.15",
+		"dedent-js": "^1.0.1",
+		"dotenv": "^16.4.4",
+		"is-integer": "^1.0.7",
+		"object-traversal": "^1.0.1",
+		"pretty-bytes": "^6.1.1",
+		"react-markdown": "^9.0.1",
+		"remark-breaks": "^4.0.0",
+		"remark-gfm": "^4.0.0",
+		"table": "^6.8.1"
+	},
+	"devDependencies": {
+		"@datocms/cma-client": "3.1.2",
+		"@datocms/cma-client-browser": "^3.1.2",
+		"@datocms/cma-client-node": "^3.1.2",
+		"@types/node": "^20.11.19",
+		"@types/react": "^18.2.56",
+		"@types/react-dom": "^18.2.19",
+		"copyfiles": "^2.4.1",
+		"datocms-structured-text-utils": "^4.1.2",
+		"graphql": "^16.8.1",
+		"next": "15.0.1",
+		"nodemon": "^3.0.3",
+		"react": "^18.2.0",
+		"react-datocms": "^8.0.0-1",
+		"react-dom": "^18.2.0",
+		"renamer": "^4.0.0",
+		"sass": "^1.71.0",
+		"tsx": "^4.7.1",
+		"typescript": "^5.3.3"
+	},
+	"peerDependencies": {
+		"@datocms/cma-client": ">=3.0.0",
+		"@datocms/cma-client-browser": ">=3.0.0",
+		"@datocms/cma-client-node": ">=3.0.0",
+		"@types/react": ">=18.2.3",
+		"@types/react-dom": ">=18.2.1",
+		"datocms-structured-text-utils": ">=2.0.0",
+		"graphql": ">=16.8.0",
+		"postmark": ">=4.0.0",
+		"react": ">=18.2.0",
+		"react-datocms": ">=4.0.0",
+		"react-dom": ">=18.2.0",
+		"sass": ">=1.69.0",
+		"zod": ">=3.22.0"
+	}
 }
