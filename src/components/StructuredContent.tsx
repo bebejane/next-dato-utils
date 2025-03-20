@@ -1,118 +1,154 @@
 import { StructuredText, renderNodeRule, renderMarkRule } from 'react-datocms';
-import { isParagraph, isHeading, isRoot } from 'datocms-structured-text-utils';
+import { isParagraph, isHeading, isRoot, isInlineBlock } from 'datocms-structured-text-utils';
 
 export type Props = {
-  content: any
-  className?: string
-  //onClick?: (imageId: string) => void
-  blocks?: any
-  styles?: { [key: string]: string }
-}
+	content: any;
+	className?: string;
+	blocks?: any;
+	styles?: { [key: string]: string };
+};
 
 export default function StructuredContent({
-  content,
-  className,
-  blocks,
-  styles,
-  //onClick
-}: Props) {
+	content,
+	className,
+	blocks,
+	styles,
+}: //onClick
+Props) {
+	if (!content) return null;
 
-  if (!content)
-    return null
+	const customMarkRules =
+		(styles &&
+			Object.keys(styles).map((style) =>
+				renderMarkRule(style, ({ mark, children, key }) => {
+					return (
+						<span key={key} className={styles[style]}>
+							{children}
+						</span>
+					);
+				})
+			)) ||
+		[];
 
-  const customMarkRules = styles && Object.keys(styles).map(style => renderMarkRule(style, ({ mark, children, key }) => {
-    return <span key={key} className={styles[style]}>{children}</span>;
-  })) || []
+	return (
+		<StructuredText
+			data={content}
+			renderBlock={({ record }) => {
+				const Block = blocks[record?.__typename?.replace('Record', '')];
+				if (!Block) return null;
+				return <Block key={record?.id} data={record} />;
+				////onClick={(id: string) => onClick?.(id)}
+			}}
+			renderInlineRecord={({ record }) => {
+				switch (record.__typename) {
+					default:
+						return null;
+				}
+			}}
+			renderLinkToRecord={({ record, children, transformedMeta }) => {
+				switch (record.__typename) {
+					default:
+						return null;
+				}
+			}}
+			renderText={(text) => {
+				// Replace nbsp, quotes and multiple spaces
+				return text?.replace(/\s/g, ' ')?.replaceAll('"', '”');
+			}}
+			customMarkRules={customMarkRules}
+			customNodeRules={[
+				// Clenup paragraphs
+				renderNodeRule(
+					isParagraph,
+					({ adapter: { renderNode }, node, children, key, ancestors }) => {
+						const firstChild = node.children[0];
+						const lastChild = node.children[node.children.length - 1];
 
-  return (
-    <StructuredText
-      data={content}
-      renderBlock={({ record }) => {
-        const Block = blocks[record?.__typename?.replace('Record', '')]
-        if (!Block) return null
-        return <Block key={record?.id} data={record} />
-        ////onClick={(id: string) => onClick?.(id)}
+						// Remove trailing <br>
+						if (
+							isRoot(ancestors[0]) &&
+							lastChild.type === 'span' &&
+							lastChild.value?.endsWith('\n')
+						) {
+							let index = node.children.length;
 
-      }}
-      renderInlineRecord={({ record }) => {
-        switch (record.__typename) {
-          default:
-            return null;
-        }
-      }}
-      renderLinkToRecord={({ record, children, transformedMeta }) => {
-        switch (record.__typename) {
-          default:
-            return null;
-        }
-      }}
-      renderText={(text) => {
-        // Replace nbsp, quotes and multiple spaces
-        return text?.replace(/\s/g, ' ')?.replaceAll('"', '”');
-      }}
-      customMarkRules={customMarkRules}
-      customNodeRules={[
-        // Clenup paragraphs
-        renderNodeRule(isParagraph, ({ adapter: { renderNode }, node, children, key, ancestors }) => {
+							while (index >= 0 && firstChild.type === 'span' && firstChild.value[index] === '\n')
+								index--;
 
-          const firstChild = node.children[0]
-          const lastChild = node.children[node.children.length - 1]
+							// remove trailing br
+							if (children && Array.isArray(children) && typeof children[0] === 'object')
+								Array.isArray(children[0].props.children) &&
+									children[0].props.children.splice(index);
+						}
 
-          // Remove trailing <br>
-          if (isRoot(ancestors[0]) && lastChild.type === 'span' && lastChild.value?.endsWith('\n')) {
+						////@ts-ignore // Remove leading <br>
+						if (
+							isRoot(ancestors[0]) &&
+							firstChild.type === 'span' &&
+							firstChild.value.startsWith('\n')
+						) {
+							let index = 0;
 
-            let index = node.children.length;
+							while (index < firstChild.value.length && firstChild.value[index] === '\n') index++;
 
-            while (index >= 0 && firstChild.type === 'span' && firstChild.value[index] === '\n') index--;
+							if (children && Array.isArray(children) && typeof children[0] === 'object')
+								Array.isArray(children[0].props.children) &&
+									children[0].props.children?.splice(0, index + 1);
+						}
 
-            // remove trailing br
-            if (children && Array.isArray(children) && typeof children[0] === 'object')
-              Array.isArray(children[0].props.children) && children[0].props.children.splice(index)
-          }
+						// Filter out empty paragraphs
+						children = children?.filter(
+							(c) =>
+								!(typeof c === 'object' && c.props.children?.length === 1 && !c.props.children[0])
+						);
 
-          ////@ts-ignore // Remove leading <br>
-          if (isRoot(ancestors[0]) && firstChild.type === 'span' && firstChild.value.startsWith('\n')) {
-            let index = 0;
+						// If no children remove tag completely
+						if (!children?.length) return null;
 
-            while (index < firstChild.value.length && firstChild.value[index] === '\n') index++;
+						const classNames = [];
 
-            if (children && Array.isArray(children) && typeof children[0] === 'object')
-              Array.isArray(children[0].props.children) && children[0].props.children?.splice(0, index + 1)
-          }
+						isRoot(ancestors[0]) && className && classNames.push(className);
+						node.style && styles?.[node.style] && classNames.push(styles[node.style]);
 
-          // Filter out empty paragraphs
-          children = children?.filter(c => !(typeof c === 'object' && c.props.children?.length === 1 && !c.props.children[0]))
+						node.style &&
+							!styles?.[node.style] &&
+							console.warn(node.style, 'does not exist in styles', 'P');
 
-          // If no children remove tag completely
-          if (!children?.length) return null
+						// Return paragraph with sanitized children
+						return renderNode(
+							'p',
+							{
+								key,
+								className: classNames.length ? classNames.join(' ') : undefined,
+							},
+							children
+						);
+					}
+				),
+				// Add H classes
+				renderNodeRule(isHeading, ({ adapter: { renderNode }, node, children, key, ancestors }) => {
+					const classNames: string[] = [];
+					node.style && styles?.[node.style] && classNames.push(styles[node.style]);
+					node.style &&
+						!styles?.[node.style] &&
+						console.warn(node.style, 'does not exist in styles', 'H');
 
-          const classNames = []
-
-          isRoot(ancestors[0]) && className && classNames.push(className)
-          node.style && styles?.[node.style] && classNames.push(styles[node.style])
-
-          node.style && !styles?.[node.style] && console.warn(node.style, 'does not exist in styles', 'P')
-
-          // Return paragraph with sanitized children
-          return renderNode('p', {
-            key,
-            className: classNames.length ? classNames.join(' ') : undefined,
-          }, children)
-
-        }),
-        // Add H classes
-        renderNodeRule(isHeading, ({ adapter: { renderNode }, node, children, key, ancestors }) => {
-          const classNames: string[] = []
-          node.style && styles?.[node.style] && classNames.push(styles[node.style])
-          node.style && !styles?.[node.style] && console.warn(node.style, 'does not exist in styles', 'H')
-
-          return renderNode(`h${node.level}`, {
-            key,
-            className: classNames.length ? classNames.join(' ') : undefined,
-          }, children)
-        })
-      ]
-      }
-    />
-  );
+					return renderNode(
+						`h${node.level}`,
+						{
+							key,
+							className: classNames.length ? classNames.join(' ') : undefined,
+						},
+						children
+					);
+				}),
+				renderNodeRule(
+					isInlineBlock,
+					({ adapter: { renderNode }, node, children, key, ancestors }) => {
+						return null;
+					}
+				),
+			]}
+		/>
+	);
 }
