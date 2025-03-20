@@ -8,13 +8,7 @@ export type Props = {
 	styles?: { [key: string]: string };
 };
 
-export default function StructuredContent({
-	content,
-	className,
-	blocks,
-	styles,
-}: //onClick
-Props) {
+export default function StructuredContent({ content, className, blocks, styles }: Props) {
 	if (!content) return null;
 
 	const customMarkRules =
@@ -38,6 +32,12 @@ Props) {
 				if (!Block) return null;
 				return <Block key={record?.id} data={record} />;
 				////onClick={(id: string) => onClick?.(id)}
+			}}
+			//@ts-ignore
+			renderInlineBlock={({ record }) => {
+				const Block = blocks[record?.__typename?.replace('Record', '')];
+				if (!Block) return null;
+				return <Block key={record?.id} data={record} />;
 			}}
 			renderInlineRecord={({ record }) => {
 				switch (record.__typename) {

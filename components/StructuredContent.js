@@ -1,7 +1,7 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { StructuredText, renderNodeRule, renderMarkRule } from 'react-datocms';
 import { isParagraph, isHeading, isRoot, isInlineBlock } from 'datocms-structured-text-utils';
-export default function StructuredContent({ content, className, blocks, styles, }) {
+export default function StructuredContent({ content, className, blocks, styles }) {
     if (!content)
         return null;
     const customMarkRules = (styles &&
@@ -15,6 +15,13 @@ export default function StructuredContent({ content, className, blocks, styles, 
                 return null;
             return _jsx(Block, { data: record }, record?.id);
             ////onClick={(id: string) => onClick?.(id)}
+        }, 
+        //@ts-ignore
+        renderInlineBlock: ({ record }) => {
+            const Block = blocks[record?.__typename?.replace('Record', '')];
+            if (!Block)
+                return null;
+            return _jsx(Block, { data: record }, record?.id);
         }, renderInlineRecord: ({ record }) => {
             switch (record.__typename) {
                 default:

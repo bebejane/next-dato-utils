@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 const react_datocms_1 = require("react-datocms");
 const datocms_structured_text_utils_1 = require("datocms-structured-text-utils");
-function StructuredContent({ content, className, blocks, styles, }) {
+function StructuredContent({ content, className, blocks, styles }) {
     if (!content)
         return null;
     const customMarkRules = (styles &&
@@ -17,6 +17,13 @@ function StructuredContent({ content, className, blocks, styles, }) {
                 return null;
             return (0, jsx_runtime_1.jsx)(Block, { data: record }, record?.id);
             ////onClick={(id: string) => onClick?.(id)}
+        }, 
+        //@ts-ignore
+        renderInlineBlock: ({ record }) => {
+            const Block = blocks[record?.__typename?.replace('Record', '')];
+            if (!Block)
+                return null;
+            return (0, jsx_runtime_1.jsx)(Block, { data: record }, record?.id);
         }, renderInlineRecord: ({ record }) => {
             switch (record.__typename) {
                 default:
