@@ -33,7 +33,6 @@ export default function StructuredContent({ content, className, blocks, styles }
 				return <Block key={record?.id} data={record} />;
 				////onClick={(id: string) => onClick?.(id)}
 			}}
-			//@ts-ignore
 			renderInlineBlock={({ record }) => {
 				const Block = blocks[record?.__typename?.replace('Record', '')];
 				if (!Block) return null;

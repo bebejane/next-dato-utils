@@ -15,9 +15,7 @@ export default function StructuredContent({ content, className, blocks, styles }
                 return null;
             return _jsx(Block, { data: record }, record?.id);
             ////onClick={(id: string) => onClick?.(id)}
-        }, 
-        //@ts-ignore
-        renderInlineBlock: ({ record }) => {
+        }, renderInlineBlock: ({ record }) => {
             const Block = blocks[record?.__typename?.replace('Record', '')];
             if (!Block)
                 return null;
