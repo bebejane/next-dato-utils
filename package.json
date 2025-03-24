@@ -1,6 +1,6 @@
 {
   "name": "next-dato-utils",
-  "version": "1.0.613",
+  "version": "1.0.614",
   "description": "",
   "type": "module",
   "scripts": {
@@ -84,7 +84,7 @@
     "next": "15.0.1",
     "nodemon": "^3.0.3",
     "react": "^18.2.0",
-    "react-datocms": "^7.2.1",
+    "react-datocms": "^7.2.2",
     "react-dom": "^18.2.0",
     "renamer": "^4.0.0",
     "sass": "^1.71.0",
