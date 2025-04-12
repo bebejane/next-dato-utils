@@ -74,9 +74,9 @@ const paginatedQuery = async (query, options, data, queryId) => {
             if ((!filter && metaFilter) || (filter && !metaFilter) || JSON.stringify(filter) !== JSON.stringify(metaFilter))
                 throw new Error(`Query must have same filter argument on ${k} and ${pageKeyMap[k]}`);
         });
-        const first = options.variables?.first ?? firstVariable?.defaultValue?.value ?? 100;
-        if (first > 100)
-            throw new Error('"first" variable must be less than or equal to 100');
+        const first = options.variables?.first ?? firstVariable?.defaultValue?.value ?? 500;
+        if (first > 500)
+            throw new Error('"first" variable must be less than or equal to 500');
         let count = 0;
         while (Object.keys(pageKeyMap).some(k => data[k].count > data[pageKeyMap[k]].length)) {
             const maxPageKey = pageKeyMap[Object.keys(pageKeyMap).sort((a, b) => data[a].count > data[b].count ? -1 : 1)[0]];

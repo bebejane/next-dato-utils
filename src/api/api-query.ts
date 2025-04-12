@@ -119,10 +119,10 @@ const paginatedQuery = async <T, V = void>(query: DocumentNode, options: ApiQuer
         throw new Error(`Query must have same filter argument on ${k} and ${pageKeyMap[k]}`)
     })
 
-    const first = options.variables?.first ?? (firstVariable?.defaultValue as any)?.value ?? 100
+    const first = options.variables?.first ?? (firstVariable?.defaultValue as any)?.value ?? 500
 
-    if (first > 100)
-      throw new Error('"first" variable must be less than or equal to 100')
+    if (first > 500)
+      throw new Error('"first" variable must be less than or equal to 500')
 
     let count = 0
 
