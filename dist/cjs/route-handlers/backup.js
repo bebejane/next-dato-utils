@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const vercel_cron_auth_js_1 = __importDefault(require("./vercel-cron-auth.js"));
 const cma_client_browser_1 = require("@datocms/cma-client-browser");
-const backup = async (req) => {
+async function backup(req) {
     return (0, vercel_cron_auth_js_1.default)(req, async (req) => {
         if (!process.env.DATOCMS_ENVIRONMENT)
             throw new Error('DATOCMS_ENVIRONMENT not set in .env');
@@ -44,6 +44,6 @@ const backup = async (req) => {
             return new Response(`Backup failed: ${e.message}`, { status: 500 });
         }
     });
-};
+}
 exports.default = backup;
 //# sourceMappingURL=backup.js.map

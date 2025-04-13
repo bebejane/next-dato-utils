@@ -1,12 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server.js';
-import cors from './cors.js'
-
 export type PreviewLink = {
   label: string
   url: string
 }
 
-export default async function webPreviews(req: NextRequest, generatePreviewUrl: (record: any) => Promise<string | null>): Promise<Response> {
+export default async function webPreviews(req: Request, generatePreviewUrl: (record: any) => Promise<string | null>): Promise<Response> {
 
   if (!process.env.NEXT_PUBLIC_SITE_URL && !process.env.SITE_URL)
     throw new Error('NEXT_PUBLIC_SITE_URL is not set in .env')

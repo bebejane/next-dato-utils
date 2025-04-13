@@ -1,6 +1,6 @@
 import vercelCronAuth from './vercel-cron-auth.js';
 import { buildClient } from '@datocms/cma-client-browser';
-const backup = async (req) => {
+export default async function backup(req) {
     return vercelCronAuth(req, async (req) => {
         if (!process.env.DATOCMS_ENVIRONMENT)
             throw new Error('DATOCMS_ENVIRONMENT not set in .env');
@@ -39,6 +39,5 @@ const backup = async (req) => {
             return new Response(`Backup failed: ${e.message}`, { status: 500 });
         }
     });
-};
-export default backup;
+}
 //# sourceMappingURL=backup.js.map
