@@ -17,7 +17,8 @@ const defaultOptions = {
     generateTags: false,
     maxTags: 64,
     logs: false,
-    all: false
+    all: false,
+    apiToken: undefined
 };
 async function apiQuery(query, options) {
     const opt = { ...defaultOptions, ...(options ?? {}) };
@@ -102,9 +103,9 @@ const paginatedQuery = async (query, options, data, queryId) => {
     }
 };
 const dedupedFetch = async (options) => {
-    const { url, body, includeDrafts, excludeInvalid, visualEditingBaseUrl, revalidate, tags, queryId, logs } = options;
+    const { url, body, includeDrafts, excludeInvalid, visualEditingBaseUrl, revalidate, tags, queryId, logs, apiToken } = options;
     const headers = {
-        'Authorization': `Bearer ${process.env.DATOCMS_API_TOKEN ?? process.env.NEXT_PUBLIC_DATOCMS_API_TOKEN}`,
+        'Authorization': `Bearer ${apiToken ?? process.env.DATOCMS_API_TOKEN ?? process.env.NEXT_PUBLIC_DATOCMS_API_TOKEN}`,
         ...(includeDrafts ? { 'X-Include-Drafts': 'true' } : {}),
         ...(excludeInvalid ? { 'X-Exclude-Invalid': 'true' } : {}),
         ...(visualEditingBaseUrl

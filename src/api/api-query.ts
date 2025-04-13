@@ -16,6 +16,7 @@ export type ApiQueryOptions<V = void> = {
   maxTags?: number
   logs?: boolean
   all?: boolean
+  apiToken?: string
 };
 
 export type DefaultApiQueryOptions = ApiQueryOptions & {
@@ -29,6 +30,7 @@ export type DefaultApiQueryOptions = ApiQueryOptions & {
   maxTags: number,
   logs: boolean
   all: boolean
+  apiToken?: string
 }
 
 const defaultOptions: DefaultApiQueryOptions = {
@@ -41,7 +43,8 @@ const defaultOptions: DefaultApiQueryOptions = {
   generateTags: false,
   maxTags: 64,
   logs: false,
-  all: false
+  all: false,
+  apiToken: undefined
 };
 
 
@@ -164,7 +167,8 @@ export type DedupeOptions = {
   revalidate?: number;
   tags?: string[] | undefined
   queryId: string,
-  logs: boolean
+  logs: boolean,
+  apiToken?: string
 }
 
 const dedupedFetch = async (options: DedupeOptions) => {
@@ -177,11 +181,13 @@ const dedupedFetch = async (options: DedupeOptions) => {
     revalidate,
     tags,
     queryId,
-    logs
+    logs,
+    apiToken
+
   } = options;
 
   const headers = {
-    'Authorization': `Bearer ${process.env.DATOCMS_API_TOKEN ?? process.env.NEXT_PUBLIC_DATOCMS_API_TOKEN}`,
+    'Authorization': `Bearer ${apiToken ?? process.env.DATOCMS_API_TOKEN ?? process.env.NEXT_PUBLIC_DATOCMS_API_TOKEN}`,
     ...(includeDrafts ? { 'X-Include-Drafts': 'true' } : {}),
     ...(excludeInvalid ? { 'X-Exclude-Invalid': 'true' } : {}),
     ...(visualEditingBaseUrl
