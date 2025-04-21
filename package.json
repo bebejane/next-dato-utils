@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.620",
+	"version": "1.0.621",
 	"description": "",
 	"type": "module",
 	"scripts": {
@@ -11,7 +11,7 @@
 		"dev:cli": "tsx src/cli/index.ts",
 		"clean": "rm -rf ./dist",
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"tsc": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
+		"tsc": "tsc -p tsconfig.json",
 		"copy-files": "copyfiles -u 1 src/**/*.scss ./build && rsync -a ./build/* ./",
 		"rename:cjs": "renamer --find js --replace cjs ./dist/cjs/**/*",
 		"rename:mjs": "renamer --find js --replace mjs .//**/*"
