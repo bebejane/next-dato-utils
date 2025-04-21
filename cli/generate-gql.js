@@ -195,7 +195,7 @@ export default async function generateGqlFiles() {
                                 const blockModel = models.find(m => m.id === id);
                                 if (blockModel) {
                                     const blockFields = await client.fields.list(blockModel.id);
-                                    blocksQuery += `      ... on ${toPascalCase(blockModel.api_key)}Record {
+                                    blocksQuery += `... on ${toPascalCase(blockModel.api_key)}Record {
 `;
                                     for (const blockField of blockFields) {
                                         const blockFieldApiKeyCamel = toCamelCase(blockField.api_key);
@@ -203,10 +203,10 @@ export default async function generateGqlFiles() {
                                         switch (blockFieldType) {
                                             case 'file':
                                             case 'gallery':
-                                                blocksQuery += `        ${blockFieldApiKeyCamel} { ...ImageFragment }\n`;
+                                                blocksQuery += `${blockFieldApiKeyCamel} { ...ImageFragment }\n`;
                                                 break;
                                             case 'lat_lon':
-                                                blocksQuery += `        ${blockFieldApiKeyCamel} { latitude longitude }\n`;
+                                                blocksQuery += `${blockFieldApiKeyCamel} { latitude longitude }\n`;
                                                 break;
                                             case 'link':
                                             case 'links': {
@@ -230,40 +230,40 @@ export default async function generateGqlFiles() {
                                                         linkedModelIds.forEach(linkedId => {
                                                             const linkedModelInfo = modelMap.get(linkedId);
                                                             if (linkedModelInfo) {
-                                                                fragmentSpread += `          ... on ${linkedModelInfo.pascalName}Record { ...${linkedModelInfo.pascalName}Fragment }\n`;
+                                                                fragmentSpread += `... on ${linkedModelInfo.pascalName}Record { ...${linkedModelInfo.pascalName}Fragment }\n`;
                                                             }
                                                         });
-                                                        fragmentSpread += `        }`;
+                                                        fragmentSpread += `}`;
                                                     }
-                                                    blocksQuery += `        ${blockFieldApiKeyCamel} ${fragmentSpread}\n`;
+                                                    blocksQuery += `${blockFieldApiKeyCamel} ${fragmentSpread}\n`;
                                                 }
                                                 else {
-                                                    blocksQuery += `        ${blockFieldApiKeyCamel} { id } # Fallback: No specific linked models defined\n`;
+                                                    blocksQuery += `${blockFieldApiKeyCamel} { id } # Fallback: No specific linked models defined\n`;
                                                 }
                                                 break;
                                             }
                                             default:
-                                                blocksQuery += `        ${blockFieldApiKeyCamel}\n`;
+                                                blocksQuery += `${blockFieldApiKeyCamel}\n`;
                                         }
                                     }
-                                    blocksQuery += `      }\n`;
+                                    blocksQuery += `}\n`;
                                 }
                                 else {
                                     console.warn(`Warning: Could not find model info for block ID ${id} in structured_text field ${fieldApiKey} of model ${modelApiKey}`);
                                 }
                             }
-                            blocksQuery += `    }`;
+                            blocksQuery += `}`;
                         }
-                        fullFragmentFields += `  ${fieldApiKeyCamel} { value links ${blocksQuery} }\n`;
+                        fullFragmentFields += `${fieldApiKeyCamel} { value links ${blocksQuery} }\n`;
                         break;
                     }
                     case 'file': // Single Asset
                     case 'gallery': // Multiple Assets
-                        fullFragmentFields += `  ${fieldApiKeyCamel} { ...ImageFragment }\n`;
+                        fullFragmentFields += `${fieldApiKeyCamel} { ...ImageFragment }\n`;
                         hasAssets = true;
                         break;
                     case 'lat_lon': // Coordinates
-                        fullFragmentFields += `  ${fieldApiKeyCamel} { latitude longitude }\n`;
+                        fullFragmentFields += `${fieldApiKeyCamel} { latitude longitude }\n`;
                         break;
                     case 'link': // Single Link
                     case 'links': { // Multiple Links
@@ -291,25 +291,25 @@ export default async function generateGqlFiles() {
                                 linkedModelIds.forEach(id => {
                                     const linkedModelInfo = modelMap.get(id);
                                     if (linkedModelInfo) {
-                                        fragmentSpread += `    ... on ${linkedModelInfo.pascalName}Record { ...${linkedModelInfo.pascalName}Fragment }\n`;
+                                        fragmentSpread += `... on ${linkedModelInfo.pascalName}Record { ...${linkedModelInfo.pascalName}Fragment }\n`;
                                     }
                                     else {
                                         console.warn(`Warning: Could not find model info for ID ${id} in field ${fieldApiKey} of model ${modelApiKey}`);
                                     }
                                 });
-                                fragmentSpread += `  }`;
+                                fragmentSpread += `}`;
                             }
-                            fullFragmentFields += `  ${fieldApiKeyCamel} ${fragmentSpread}\n`;
+                            fullFragmentFields += `${fieldApiKeyCamel} ${fragmentSpread}\n`;
                         }
                         else {
                             // No specific model validation, or unable to determine linked models
                             console.warn(`Warning: Could not determine linked models for field ${fieldApiKey} in model ${modelApiKey}. Falling back to id.`);
-                            fullFragmentFields += `  ${fieldApiKeyCamel} { id } # Fallback: No specific linked models defined\n`;
+                            fullFragmentFields += `${fieldApiKeyCamel} { id } # Fallback: No specific linked models defined\n`;
                         }
                         break;
                     }
                     default: // string, text, boolean, integer, float, date, datetime, color, video, json, seo, slug etc.
-                        fullFragmentFields += `  ${fieldApiKeyCamel}\n`;
+                        fullFragmentFields += `${fieldApiKeyCamel}\n`;
                 }
                 // Light Fragment Logic
                 switch (fieldType) {
@@ -327,7 +327,7 @@ export default async function generateGqlFiles() {
                                 const blockModel = models.find(m => m.id === id);
                                 if (blockModel) {
                                     const blockFields = await client.fields.list(blockModel.id);
-                                    blocksQuery += `      ... on ${toPascalCase(blockModel.api_key)}Record {
+                                    blocksQuery += `... on ${toPascalCase(blockModel.api_key)}Record {
 `;
                                     for (const blockField of blockFields) {
                                         const blockFieldApiKeyCamel = toCamelCase(blockField.api_key);
@@ -335,10 +335,10 @@ export default async function generateGqlFiles() {
                                         switch (blockFieldType) {
                                             case 'file':
                                             case 'gallery':
-                                                blocksQuery += `        ${blockFieldApiKeyCamel} { ...ImageFragment }\n`;
+                                                blocksQuery += `${blockFieldApiKeyCamel} { ...ImageFragment }\n`;
                                                 break;
                                             case 'lat_lon':
-                                                blocksQuery += `        ${blockFieldApiKeyCamel} { latitude longitude }\n`;
+                                                blocksQuery += `${blockFieldApiKeyCamel} { latitude longitude }\n`;
                                                 break;
                                             case 'link':
                                             case 'links': {
@@ -362,40 +362,40 @@ export default async function generateGqlFiles() {
                                                         linkedModelIds.forEach(linkedId => {
                                                             const linkedModelInfo = modelMap.get(linkedId);
                                                             if (linkedModelInfo) {
-                                                                fragmentSpread += `          ... on ${linkedModelInfo.pascalName}Record { ...${linkedModelInfo.pascalName}FragmentLight }\n`;
+                                                                fragmentSpread += `... on ${linkedModelInfo.pascalName}Record { ...${linkedModelInfo.pascalName}FragmentLight }\n`;
                                                             }
                                                         });
-                                                        fragmentSpread += `        }`;
+                                                        fragmentSpread += `}`;
                                                     }
-                                                    blocksQuery += `        ${blockFieldApiKeyCamel} ${fragmentSpread}\n`;
+                                                    blocksQuery += `${blockFieldApiKeyCamel} ${fragmentSpread}\n`;
                                                 }
                                                 else {
-                                                    blocksQuery += `        ${blockFieldApiKeyCamel} { id } # Fallback: No specific linked models defined\n`;
+                                                    blocksQuery += `${blockFieldApiKeyCamel} { id } # Fallback: No specific linked models defined\n`;
                                                 }
                                                 break;
                                             }
                                             default:
-                                                blocksQuery += `        ${blockFieldApiKeyCamel}\n`;
+                                                blocksQuery += `${blockFieldApiKeyCamel}\n`;
                                         }
                                     }
-                                    blocksQuery += `      }\n`;
+                                    blocksQuery += `}\n`;
                                 }
                                 else {
                                     console.warn(`Warning: Could not find model info for block ID ${id} in structured_text field ${fieldApiKey} (light) of model ${modelApiKey}`);
                                 }
                             }
-                            blocksQuery += `    }`;
+                            blocksQuery += `}`;
                         }
-                        lightFragmentFields += `  ${fieldApiKeyCamel} { value links ${blocksQuery} }\n`;
+                        lightFragmentFields += `${fieldApiKeyCamel} { value links ${blocksQuery} }\n`;
                         break;
                     }
                     case 'file':
                     case 'gallery':
-                        lightFragmentFields += `  ${fieldApiKeyCamel} { ...ImageFragment }\n`;
+                        lightFragmentFields += `${fieldApiKeyCamel} { ...ImageFragment }\n`;
                         hasAssets = true; // Mark if assets are included in light fragment too
                         break;
                     case 'lat_lon': // Coordinates
-                        lightFragmentFields += `  ${fieldApiKeyCamel} { latitude longitude }\n`;
+                        lightFragmentFields += `${fieldApiKeyCamel} { latitude longitude }\n`;
                         break;
                     case 'link':
                     case 'links': {
@@ -424,20 +424,20 @@ export default async function generateGqlFiles() {
                                     const linkedModelInfo = modelMap.get(id);
                                     if (linkedModelInfo) {
                                         // Consider using a Light fragment if defined
-                                        fragmentSpread += `    ... on ${linkedModelInfo.pascalName}Record { ...${linkedModelInfo.pascalName}FragmentLight }\n`; // Assuming Light fragment exists
+                                        fragmentSpread += `... on ${linkedModelInfo.pascalName}Record { ...${linkedModelInfo.pascalName}FragmentLight }\n`; // Assuming Light fragment exists
                                     }
                                 });
-                                fragmentSpread += `  }`;
+                                fragmentSpread += `}`;
                             }
-                            lightFragmentFields += `  ${fieldApiKeyCamel} ${fragmentSpread}\n`;
+                            lightFragmentFields += `${fieldApiKeyCamel} ${fragmentSpread}\n`;
                         }
                         else {
-                            lightFragmentFields += `  ${fieldApiKeyCamel} { id } # Fallback: No specific linked models defined\n`;
+                            lightFragmentFields += `${fieldApiKeyCamel} { id } # Fallback: No specific linked models defined\n`;
                         }
                         break;
                     }
                     default:
-                        lightFragmentFields += `  ${fieldApiKeyCamel}\n`;
+                        lightFragmentFields += `${fieldApiKeyCamel}\n`;
                 }
             }
             // Define fragments (common for all models)
@@ -455,10 +455,10 @@ ${lightFragmentFields.trimEnd()}
             }
             // Ensure fragments are not empty (check moved slightly earlier)
             if (fullFragmentFields.trim() === '') {
-                fullFragmentFields = '  id # Placeholder if no fields\n';
+                fullFragmentFields = 'id # Placeholder if no fields\n';
             }
             if (lightFragmentFields.trim() === '') {
-                lightFragmentFields = '  id # Placeholder if no fields\n';
+                lightFragmentFields = 'id # Placeholder if no fields\n';
             }
             // --- Logic specific to modular blocks vs regular models ---
             if (model.modular_block) {
@@ -487,9 +487,9 @@ ${lightFragmentFields.trimEnd()}
                 const queryFilter = useSlugFilter ? '(filter:{slug: {eq: $slug}})' : '';
                 // Define the query for a single item
                 const singleQuery = `query ${modelNamePascal}${queryParams} {
-  ${modelApiKeyCamel}${queryFilter} {
-    ... ${modelNamePascal}Fragment
-  }
+${modelApiKeyCamel}${queryFilter} {
+... ${modelNamePascal}Fragment
+}
 }`;
                 // Define the query for all items only if it's not a singleton model
                 let allQuery = '';
@@ -498,12 +498,12 @@ ${lightFragmentFields.trimEnd()}
                     // Fallback to simple 's' logic if collection_appearance is missing
                     allQuery = `
 query All${modelNamePluralPascal}($first: IntType = 500, $skip: IntType = 0) {
-  all${modelNamePluralPascal}(first: $first, skip: $skip) {
-    ... ${modelNamePascal}FragmentLight
-  }
-  _all${modelNamePluralPascal}Meta {
-    count
-  }
+all${modelNamePluralPascal}(first: $first, skip: $skip) {
+... ${modelNamePascal}FragmentLight
+}
+_all${modelNamePluralPascal}Meta {
+count
+}
 }`;
                 }
                 // Combine all parts for the regular model query file
