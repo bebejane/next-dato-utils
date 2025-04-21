@@ -4,9 +4,6 @@ import * as path from 'path';
 import 'dotenv/config';
 import * as prettier from 'prettier';
 import pluralize from 'pluralize';
-import * as url from 'url';
-
-
 
 // Helper functions
 function toCamelCase(str: string): string {
@@ -42,8 +39,7 @@ if (!DATOCMS_API_TOKEN) {
 }
 
 const client = buildClient({ apiToken: DATOCMS_API_TOKEN });
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
-const gqlDir = path.join(__dirname, 'gql');
+const gqlDir = path.join(process.cwd(), 'gql');
 const fragmentsDir = path.join(gqlDir, 'fragments');
 
 const imageFragmentContent = `fragment ImageFragment on FileFieldInterface {
