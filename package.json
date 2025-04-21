@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.618",
+	"version": "1.0.619",
 	"description": "",
 	"type": "module",
 	"scripts": {
@@ -49,7 +49,7 @@
 		}
 	},
 	"bin": {
-		"nextdato": ".///cli/index.js"
+		"nextdato": "./cli/index.js"
 	},
 	"engines": {
 		"node": ">=0.18"
