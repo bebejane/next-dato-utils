@@ -4,6 +4,7 @@ import { Command } from 'commander';
 import { buildClient } from '@datocms/cma-client-node';
 import dedent from 'dedent-js';
 import { table } from 'table';
+import generateGqlFiles from './generate-gql.js';
 import prettyBytes from 'pretty-bytes';
 const version = '1.0.0';
 const program = new Command();
@@ -12,6 +13,7 @@ program
     .description(`next-dato-utils v${version}`)
     .option("-i, --info", "Info DatoCMS project")
     .option("-u, --usage", "Usage DatoCMS project")
+    .option("-g, --gql", "Generate GQL")
     .option("-to, --token <value>", "Api token")
     .option("-t, --test <value>", "Test DatoCMS project")
     .parse(process.argv);
@@ -27,6 +29,8 @@ if (options.info)
     info();
 if (options.usage)
     usage();
+if (options.gql)
+    generateGqlFiles();
 async function info() {
     const [site, itemTypes, webhooks, plugins, buildTriggers] = await Promise.all([
         client.site.find(),

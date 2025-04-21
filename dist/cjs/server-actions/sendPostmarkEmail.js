@@ -1,6 +1,7 @@
 "use strict";
 'use server';
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = sendPostmarkEmailServerAction;
 const postmark_js_1 = require("../utils/postmark.js");
 async function sendPostmarkEmailServerAction(prevState, formData) {
     try {
@@ -19,5 +20,4 @@ async function sendPostmarkEmailServerAction(prevState, formData) {
         return { success: false, error: error instanceof Error ? error.message : error };
     }
 }
-exports.default = sendPostmarkEmailServerAction;
 //# sourceMappingURL=sendPostmarkEmail.js.map

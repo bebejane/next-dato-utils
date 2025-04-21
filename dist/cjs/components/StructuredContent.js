@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = StructuredContent;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const react_datocms_1 = require("react-datocms");
 const datocms_structured_text_utils_1 = require("datocms-structured-text-utils");
@@ -97,5 +98,4 @@ function StructuredContent({ content, className, blocks, styles }) {
             }),
         ] }));
 }
-exports.default = StructuredContent;
 //# sourceMappingURL=StructuredContent.js.map

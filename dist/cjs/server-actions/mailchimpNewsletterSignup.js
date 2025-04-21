@@ -1,6 +1,7 @@
 "use strict";
 'use server';
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = mailchimpNewsletterSignup;
 const zod_1 = require("zod");
 async function mailchimpNewsletterSignup(prevState, formData) {
     try {
@@ -42,5 +43,4 @@ async function mailchimpNewsletterSignup(prevState, formData) {
         return { error: e instanceof Error ? e.message : e, success: false };
     }
 }
-exports.default = mailchimpNewsletterSignup;
 //# sourceMappingURL=mailchimpNewsletterSignup.js.map

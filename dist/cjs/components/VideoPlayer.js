@@ -1,6 +1,7 @@
 "use strict";
 'use client';
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = VideoPlayer;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const react_1 = require("react");
 function VideoPlayer({ data, className, loop = true, muted = true, autoPlay = true }) {
@@ -47,7 +48,6 @@ function VideoPlayer({ data, className, loop = true, muted = true, autoPlay = tr
     }, [showPoster, videoRef]);
     return ((0, jsx_runtime_1.jsx)("video", { ref: videoRef, src: quality ? data.video[`mp4${quality}`] : data.video.streamingUrl, className: className, muted: muted, loop: loop, autoPlay: autoPlay, playsInline: true, disablePictureInPicture: true, poster: showPoster ? `${data.video?.thumbnailUrl}?time=0` : undefined }));
 }
-exports.default = VideoPlayer;
 const videoHasAudio = (video) => {
     if (!video)
         return false;

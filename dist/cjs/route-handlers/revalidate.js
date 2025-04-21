@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = revalidate;
 const cache_js_1 = require("next/cache.js");
 //import basicAuth from "./basic-auth";
 async function revalidate(req, callback) {
@@ -31,7 +32,6 @@ async function revalidate(req, callback) {
         }
     });
 }
-exports.default = revalidate;
 const parseDelay = (entity) => {
     const updated_at = entity.meta?.updated_at ?? entity.attributes?.updated_at ?? null;
     const published_at = entity.meta?.published_at ?? entity.attributes?.published_at ?? null;

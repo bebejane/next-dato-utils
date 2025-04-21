@@ -5,7 +5,8 @@
  * web APIs. Feel free to use it in your own projects.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.initCors = void 0;
+exports.default = cors;
+exports.initCors = initCors;
 const defaultOptions = {
     origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -107,9 +108,7 @@ async function cors(req, res, options) {
     // If we got here, it's a normal request
     return res;
 }
-exports.default = cors;
 function initCors(options) {
     return (req, res) => cors(req, res, options);
 }
-exports.initCors = initCors;
 //# sourceMappingURL=cors.js.map

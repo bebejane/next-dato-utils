@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = webPreviews;
 async function webPreviews(req, generatePreviewUrl) {
     if (!process.env.NEXT_PUBLIC_SITE_URL && !process.env.SITE_URL)
         throw new Error('NEXT_PUBLIC_SITE_URL is not set in .env');
@@ -26,5 +27,4 @@ async function webPreviews(req, generatePreviewUrl) {
         headers: { 'Content-Type': 'application/json' },
     });
 }
-exports.default = webPreviews;
 //# sourceMappingURL=web-previews.js.map

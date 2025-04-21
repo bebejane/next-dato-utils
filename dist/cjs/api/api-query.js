@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = apiQuery;
 const headers_js_1 = require("next/headers.js");
 const printer_js_1 = require("graphql/language/printer.js");
 const object_traversal_1 = require("object-traversal");
@@ -49,7 +50,6 @@ async function apiQuery(query, options) {
     }
     return { ...data, draftUrl: res.url ?? null };
 }
-exports.default = apiQuery;
 const paginatedQuery = async (query, options, data, queryId) => {
     try {
         if (typeof data !== 'object' || data === null || data === undefined)

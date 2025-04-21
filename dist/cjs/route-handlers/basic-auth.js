@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = basicAuth;
 async function basicAuth(req, callback, options) {
     if (req.method === 'OPTIONS' || process.env.NODE_ENV === 'development')
         return callback ? await callback(req) : new Response('OK', { status: 200 });
@@ -17,5 +18,4 @@ async function basicAuth(req, callback, options) {
         return await callback(req);
     return new Response('OK', { status: 200 });
 }
-exports.default = basicAuth;
 //# sourceMappingURL=basic-auth.js.map

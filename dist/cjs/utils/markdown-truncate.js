@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = default_1;
 function default_1(text = '', options = { limit: 1, ellipsis: false }) {
     const { limit, ellipsis } = options || {};
     if (text.length <= limit) {
@@ -10,7 +11,6 @@ function default_1(text = '', options = { limit: 1, ellipsis: false }) {
     outputText = replaceFormatPlaceholdersWithMarkers(outputText);
     return outputText;
 }
-exports.default = default_1;
 ;
 const ASTERISK_ITALIC = '*';
 const UNDERSCORE_ITALIC = '_';

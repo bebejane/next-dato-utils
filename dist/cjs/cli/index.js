@@ -9,6 +9,7 @@ const commander_1 = require("commander");
 const cma_client_node_1 = require("@datocms/cma-client-node");
 const dedent_js_1 = __importDefault(require("dedent-js"));
 const table_1 = require("table");
+const generate_gql_js_1 = __importDefault(require("./generate-gql.js"));
 const pretty_bytes_1 = __importDefault(require("pretty-bytes"));
 const version = '1.0.0';
 const program = new commander_1.Command();
@@ -17,6 +18,7 @@ program
     .description(`next-dato-utils v${version}`)
     .option("-i, --info", "Info DatoCMS project")
     .option("-u, --usage", "Usage DatoCMS project")
+    .option("-g, --gql", "Generate GQL")
     .option("-to, --token <value>", "Api token")
     .option("-t, --test <value>", "Test DatoCMS project")
     .parse(process.argv);
@@ -32,6 +34,8 @@ if (options.info)
     info();
 if (options.usage)
     usage();
+if (options.gql)
+    (0, generate_gql_js_1.default)();
 async function info() {
     const [site, itemTypes, webhooks, plugins, buildTriggers] = await Promise.all([
         client.site.find(),

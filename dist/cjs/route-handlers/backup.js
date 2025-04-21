@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = backup;
 const vercel_cron_auth_js_1 = __importDefault(require("./vercel-cron-auth.js"));
 const cma_client_browser_1 = require("@datocms/cma-client-browser");
 async function backup(req) {
@@ -45,5 +46,4 @@ async function backup(req) {
         }
     });
 }
-exports.default = backup;
 //# sourceMappingURL=backup.js.map

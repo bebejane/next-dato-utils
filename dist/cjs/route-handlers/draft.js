@@ -1,6 +1,7 @@
 "use strict";
 'use server';
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = draft;
 const headers_js_1 = require("next/headers.js");
 const navigation_js_1 = require("next/navigation.js");
 const headers_js_2 = require("next/headers.js");
@@ -36,5 +37,4 @@ async function draft(request) {
     else
         return new Response('OK', { status: 200 });
 }
-exports.default = draft;
 //# sourceMappingURL=draft.js.map

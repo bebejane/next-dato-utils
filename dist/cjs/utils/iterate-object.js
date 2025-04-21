@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = iterateObject;
 function iterateObject(obj, fn) {
     let i = 0, keys = [];
     if (Array.isArray(obj)) {
@@ -16,5 +17,4 @@ function iterateObject(obj, fn) {
         }
     }
 }
-exports.default = iterateObject;
 //# sourceMappingURL=iterate-object.js.map

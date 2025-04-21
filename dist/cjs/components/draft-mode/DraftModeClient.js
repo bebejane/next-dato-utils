@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = DraftMode;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const DraftModeClient_module_scss_1 = __importDefault(require("./DraftModeClient.module.scss"));
 const navigation_js_1 = require("next/navigation.js");
@@ -63,5 +64,4 @@ function DraftMode({ enabled, draftUrl, tag, path, actions }) {
         return null;
     return ((0, jsx_runtime_1.jsxs)("div", { className: DraftModeClient_module_scss_1.default.draftMode, children: [(0, jsx_runtime_1.jsxs)("div", { className: DraftModeClient_module_scss_1.default.label, children: [(0, jsx_runtime_1.jsx)("img", { className: loading ? DraftModeClient_module_scss_1.default.loading : undefined, width: "20", height: "20" }), (0, jsx_runtime_1.jsx)("div", { children: "Draft mode" })] }), (0, jsx_runtime_1.jsx)("div", { className: DraftModeClient_module_scss_1.default.button, children: (0, jsx_runtime_1.jsx)("button", { onClick: () => startTransition(() => actions.disableDraftMode(pathname)), children: "Exit" }) })] }));
 }
-exports.default = DraftMode;
 //# sourceMappingURL=DraftModeClient.js.map

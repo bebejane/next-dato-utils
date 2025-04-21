@@ -1,6 +1,7 @@
 "use strict";
 'use server';
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = campaignMonitorNewsletterSignup;
 const zod_1 = require("zod");
 async function campaignMonitorNewsletterSignup(prevState, formData) {
     try {
@@ -40,5 +41,4 @@ async function campaignMonitorNewsletterSignup(prevState, formData) {
         return { success: false, error: error instanceof Error ? error.message : error };
     }
 }
-exports.default = campaignMonitorNewsletterSignup;
 //# sourceMappingURL=campaignMonitorNewsletterSignup.js.map

@@ -1,6 +1,7 @@
 "use strict";
 'use client';
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = useScrollInfo;
 const react_1 = require("react");
 function useScrollInfo(pageBottomLimit = 0) {
     const isServer = typeof window === 'undefined';
@@ -58,5 +59,4 @@ function useScrollInfo(pageBottomLimit = 0) {
     }, [handleScroll]);
     return scrollInfo;
 }
-exports.default = useScrollInfo;
 //# sourceMappingURL=useScrollInfo.js.map

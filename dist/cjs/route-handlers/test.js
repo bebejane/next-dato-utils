@@ -3,7 +3,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.testResultsToHtml = exports.testResultsToString = exports.testApiEndpoints = void 0;
+exports.testResultsToHtml = exports.testResultsToString = void 0;
+exports.testApiEndpoints = testApiEndpoints;
 const basic_auth_js_1 = __importDefault(require("./basic-auth.js"));
 const cma_client_browser_1 = require("@datocms/cma-client-browser");
 const tests = async (req) => {
@@ -42,7 +43,6 @@ async function testApiEndpoints() {
     }));
     return results.sort((a, b) => a.model > b.model ? 1 : -1);
 }
-exports.testApiEndpoints = testApiEndpoints;
 const testResultsToString = (results) => {
     const tests = results.map(r => {
         return `${r.model} - Previews: ${r.previews ? 'YES' : 'NO'} / Revalidate: ${r.revalidate ? 'YES' : 'NO'}`;

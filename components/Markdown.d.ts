@@ -1,4 +1,3 @@
-/// <reference types="node" resolution-mode="require"/>
 import { Components } from 'react-markdown';
 import type { UrlObject } from 'url';
 export type MarkdownProps = {

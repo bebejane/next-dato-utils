@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Block;
 const jsx_runtime_1 = require("react/jsx-runtime");
 function Block({ data, onClick, components, className }) {
     const type = data.__typename?.replace('Record', '');
@@ -8,5 +9,4 @@ function Block({ data, onClick, components, className }) {
         return (0, jsx_runtime_1.jsxs)("div", { children: ["No block match: ", data.__typename] });
     return (0, jsx_runtime_1.jsx)(BlockComponent, { data: data, onClick: onClick, className: className });
 }
-exports.default = Block;
 //# sourceMappingURL=Block.js.map

@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = Markdown;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const react_markdown_1 = __importDefault(require("react-markdown"));
 const remark_gfm_1 = __importDefault(require("remark-gfm"));
@@ -24,5 +25,4 @@ function Markdown({ content, truncate, className, components, sentances = 1, all
             a: ({ children, href }) => (0, jsx_runtime_1.jsx)(link_js_1.default, { scroll: scroll, href: href, children: children })
         } }));
 }
-exports.default = Markdown;
 //# sourceMappingURL=Markdown.js.map
