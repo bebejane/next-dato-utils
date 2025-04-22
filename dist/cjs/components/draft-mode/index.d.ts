@@ -3,4 +3,4 @@ export type Props = {
     tag?: string | string[] | undefined | null;
     path?: string | string[] | undefined | null;
 };
-export default function DraftMode({ url, tag, path }: Props): Promise<import("react/jsx-runtime.js").JSX.Element | null>;
+export default function DraftMode({ url, tag, path }: Props): Promise<import("react/jsx-runtime").JSX.Element | null>;

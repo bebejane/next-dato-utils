@@ -15,4 +15,4 @@ export type AnchorProp = {
     children: any[];
     href: UrlObject;
 };
-export default function Markdown({ content, truncate, className, components, sentances, allowedElements, scroll, disableBreaks }: MarkdownProps): import("react/jsx-runtime.js").JSX.Element;
+export default function Markdown({ content, truncate, className, components, sentances, allowedElements, scroll, disableBreaks }: MarkdownProps): import("react/jsx-runtime").JSX.Element;

@@ -1,19 +1,18 @@
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
 import { useEffect, useState, useRef } from 'react';
-export default function VideoPlayer({ data, className, loop = true, muted = true, autoPlay = true, }) {
+export default function VideoPlayer({ data, className, loop = true, muted = true, autoPlay = true }) {
     if (!data?.video)
         return null;
     const [inView, setInView] = useState(false);
     const [hasAudio, setHasAudio] = useState(false);
     const videoRef = useRef(null);
     const posterRef = useRef(null);
+    const muteRef = useRef(null);
     const [active, setActive] = useState(false);
     const [showPoster, setShowPoster] = useState(false);
     const [quality, setQuality] = useState('high');
-    useEffect(() => {
-        setActive(inView);
-    }, [inView]);
+    useEffect(() => { setActive(inView); }, [inView]);
     useEffect(() => {
         if (!videoRef.current)
             return;
@@ -26,9 +25,7 @@ export default function VideoPlayer({ data, className, loop = true, muted = true
         if (!videoRef.current)
             return;
         const loadedData = () => setHasAudio(videoHasAudio(videoRef.current));
-        const canPlay = () => {
-            setShowPoster(false);
-        };
+        const canPlay = () => { setShowPoster(false); };
         videoRef.current.addEventListener('loadeddata', loadedData);
         videoRef.current.addEventListener('canplay', canPlay);
         // Check if video is in view
