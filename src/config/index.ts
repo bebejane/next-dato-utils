@@ -24,9 +24,10 @@ export type DatoCmsConfig = {
 
 export const getDatoCmsConfig = async (): Promise<DatoCmsConfig> => {
   const file = process.env.NODE_ENV === 'development' ? 'datocms.config.ts' : 'datocms.config.js'
-  const path = '../../../' + file
-  console.log(path, process.env.NODE_ENV, process.cwd())
-  const config = (await import(path)).default;
+  const path = process.env.NODE_ENV === 'development' ? '../../..' : process.cwd()
+  const filePath = `${path}/${file}`
+  console.log(filePath, process.env.NODE_ENV)
+  const config = (await import(filePath)).default;
   return config
 }
 
