@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.635",
+	"version": "1.0.636",
 	"description": "",
 	"type": "module",
 	"scripts": {
@@ -65,6 +65,7 @@
 		"@types/is-integer": "^1.0.2",
 		"commander": "^11.1.0",
 		"cosmiconfig": "^9.0.0",
+		"cosmiconfig-typescript-loader": "^6.1.0",
 		"datocms-listen": "^0.1.15",
 		"dedent-js": "^1.0.1",
 		"dotenv": "^16.4.4",
