@@ -32,13 +32,14 @@ export const getDatoCmsConfig = async (): Promise<DatoCmsConfig> => {
       '.ts': TypeScriptLoader(),
     },
   });
-  const result = await explorer.search();
+  const res = await explorer.load("./datocms.config.ts");
+  //const result = await explorer.search();
 
-  if (!result || result.isEmpty) {
+  if (!res?.config) {
     throw new Error('No datocms.config.ts found or it is empty.');
   }
   // The config object is nested under the 'config' property
-  return result.config as DatoCmsConfig;
+  return res.config as DatoCmsConfig;
 }
 
 export const getRoute = async (record: any, locale?: string): Promise<string[] | null> => {
