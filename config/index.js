@@ -1,5 +1,14 @@
 import { backup, revalidate, test, webPreviews, draft } from '../route-handlers/index.js';
+import { cosmiconfig } from 'cosmiconfig';
 export const getDatoCmsConfig = async () => {
+    const explorer = cosmiconfig('datocms');
+    const res = await explorer.search();
+    console.log(res);
+    if (!res?.config)
+        throw new Error('No datocms config found');
+    return res?.config;
+};
+export const getDatoCmsConfig2 = async () => {
     const file = process.env.NODE_ENV === 'development' ? 'datocms.config.ts' : 'datocms.config.ts';
     const path = process.env.NODE_ENV === 'development' ? '../../..' : process.cwd();
     const filePath = `../../../${file}`; //`${path}/${file}`;

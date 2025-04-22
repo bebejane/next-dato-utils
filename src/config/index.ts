@@ -1,5 +1,7 @@
 import { MetadataRoute } from 'next';
 import { backup, revalidate, test, webPreviews, draft } from '../route-handlers/index.js';
+import { cosmiconfig, cosmiconfigSync } from 'cosmiconfig'
+
 
 export type DatoCmsConfig = {
   name: string
@@ -22,7 +24,15 @@ export type DatoCmsConfig = {
   sitemap?: () => Promise<MetadataRoute.Sitemap>
 }
 
+
 export const getDatoCmsConfig = async (): Promise<DatoCmsConfig> => {
+  const explorer = cosmiconfig('datocms')
+  const res = await explorer.search()
+  console.log(res)
+  if (!res?.config) throw new Error('No datocms config found')
+  return res?.config as DatoCmsConfig
+}
+export const getDatoCmsConfig2 = async (): Promise<DatoCmsConfig> => {
   const file = process.env.NODE_ENV === 'development' ? 'datocms.config.ts' : 'datocms.config.ts'
   const path = process.env.NODE_ENV === 'development' ? '../../..' : process.cwd()
   const filePath = `../../../${file}` //`${path}/${file}`;
