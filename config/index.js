@@ -1,20 +1,19 @@
 import { backup, revalidate, test, webPreviews, draft } from '../route-handlers/index.js';
 import { cosmiconfig } from 'cosmiconfig';
+import { TypeScriptLoader } from 'cosmiconfig-typescript-loader';
 export const getDatoCmsConfig = async () => {
-    const explorer = cosmiconfig('datocms');
-    const res = await explorer.search();
-    console.log(res);
-    if (!res?.config)
-        throw new Error('No datocms config found');
-    return res?.config;
-};
-export const getDatoCmsConfig2 = async () => {
-    const file = process.env.NODE_ENV === 'development' ? 'datocms.config.ts' : 'datocms.config.ts';
-    const path = process.env.NODE_ENV === 'development' ? '../../..' : process.cwd();
-    const filePath = `../../../${file}`; //`${path}/${file}`;
-    console.log(filePath, process.env.NODE_ENV);
-    const config = (await import(filePath)).default;
-    return config;
+    const explorer = cosmiconfig('datocms', {
+        searchPlaces: ['datocms.config.ts'], // Explicitly search for the TS file
+        loaders: {
+            '.ts': TypeScriptLoader(),
+        },
+    });
+    const result = await explorer.search();
+    if (!result || result.isEmpty) {
+        throw new Error('No datocms.config.ts found or it is empty.');
+    }
+    // The config object is nested under the 'config' property
+    return result.config;
 };
 export const getRoute = async (record, locale) => {
     const config = await getDatoCmsConfig();

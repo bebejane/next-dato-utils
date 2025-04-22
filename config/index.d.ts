@@ -20,7 +20,6 @@ export type DatoCmsConfig = {
     sitemap?: () => Promise<MetadataRoute.Sitemap>;
 };
 export declare const getDatoCmsConfig: () => Promise<DatoCmsConfig>;
-export declare const getDatoCmsConfig2: () => Promise<DatoCmsConfig>;
 export declare const getRoute: (record: any, locale?: string) => Promise<string[] | null>;
 export declare const datoCmsRouteHandler: (req: Request, { params }: {
     params: Promise<{

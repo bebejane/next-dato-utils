@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
 import { backup, revalidate, test, webPreviews, draft } from '../route-handlers/index.js';
-import { cosmiconfig, cosmiconfigSync } from 'cosmiconfig'
+import { cosmiconfig } from 'cosmiconfig';
+import { TypeScriptLoader } from 'cosmiconfig-typescript-loader';
 
 
 export type DatoCmsConfig = {
@@ -24,21 +25,20 @@ export type DatoCmsConfig = {
   sitemap?: () => Promise<MetadataRoute.Sitemap>
 }
 
-
 export const getDatoCmsConfig = async (): Promise<DatoCmsConfig> => {
-  const explorer = cosmiconfig('datocms')
-  const res = await explorer.search()
-  console.log(res)
-  if (!res?.config) throw new Error('No datocms config found')
-  return res?.config as DatoCmsConfig
-}
-export const getDatoCmsConfig2 = async (): Promise<DatoCmsConfig> => {
-  const file = process.env.NODE_ENV === 'development' ? 'datocms.config.ts' : 'datocms.config.ts'
-  const path = process.env.NODE_ENV === 'development' ? '../../..' : process.cwd()
-  const filePath = `../../../${file}` //`${path}/${file}`;
-  console.log(filePath, process.env.NODE_ENV);
-  const config = (await import(filePath)).default;
-  return config
+  const explorer = cosmiconfig('datocms', {
+    searchPlaces: ['datocms.config.ts'], // Explicitly search for the TS file
+    loaders: {
+      '.ts': TypeScriptLoader(),
+    },
+  });
+  const result = await explorer.search();
+
+  if (!result || result.isEmpty) {
+    throw new Error('No datocms.config.ts found or it is empty.');
+  }
+  // The config object is nested under the 'config' property
+  return result.config as DatoCmsConfig;
 }
 
 export const getRoute = async (record: any, locale?: string): Promise<string[] | null> => {
@@ -82,5 +82,3 @@ export const datoCmsRouteHandler = async (req: Request, { params }: { params: Pr
   if (!handler) throw new Error(`No handler found for ${slug}`)
   return handler()
 }
-
-
