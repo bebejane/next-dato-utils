@@ -1,6 +1,6 @@
 {
   "name": "next-dato-utils",
-  "version": "1.0.627",
+  "version": "1.0.628",
   "description": "",
   "type": "module",
   "scripts": {
@@ -74,15 +74,15 @@
     "table": "^6.8.1"
   },
   "devDependencies": {
-    "@datocms/cma-client": "4.0.1",
-    "@datocms/cma-client-browser": "^4.0.1",
-    "@datocms/cma-client-node": "^4.0.1",
+    "@datocms/cma-client": "3.4.5",
+    "@datocms/cma-client-browser": "^3.4.5",
+    "@datocms/cma-client-node": "^3.4.5",
     "@types/node": "^20.11.19",
     "@types/pluralize": "^0.0.33",
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
     "copyfiles": "^2.4.1",
-    "datocms-structured-text-utils": "^4.1.2",
+    "datocms-structured-text-utils": "^5.0.0",
     "graphql": "^16.8.1",
     "next": "15.3.0",
     "nodemon": "^3.0.3",
