@@ -1,9 +1,18 @@
-import fs from "fs";
+import fs from 'fs';
 
-const packages = ["api", "components", "hooks", "route-handlers", "server-actions", "utils", "cli"];
+const packages = [
+	'api',
+	'components',
+	'hooks',
+	'route-handlers',
+	'server-actions',
+	'utils',
+	'cli',
+	'config',
+];
 
 export default function clean() {
-	console.log("Cleaning up...");
+	console.log('Cleaning up...');
 	for (const pkg of packages) {
 		if (fs.existsSync(`./${pkg}`)) fs.rmSync(`./${pkg}`, { recursive: true });
 	}
