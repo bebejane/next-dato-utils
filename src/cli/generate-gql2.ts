@@ -1,4 +1,4 @@
-import { buildClient } from '@datocms/cma-client';
+import { buildClient, Client } from '@datocms/cma-client';
 import * as fs from 'fs';
 import * as path from 'path';
 import 'dotenv/config';
@@ -6,19 +6,9 @@ import * as prettier from 'prettier';
 import pluralize from 'pluralize';
 import { ItemType, Field } from '@datocms/cma-client/dist/types/generated/SimpleSchemaTypes.js';
 
-// Define interfaces for richText validators to satisfy TypeScript
-interface ItemItemTypeValidator {
-	item_types: string[];
-}
+let client: Client;
 
-// Define interface for structured text block validator
-interface StructuredTextBlockValidator {
-	item_types: string[];
-}
 interface BlockValidator {
-	item_types: string[];
-}
-interface ItemsItemTypeValidator {
 	item_types: string[];
 }
 
@@ -34,30 +24,7 @@ function toPascalCase(str: string): string {
 	return camel.charAt(0).toUpperCase() + camel.slice(1);
 }
 
-// Define interfaces for richText validators to satisfy TypeScript
-interface ItemItemTypeValidator {
-	item_types: string[];
-}
 
-// Define interface for structured text block validator
-interface StructuredTextBlockValidator {
-	item_types: string[];
-}
-interface ItemsItemTypeValidator {
-	item_types: string[];
-}
-
-
-const DATOCMS_API_TOKEN = process.env.DATOCMS_API_TOKEN;
-
-if (!DATOCMS_API_TOKEN) {
-	console.error('DATOCMS_API_TOKEN environment variable is not set.');
-	process.exit(1);
-}
-
-const client = buildClient({ apiToken: DATOCMS_API_TOKEN });
-const gqlDir = path.join(process.cwd(), 'gql');
-const fragmentsDir = path.join(gqlDir, 'fragments');
 
 const imageFragmentContent = `fragment ImageFragment on FileFieldInterface {
 	id
@@ -160,6 +127,29 @@ const mediaFragmentContent = `fragment MediaFragment on FileField {
 	}
 }`;
 
+const videoFragmentContent = `fragment VideoFragment on VideoFileField {
+	id
+	alt
+	basename
+	format
+	mimeType
+	size
+	title
+	url
+	width
+	height
+	video {
+		thumbnailUrl
+		streamingUrl
+		mp4Url(res: high)
+		mp4high: mp4Url(res: high)
+		mp4med: mp4Url(res: medium)
+		mp4low: mp4Url(res: low)
+		framerate
+		duration
+	}
+}`
+
 const siteFragmentContent = `fragment SiteFragment on Site {
 	faviconMetaTags {
 		attributes
@@ -193,13 +183,24 @@ const videoFieldFragmentContent = `fragment VideoFieldFragment on VideoField {
 	url
 }`;
 
-const fragments = [imageFragmentContent, fileFragmentContent, videoFieldFragmentContent, imageThumbnailFragmentContent, mediaFragmentContent, siteFragmentContent]
+const fragments = [imageFragmentContent, fileFragmentContent, videoFieldFragmentContent, imageThumbnailFragmentContent, mediaFragmentContent, siteFragmentContent, videoFragmentContent]
 
 const modelMap = new Map<string, { apiKey: string; apiKeyPlural: string; pascalName: string; pascalNamePlural: string; camelName: string; camelNamePlural: string, singleton: boolean }>();
 let itemTypes: ItemType[] = []
 let models: ItemType[] = []
 
 export default async function generateGqlFiles() {
+	const DATOCMS_API_TOKEN = process.env.DATOCMS_API_TOKEN;
+
+	if (!DATOCMS_API_TOKEN) {
+		console.error('DATOCMS_API_TOKEN environment variable is not set.');
+		process.exit(1);
+	}
+
+	client = buildClient({ apiToken: DATOCMS_API_TOKEN });
+	const gqlDir = path.join(process.cwd(), 'gql');
+	const fragmentsDir = path.join(gqlDir, 'fragments');
+
 
 	try {
 		// Create directories if they don't exist
@@ -218,9 +219,6 @@ export default async function generateGqlFiles() {
 		models = await client.itemTypes.list();
 		itemTypes = await client.itemTypes.list()
 
-
-
-
 		// Create a map of model IDs to their API keys and PascalCase names for easy lookup
 		models.forEach(m => modelMap.set(m.id, {
 			apiKey: m.api_key,
@@ -232,19 +230,15 @@ export default async function generateGqlFiles() {
 			singleton: m.has_singleton_item
 		}));
 
-
 		for (const { modular_block, api_key, id, has_singleton_item } of models) {
 			if (modular_block) {
-				console.log('skipping modular block', api_key)
 				continue
 			}
-
 			// Fetch fields for the current model
 			const m = modelMap.get(id);
 			if (!m) continue
 
 			const filename = path.join(gqlDir, `${api_key}.gql`);
-
 			const fields = await client.fields.list(id);
 			const queryFields = await Promise.all(fields.map(field => generateField(id, field)))
 			const haveSlug = fields.some(field => field.api_key === 'slug') && !m.singleton;
@@ -283,77 +277,53 @@ export default async function generateGqlFiles() {
 				console.error('Error writing file', filename, error);
 			}
 		}
-
-
-
 	} catch (error) {
 		console.error('Error generating GraphQL files:', error);
 	}
 }
 
 async function generateField(modelId: string, field: Field): Promise<string> {
-	const m = modelMap.get(modelId);
 	const fieldType = field.field_type;
 	const apiKeyCamel = toCamelCase(field.api_key);
 	let str: string = ''
-
 	switch (fieldType) {
 		case 'structured_text':
-			let blocksStr = ''
-			const blocks = field.validators.structured_text_blocks as StructuredTextBlockValidator;
-
-			if (blocks && blocks?.item_types?.length > 0) {
-				const blockModelIds = blocks.item_types;
-				const blockFields: { api_key?: string, fields: Field[] }[] = []
-				for (const id of blockModelIds) {
-					blockFields.push({
-						api_key: itemTypes.find(t => t.id === id)?.api_key,
-						fields: await client.fields.list(id)
-					})
-				}
-
-				const blockQueries = await Promise.all(blockFields.map(async ({ api_key, fields }, idx) => {
-					return (await Promise.all(fields.map(field => generateField(blockModelIds[idx], field)))).join(' ')
-				}))
-
-				blocksStr = `{ 
-					${blockQueries.map((q, idx) => blockFields[idx]?.api_key ?
-					`... on ${toPascalCase(blockFields[idx]?.api_key)}Record { ${q} }` : ''
-				).join('\n')}}`;
-			}
-			str = `${apiKeyCamel} { value links blocks${blocksStr}}`;
+			const structuredTextBlocks = (field.validators.structured_text_blocks as BlockValidator)?.item_types;
+			const structuredTextGql = await generateBlocks(structuredTextBlocks)
+			if (structuredTextGql !== null)
+				str = `${apiKeyCamel} { value links blocks { ${structuredTextGql} } }`;
 			break;
 		case 'rich_text':
 
-			let richText = ''
-			const richTextBlocks = field.validators.rich_text_blocks as StructuredTextBlockValidator;
+			const richTextBlocks = (field.validators.rich_text_blocks as BlockValidator)?.item_types;
+			const richTextGql = await generateBlocks(richTextBlocks)
+			if (richTextGql !== null)
+				str = `${apiKeyCamel} { ${richTextGql} }`;
+			break;
+		case 'link': case 'links':
 
-			if (richTextBlocks && richTextBlocks?.item_types?.length > 0) {
-				const richTextModelIds = richTextBlocks.item_types;
-				const richTextFields: { api_key?: string, fields: Field[] }[] = []
-				for (const id of richTextModelIds) {
-					richTextFields.push({
-						api_key: itemTypes.find(t => t.id === id)?.api_key,
-						fields: await client.fields.list(id)
-					})
-				}
+			const linkBlocks = (field.validators.item_item_type as BlockValidator)?.item_types ?? (field.validators.item_item_types as BlockValidator)?.item_types;
+			const linkGql = await generateBlocks(linkBlocks)
+			if (linkGql !== null)
+				str = `${apiKeyCamel} { ${linkGql} }`;
+			break;
+		case 'single_block':
 
-				const richTextQueries = await Promise.all(richTextFields.map(async ({ api_key, fields }, idx) => {
-					return (await Promise.all(fields.map(field => generateField(richTextModelIds[idx], field)))).join(' ')
-				}))
-
-				richText = `${richTextQueries.map((q, idx) => richTextFields[idx].api_key ?
-					`... on ${toPascalCase(richTextFields[idx].api_key)}Record { ${q} }` : ''
-				).join('\n')}`;
-			}
-			str = `${apiKeyCamel} { ${richText} }`;
-
+			const singleBlockBlocks = (field.validators.single_block_blocks as BlockValidator)?.item_types;
+			const singleBlockGql = await generateBlocks(singleBlockBlocks)
+			if (singleBlockGql !== null)
+				str = `${apiKeyCamel} { ${singleBlockGql} }`;
 			break;
 		case 'file':
+			//@ts-ignore
+			const isVideoField = field.validators?.extension?.predefined_list === 'video'
+
 			if (field.api_key.includes('image') || field.api_key.includes('logo')) {
 				str = `${apiKeyCamel} { ...ImageFragment }`;
 			} else if (field.api_key.includes('media')) {
 				str = `${apiKeyCamel} { ...MediaFragment }`;
+			} else if (isVideoField) {
+				str = `${apiKeyCamel} { ...VideoFragment }`;
 			} else
 				str = `${apiKeyCamel} { ...FileFragment }`;
 			break;
@@ -362,29 +332,6 @@ async function generateField(modelId: string, field: Field): Promise<string> {
 			break;
 		case 'video':
 			str = `${apiKeyCamel} { ...VideoFieldFragment }`;
-			break;
-		case 'link': case 'links':
-			//@ts-ignore
-			const validators = (field.validators.item_item_type as BlockValidator[])?.item_types ?? (field.validators.item_item_types as BlockValidator[])?.item_types;;
-
-			if (validators && validators?.length > 0) {
-				const linkModelIds = validators;
-				const linkFields: { api_key?: string, fields: Field[] }[] = []
-				for (const id of linkModelIds) {
-					linkFields.push({
-						api_key: itemTypes.find(t => t.id === id)?.api_key,
-						fields: await client.fields.list(id)
-					})
-				}
-
-				str = `${apiKeyCamel} { 
-					__typename
-					${linkFields.map(({ api_key }, idx) => api_key ?
-					`... on ${toPascalCase(api_key)}Record { ...${toPascalCase(api_key)}Fragment }`
-					: ''
-				).join('\n')}}`;
-			}
-
 			break;
 		case 'seo':
 			break;
@@ -403,6 +350,31 @@ async function generateField(modelId: string, field: Field): Promise<string> {
 	return str ? `${str}\n` : ''
 }
 
+async function generateBlocks(blockIds: BlockValidator['item_types']): Promise<string | null> {
+
+	if (!blockIds || blockIds?.length <= 0) return null
+	const modelIds = blockIds.filter((v, i, a) => a.indexOf(v) === i);
+	const blockFields: { api_key?: string, fields: Field[] }[] = []
+
+	for (const id of modelIds) {
+		blockFields.push({
+			api_key: itemTypes.find(t => t.id === id)?.api_key,
+			fields: await client.fields.list(id)
+		})
+	}
+
+	const blockQueries = await Promise.all(blockFields.map(async ({ api_key, fields }, idx) => {
+		return (await Promise.all(fields.map(field => generateField(modelIds[idx], field)))).join(' ')
+	}))
+
+	const gql = `
+		${blockQueries.map((q, idx) => blockFields[idx]?.api_key && q ?
+		`... on ${toPascalCase(blockFields[idx].api_key)}Record { ${q} }` : ''
+	).join('\n')}`;
+
+	return gql
+}
+
 async function writeGraphqlFile(filename: string, content: string) {
 	try {
 		const formattedGqlContent = await prettier.format(content, { parser: 'graphql' });
@@ -410,6 +382,8 @@ async function writeGraphqlFile(filename: string, content: string) {
 		console.log(`Created ${filename}`);
 	} catch (error) {
 		console.error('Error parsing gql', filename);
+		//console.error(error);
+		//console.log(content);
 	}
 }
 
