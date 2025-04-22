@@ -1,6 +1,6 @@
 import { backup, revalidate, test, webPreviews, draft } from '../route-handlers/index.js';
 export const getDatoCmsConfig = async () => {
-    const file = process.env.NODE_ENV === 'development' ? 'datocms.config.ts' : 'datocms.config.js';
+    const file = process.env.NODE_ENV === 'development' ? 'datocms.config.ts' : 'datocms.config.ts';
     const path = process.env.NODE_ENV === 'development' ? '../../..' : process.cwd();
     const filePath = `${path}/${file}`;
     console.log(filePath, process.env.NODE_ENV);
