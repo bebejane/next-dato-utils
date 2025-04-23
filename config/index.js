@@ -9,7 +9,6 @@ export const getDatoCmsConfig = async () => {
         },
     });
     const res = await explorer.load("./datocms.config.ts");
-    //const result = await explorer.search();
     if (!res?.config) {
         throw new Error('No datocms.config.ts found or it is empty.');
     }

@@ -1,4 +1,4 @@
-import vercelCronAuth from './vercel-cron-auth.js';
+import vercelCronAuth from './vercel-cron-auth';
 import { buildClient } from '@datocms/cma-client-browser';
 export default async function backup(req) {
     return vercelCronAuth(req, async (req) => {

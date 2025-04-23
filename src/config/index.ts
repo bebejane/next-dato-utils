@@ -3,7 +3,6 @@ import { backup, revalidate, test, webPreviews, draft } from '../route-handlers/
 import { cosmiconfig } from 'cosmiconfig';
 import { TypeScriptLoader } from 'cosmiconfig-typescript-loader';
 
-
 export type DatoCmsConfig = {
   name: string
   description: string
@@ -33,8 +32,6 @@ export const getDatoCmsConfig = async (): Promise<DatoCmsConfig> => {
     },
   });
   const res = await explorer.load("./datocms.config.ts");
-  //const result = await explorer.search();
-
   if (!res?.config) {
     throw new Error('No datocms.config.ts found or it is empty.');
   }

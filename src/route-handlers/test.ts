@@ -1,4 +1,4 @@
-import basicAuth from './basic-auth.js'
+import basicAuth from './basic-auth'
 
 import { Client, buildClient } from '@datocms/cma-client-browser';
 

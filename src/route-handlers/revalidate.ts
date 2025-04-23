@@ -1,4 +1,4 @@
-import { revalidatePath, revalidateTag } from 'next/cache.js';
+import { revalidatePath, revalidateTag } from 'next/cache';
 //import basicAuth from "./basic-auth";
 
 export default async function revalidate(req: Request, callback: (payload: RevalidatePayload, revalidate: (paths: string[], tags: string[], logs?: boolean) => Promise<Response>) => Promise<Response>) {

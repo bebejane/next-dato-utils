@@ -1,7 +1,7 @@
 'use server';
-import { draftMode } from 'next/headers.js';
-import { redirect } from 'next/navigation.js';
-import { cookies } from 'next/headers.js';
+import { draftMode } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
 export default async function draft(request) {
     const { searchParams } = new URL(request.url);
     const secret = searchParams.get('secret');
