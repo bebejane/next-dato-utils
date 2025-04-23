@@ -1,11 +1,12 @@
 import { backup, revalidate, test, webPreviews, draft } from '../route-handlers';
 import { cosmiconfigSync } from 'cosmiconfig';
-import { TypeScriptLoader } from 'cosmiconfig-typescript-loader';
+//@ts-expect-error
+import typeScriptLoader from 'cosmiconfig-ts-loader';
 export const getDatoCmsConfig = () => {
     const explorer = cosmiconfigSync('datocms', {
         searchPlaces: ['datocms.config.ts'], // Explicitly search for the TS file
         loaders: {
-            '.ts': TypeScriptLoader(),
+            '.ts': typeScriptLoader(),
         },
     });
     const res = explorer.load("./datocms.config.ts");
