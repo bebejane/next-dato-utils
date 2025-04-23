@@ -1,6 +1,6 @@
 'use server'
 
-import { sendPostmarkEmail } from '../utils/postmark.js'
+import { sendPostmarkEmail } from '../utils/postmark'
 
 export default async function sendPostmarkEmailServerAction(prevState: any, formData: FormData): Promise<{ success: boolean, error?: string }> {
 

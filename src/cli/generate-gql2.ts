@@ -4,7 +4,7 @@ import * as path from 'path';
 import 'dotenv/config';
 import * as prettier from 'prettier';
 import pluralize from 'pluralize';
-import { ItemType, Field } from '@datocms/cma-client/dist/types/generated/SimpleSchemaTypes.js';
+import { ItemType, Field } from '@datocms/cma-client/dist/types/generated/SimpleSchemaTypes';
 
 let client: Client;
 

@@ -1,8 +1,8 @@
 'use server';
 import { jsx as _jsx } from "react/jsx-runtime";
-import { draftMode } from 'next/headers.js';
-import { revalidateTag, revalidatePath, disableDraftMode } from '../../server-actions/index.js';
-import DraftModeClient from './DraftModeClient.js';
+import { draftMode } from 'next/headers';
+import { revalidateTag, revalidatePath, disableDraftMode } from '../../server-actions';
+import DraftModeClient from './DraftModeClient';
 export default async function DraftMode({ url, tag, path }) {
     if (!url || (!tag && !path))
         return null;

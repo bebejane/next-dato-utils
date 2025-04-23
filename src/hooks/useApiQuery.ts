@@ -2,7 +2,7 @@
 
 import type { DocumentNode } from 'graphql';
 import { useEffect, useState, useCallback } from "react";
-import { apiQuery } from '../api/index.js';
+import { apiQuery } from '../api/index';
 
 export type UseApiQueryProps = {
   variables?: any

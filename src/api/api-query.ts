@@ -1,7 +1,7 @@
-import { draftMode } from 'next/headers.js'
-import type { RequestInit } from 'next/dist/server/web/spec-extension/request.js'
+import { draftMode } from 'next/headers'
+import type { RequestInit } from 'next/dist/server/web/spec-extension/request'
 import type { DocumentNode, FieldNode, OperationDefinitionNode, VariableDefinitionNode } from 'graphql'
-import { print } from 'graphql/language/printer.js'
+import { print } from 'graphql/language/printer'
 import { traverse } from 'object-traversal';
 import isInteger from 'is-integer';
 

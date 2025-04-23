@@ -1,5 +1,5 @@
-import { draftMode } from 'next/headers.js';
-import { print } from 'graphql/language/printer.js';
+import { draftMode } from 'next/headers';
+import { print } from 'graphql/language/printer';
 import { traverse } from 'object-traversal';
 import isInteger from 'is-integer';
 const defaultOptions = {
