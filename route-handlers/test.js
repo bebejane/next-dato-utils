@@ -47,7 +47,6 @@ export const testResultsToString = (results) => {
     return `WEB PREVIEWS\n${previews}\n\nNO WEB PREVIEWS:\n${nopreviews}\n\nREVALIDATE\n${revalidate}\n\nNO REVALIDATE\n${norevalidate}`;
 };
 export const testResultsToHtml = (results) => {
-    console.log(JSON.stringify(results, null, 2));
     return `
     <html>
       <head>
@@ -84,8 +83,8 @@ export const testResultsToHtml = (results) => {
                 class="${!r.previews || !r.revalidate?.revalidated ? 'error' : ''}"
               >
                 <td>${r.model}</td>
-                <td>${r.previews?.filter(({ label, url }) => label === 'Live' && new URL(url).pathname).map(p => new URL(p.url).pathname).join(', ')}</td>
-                <td>${r.revalidate?.paths?.join(', ')}</td>
+                <td>${r.previews?.filter(({ label, url }) => label === 'Live' && new URL(url).pathname).map(p => new URL(p.url).pathname).join(', ') ?? ''}</td>
+                <td>${r.revalidate?.paths?.join(', ') ?? ''}</td>
               </tr>
             `).join('')}
           </tbody>
