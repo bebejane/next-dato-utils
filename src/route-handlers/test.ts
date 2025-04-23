@@ -121,7 +121,7 @@ export const testResultsToHtml = (results: TestResult[]) => {
                 class="${!r.previews || !r.revalidate?.revalidated ? 'error' : ''}"
               >
                 <td>${r.model}</td>
-                <td>${r.previews?.filter(({ label, url }) => label === 'Live' && url).map(p => new URL(p.url).pathname).join(', ')}</td>
+                <td>${r.previews?.filter(({ label, url }) => label === 'Live' && new URL(url).pathname).map(p => new URL(p.url).pathname).join(', ')}</td>
                 <td>${r.revalidate?.paths?.join(', ')}</td>
               </tr>
             `).join('')}
