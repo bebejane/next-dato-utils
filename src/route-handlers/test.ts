@@ -117,12 +117,13 @@ export const testResultsToHtml = (results: TestResult[]) => {
           <tbody>
             ${results.map(r => `
               <tr 
-                title="Web Previews\n-----------\n${!r.previews ? '' : r.previews?.map(p => `${p.label}: ${p.url}`).join('\n')}\n\nRevalidate\n-----------\n${!r.revalidate ? '' : r.revalidate?.paths?.join('\n')}"
                 class="${!r.previews || !r.revalidate?.revalidated ? 'error' : ''}"
               >
                 <td>${r.model}</td>
                 <td class="center">${r.previews ? 'x' : '-'}</td>
+                <td>${r.previews?.map(p => p.url).join(', ')}</td>
                 <td class="center">${r.revalidate?.revalidated ? 'x' : '-'}</td>
+                <td>${r.revalidate?.paths?.join(', ')}</td>
               </tr>
             `).join('')}
           </tbody>
