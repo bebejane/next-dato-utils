@@ -28,7 +28,7 @@ export type DatoCmsConfig = {
 export const getDatoCmsConfig = (): DatoCmsConfig => {
   const explorer = cosmiconfigSync('datocms', {
     searchPlaces: ['datocms.config.ts'], // Explicitly search for the TS file
-    //loaders: {'.ts': TypeScriptLoaderSync(),},
+    loaders: { '.ts': TypeScriptLoaderSync(), },
   });
   const res = explorer.load("./datocms.config.ts");
   if (!res?.config) {
