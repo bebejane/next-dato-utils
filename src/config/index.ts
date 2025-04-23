@@ -63,7 +63,7 @@ export const datoCmsRouteHandler = async (req: Request, { params }: { params: Pr
       break;
     case 'web-previews':
       handler = () => webPreviews(req, async ({ item, itemType, locale }) => {
-        const path = await config.routes[itemType.attributes.api_key](item, locale)
+        const path = await config.routes[itemType.attributes.api_key]?.(item, locale)
         return path?.[0] ?? null
       })
       break;
