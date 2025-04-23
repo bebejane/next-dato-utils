@@ -85,7 +85,7 @@ export const testResultsToString = (results: TestResult[]) => {
 }
 
 export const testResultsToHtml = (results: TestResult[]) => {
-  console.log(results)
+  console.log(JSON.stringify(results, null, 2))
   return `
     <html>
       <head>
@@ -155,7 +155,7 @@ const testWebPreviewsEndpoint = async (itemType: any, client: Client): Promise<P
   })
 
   const json = await res.json()
-  return json.previewLinks ?? []
+  return json.previewLinks
 
 }
 

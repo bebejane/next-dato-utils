@@ -47,7 +47,7 @@ export const testResultsToString = (results) => {
     return `WEB PREVIEWS\n${previews}\n\nNO WEB PREVIEWS:\n${nopreviews}\n\nREVALIDATE\n${revalidate}\n\nNO REVALIDATE\n${norevalidate}`;
 };
 export const testResultsToHtml = (results) => {
-    console.log(results);
+    console.log(JSON.stringify(results, null, 2));
     return `
     <html>
       <head>
@@ -114,7 +114,7 @@ const testWebPreviewsEndpoint = async (itemType, client) => {
         })
     });
     const json = await res.json();
-    return json.previewLinks ?? [];
+    return json.previewLinks;
 };
 const testRevalidateEndpoint = async (itemType, client) => {
     const item = (await client.items.list({ filter: { type: itemType.api_key } }))[0];
