@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 import { backup, revalidate, test, webPreviews, draft } from '../route-handlers';
 import { cosmiconfigSync } from 'cosmiconfig';
-import { TypeScriptLoaderSync } from 'cosmiconfig-typescript-loader';
+import { TypeScriptLoaderSync, TypeScriptLoader } from 'cosmiconfig-typescript-loader';
 
 
 export type DatoCmsConfig = {
@@ -27,10 +27,15 @@ export type DatoCmsConfig = {
 
 export const getDatoCmsConfig = (): DatoCmsConfig => {
   const explorer = cosmiconfigSync('datocms', {
-    searchPlaces: ['datocms.config.ts'], // Explicitly search for the TS file
-    loaders: { '.ts': TypeScriptLoaderSync(), },
+    searchPlaces: ['datocms.config.js', 'datocms.config.ts'], // Explicitly search for the TS file 
+    loaders: { '.ts': TypeScriptLoaderSync() },
   });
-  const res = explorer.load("./datocms.config.ts");
+  let res;
+  try {
+    res = explorer.load("./datocms.config.ts");
+  } catch (e) {
+    res = explorer.load("./datocms.config.js");
+  }
   if (!res?.config) {
     throw new Error('No datocms.config.ts found or it is empty.');
   }
