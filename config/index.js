@@ -1,8 +1,7 @@
 import { backup, revalidate, test, webPreviews, draft } from '../route-handlers';
 import { cosmiconfig } from 'cosmiconfig';
-import { cache } from 'react';
 import { TypeScriptLoader } from 'cosmiconfig-typescript-loader';
-export const getDatoCmsConfig = cache(async () => {
+export const getDatoCmsConfig = async () => {
     const explorer = cosmiconfig('datocms', {
         searchPlaces: ['datocms.config.ts', 'datocms.config.json'], // Explicitly search for the TS file 
         loaders: { '.ts': TypeScriptLoader() },
@@ -14,7 +13,7 @@ export const getDatoCmsConfig = cache(async () => {
     console.log(res.config);
     // The config object is nested under the 'config' property
     return res.config;
-});
+};
 export const getRoute = async (record, locale) => {
     const config = await getDatoCmsConfig();
     if (!config?.routes?.[record?.api_key])

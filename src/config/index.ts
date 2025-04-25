@@ -1,10 +1,7 @@
 import { MetadataRoute } from 'next';
 import { backup, revalidate, test, webPreviews, draft } from '../route-handlers';
 import { cosmiconfig } from 'cosmiconfig';
-import { cache } from 'react';
-
 import { TypeScriptLoader } from 'cosmiconfig-typescript-loader';
-
 
 export type DatoCmsConfig = {
   name: string
@@ -27,7 +24,7 @@ export type DatoCmsConfig = {
   sitemap?: () => Promise<MetadataRoute.Sitemap>
 }
 
-export const getDatoCmsConfig = cache(async (): Promise<DatoCmsConfig> => {
+export const getDatoCmsConfig = async (): Promise<DatoCmsConfig> => {
 
   const explorer = cosmiconfig('datocms', {
     searchPlaces: ['datocms.config.ts', 'datocms.config.json'], // Explicitly search for the TS file 
@@ -41,8 +38,7 @@ export const getDatoCmsConfig = cache(async (): Promise<DatoCmsConfig> => {
   console.log(res.config)
   // The config object is nested under the 'config' property
   return res.config as DatoCmsConfig;
-})
-
+}
 
 export const getRoute = async (record: any, locale?: string): Promise<string[] | null> => {
   const config = await getDatoCmsConfig()
