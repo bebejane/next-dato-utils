@@ -3,16 +3,11 @@ import { cosmiconfig } from 'cosmiconfig';
 import { TypeScriptLoader } from 'cosmiconfig-typescript-loader';
 export const getDatoCmsConfig = async () => {
     const explorer = cosmiconfig('datocms', {
-        searchPlaces: ['datocms.config.js', 'datocms.config.ts'], // Explicitly search for the TS file 
+        searchPlaces: ['datocms.config.ts', 'datocms.config.json'], // Explicitly search for the TS file 
         loaders: { '.ts': TypeScriptLoader() },
+        cache: true
     });
-    let res;
-    try {
-        res = await explorer.load("./datocms.config.ts");
-    }
-    catch (e) {
-        res = await explorer.load("./datocms.config.js");
-    }
+    const res = await explorer.load("./datocms.config.ts");
     if (!res?.config) {
         throw new Error('No datocms.config.ts found or it is empty.');
     }
