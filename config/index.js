@@ -5,12 +5,12 @@ export const getDatoCmsConfig = async () => {
     const explorer = cosmiconfig('datocms', {
         searchPlaces: ['datocms.config.ts', 'datocms.config.json'], // Explicitly search for the TS file 
         loaders: { '.ts': TypeScriptLoader() },
-        cache: true
     });
     const res = await explorer.load("./datocms.config.ts");
     if (!res?.config) {
         throw new Error('No datocms.config.ts found or it is empty.');
     }
+    console.log(res.config);
     // The config object is nested under the 'config' property
     return res.config;
 };
