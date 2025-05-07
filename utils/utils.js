@@ -66,19 +66,20 @@ export const sortSwedish = (arr, key) => {
         return !ai ? -1 : ai > bi ? 1 : ai === bi ? 0 : -1;
     });
 };
-export const awaitElement = async (selector) => {
+export const awaitElement = async (selector, ms = 1000) => {
     const cleanSelector = function (selector) {
         (selector.match(/(#[0-9][^\s:,]*)/g) || []).forEach(function (n) {
             selector = selector.replace(n, '[id="' + n.replace("#", "") + '"]');
         });
         return selector;
     };
-    for (let i = 0; i < 100; i++) {
+    const retry = 30;
+    for (let t = 0; t < ms; t += retry) {
         const el = document.querySelector(cleanSelector(selector));
         if (el)
             return el;
-        await sleep(30);
+        await sleep(retry);
     }
-    throw new Error(`Element ${selector} not found`);
+    return null;
 };
 //# sourceMappingURL=utils.js.map

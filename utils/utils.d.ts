@@ -10,4 +10,4 @@ export declare const rInt: (min: number, max: number) => number;
 export declare const truncateParagraph: (s: string, sentances?: number, ellipsis?: boolean, minLength?: number) => string;
 export declare const truncateWords: (text: string, maxLength: number) => string;
 export declare const sortSwedish: <T>(arr: T[], key?: string) => T[];
-export declare const awaitElement: <T>(selector: string) => Promise<NonNullable<T>>;
+export declare const awaitElement: <T>(selector: string, ms?: number) => Promise<T | null>;

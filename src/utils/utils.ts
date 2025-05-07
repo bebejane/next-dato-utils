@@ -87,7 +87,7 @@ export const sortSwedish = <T>(arr: T[], key?: string): T[] => {
   })
 }
 
-export const awaitElement = async <T>(selector: string) => {
+export const awaitElement = async <T>(selector: string, ms: number = 1000): Promise<T | null> => {
 
   const cleanSelector = function (selector: string) {
     (selector.match(/(#[0-9][^\s:,]*)/g) || []).forEach(function (n) {
@@ -95,12 +95,12 @@ export const awaitElement = async <T>(selector: string) => {
     });
     return selector;
   }
-
-  for (let i = 0; i < 100; i++) {
+  const retry = 30;
+  for (let t = 0; t < ms; t += retry) {
     const el = document.querySelector(cleanSelector(selector)) as T
     if (el) return el
-    await sleep(30)
+    await sleep(retry)
   }
 
-  throw new Error(`Element ${selector} not found`)
+  return null
 }
