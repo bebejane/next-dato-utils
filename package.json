@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.660",
+	"version": "1.0.661",
 	"description": "",
 	"type": "module",
 	"scripts": {
@@ -70,6 +70,7 @@
 		"datocms-listen": "^0.1.15",
 		"dedent-js": "^1.0.1",
 		"dotenv": "^16.4.4",
+		"ico-utils": "^0.1.4",
 		"is-integer": "^1.0.7",
 		"object-traversal": "^1.0.1",
 		"pluralize": "^8.0.0",
