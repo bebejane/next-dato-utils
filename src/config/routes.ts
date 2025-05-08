@@ -1,4 +1,4 @@
-import { DatoCmsConfig, getDatoCmsConfig } from '../config';
+import { DatoCmsConfig, getDatoCmsConfig, getDatoCmsConfig2 } from '../config';
 import { backup, revalidate, test, webPreviews, draft } from '../route-handlers';
 
 export type RouteHandler = (req: Request, { params }: { params: Promise<{ slug: string }> }) => Promise<Response>
@@ -47,7 +47,7 @@ const GET: RouteHandler = async (req, { params }) => {
       case 'draft':
         return draft(req)
       case 'config':
-        return new Response(JSON.stringify(await getDatoCmsConfig()), { status: 200, headers: { 'Content-Type': 'application/json' } })
+        return new Response(JSON.stringify(await getDatoCmsConfig2()), { status: 200, headers: { 'Content-Type': 'application/json' } })
       default:
         return new Response('Not Found', { status: 404 })
     }
