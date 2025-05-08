@@ -27,12 +27,13 @@ export type DatoCmsConfig = {
 export const getDatoCmsConfig = async (path?: string): Promise<DatoCmsConfig> => {
 
   try {
-    const importPath = `${path ?? '../../../..'}/datocms.config`
-    console.log('load config', process.cwd(), importPath)
+    const importPath = path ?? `../../../../datocms.config`
+    console.log('load config', importPath)
     const config = (await import(importPath)).default;
     console.log(config)
     return config as DatoCmsConfig;
   } catch (e) {
+    console.log(e)
     throw new Error('No datocms.config.ts found or it is empty.');
   }
 }
@@ -42,7 +43,6 @@ export const getDatoCmsConfig2 = async (): Promise<DatoCmsConfig> => {
     searchPlaces: ['datocms.config.ts', 'datocms.config.json'], // Explicitly search for the TS file 
     loaders: { '.ts': TypeScriptLoader() },
   });
-
   const res = await explorer.load("./datocms.config.ts");
   if (!res?.config) {
     throw new Error('No datocms.config.ts found or it is empty.');

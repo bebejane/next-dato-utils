@@ -3,13 +3,14 @@ import { TypeScriptLoader } from 'cosmiconfig-typescript-loader';
 export { GET, POST } from './routes';
 export const getDatoCmsConfig = async (path) => {
     try {
-        const importPath = `${path ?? '../../../..'}/datocms.config`;
-        console.log('load config', process.cwd(), importPath);
+        const importPath = path ?? `../../../../datocms.config`;
+        console.log('load config', importPath);
         const config = (await import(importPath)).default;
         console.log(config);
         return config;
     }
     catch (e) {
+        console.log(e);
         throw new Error('No datocms.config.ts found or it is empty.');
     }
 };
