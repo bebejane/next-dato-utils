@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-export { GET, POST } from './routes';
+export { default as router } from './router';
 export type DatoCmsConfig = {
     name: string;
     description: string;
@@ -20,6 +20,3 @@ export type DatoCmsConfig = {
     };
     sitemap?: () => Promise<MetadataRoute.Sitemap>;
 };
-export declare const getDatoCmsConfig: (path?: string) => Promise<DatoCmsConfig>;
-export declare const getDatoCmsConfig2: () => Promise<DatoCmsConfig>;
-export declare const getRoute: (record: any, locale?: string) => Promise<string[] | null>;

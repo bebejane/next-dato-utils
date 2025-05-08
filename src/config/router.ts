@@ -1,17 +1,16 @@
-import { DatoCmsConfig, getDatoCmsConfig, getDatoCmsConfig2 } from '../config';
+import { DatoCmsConfig } from '../config';
 import { backup, revalidate, test, webPreviews, draft } from '../route-handlers';
 
-export type RouteHandler = (req: Request, { params }: { params: Promise<{ slug: string }> }) => Promise<Response>
+export type RouteHandler = (req: Request, { params }: { params: Promise<{ slug: string }> }, config: DatoCmsConfig) => Promise<Response>
 
 export type DatoCmsRouter = {
   POST: RouteHandler
-  GET: RouteHandler
+  GET: RouteHandler,
 }
 
-const POST: RouteHandler = async (req, { params }) => {
+const POST: RouteHandler = async (req, { params }, config) => {
   const { slug } = await params
   try {
-    const config = await getDatoCmsConfig()
 
     switch (slug) {
       case 'revalidate':
@@ -38,7 +37,7 @@ const POST: RouteHandler = async (req, { params }) => {
   }
 }
 
-const GET: RouteHandler = async (req, { params }) => {
+const GET: RouteHandler = async (req, { params }, config) => {
   try {
     const { slug } = await params
     switch (slug) {
@@ -47,7 +46,7 @@ const GET: RouteHandler = async (req, { params }) => {
       case 'draft':
         return draft(req)
       case 'config':
-        return new Response(JSON.stringify(await getDatoCmsConfig2()), { status: 200, headers: { 'Content-Type': 'application/json' } })
+        return new Response(JSON.stringify(config), { status: 200, headers: { 'Content-Type': 'application/json' } })
       default:
         return new Response('Not Found', { status: 404 })
     }
@@ -56,7 +55,16 @@ const GET: RouteHandler = async (req, { params }) => {
   }
 }
 
-export {
-  POST,
-  GET
-}
+const router = async function (req, { params }, config) {
+  const method = req.method.toLowerCase()
+  switch (method) {
+    case 'post':
+      return POST(req, { params }, config)
+    case 'get':
+      return GET(req, { params }, config)
+    default:
+      return new Response('Not Found', { status: 404 })
+  }
+} satisfies RouteHandler
+
+export default router
