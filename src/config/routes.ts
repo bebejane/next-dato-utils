@@ -45,6 +45,8 @@ const GET: RouteHandler = async (req, { params }) => {
       return test(req)
     case 'draft':
       return draft(req)
+    case 'config':
+      return new Response(JSON.stringify(await getDatoCmsConfig()), { status: 200, headers: { 'Content-Type': 'application/json' } })
     default:
       return new Response('Not Found', { status: 404 })
   }
