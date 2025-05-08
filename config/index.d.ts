@@ -25,4 +25,4 @@ export declare const datoCmsRouteHandler: (req: Request, { params }: {
     params: Promise<{
         slug: string;
     }>;
-}, config: DatoCmsConfig) => Promise<void | Response>;
+}, config: DatoCmsConfig) => Promise<Response>;

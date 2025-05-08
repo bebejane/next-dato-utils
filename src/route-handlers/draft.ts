@@ -4,7 +4,7 @@ import { draftMode } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 
-export default async function draft(request: Request): Promise<Response | void> {
+export default async function draft(request: Request): Promise<Response> {
 
   const { searchParams } = new URL(request.url)
   const secret = searchParams.get('secret')
