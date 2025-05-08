@@ -29,7 +29,7 @@ export const getDatoCmsConfig = async (): Promise<DatoCmsConfig> => {
   try {
     console.log('load config', process.cwd())
     //@ts-expect-error
-    const config = (await import('../../../datocms.config')).default;
+    const config = (await import('../../../../datocms.config')).default;
     console.log(config)
     return config as DatoCmsConfig;
   } catch (e) {

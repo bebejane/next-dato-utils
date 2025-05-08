@@ -31,16 +31,21 @@ const POST = async (req, { params }) => {
     }
 };
 const GET = async (req, { params }) => {
-    const { slug } = await params;
-    switch (slug) {
-        case 'test':
-            return test(req);
-        case 'draft':
-            return draft(req);
-        case 'config':
-            return new Response(JSON.stringify(await getDatoCmsConfig()), { status: 200, headers: { 'Content-Type': 'application/json' } });
-        default:
-            return new Response('Not Found', { status: 404 });
+    try {
+        const { slug } = await params;
+        switch (slug) {
+            case 'test':
+                return test(req);
+            case 'draft':
+                return draft(req);
+            case 'config':
+                return new Response(JSON.stringify(await getDatoCmsConfig()), { status: 200, headers: { 'Content-Type': 'application/json' } });
+            default:
+                return new Response('Not Found', { status: 404 });
+        }
+    }
+    catch (e) {
+        return new Response(e.message, { status: 500 });
     }
 };
 export { POST, GET };
