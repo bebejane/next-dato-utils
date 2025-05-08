@@ -20,8 +20,7 @@ export const getRoute = async (record, locale) => {
         throw new Error(`No route found for ${record.api_key}`);
     return config.routes[record.api_key](record, locale);
 };
-export const datoCmsRouteHandler = async (req, { params }) => {
-    const config = await getDatoCmsConfig();
+export const datoCmsRouteHandler = async (req, { params }, config) => {
     const { slug } = await params;
     let handler = null;
     switch (slug) {

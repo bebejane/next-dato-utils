@@ -46,8 +46,7 @@ export const getRoute = async (record: any, locale?: string): Promise<string[] |
   return config.routes[record.api_key](record, locale)
 }
 
-export const datoCmsRouteHandler = async (req: Request, { params }: { params: Promise<{ slug: string }> }) => {
-  const config = await getDatoCmsConfig()
+export const datoCmsRouteHandler = async (req: Request, { params }: { params: Promise<{ slug: string }> }, config: DatoCmsConfig) => {
   const { slug } = await params
   let handler = null;
 
