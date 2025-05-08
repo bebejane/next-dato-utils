@@ -58,6 +58,7 @@ export const testResultsToHtml = (results) => {
           th, td {
             padding: 5px;
             text-align:left;
+            vertical-align: top;
           }
           .center{
             text-align:center;
@@ -79,12 +80,10 @@ export const testResultsToHtml = (results) => {
           </thead>
           <tbody>
             ${results.map(r => `
-              <tr 
-                class="${!r.previews || !r.revalidate?.revalidated ? 'error' : ''}"
-              >
-                <td>${r.model}</td>
-                <td>${r.previews?.filter(({ label, url }) => label === 'Live' && new URL(url).pathname).map(p => new URL(p.url).pathname).join(', ') ?? ''}</td>
-                <td>${r.revalidate?.paths?.join(', ') ?? ''}</td>
+              <tr>
+                <td class="${!r.previews || !r.revalidate?.revalidated ? 'error' : ''}">${r.model}</td>
+                <td>${r.previews?.filter(({ label, url }) => label === 'Live' && new URL(url).pathname).map(p => new URL(p.url).pathname).join('\n') ?? ''}</td>
+                <td>${r.revalidate?.paths?.join('\n') ?? ''}</td>
               </tr>
             `).join('')}
           </tbody>
