@@ -27,10 +27,9 @@ export type DatoCmsConfig = {
 export const getDatoCmsConfig = async (path?: string): Promise<DatoCmsConfig> => {
 
   try {
-
-    const pathname = path ?? process.cwd()
-    console.log('load config', pathname)
-    const config = (await import(`${pathname}/datocms.config.ts`)).default;
+    const importPath = `../../../../datocms.config.ts`
+    console.log('load config', process.cwd(), importPath)
+    const config = (await import(importPath)).default;
     console.log(config)
     return config as DatoCmsConfig;
   } catch (e) {
