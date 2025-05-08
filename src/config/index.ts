@@ -27,8 +27,10 @@ export type DatoCmsConfig = {
 export const getDatoCmsConfig = async (): Promise<DatoCmsConfig> => {
 
   try {
-    console.log(process.cwd() + '/datcoms.config')
-    const config = (await import(process.cwd() + '/datcoms.config'))
+    console.log('load configp', process.cwd())
+    //@ts-expect-error
+    const config = (await import('../../../datccms.config')).default;
+    console.log(config)
     return config as DatoCmsConfig;
   } catch (e) {
     throw new Error('No datocms.config.ts found or it is empty.');
