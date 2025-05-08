@@ -1,46 +1,56 @@
-import { DatoCmsConfig } from '../config';
+import { DatoCmsConfig, getDatoCmsConfig } from '../config';
 import { backup, revalidate, test, webPreviews, draft } from '../route-handlers';
 
+export type RouteHandler = (req: Request, { params }: { params: Promise<{ slug: string }> }) => Promise<Response>
+
 export type DatoCmsRouter = {
-  POST: (req: Request) => Promise<Response>
-  GET: (req: Request) => Promise<Response>
+  POST: RouteHandler
+  GET: RouteHandler
 }
 
-export default async (req: Request, { params }: { params: Promise<{ slug: string }> }, config: DatoCmsConfig): Promise<DatoCmsRouter> => {
+const POST: RouteHandler = async (req, { params }) => {
   const { slug } = await params
+  try {
+    const config = await getDatoCmsConfig()
 
-  return {
-    POST: async (req: Request) => {
-      switch (slug) {
-        case 'revalidate':
-          return revalidate(req, async (payload, revalidate) => {
-            const { api_key, entity } = payload;
-            const { id, attributes } = entity
-            if (!api_key) throw new Error('No api_key found')
-            const paths: string[] = await config.routes?.[api_key]?.(attributes) ?? []
-            const tags: string[] = [api_key, id].filter(t => t)
-            return await revalidate(paths, tags, true)
-          })
-        case 'web-previews':
-          return webPreviews(req, async ({ item, itemType, locale }) => {
-            const path = await config.routes[itemType.attributes.api_key]?.(item, locale)
-            return path?.[0] ?? null
-          })
-        case 'backup':
-          return backup(req)
-        default:
-          return new Response('Not Found', { status: 404 })
-      }
-    },
-    GET: async (req: Request) => {
-      switch (slug) {
-        case 'test':
-          return test(req)
-        case 'draft':
-          return draft(req)
-        default:
-          return new Response('Not Found', { status: 404 })
-      }
+    switch (slug) {
+      case 'revalidate':
+        return revalidate(req, async (payload, revalidate) => {
+          const { api_key, entity } = payload;
+          const { id, attributes } = entity
+          if (!api_key) throw new Error('No api_key found')
+          const paths: string[] = await config.routes?.[api_key]?.(attributes) ?? []
+          const tags: string[] = [api_key, id].filter(t => t)
+          return await revalidate(paths, tags, true)
+        })
+      case 'web-previews':
+        return webPreviews(req, async ({ item, itemType, locale }) => {
+          const path = await config.routes[itemType.attributes.api_key]?.(item, locale)
+          return path?.[0] ?? null
+        })
+      case 'backup':
+        return backup(req)
+      default:
+        return new Response('Not Found', { status: 404 })
     }
+  } catch (e) {
+    return new Response((e as Error).message, { status: 500 })
   }
 }
+
+const GET: RouteHandler = async (req, { params }) => {
+  const { slug } = await params
+  switch (slug) {
+    case 'test':
+      return test(req)
+    case 'draft':
+      return draft(req)
+    default:
+      return new Response('Not Found', { status: 404 })
+  }
+}
+
+export default {
+  POST,
+  GET
+} satisfies DatoCmsRouter

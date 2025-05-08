@@ -1,11 +1,14 @@
-import { DatoCmsConfig } from '../config';
-export type DatoCmsRouter = {
-    POST: (req: Request) => Promise<Response>;
-    GET: (req: Request) => Promise<Response>;
-};
-declare const _default: (req: Request, { params }: {
+export type RouteHandler = (req: Request, { params }: {
     params: Promise<{
         slug: string;
     }>;
-}, config: DatoCmsConfig) => Promise<DatoCmsRouter>;
+}) => Promise<Response>;
+export type DatoCmsRouter = {
+    POST: RouteHandler;
+    GET: RouteHandler;
+};
+declare const _default: {
+    POST: RouteHandler;
+    GET: RouteHandler;
+};
 export default _default;
