@@ -7,6 +7,8 @@ export type DatoCmsRouter = {
     POST: RouteHandler;
     GET: RouteHandler;
 };
-declare const POST: RouteHandler;
-declare const GET: RouteHandler;
-export { POST, GET };
+declare const _default: {
+    POST: RouteHandler;
+    GET: RouteHandler;
+};
+export default _default;

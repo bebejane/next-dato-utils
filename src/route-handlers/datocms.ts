@@ -50,7 +50,7 @@ const GET: RouteHandler = async (req, { params }) => {
   }
 }
 
-export {
+export default {
   POST,
   GET
 }
