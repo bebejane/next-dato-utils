@@ -59,6 +59,7 @@ export const testResultsToHtml = (results) => {
             padding: 5px;
             text-align:left;
             vertical-align: top;
+            white-space:pre;
           }
           .center{
             text-align:center;
