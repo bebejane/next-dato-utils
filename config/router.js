@@ -15,6 +15,7 @@ const POST = async (req, { params }, config) => {
                 });
             case 'web-previews':
                 return webPreviews(req, async ({ item, itemType, locale }) => {
+                    console.log(item);
                     const paths = await config.routes[itemType.attributes.api_key]?.(item, locale);
                     console.log('apiKey', itemType.attributes.api_key, paths?.[0]);
                     return paths?.[0] ?? null;
