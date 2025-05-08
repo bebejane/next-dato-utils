@@ -8,4 +8,3 @@ export { default as vercelCronAuth } from './vercel-cron-auth';
 export { default as webPreviews } from './web-previews';
 export { default as draft } from './draft';
 export { default as favicon } from './favicon';
-export { default as datocms } from './datocms';

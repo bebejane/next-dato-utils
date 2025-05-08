@@ -41,8 +41,5 @@ const GET = async (req, { params }) => {
             return new Response('Not Found', { status: 404 });
     }
 };
-export default {
-    POST,
-    GET
-};
+export { POST, GET };
 //# sourceMappingURL=datocms.js.map
