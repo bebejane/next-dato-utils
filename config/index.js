@@ -5,7 +5,7 @@ export const getDatoCmsConfig = async () => {
     try {
         console.log('load config', process.cwd());
         //@ts-expect-error
-        const config = (await import('../../../../datocms.config')).default;
+        const config = (await import('../../../datocms.config')).default;
         console.log(config);
         return config;
     }
