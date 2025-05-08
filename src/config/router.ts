@@ -24,8 +24,10 @@ const POST: RouteHandler = async (req, { params }, config) => {
         })
       case 'web-previews':
         return webPreviews(req, async ({ item, itemType, locale }) => {
-          const path = await config.routes[itemType.attributes.api_key]?.(item, locale)
-          return path?.[0] ?? null
+          console.log('apiKey', itemType.attributes.api_key)
+          const paths = await config.routes[itemType.attributes.api_key]?.(item, locale)
+          console.log('apiKey', itemType.attributes.api_key, paths?.[0])
+          return paths?.[0] ?? null
         })
       case 'backup':
         return backup(req)

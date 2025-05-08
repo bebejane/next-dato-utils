@@ -135,7 +135,7 @@ export const testResultsToHtml = (results: TestResult[]) => {
 
 const testWebPreviewsEndpoint = async (itemType: any, client: Client): Promise<PreviewLink[]> => {
 
-  const item = (await client.items.list({ filter: { type: itemType.api_key } }))[0]
+  const item = (await client.items.list({ limit: 500, filter: { type: itemType.api_key } }))[0]
   const res = await fetch(`${baseApiUrl}/web-previews`, {
     method: 'POST',
     headers: {
@@ -149,7 +149,7 @@ const testWebPreviewsEndpoint = async (itemType: any, client: Client): Promise<P
       itemType: {
         attributes: itemType
       },
-      environmentId: "main",
+      environmentId: process.env.DATOCMS_ENVIRONMENT,
       locale: "en"
     })
   })
