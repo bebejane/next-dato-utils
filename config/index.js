@@ -1,11 +1,11 @@
 import { cosmiconfig } from 'cosmiconfig';
 import { TypeScriptLoader } from 'cosmiconfig-typescript-loader';
 export { GET, POST } from './routes';
-export const getDatoCmsConfig = async () => {
+export const getDatoCmsConfig = async (path) => {
     try {
-        console.log('load config', process.cwd());
-        //@ts-expect-error
-        const config = (await import('../../../datocms.config')).default;
+        const pathname = path ?? process.cwd();
+        console.log('load config', pathname);
+        const config = (await import(`${pathname}/datocms.config.ts`)).default;
         console.log(config);
         return config;
     }

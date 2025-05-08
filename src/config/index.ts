@@ -24,12 +24,13 @@ export type DatoCmsConfig = {
   sitemap?: () => Promise<MetadataRoute.Sitemap>
 }
 
-export const getDatoCmsConfig = async (): Promise<DatoCmsConfig> => {
+export const getDatoCmsConfig = async (path?: string): Promise<DatoCmsConfig> => {
 
   try {
-    console.log('load config', process.cwd())
-    //@ts-expect-error
-    const config = (await import('../../../datocms.config')).default;
+
+    const pathname = path ?? process.cwd()
+    console.log('load config', pathname)
+    const config = (await import(`${pathname}/datocms.config.ts`)).default;
     console.log(config)
     return config as DatoCmsConfig;
   } catch (e) {
