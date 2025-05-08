@@ -1,5 +1,6 @@
 import { cosmiconfig } from 'cosmiconfig';
 import { TypeScriptLoader } from 'cosmiconfig-typescript-loader';
+export { GET, POST } from './routes';
 export const getDatoCmsConfig = async () => {
     try {
         console.log('load configp', process.cwd());

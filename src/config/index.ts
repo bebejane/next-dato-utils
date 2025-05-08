@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
-import { backup, revalidate, test, webPreviews, draft } from '../route-handlers';
 import { cosmiconfig } from 'cosmiconfig';
 import { TypeScriptLoader } from 'cosmiconfig-typescript-loader';
+export { GET, POST } from './routes';
 
 export type DatoCmsConfig = {
   name: string

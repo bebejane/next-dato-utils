@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next';
+export { GET, POST } from './routes';
 export type DatoCmsConfig = {
     name: string;
     description: string;
