@@ -31,15 +31,7 @@ const POST = async (req, { params }, config) => {
 const GET = async (req, { params }, config) => {
     try {
         const { route } = await params;
-        //@ts-ignore
         const searchParams = req.nextUrl.searchParams;
-        if (searchParams) {
-            console.log('sluggy', searchParams.get('sluggy'));
-            console.log('slug', searchParams.get('slug'));
-            console.log('secret', searchParams.get('secret'));
-        }
-        console.log(req.url);
-        console.log(searchParams);
         switch (route) {
             case 'test':
                 return test(req);
