@@ -43,8 +43,11 @@ const GET: RouteHandler = async (req, { params }, config) => {
     //@ts-ignore
     const searchParams = req.nextUrl.searchParams
 
-    if (searchParams)
+    if (searchParams) {
       console.log('sluggy', searchParams.get('sluggy'))
+      console.log('slug', searchParams.get('slug'))
+      console.log(searchParams)
+    }
 
     switch (slug) {
       case 'test':
