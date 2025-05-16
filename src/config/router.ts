@@ -42,10 +42,9 @@ const GET: RouteHandler = async (req, { params }, config) => {
     const { slug } = await params
     //@ts-ignore
     const searchParams = req.nextUrl.searchParams
-    //@ts-ignore
-    console.log(req.nextUrl)
+
     if (searchParams)
-      console.log(searchParams.get('slug'))
+      console.log('slug', searchParams.get('slug'))
 
     switch (slug) {
       case 'test':
