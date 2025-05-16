@@ -1,7 +1,7 @@
 import { DatoCmsConfig } from '../config';
 export type RouteHandler = (req: Request, { params }: {
     params: Promise<{
-        slug: string;
+        route: string;
     }>;
 }, config: DatoCmsConfig) => Promise<Response>;
 export type DatoCmsRouter = {
@@ -10,7 +10,7 @@ export type DatoCmsRouter = {
 };
 declare const router: (req: Request, { params }: {
     params: Promise<{
-        slug: string;
+        route: string;
     }>;
 }, config: DatoCmsConfig) => Promise<Response>;
 export default router;

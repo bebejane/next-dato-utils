@@ -1,8 +1,8 @@
 import { backup, revalidate, test, webPreviews, draft } from '../route-handlers';
 const POST = async (req, { params }, config) => {
-    const { slug } = await params;
+    const { route } = await params;
     try {
-        switch (slug) {
+        switch (route) {
             case 'revalidate':
                 return revalidate(req, async (payload, revalidate) => {
                     const { api_key, entity } = payload;
@@ -30,7 +30,7 @@ const POST = async (req, { params }, config) => {
 };
 const GET = async (req, { params }, config) => {
     try {
-        const { slug } = await params;
+        const { route } = await params;
         //@ts-ignore
         const searchParams = req.nextUrl.searchParams;
         if (searchParams) {
@@ -40,7 +40,7 @@ const GET = async (req, { params }, config) => {
         }
         console.log(req.url);
         console.log(searchParams);
-        switch (slug) {
+        switch (route) {
             case 'test':
                 return test(req);
             case 'draft':

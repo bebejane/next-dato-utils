@@ -1,7 +1,7 @@
 import { DatoCmsConfig } from '../config';
 import { backup, revalidate, test, webPreviews, draft } from '../route-handlers';
 
-export type RouteHandler = (req: Request, { params }: { params: Promise<{ slug: string }> }, config: DatoCmsConfig) => Promise<Response>
+export type RouteHandler = (req: Request, { params }: { params: Promise<{ route: string }> }, config: DatoCmsConfig) => Promise<Response>
 
 export type DatoCmsRouter = {
   POST: RouteHandler
@@ -9,10 +9,10 @@ export type DatoCmsRouter = {
 }
 
 const POST: RouteHandler = async (req, { params }, config) => {
-  const { slug } = await params
+  const { route } = await params
   try {
 
-    switch (slug) {
+    switch (route) {
       case 'revalidate':
         return revalidate(req, async (payload, revalidate) => {
           const { api_key, entity } = payload;
@@ -39,7 +39,7 @@ const POST: RouteHandler = async (req, { params }, config) => {
 
 const GET: RouteHandler = async (req, { params }, config) => {
   try {
-    const { slug } = await params
+    const { route } = await params
     //@ts-ignore
     const searchParams = req.nextUrl.searchParams
 
@@ -52,7 +52,7 @@ const GET: RouteHandler = async (req, { params }, config) => {
     console.log(req.url)
     console.log(searchParams)
 
-    switch (slug) {
+    switch (route) {
       case 'test':
         return test(req)
       case 'draft':
