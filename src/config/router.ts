@@ -1,3 +1,4 @@
+import { NextRequest } from 'next/server';
 import { DatoCmsConfig } from '../config';
 import { backup, revalidate, test, webPreviews, draft } from '../route-handlers';
 
@@ -40,17 +41,7 @@ const POST: RouteHandler = async (req, { params }, config) => {
 const GET: RouteHandler = async (req, { params }, config) => {
   try {
     const { route } = await params
-    //@ts-ignore
-    const searchParams = req.nextUrl.searchParams
-
-    if (searchParams) {
-      console.log('sluggy', searchParams.get('sluggy'))
-      console.log('slug', searchParams.get('slug'))
-      console.log('secret', searchParams.get('secret'))
-
-    }
-    console.log(req.url)
-    console.log(searchParams)
+    const searchParams = (req as NextRequest).nextUrl.searchParams
 
     switch (route) {
       case 'test':
