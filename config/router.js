@@ -31,12 +31,13 @@ const POST = async (req, { params }, config) => {
 const GET = async (req, { params }, config) => {
     try {
         const { slug } = await params;
-        console.log(req.url);
+        //@ts-ignore
+        const searchParams = req.nextUrl.searchParams;
         switch (slug) {
             case 'test':
                 return test(req);
             case 'draft':
-                return draft(req);
+                return draft(req, searchParams);
             default:
                 return new Response('Not Found', { status: 404 });
         }

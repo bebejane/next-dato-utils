@@ -4,9 +4,10 @@ import { draftMode } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 
-export default async function draft(request: Request, params?: any): Promise<Response> {
+export default async function draft(request: Request, searchParams?: URLSearchParams): Promise<Response> {
 
-  const { searchParams } = new URL(request.url)
+  searchParams = searchParams ?? new URL(request.url).searchParams
+
   const secret = searchParams.get('secret')
   const slug = searchParams.get('slug')
   const maxAge = searchParams.get('max-age')

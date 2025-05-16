@@ -2,8 +2,8 @@
 import { draftMode } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
-export default async function draft(request, params) {
-    const { searchParams } = new URL(request.url);
+export default async function draft(request, searchParams) {
+    searchParams = searchParams ?? new URL(request.url).searchParams;
     const secret = searchParams.get('secret');
     const slug = searchParams.get('slug');
     const maxAge = searchParams.get('max-age');
