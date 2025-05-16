@@ -33,6 +33,10 @@ const GET = async (req, { params }, config) => {
         const { slug } = await params;
         //@ts-ignore
         const searchParams = req.nextUrl.searchParams;
+        //@ts-ignore
+        console.log(req.nextUrl);
+        if (searchParams)
+            console.log(searchParams.get('slug'));
         switch (slug) {
             case 'test':
                 return test(req);
