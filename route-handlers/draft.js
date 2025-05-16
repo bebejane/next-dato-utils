@@ -33,6 +33,6 @@ export default async function draft(request) {
     if (slug)
         redirect(slug);
     else
-        return new Response('OK', { status: 200 });
+        return new Response('not ok', { status: 200 });
 }
 //# sourceMappingURL=draft.js.map

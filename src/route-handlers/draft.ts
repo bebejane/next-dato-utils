@@ -39,5 +39,5 @@ export default async function draft(request: Request): Promise<Response> {
   if (slug)
     redirect(slug)
   else
-    return new Response('OK', { status: 200 })
+    return new Response('not ok', { status: 200 })
 }
