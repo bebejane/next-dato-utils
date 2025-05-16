@@ -34,7 +34,7 @@ const GET = async (req, { params }, config) => {
         //@ts-ignore
         const searchParams = req.nextUrl.searchParams;
         if (searchParams)
-            console.log('slug', searchParams.get('slug'));
+            console.log('sluggy', searchParams.get('sluggy'));
         switch (slug) {
             case 'test':
                 return test(req);
