@@ -29,6 +29,7 @@ export default async function draft(request) {
             maxAge: parseInt(maxAge)
         });
     }
+    console.log('draft mode enabled', exit === null, slug);
     if (slug)
         redirect(slug);
     else
