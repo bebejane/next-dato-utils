@@ -35,9 +35,9 @@ export default async function draft(request: Request): Promise<Response> {
       maxAge: parseInt(maxAge)
     })
   }
-  console.log('draft mode enabled', exit === null, slug)
+
   if (slug)
     redirect(slug)
   else
-    return new Response('not ok', { status: 200 })
+    return new Response('OK' + request.url, { status: 200 })
 }
