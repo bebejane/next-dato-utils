@@ -1,1 +1,1 @@
-export default function draft(request: Request): Promise<Response>;
+export default function draft(request: Request, params?: any): Promise<Response>;

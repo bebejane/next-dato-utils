@@ -31,13 +31,12 @@ const POST = async (req, { params }, config) => {
 const GET = async (req, { params }, config) => {
     try {
         const { slug } = await params;
+        console.log(req.url);
         switch (slug) {
             case 'test':
                 return test(req);
             case 'draft':
                 return draft(req);
-            case 'config':
-                return new Response(JSON.stringify(config), { status: 200, headers: { 'Content-Type': 'application/json' } });
             default:
                 return new Response('Not Found', { status: 404 });
         }
