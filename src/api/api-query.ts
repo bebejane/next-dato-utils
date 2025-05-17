@@ -17,6 +17,7 @@ export type ApiQueryOptions<V = void> = {
   logs?: boolean
   all?: boolean
   apiToken?: string
+  environment?: string
 };
 
 export type DefaultApiQueryOptions = ApiQueryOptions & {
@@ -30,7 +31,8 @@ export type DefaultApiQueryOptions = ApiQueryOptions & {
   maxTags: number,
   logs: boolean
   all: boolean
-  apiToken?: string
+  apiToken?: string,
+  environment?: string
 }
 
 const defaultOptions: DefaultApiQueryOptions = {
@@ -44,7 +46,8 @@ const defaultOptions: DefaultApiQueryOptions = {
   maxTags: 64,
   logs: false,
   all: false,
-  apiToken: undefined
+  apiToken: undefined,
+  environment: process.env.DATOCMS_ENVIRONMENT ?? process.env.NEXT_PUBLIC_DATOCMS_ENVIRONMENT ?? 'main'
 };
 
 
@@ -169,6 +172,7 @@ export type DedupeOptions = {
   queryId: string,
   logs: boolean,
   apiToken?: string
+  environment?: string
 }
 
 const dedupedFetch = async (options: DedupeOptions) => {
@@ -182,12 +186,13 @@ const dedupedFetch = async (options: DedupeOptions) => {
     tags,
     queryId,
     logs,
-    apiToken
-
+    apiToken,
+    environment
   } = options;
 
   const headers = {
     'Authorization': `Bearer ${apiToken ?? process.env.DATOCMS_API_TOKEN ?? process.env.NEXT_PUBLIC_DATOCMS_API_TOKEN}`,
+    'X-Environment': environment,
     ...(includeDrafts ? { 'X-Include-Drafts': 'true' } : {}),
     ...(excludeInvalid ? { 'X-Exclude-Invalid': 'true' } : {}),
     ...(visualEditingBaseUrl
@@ -195,10 +200,7 @@ const dedupedFetch = async (options: DedupeOptions) => {
         'X-Visual-Editing': 'vercel-v1',
         'X-Base-Editing-Url': visualEditingBaseUrl,
       }
-      : {}),
-    ...(process.env.DATOCMS_ENVIRONMENT
-      ? { 'X-Environment': process.env.DATOCMS_ENVIRONMENT ?? process.env.NEXT_PUBLIC_DATOCMS_ENVIRONMENT }
-      : {}),
+      : {})
   } as unknown as HeadersInit
 
   const response = await fetch(url ?? 'https://graphql.datocms.com/', {

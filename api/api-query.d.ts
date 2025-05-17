@@ -11,6 +11,7 @@ export type ApiQueryOptions<V = void> = {
     logs?: boolean;
     all?: boolean;
     apiToken?: string;
+    environment?: string;
 };
 export type DefaultApiQueryOptions = ApiQueryOptions & {
     variables: undefined;
@@ -24,6 +25,7 @@ export type DefaultApiQueryOptions = ApiQueryOptions & {
     logs: boolean;
     all: boolean;
     apiToken?: string;
+    environment?: string;
 };
 export default function apiQuery<T, V = void>(query: DocumentNode, options?: ApiQueryOptions<V>): Promise<T & {
     draftUrl: string | null;
@@ -39,4 +41,5 @@ export type DedupeOptions = {
     queryId: string;
     logs: boolean;
     apiToken?: string;
+    environment?: string;
 };
