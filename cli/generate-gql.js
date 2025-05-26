@@ -346,5 +346,4 @@ async function writeGraphqlFile(filename, content) {
         //console.log(content);
     }
 }
-generateGqlFiles();
 //# sourceMappingURL=generate-gql.js.map

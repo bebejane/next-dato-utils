@@ -386,5 +386,3 @@ async function writeGraphqlFile(filename: string, content: string) {
 		//console.log(content);
 	}
 }
-
-generateGqlFiles()
