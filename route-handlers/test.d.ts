@@ -15,6 +15,6 @@ type TestResult = {
     previews?: PreviewLink[];
     revalidate?: RevalidateResponse;
 };
-export declare function testApiEndpoints(): Promise<TestResult[]>;
+export declare function testApiEndpoints(locale: string): Promise<TestResult[]>;
 export declare const testResultsToString: (results: TestResult[]) => string;
 export declare const testResultsToHtml: (results: TestResult[]) => string;

@@ -2,8 +2,8 @@ import basicAuth from './basic-auth';
 import { buildClient } from '@datocms/cma-client-browser';
 const tests = async (req) => {
     return await basicAuth(req, async (req) => {
-        const results = await testApiEndpoints();
         const params = new URLSearchParams(req.url.split('?')[1]);
+        const results = await testApiEndpoints(params.get('locale') || 'en');
         if (params.get('json'))
             return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
         else
@@ -12,7 +12,7 @@ const tests = async (req) => {
 };
 export default tests;
 const baseApiUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api`;
-export async function testApiEndpoints() {
+export async function testApiEndpoints(locale) {
     const client = buildClient({ apiToken: process.env.DATOCMS_API_TOKEN });
     const site = await client.site.find();
     console.log(`Testing site: ${site.name}`);
@@ -22,14 +22,14 @@ export async function testApiEndpoints() {
         const r = { model: model.api_key };
         console.log(`${i + 1}/${models.length}: ${r.model}`);
         try {
-            const previews = await testWebPreviewsEndpoint(model, client);
+            const previews = await testWebPreviewsEndpoint(model, client, locale);
             if (previews.length > 0) {
                 r.previews = previews;
             }
         }
         catch (e) { }
         try {
-            r.revalidate = await testRevalidateEndpoint(model, client);
+            r.revalidate = await testRevalidateEndpoint(model, client, locale);
         }
         catch (e) { }
         return r;
@@ -93,7 +93,7 @@ export const testResultsToHtml = (results) => {
     </html>
   `;
 };
-const testWebPreviewsEndpoint = async (itemType, client) => {
+const testWebPreviewsEndpoint = async (itemType, client, locale) => {
     const item = (await client.items.list({ limit: 500, filter: { type: itemType.api_key } }))[0];
     const res = await fetch(`${baseApiUrl}/web-previews`, {
         method: 'POST',
@@ -109,13 +109,13 @@ const testWebPreviewsEndpoint = async (itemType, client) => {
                 attributes: itemType
             },
             environmentId: process.env.DATOCMS_ENVIRONMENT,
-            locale: "en"
+            locale
         })
     });
     const json = await res.json();
     return json.previewLinks;
 };
-const testRevalidateEndpoint = async (itemType, client) => {
+const testRevalidateEndpoint = async (itemType, client, locale) => {
     const item = (await client.items.list({ filter: { type: itemType.api_key } }))[0];
     const res = await fetch(`${baseApiUrl}/revalidate`, {
         method: 'POST',
@@ -124,6 +124,7 @@ const testRevalidateEndpoint = async (itemType, client) => {
             'Authorization': `Basic ${btoa(`${process.env.BASIC_AUTH_USER}:${process.env.BASIC_AUTH_PASSWORD}`)}`
         },
         body: JSON.stringify({
+            "locale": locale,
             "environment": "main",
             "entity_type": "item",
             "event_type": "update",
