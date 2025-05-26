@@ -4,7 +4,7 @@ import { Command } from 'commander';
 import { buildClient } from '@datocms/cma-client-node';
 import dedent from 'dedent-js';
 import { table } from 'table';
-import generateGqlFiles from './generate-gql';
+import generateGqlFiles from './generate-gql.js';
 import prettyBytes from 'pretty-bytes';
 const version = '1.0.0';
 const program = new Command();
