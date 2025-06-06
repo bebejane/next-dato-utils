@@ -19,7 +19,17 @@ const POST: RouteHandler = async (req, { params }, config) => {
           const { api_key, entity } = payload;
           const { id, attributes } = entity
           if (!api_key) throw new Error('No api_key found')
-          const paths: string[] = await config.routes?.[api_key]?.(attributes) ?? []
+          let paths: string[] = []
+          if (config.i18n) {
+            paths = await config.routes?.[api_key]?.(attributes, config.i18n?.defaultLocale) ?? []
+            paths.forEach(path => {
+              config.i18n?.locales.filter(l => l !== config.i18n?.defaultLocale).forEach(locale => {
+                paths.push(`/${locale}${path}`)
+              })
+            })
+          } else {
+            paths = await config.routes?.[api_key]?.(attributes) ?? []
+          }
           const tags: string[] = [api_key, id].filter(t => t)
           return await revalidate(paths, tags, true)
         })
