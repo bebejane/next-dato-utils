@@ -1,7 +1,7 @@
 import { revalidatePath, revalidateTag } from 'next/cache';
 //import basicAuth from "./basic-auth";
 export default async function revalidate(req, callback) {
-    const payload = await req.json();
+    const payload = (await req.json());
     if (!payload || !payload?.entity)
         return new Response('Payload empty or missing entity', { status: 400 });
     const { entity, related_entities, event_type, entity_type } = payload;
@@ -18,14 +18,20 @@ export default async function revalidate(req, callback) {
             }
             if ((!paths && !tags) || (!paths.length && !tags.length))
                 return new Response(JSON.stringify(response), { status: 200, headers: { 'content-type': 'application/json' } });
-            paths?.forEach(p => revalidatePath(p));
-            tags?.forEach(t => revalidateTag(t));
-            return new Response(JSON.stringify({ ...response, revalidated: true, paths, tags }), { status: 200, headers: { 'content-type': 'application/json' } });
+            paths?.forEach((p) => revalidatePath(p));
+            tags?.forEach((t) => revalidateTag(t));
+            return new Response(JSON.stringify({ ...{ ...response, revalidated: true }, revalidated: true, paths, tags }), {
+                status: 200,
+                headers: { 'content-type': 'application/json' },
+            });
         }
         catch (error) {
             console.log('Error revalidating', paths, tags);
             console.error(error);
-            return new Response(JSON.stringify({ ...response, paths, tags, error }), { status: 200, headers: { 'content-type': 'application/json' } });
+            return new Response(JSON.stringify({ ...response, paths, tags, error }), {
+                status: 200,
+                headers: { 'content-type': 'application/json' },
+            });
         }
     });
 }
