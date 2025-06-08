@@ -32,7 +32,7 @@ export default async function revalidate(
 			paths?.forEach((p) => revalidatePath(p));
 			tags?.forEach((t) => revalidateTag(t));
 
-			return new Response(JSON.stringify({ ...{ ...response, revalidated: true }, revalidated: true, paths, tags }), {
+			return new Response(JSON.stringify({ ...{ ...response, revalidated: true, paths, tags }, revalidated: true, paths, tags }), {
 				status: 200,
 				headers: { 'content-type': 'application/json' },
 			});
