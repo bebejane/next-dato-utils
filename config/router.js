@@ -10,18 +10,21 @@ const POST = async (req, { params }, config) => {
                     if (!api_key)
                         throw new Error('No api_key found');
                     let paths = [];
+                    const record = { ...attributes, id };
                     if (config.i18n) {
-                        paths = await config.routes?.[api_key]?.(attributes, config.i18n?.defaultLocale) ?? [];
-                        paths.forEach(path => {
-                            config.i18n?.locales.filter(l => l !== config.i18n?.defaultLocale).forEach(locale => {
-                                paths.push(`/${locale}${path}`);
+                        paths = (await config.routes?.[api_key]?.(record, config.i18n?.defaultLocale)) ?? [];
+                        paths.forEach((path) => {
+                            config.i18n?.locales
+                                .filter((l) => l !== config.i18n?.defaultLocale)
+                                .forEach((locale) => {
+                                paths.push(path == '/' ? `/${locale}` : `/${locale}/${path}`);
                             });
                         });
                     }
                     else {
-                        paths = await config.routes?.[api_key]?.(attributes) ?? [];
+                        paths = (await config.routes?.[api_key]?.(record)) ?? [];
                     }
-                    const tags = [api_key, id].filter(t => t);
+                    const tags = [api_key, id].filter((t) => t);
                     return await revalidate(paths, tags, true);
                 });
             case 'web-previews':
