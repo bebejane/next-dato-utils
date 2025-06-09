@@ -11,7 +11,7 @@ export type DatoCmsRouter = {
 
 const POST: RouteHandler = async (req, { params }, config) => {
 	const { route } = await params;
-	console.log(route);
+
 	try {
 		switch (route) {
 			case 'revalidate':
@@ -19,7 +19,6 @@ const POST: RouteHandler = async (req, { params }, config) => {
 					revalidate(req, async (payload, revalidate) => {
 						const { api_key, entity } = payload;
 						const { id, attributes } = entity;
-						console.log(api_key);
 						if (!api_key) throw new Error('No api_key found');
 						let paths: string[] = [];
 						const record = { ...attributes, id };

@@ -1,14 +1,12 @@
 import { backup, revalidate, test, webPreviews, draft, basicAuth } from '../route-handlers';
 const POST = async (req, { params }, config) => {
     const { route } = await params;
-    console.log(route);
     try {
         switch (route) {
             case 'revalidate':
                 return basicAuth(req, (req) => revalidate(req, async (payload, revalidate) => {
                     const { api_key, entity } = payload;
                     const { id, attributes } = entity;
-                    console.log(api_key);
                     if (!api_key)
                         throw new Error('No api_key found');
                     let paths = [];
