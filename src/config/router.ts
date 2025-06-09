@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { DatoCmsConfig } from '../config';
-import { backup, revalidate, test, webPreviews, draft } from '../route-handlers';
+import { backup, revalidate, test, webPreviews, draft, basicAuth } from '../route-handlers';
 
 export type RouteHandler = (req: Request, { params }: { params: Promise<{ route: string }> }, config: DatoCmsConfig) => Promise<Response>;
 
@@ -14,27 +14,29 @@ const POST: RouteHandler = async (req, { params }, config) => {
 	try {
 		switch (route) {
 			case 'revalidate':
-				return revalidate(req, async (payload, revalidate) => {
-					const { api_key, entity } = payload;
-					const { id, attributes } = entity;
-					if (!api_key) throw new Error('No api_key found');
-					let paths: string[] = [];
-					const record = { ...attributes, id };
-					if (config.i18n) {
-						paths = (await config.routes?.[api_key]?.(record, config.i18n?.defaultLocale)) ?? [];
-						paths.forEach((path) => {
-							config.i18n?.locales
-								.filter((l) => l !== config.i18n?.defaultLocale)
-								.forEach((locale) => {
-									paths.push(path == '/' ? `/${locale}` : `/${locale}/${path}`);
-								});
-						});
-					} else {
-						paths = (await config.routes?.[api_key]?.(record)) ?? [];
-					}
-					const tags: string[] = [api_key, id].filter((t) => t);
-					return await revalidate(paths, tags, true);
-				});
+				return basicAuth(req, (req) =>
+					revalidate(req, async (payload, revalidate) => {
+						const { api_key, entity } = payload;
+						const { id, attributes } = entity;
+						if (!api_key) throw new Error('No api_key found');
+						let paths: string[] = [];
+						const record = { ...attributes, id };
+						if (config.i18n) {
+							paths = (await config.routes?.[api_key]?.(record, config.i18n?.defaultLocale)) ?? [];
+							paths.forEach((path) => {
+								config.i18n?.locales
+									.filter((l) => l !== config.i18n?.defaultLocale)
+									.forEach((locale) => {
+										paths.push(path == '/' ? `/${locale}` : `/${locale}/${path}`);
+									});
+							});
+						} else {
+							paths = (await config.routes?.[api_key]?.(record)) ?? [];
+						}
+						const tags: string[] = [api_key, id].filter((t) => t);
+						return await revalidate(paths, tags, true);
+					})
+				);
 			case 'web-previews':
 				return webPreviews(req, async ({ item, itemType, locale }) => {
 					const paths = await config.routes[itemType.attributes.api_key]?.(item.attributes, locale);

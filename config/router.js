@@ -1,10 +1,10 @@
-import { backup, revalidate, test, webPreviews, draft } from '../route-handlers';
+import { backup, revalidate, test, webPreviews, draft, basicAuth } from '../route-handlers';
 const POST = async (req, { params }, config) => {
     const { route } = await params;
     try {
         switch (route) {
             case 'revalidate':
-                return revalidate(req, async (payload, revalidate) => {
+                return basicAuth(req, (req) => revalidate(req, async (payload, revalidate) => {
                     const { api_key, entity } = payload;
                     const { id, attributes } = entity;
                     if (!api_key)
@@ -26,7 +26,7 @@ const POST = async (req, { params }, config) => {
                     }
                     const tags = [api_key, id].filter((t) => t);
                     return await revalidate(paths, tags, true);
-                });
+                }));
             case 'web-previews':
                 return webPreviews(req, async ({ item, itemType, locale }) => {
                     const paths = await config.routes[itemType.attributes.api_key]?.(item.attributes, locale);
