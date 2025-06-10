@@ -145,7 +145,11 @@ const testWebPreviewsEndpoint = async (itemType, client, locale) => {
     return json.previewLinks;
 };
 const testRevalidateEndpoint = async (itemType, client, locale) => {
-    const item = (await client.items.list({ filter: { type: itemType.api_key } }))[0];
+    const item = (await client.items.list({
+        filter: { type: itemType.api_key },
+        version: 'published',
+        limit: 1,
+    }))[0];
     const res = await fetch(`${baseApiUrl}/revalidate`, {
         method: 'POST',
         headers: {
