@@ -170,13 +170,13 @@ const testWebPreviewsEndpoint = async (
 	client: Client,
 	locale: string
 ): Promise<PreviewLink[]> => {
-	const item = (
-		await client.items.list({
-			limit: 500,
-			version: 'published',
-			filter: { type: itemType.api_key },
-		})
-	)[0];
+	const items = await client.items.list({
+		limit: 1,
+		version: 'published',
+		nested: true,
+		filter: { type: itemType.api_key },
+	});
+	const item = items[0];
 	const res = await fetch(`${baseApiUrl}/web-previews`, {
 		method: 'POST',
 		headers: {

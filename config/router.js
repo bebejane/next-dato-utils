@@ -17,7 +17,7 @@ const POST = async (req, { params }, config) => {
                             config.i18n?.locales
                                 .filter((l) => l !== config.i18n?.defaultLocale)
                                 .forEach((locale) => {
-                                paths.push(path == '/' ? `/${locale}` : `/${locale}/${path}`);
+                                paths.push(path == '/' ? `/${locale}` : `/${locale}${path}`);
                             });
                         });
                     }
