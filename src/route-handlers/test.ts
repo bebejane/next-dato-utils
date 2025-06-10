@@ -176,6 +176,7 @@ const testWebPreviewsEndpoint = async (
 		nested: true,
 		filter: { type: itemType.api_key },
 	});
+	console.log(items);
 	const item = items[0];
 	const res = await fetch(`${baseApiUrl}/web-previews`, {
 		method: 'POST',
