@@ -3,7 +3,7 @@ import { buildClient } from '@datocms/cma-client-browser';
 const tests = async (req) => {
     return await basicAuth(req, async (req) => {
         const params = new URLSearchParams(req.url.split('?')[1]);
-        const results = await testApiEndpoints(params.get('locale') || 'en');
+        const results = await testApiEndpoints(params.get('locale') || params.get('l') || 'en');
         if (params.get('json'))
             return new Response(JSON.stringify(results), {
                 status: 200,
