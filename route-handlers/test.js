@@ -123,7 +123,11 @@ export const testResultsToHtml = (results) => {
   `;
 };
 const testWebPreviewsEndpoint = async (itemType, client, locale) => {
-    const item = (await client.items.list({ limit: 500, filter: { type: itemType.api_key } }))[0];
+    const item = (await client.items.list({
+        limit: 500,
+        version: 'published',
+        filter: { type: itemType.api_key },
+    }))[0];
     const res = await fetch(`${baseApiUrl}/web-previews`, {
         method: 'POST',
         headers: {
