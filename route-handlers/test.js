@@ -137,7 +137,7 @@ const testWebPreviewsEndpoint = async (itemType, client, locale) => {
             itemType: {
                 attributes: itemType,
             },
-            environmentId: process.env.DATOCMS_ENVIRONMENT,
+            environmentId: process.env.DATOCMS_ENVIRONMENT || 'main',
             locale,
         }),
     });
@@ -154,7 +154,7 @@ const testRevalidateEndpoint = async (itemType, client, locale) => {
         },
         body: JSON.stringify({
             locale: locale,
-            environment: 'main',
+            environment: process.env.DATOCMS_ENVIRONMENT || 'main',
             entity_type: 'item',
             event_type: 'update',
             entity: {
