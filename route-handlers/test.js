@@ -5,9 +5,15 @@ const tests = async (req) => {
         const params = new URLSearchParams(req.url.split('?')[1]);
         const results = await testApiEndpoints(params.get('locale') || 'en');
         if (params.get('json'))
-            return new Response(JSON.stringify(results), { status: 200, headers: { 'Content-Type': 'application/json' } });
+            return new Response(JSON.stringify(results), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+            });
         else
-            return new Response(testResultsToHtml(results), { status: 200, headers: { 'Content-Type': 'text/html' } });
+            return new Response(testResultsToHtml(results), {
+                status: 200,
+                headers: { 'Content-Type': 'text/html' },
+            });
     });
 };
 export default tests;
@@ -17,7 +23,7 @@ export async function testApiEndpoints(locale) {
     const site = await client.site.find();
     console.log(`Testing site: ${site.name}`);
     const itemTypes = await client.itemTypes.list();
-    const models = itemTypes.filter(t => !t.modular_block);
+    const models = itemTypes.filter((t) => !t.modular_block);
     const results = await Promise.all(models.map(async (model, i) => {
         const r = { model: model.api_key };
         console.log(`${i + 1}/${models.length}: ${r.model}`);
@@ -34,16 +40,34 @@ export async function testApiEndpoints(locale) {
         catch (e) { }
         return r;
     }));
-    return results.sort((a, b) => a.model > b.model ? 1 : -1);
+    return results.sort((a, b) => (a.model > b.model ? 1 : -1));
 }
 export const testResultsToString = (results) => {
-    const tests = results.map(r => {
+    const tests = results
+        .map((r) => {
         return `${r.model} - Previews: ${r.previews ? 'YES' : 'NO'} / Revalidate: ${r.revalidate ? 'YES' : 'NO'}`;
-    }).join('\n');
-    const previews = results.filter(r => r.previews).map(r => r.model).sort((a, b) => a > b ? 1 : -1).join('\n');
-    const revalidate = results.filter(r => r.revalidate?.paths.length).map(r => r.model).sort((a, b) => a > b ? 1 : -1).join('\n');
-    const nopreviews = results.filter(r => !r.previews).map(r => r.model).sort((a, b) => a > b ? 1 : -1).join('\n');
-    const norevalidate = results.filter(r => !r.revalidate || !r.revalidate?.paths.length).map(r => r.model).sort((a, b) => a > b ? 1 : -1).join('\n');
+    })
+        .join('\n');
+    const previews = results
+        .filter((r) => r.previews)
+        .map((r) => r.model)
+        .sort((a, b) => (a > b ? 1 : -1))
+        .join('\n');
+    const revalidate = results
+        .filter((r) => r.revalidate?.paths.length)
+        .map((r) => r.model)
+        .sort((a, b) => (a > b ? 1 : -1))
+        .join('\n');
+    const nopreviews = results
+        .filter((r) => !r.previews)
+        .map((r) => r.model)
+        .sort((a, b) => (a > b ? 1 : -1))
+        .join('\n');
+    const norevalidate = results
+        .filter((r) => !r.revalidate || !r.revalidate?.paths.length)
+        .map((r) => r.model)
+        .sort((a, b) => (a > b ? 1 : -1))
+        .join('\n');
     return `WEB PREVIEWS\n${previews}\n\nNO WEB PREVIEWS:\n${nopreviews}\n\nREVALIDATE\n${revalidate}\n\nNO REVALIDATE\n${norevalidate}`;
 };
 export const testResultsToHtml = (results) => {
@@ -80,13 +104,18 @@ export const testResultsToHtml = (results) => {
             </tr>
           </thead>
           <tbody>
-            ${results.map(r => `
+            ${results
+        .map((r) => `
               <tr>
                 <td class="${!r.previews || !r.revalidate?.revalidated ? 'error' : ''}">${r.model}</td>
-                <td>${r.previews?.filter(({ label, url }) => label === 'Live' && new URL(url).pathname).map(p => new URL(p.url).pathname).join('\n') ?? ''}</td>
+                <td>${r.previews
+        ?.filter(({ label, url }) => label === 'Live' && new URL(url).pathname)
+        .map((p) => new URL(p.url).pathname)
+        .join('\n') ?? ''}</td>
                 <td>${r.revalidate?.paths?.join('\n') ?? ''}</td>
               </tr>
-            `).join('')}
+            `)
+        .join('')}
           </tbody>
         </pre>
       </body>
@@ -99,18 +128,18 @@ const testWebPreviewsEndpoint = async (itemType, client, locale) => {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Basic ${btoa(`${process.env.BASIC_AUTH_USER}:${process.env.BASIC_AUTH_PASSWORD}`)}`
+            'Authorization': `Basic ${btoa(`${process.env.BASIC_AUTH_USER}:${process.env.BASIC_AUTH_PASSWORD}`)}`,
         },
         body: JSON.stringify({
             item: {
-                attributes: item || {}
+                attributes: item || {},
             },
             itemType: {
-                attributes: itemType
+                attributes: itemType,
             },
             environmentId: process.env.DATOCMS_ENVIRONMENT,
-            locale
-        })
+            locale,
+        }),
     });
     const json = await res.json();
     return json.previewLinks;
@@ -121,42 +150,42 @@ const testRevalidateEndpoint = async (itemType, client, locale) => {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Basic ${btoa(`${process.env.BASIC_AUTH_USER}:${process.env.BASIC_AUTH_PASSWORD}`)}`
+            'Authorization': `Basic ${btoa(`${process.env.BASIC_AUTH_USER}:${process.env.BASIC_AUTH_PASSWORD}`)}`,
         },
         body: JSON.stringify({
-            "locale": locale,
-            "environment": "main",
-            "entity_type": "item",
-            "event_type": "update",
-            "entity": {
-                "id": item.id,
-                "type": "item",
-                "attributes": {
-                    ...item || {}
+            locale: locale,
+            environment: 'main',
+            entity_type: 'item',
+            event_type: 'update',
+            entity: {
+                id: item.id,
+                type: 'item',
+                attributes: {
+                    ...(item || {}),
                 },
-                "relationships": {
-                    "item_type": {
-                        "data": {
-                            "id": itemType.id,
-                            "type": "item_type"
-                        }
-                    }
+                relationships: {
+                    item_type: {
+                        data: {
+                            id: itemType.id,
+                            type: 'item_type',
+                        },
+                    },
                 },
-                "meta": {
+                meta: {
                     ...item.meta,
-                    "updated_at": new Date().toISOString(),
-                    "published_at": new Date().toISOString(),
-                    "created_at": new Date().toISOString()
-                }
+                    updated_at: new Date().toISOString(),
+                    published_at: new Date().toISOString(),
+                    created_at: new Date().toISOString(),
+                },
             },
-            "related_entities": [
+            related_entities: [
                 {
-                    "id": itemType.id,
-                    "type": "item_type",
-                    "attributes": itemType
-                }
+                    id: itemType.id,
+                    type: 'item_type',
+                    attributes: itemType,
+                },
             ],
-        })
+        }),
     });
     if (res.status === 200) {
         const json = await res.json();
