@@ -4,7 +4,7 @@ export default async function revalidate(req, callback) {
     const payload = (await req.json());
     if (!payload || !payload?.entity)
         return new Response('Payload empty or missing entity', { status: 400 });
-    const { entity, related_entities, event_type, entity_type } = payload;
+    const { entity, related_entities, event_type, entity_type, environment } = payload;
     const api_key = related_entities?.find(({ id }) => id === entity.relationships?.item_type?.data?.id)?.attributes?.api_key;
     const delay = parseDelay(entity);
     const now = Date.now();
@@ -17,10 +17,18 @@ export default async function revalidate(req, callback) {
                 console.log(response);
             }
             if ((!paths && !tags) || (!paths.length && !tags.length))
-                return new Response(JSON.stringify(response), { status: 200, headers: { 'content-type': 'application/json' } });
+                return new Response(JSON.stringify(response), {
+                    status: 200,
+                    headers: { 'content-type': 'application/json' },
+                });
             paths?.forEach((p) => revalidatePath(p));
             tags?.forEach((t) => revalidateTag(t));
-            return new Response(JSON.stringify({ ...{ ...response, revalidated: true, paths, tags }, revalidated: true, paths, tags }), {
+            return new Response(JSON.stringify({
+                ...{ ...response, revalidated: true, paths, tags },
+                revalidated: true,
+                paths,
+                tags,
+            }), {
                 status: 200,
                 headers: { 'content-type': 'application/json' },
             });
@@ -41,6 +49,7 @@ const parseDelay = (entity) => {
     const created_at = entity.meta?.created_at ?? entity.attributes?.created_at ?? null;
     if (!updated_at && !published_at && !created_at)
         return 0;
-    return Date.now() - Math.max(new Date(updated_at).getTime(), new Date(published_at).getTime(), new Date(created_at).getTime());
+    return (Date.now() -
+        Math.max(new Date(updated_at).getTime(), new Date(published_at).getTime(), new Date(created_at).getTime()));
 };
 //# sourceMappingURL=revalidate.js.map

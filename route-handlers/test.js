@@ -19,7 +19,10 @@ const tests = async (req) => {
 export default tests;
 const baseApiUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api`;
 export async function testApiEndpoints(locale) {
-    const client = buildClient({ apiToken: process.env.DATOCMS_API_TOKEN });
+    const client = buildClient({
+        apiToken: process.env.DATOCMS_API_TOKEN,
+        environment: process.env.DATOCMS_ENVIRONMENT || 'main',
+    });
     const site = await client.site.find();
     console.log(`Testing site: ${site.name}`);
     const itemTypes = await client.itemTypes.list();
@@ -153,7 +156,7 @@ const testRevalidateEndpoint = async (itemType, client, locale) => {
         filter: { type: itemType.api_key },
         version: 'published',
         limit: 1,
-    }))[0];
+    }))?.[0];
     const res = await fetch(`${baseApiUrl}/revalidate`, {
         method: 'POST',
         headers: {

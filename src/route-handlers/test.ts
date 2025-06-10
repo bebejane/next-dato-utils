@@ -43,7 +43,10 @@ type TestResult = {
 };
 
 export async function testApiEndpoints(locale: string) {
-	const client = buildClient({ apiToken: process.env.DATOCMS_API_TOKEN });
+	const client = buildClient({
+		apiToken: process.env.DATOCMS_API_TOKEN,
+		environment: process.env.DATOCMS_ENVIRONMENT || 'main',
+	});
 	const site = await client.site.find();
 
 	console.log(`Testing site: ${site.name}`);
@@ -207,7 +210,7 @@ const testRevalidateEndpoint = async (
 			version: 'published',
 			limit: 1,
 		})
-	)[0];
+	)?.[0];
 	const res = await fetch(`${baseApiUrl}/revalidate`, {
 		method: 'POST',
 		headers: {
