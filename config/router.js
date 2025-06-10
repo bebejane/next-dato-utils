@@ -28,7 +28,10 @@ const POST = async (req, { params }, config) => {
                     return await revalidate(paths, tags, true);
                 }));
             case 'web-previews':
-                return webPreviews(req, async ({ item, itemType, locale }) => {
+                return webPreviews(req, async (payload) => {
+                    const { item, itemType, locale } = payload;
+                    console.log(payload);
+                    console.log(locale);
                     const paths = await config.routes[itemType.attributes.api_key]?.(item.attributes, locale);
                     return paths?.[0] ?? null;
                 });

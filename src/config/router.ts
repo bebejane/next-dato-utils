@@ -2,7 +2,11 @@ import { NextRequest } from 'next/server';
 import { DatoCmsConfig } from '../config';
 import { backup, revalidate, test, webPreviews, draft, basicAuth } from '../route-handlers';
 
-export type RouteHandler = (req: Request, { params }: { params: Promise<{ route: string }> }, config: DatoCmsConfig) => Promise<Response>;
+export type RouteHandler = (
+	req: Request,
+	{ params }: { params: Promise<{ route: string }> },
+	config: DatoCmsConfig
+) => Promise<Response>;
 
 export type DatoCmsRouter = {
 	POST: RouteHandler;
@@ -39,7 +43,10 @@ const POST: RouteHandler = async (req, { params }, config) => {
 					})
 				);
 			case 'web-previews':
-				return webPreviews(req, async ({ item, itemType, locale }) => {
+				return webPreviews(req, async (payload) => {
+					const { item, itemType, locale } = payload;
+					console.log(payload);
+					console.log(locale);
 					const paths = await config.routes[itemType.attributes.api_key]?.(item.attributes, locale);
 					return paths?.[0] ?? null;
 				});
