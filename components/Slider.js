@@ -6,8 +6,6 @@ export default function Slider({ children, hide = false, display = 'flex', speed
     const [height, setHeight] = useState(0);
     const ref = useRef(null);
     useEffect(() => {
-        if (ref.current)
-            return;
         const element = document.getElementById(id);
         if (!element)
             return console.warn(`Slider: No element with id ${id} found`);
@@ -17,6 +15,7 @@ export default function Slider({ children, hide = false, display = 'flex', speed
         element.style.transition = [element.style.transition, `height ${speed}ms ease-out`].filter(Boolean).join(',');
         if (element.scrollHeight === 0)
             return console.warn(`Slider: Element with id ${id} has no height`);
+        console.log(element.scrollHeight);
         setHeight(element.scrollHeight);
     }, [id, hide, speed]);
     useEffect(() => {
