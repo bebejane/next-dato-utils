@@ -3,4 +3,3 @@ export { default as Markdown } from './Markdown';
 export { default as StructuredContent } from './StructuredContent';
 export { default as Block } from './Block';
 export { default as VideoPlayer } from './VideoPlayer';
-export { default as Slider } from './Slider';
