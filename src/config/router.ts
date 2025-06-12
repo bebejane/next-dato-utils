@@ -21,7 +21,8 @@ const POST: RouteHandler = async (req, { params }, config) => {
 			case 'revalidate':
 				return basicAuth(req, (req) =>
 					revalidate(req, async (payload, revalidate) => {
-						const { api_key, entity } = payload;
+						const { entity, entity_type } = payload;
+						const api_key = payload.api_key ?? payload.entity_type;
 						const { id, attributes } = entity;
 						if (!api_key) throw new Error('No api_key found');
 						let paths: string[] = [];
