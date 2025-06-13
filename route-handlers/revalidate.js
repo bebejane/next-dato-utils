@@ -24,6 +24,7 @@ export default async function revalidate(req, callback) {
                 });
             paths?.forEach((p) => revalidatePath(p));
             tags?.forEach((t) => revalidateTag(t));
+            console.log('success reavalidate');
             return new Response(JSON.stringify({
                 ...{ ...response, paths, tags },
                 revalidated: true,
