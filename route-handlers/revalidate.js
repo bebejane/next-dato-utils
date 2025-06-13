@@ -9,7 +9,7 @@ export default async function revalidate(req, callback) {
         ?.api_key;
     const delay = parseDelay(entity);
     const now = Date.now();
-    let response = { paths: [], tags: [], revalidated: false, event_type, entity_type, api_key, delay, now };
+    let response = { revalidated: false, api_key, paths: [], tags: [], event_type, entity_type, delay, now };
     const transformedPayload = { entity, event_type, entity_type, api_key };
     return await callback(transformedPayload, async (paths, tags, logs = false) => {
         try {

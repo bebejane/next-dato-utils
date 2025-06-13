@@ -28,7 +28,7 @@ export default async function revalidate(
 		delay: number;
 		now: number;
 		payload?: DatoWebhookPayload;
-	} = { paths: [], tags: [], revalidated: false, event_type, entity_type, api_key, delay, now };
+	} = { revalidated: false, api_key, paths: [], tags: [], event_type, entity_type, delay, now };
 
 	const transformedPayload: RevalidatePayload = { entity, event_type, entity_type, api_key };
 
