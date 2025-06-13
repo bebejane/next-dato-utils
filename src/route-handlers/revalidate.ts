@@ -46,7 +46,7 @@ export default async function revalidate(
 				response = { ...response, revalidated: true, paths, tags };
 			}
 
-			if (logs) console.log('revalidated', response);
+			if (logs) console.log('revalidation', response);
 
 			return new Response(JSON.stringify({ response }), {
 				status: 200,

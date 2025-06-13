@@ -26,7 +26,7 @@ export default async function revalidate(req, callback) {
                 response = { ...response, revalidated: true, paths, tags };
             }
             if (logs)
-                console.log('revalidated', response);
+                console.log('revalidation', response);
             return new Response(JSON.stringify({ response }), {
                 status: 200,
                 headers: { 'content-type': 'application/json' },
