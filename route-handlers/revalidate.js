@@ -5,7 +5,8 @@ export default async function revalidate(req, callback) {
     if (!payload || !payload?.entity)
         return new Response('Payload empty or missing entity', { status: 400 });
     const { entity, related_entities, event_type, entity_type, environment } = payload;
-    const api_key = related_entities?.find(({ id }) => id === entity.relationships?.item_type?.data?.id)?.attributes?.api_key;
+    const api_key = related_entities?.find(({ id }) => id === entity.relationships?.item_type?.data?.id)?.attributes
+        ?.api_key;
     const delay = parseDelay(entity);
     const now = Date.now();
     const response = { revalidated: false, event_type, entity_type, api_key, delay, now };
@@ -17,14 +18,14 @@ export default async function revalidate(req, callback) {
                 console.log(response);
             }
             if ((!paths && !tags) || (!paths.length && !tags.length))
-                return new Response(JSON.stringify(response), {
-                    status: 200,
+                return new Response(JSON.stringify({ ...response, test: 'check' }), {
+                    status: 422,
                     headers: { 'content-type': 'application/json' },
                 });
             paths?.forEach((p) => revalidatePath(p));
             tags?.forEach((t) => revalidateTag(t));
             return new Response(JSON.stringify({
-                ...{ ...response, revalidated: true, paths, tags },
+                ...{ ...response, paths, tags },
                 revalidated: true,
                 paths,
                 tags,

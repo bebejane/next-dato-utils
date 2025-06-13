@@ -10,13 +10,11 @@ export default async function revalidate(
 ) {
 	const payload = (await req.json()) as DatoWebhookPayload;
 
-	if (!payload || !payload?.entity)
-		return new Response('Payload empty or missing entity', { status: 400 });
+	if (!payload || !payload?.entity) return new Response('Payload empty or missing entity', { status: 400 });
 
 	const { entity, related_entities, event_type, entity_type, environment } = payload;
-	const api_key = related_entities?.find(
-		({ id }) => id === entity.relationships?.item_type?.data?.id
-	)?.attributes?.api_key;
+	const api_key = related_entities?.find(({ id }) => id === entity.relationships?.item_type?.data?.id)?.attributes
+		?.api_key;
 	const delay = parseDelay(entity);
 	const now = Date.now();
 	const response = { revalidated: false, event_type, entity_type, api_key, delay, now };
@@ -30,8 +28,8 @@ export default async function revalidate(
 			}
 
 			if ((!paths && !tags) || (!paths.length && !tags.length))
-				return new Response(JSON.stringify(response), {
-					status: 200,
+				return new Response(JSON.stringify({ ...response, test: 'check' }), {
+					status: 422,
 					headers: { 'content-type': 'application/json' },
 				});
 
@@ -40,7 +38,7 @@ export default async function revalidate(
 
 			return new Response(
 				JSON.stringify({
-					...{ ...response, revalidated: true, paths, tags },
+					...{ ...response, paths, tags },
 					revalidated: true,
 					paths,
 					tags,
@@ -68,11 +66,7 @@ const parseDelay = (entity: DatoWebhookPayload['entity']): number => {
 	if (!updated_at && !published_at && !created_at) return 0;
 	return (
 		Date.now() -
-		Math.max(
-			new Date(updated_at).getTime(),
-			new Date(published_at).getTime(),
-			new Date(created_at).getTime()
-		)
+		Math.max(new Date(updated_at).getTime(), new Date(published_at).getTime(), new Date(created_at).getTime())
 	);
 };
 
