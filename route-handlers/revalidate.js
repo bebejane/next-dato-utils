@@ -9,35 +9,31 @@ export default async function revalidate(req, callback) {
         ?.api_key;
     const delay = parseDelay(entity);
     const now = Date.now();
-    const response = { revalidated: false, event_type, entity_type, api_key, delay, now };
+    let response = { paths: [], tags: [], revalidated: false, event_type, entity_type, api_key, delay, now };
     const transformedPayload = { entity, event_type, entity_type, api_key };
     return await callback(transformedPayload, async (paths, tags, logs = false) => {
         try {
-            if (logs) {
-                console.log('revalidate', 'paths', paths, 'tags', tags);
-                console.log(response);
+            if ((!paths && !tags) || (!paths.length && !tags.length)) {
+                if (logs) {
+                    console.log('revalidate', 'FAILED', 'no paths or tags');
+                    console.log(payload);
+                }
+                response = { ...response, revalidated: false, payload };
             }
-            if ((!paths && !tags) || (!paths.length && !tags.length))
-                return new Response(JSON.stringify({ ...response, test: 'check' }), {
-                    status: 422,
-                    headers: { 'content-type': 'application/json' },
-                });
-            paths?.forEach((p) => revalidatePath(p));
-            tags?.forEach((t) => revalidateTag(t));
-            console.log('success reavalidate');
-            return new Response(JSON.stringify({
-                ...{ ...response, paths, tags },
-                revalidated: true,
-                paths,
-                tags,
-            }), {
+            else {
+                paths?.forEach((p) => revalidatePath(p));
+                tags?.forEach((t) => revalidateTag(t));
+                response = { ...response, revalidated: true, paths, tags };
+            }
+            if (logs)
+                console.log('revalidated', response);
+            return new Response(JSON.stringify({ response }), {
                 status: 200,
                 headers: { 'content-type': 'application/json' },
             });
         }
         catch (error) {
             console.log('Error revalidating', paths, tags);
-            console.error(error);
             return new Response(JSON.stringify({ ...response, paths, tags, error }), {
                 status: 200,
                 headers: { 'content-type': 'application/json' },
