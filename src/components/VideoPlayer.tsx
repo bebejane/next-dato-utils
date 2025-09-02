@@ -104,9 +104,10 @@ export default function VideoPlayer({
 	return (
 		<div
 			className={className}
-			style={controls ? { position: 'relative' } : undefined}
+			style={{ position: 'relative' }}
 			onMouseEnter={handleMouse}
 			onMouseLeave={handleMouse}
+			onClick={handleClick}
 		>
 			<video
 				ref={videoRef}
@@ -118,7 +119,6 @@ export default function VideoPlayer({
 				playsInline={true}
 				disablePictureInPicture={true}
 				poster={showPoster ? `${data.video?.thumbnailUrl}?time=0` : undefined}
-				onClick={handleClick}
 			/>
 			{controls && (showControls || !playing) && (
 				<button style={buttonStyle}>{playing ? <PauseButton /> : <PlayButton />}</button>
