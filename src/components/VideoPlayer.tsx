@@ -39,7 +39,7 @@ export default function VideoPlayer({
 	}
 
 	function handleMouse(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-		setShowControls(e.type === 'mouseenter');
+		setShowControls(e.type === 'mouseenter' || e.type === 'mousemove');
 	}
 
 	useEffect(() => {
@@ -104,9 +104,10 @@ export default function VideoPlayer({
 	return (
 		<div
 			className={className}
-			style={{ position: 'relative' }}
+			style={{ position: 'relative', cursor: 'pointer' }}
 			onMouseEnter={handleMouse}
 			onMouseLeave={handleMouse}
+			onMouseMove={handleMouse}
 			onClick={handleClick}
 		>
 			<video
