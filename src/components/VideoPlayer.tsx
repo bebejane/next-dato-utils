@@ -113,7 +113,7 @@ export default function VideoPlayer({
 				disablePictureInPicture={true}
 				poster={showPoster ? `${data.video?.thumbnailUrl}?time=0` : undefined}
 			/>
-			{controls && showControls && (
+			{controls && (showControls || !playing) && (
 				<button style={buttonStyle} onClick={handleClick}>
 					{playing ? <PauseButton /> : <PlayButton />}
 				</button>
@@ -135,6 +135,8 @@ const buttonStyle: CSSProperties = {
 	transform: 'translate(-50%, -50%)',
 	width: '100px',
 	height: '100px',
+	cursor: 'pointer',
+	zIndex: 10,
 };
 
 const PlayButton = () => {
