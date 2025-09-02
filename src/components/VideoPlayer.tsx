@@ -98,7 +98,7 @@ export default function VideoPlayer({
 	useEffect(() => {
 		clearTimeout(hideControlsTimeout.current);
 		if (!playing) return;
-		hideControlsTimeout.current = setTimeout(() => setShowControls(false), 3000);
+		hideControlsTimeout.current = setTimeout(() => setShowControls(false), 2000);
 	}, [playing]);
 
 	return (
@@ -118,11 +118,10 @@ export default function VideoPlayer({
 				playsInline={true}
 				disablePictureInPicture={true}
 				poster={showPoster ? `${data.video?.thumbnailUrl}?time=0` : undefined}
+				onClick={handleClick}
 			/>
 			{controls && (showControls || !playing) && (
-				<button style={buttonStyle} onClick={handleClick}>
-					{playing ? <PauseButton /> : <PlayButton />}
-				</button>
+				<button style={buttonStyle}>{playing ? <PauseButton /> : <PlayButton />}</button>
 			)}
 		</div>
 	);

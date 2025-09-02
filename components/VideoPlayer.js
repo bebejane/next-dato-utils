@@ -67,9 +67,9 @@ export default function VideoPlayer({ data, className, videoClassName, loop = tr
         clearTimeout(hideControlsTimeout.current);
         if (!playing)
             return;
-        hideControlsTimeout.current = setTimeout(() => setShowControls(false), 3000);
+        hideControlsTimeout.current = setTimeout(() => setShowControls(false), 2000);
     }, [playing]);
-    return (_jsxs("div", { className: className, style: controls ? { position: 'relative' } : undefined, onMouseEnter: handleMouse, onMouseLeave: handleMouse, children: [_jsx("video", { ref: videoRef, src: quality ? data.video[`mp4${quality}`] : data.video.streamingUrl, className: videoClassName, muted: muted, loop: loop, autoPlay: autoPlay, playsInline: true, disablePictureInPicture: true, poster: showPoster ? `${data.video?.thumbnailUrl}?time=0` : undefined }), controls && (showControls || !playing) && (_jsx("button", { style: buttonStyle, onClick: handleClick, children: playing ? _jsx(PauseButton, {}) : _jsx(PlayButton, {}) }))] }));
+    return (_jsxs("div", { className: className, style: controls ? { position: 'relative' } : undefined, onMouseEnter: handleMouse, onMouseLeave: handleMouse, children: [_jsx("video", { ref: videoRef, src: quality ? data.video[`mp4${quality}`] : data.video.streamingUrl, className: videoClassName, muted: muted, loop: loop, autoPlay: autoPlay, playsInline: true, disablePictureInPicture: true, poster: showPoster ? `${data.video?.thumbnailUrl}?time=0` : undefined, onClick: handleClick }), controls && (showControls || !playing) && (_jsx("button", { style: buttonStyle, children: playing ? _jsx(PauseButton, {}) : _jsx(PlayButton, {}) }))] }));
 }
 const videoHasAudio = (video) => {
     if (!video)
