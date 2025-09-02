@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef, CSSProperties } from 'react';
+import React, { useEffect, useState, useRef, CSSProperties } from 'react';
 
 export type VideoPlayerProps = {
 	data?: any;
@@ -32,9 +32,14 @@ export default function VideoPlayer({
 	const [showPoster, setShowPoster] = useState(false);
 	const [quality, setQuality] = useState<String | null>('high');
 	const [playing, setPlaying] = useState(false);
+	const [showControls, setShowControls] = useState(false);
 
 	function handleClick() {
 		playing ? videoRef.current?.pause() : videoRef.current?.play();
+	}
+
+	function handleMouse(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+		setShowControls(e.type === 'mouseenter');
 	}
 
 	useEffect(() => {
@@ -91,7 +96,12 @@ export default function VideoPlayer({
 	}, [showPoster, videoRef]);
 
 	return (
-		<div className={className}>
+		<div
+			className={className}
+			style={controls ? { position: 'relative' } : undefined}
+			onMouseEnter={handleMouse}
+			onMouseLeave={handleMouse}
+		>
 			<video
 				ref={videoRef}
 				src={quality ? data.video[`mp4${quality}`] : data.video.streamingUrl}
@@ -102,9 +112,8 @@ export default function VideoPlayer({
 				playsInline={true}
 				disablePictureInPicture={true}
 				poster={showPoster ? `${data.video?.thumbnailUrl}?time=0` : undefined}
-				style={controls ? { position: 'relative' } : undefined}
 			/>
-			{controls && (
+			{controls && showControls && (
 				<button style={buttonStyle} onClick={handleClick}>
 					{playing ? <PauseButton /> : <PlayButton />}
 				</button>
@@ -119,6 +128,7 @@ const videoHasAudio = (video: any) => {
 };
 
 const buttonStyle: CSSProperties = {
+	all: 'unset',
 	position: 'absolute',
 	top: '50%',
 	left: '50%',
@@ -129,7 +139,14 @@ const buttonStyle: CSSProperties = {
 
 const PlayButton = () => {
 	return (
-		<svg width='100px' height='100px' viewBox='-0.5 0 7 7' version='1.1' xmlns='http://www.w3.org/2000/svg'>
+		<svg
+			width='100px'
+			height='100px'
+			viewBox='-0.5 0 7 7'
+			version='1.1'
+			xmlns='http://www.w3.org/2000/svg'
+			style={{ backgroundColor: 'transparent' }}
+		>
 			<g id='Page-1' stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
 				<g id='Dribbble-Light-Preview' transform='translate(-347.000000, -3766.000000)' fill='#ffffff'>
 					<g id='icons' transform='translate(56.000000, 160.000000)'>
@@ -146,7 +163,14 @@ const PlayButton = () => {
 
 const PauseButton = () => {
 	return (
-		<svg width='100px' height='100px' viewBox='-1 0 8 8' version='1.1' xmlns='http://www.w3.org/2000/svg'>
+		<svg
+			width='100px'
+			height='100px'
+			viewBox='-1 0 8 8'
+			version='1.1'
+			xmlns='http://www.w3.org/2000/svg'
+			style={{ backgroundColor: 'transparent' }}
+		>
 			<g id='Page-1' stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
 				<g id='Dribbble-Light-Preview' transform='translate(-227.000000, -3765.000000)' fill='#ffffff'>
 					<g id='icons' transform='translate(56.000000, 160.000000)'>
