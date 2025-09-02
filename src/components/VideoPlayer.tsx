@@ -42,7 +42,7 @@ export default function VideoPlayer({
 	}, [inView]);
 
 	useEffect(() => {
-		if (!videoRef.current) return;
+		if (!videoRef.current || !autoPlay) return;
 		if (active) videoRef.current.play().catch((err) => {});
 		else videoRef.current.pause();
 	}, [active, quality, videoRef]);
@@ -129,7 +129,7 @@ const buttonStyle: CSSProperties = {
 
 const PlayButton = () => {
 	return (
-		<svg width='800px' height='800px' viewBox='-0.5 0 7 7' version='1.1' xmlns='http://www.w3.org/2000/svg'>
+		<svg width='100px' height='100px' viewBox='-0.5 0 7 7' version='1.1' xmlns='http://www.w3.org/2000/svg'>
 			<g id='Page-1' stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
 				<g id='Dribbble-Light-Preview' transform='translate(-347.000000, -3766.000000)' fill='#ffffff'>
 					<g id='icons' transform='translate(56.000000, 160.000000)'>
@@ -146,7 +146,7 @@ const PlayButton = () => {
 
 const PauseButton = () => {
 	return (
-		<svg width='800px' height='800px' viewBox='-1 0 8 8' version='1.1' xmlns='http://www.w3.org/2000/svg'>
+		<svg width='100px' height='100px' viewBox='-1 0 8 8' version='1.1' xmlns='http://www.w3.org/2000/svg'>
 			<g id='Page-1' stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
 				<g id='Dribbble-Light-Preview' transform='translate(-227.000000, -3765.000000)' fill='#ffffff'>
 					<g id='icons' transform='translate(56.000000, 160.000000)'>
