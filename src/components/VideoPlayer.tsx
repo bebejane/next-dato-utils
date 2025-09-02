@@ -9,7 +9,7 @@ export type VideoPlayerProps = {
 	loop?: boolean;
 	muted?: boolean;
 	autoPlay?: boolean;
-	contols?: boolean;
+	controls?: boolean;
 };
 
 export default function VideoPlayer({
@@ -19,7 +19,7 @@ export default function VideoPlayer({
 	loop = true,
 	muted = true,
 	autoPlay = true,
-	contols = false,
+	controls = false,
 }: VideoPlayerProps) {
 	if (!data?.video) return null;
 
@@ -102,8 +102,13 @@ export default function VideoPlayer({
 				playsInline={true}
 				disablePictureInPicture={true}
 				poster={showPoster ? `${data.video?.thumbnailUrl}?time=0` : undefined}
+				style={controls ? { position: 'relative' } : undefined}
 			/>
-			{contols && <button onClick={handleClick}>{playing ? <PauseButton /> : <PlayButton />}</button>}
+			{controls && (
+				<button style={buttonStyle} onClick={handleClick}>
+					{playing ? <PauseButton /> : <PlayButton />}
+				</button>
+			)}
 		</div>
 	);
 }
@@ -125,7 +130,7 @@ const buttonStyle: CSSProperties = {
 const PlayButton = () => {
 	return (
 		<svg width='800px' height='800px' viewBox='-0.5 0 7 7' version='1.1' xmlns='http://www.w3.org/2000/svg'>
-			<g id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'>
+			<g id='Page-1' stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
 				<g id='Dribbble-Light-Preview' transform='translate(-347.000000, -3766.000000)' fill='#ffffff'>
 					<g id='icons' transform='translate(56.000000, 160.000000)'>
 						<path
@@ -142,7 +147,7 @@ const PlayButton = () => {
 const PauseButton = () => {
 	return (
 		<svg width='800px' height='800px' viewBox='-1 0 8 8' version='1.1' xmlns='http://www.w3.org/2000/svg'>
-			<g id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'>
+			<g id='Page-1' stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
 				<g id='Dribbble-Light-Preview' transform='translate(-227.000000, -3765.000000)' fill='#ffffff'>
 					<g id='icons' transform='translate(56.000000, 160.000000)'>
 						<path
