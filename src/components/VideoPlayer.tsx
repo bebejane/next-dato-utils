@@ -133,8 +133,8 @@ const buttonStyle: CSSProperties = {
 	top: '50%',
 	left: '50%',
 	transform: 'translate(-50%, -50%)',
-	width: '100px',
-	height: '100px',
+	width: '80px',
+	height: '80px',
 	cursor: 'pointer',
 	zIndex: 10,
 };
@@ -142,8 +142,8 @@ const buttonStyle: CSSProperties = {
 const PlayButton = () => {
 	return (
 		<svg
-			width='100px'
-			height='100px'
+			width='80px'
+			height='80px'
 			viewBox='-0.5 0 7 7'
 			version='1.1'
 			xmlns='http://www.w3.org/2000/svg'
@@ -166,8 +166,8 @@ const PlayButton = () => {
 const PauseButton = () => {
 	return (
 		<svg
-			width='100px'
-			height='100px'
+			width='80px'
+			height='80px'
 			viewBox='-1 0 8 8'
 			version='1.1'
 			xmlns='http://www.w3.org/2000/svg'
