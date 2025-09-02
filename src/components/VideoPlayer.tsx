@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useRef, CSSProperties } from 'react';
+import React, { useEffect, useState, useRef, CSSProperties, use } from 'react';
 
 export type VideoPlayerProps = {
 	data?: any;
@@ -27,7 +27,7 @@ export default function VideoPlayer({
 	const [hasAudio, setHasAudio] = useState(false);
 	const videoRef = useRef<HTMLVideoElement | null>(null);
 	const posterRef = useRef<any | null>(null);
-	const muteRef = useRef<HTMLDivElement | null>(null);
+	const hideControlsTimeout = useRef<any | null>(null);
 	const [active, setActive] = useState(false);
 	const [showPoster, setShowPoster] = useState(false);
 	const [quality, setQuality] = useState<String | null>('high');
@@ -94,6 +94,12 @@ export default function VideoPlayer({
 		clearTimeout(posterRef.current);
 		posterRef.current = setTimeout(() => setShowPoster(true), 1000);
 	}, [showPoster, videoRef]);
+
+	useEffect(() => {
+		clearTimeout(hideControlsTimeout.current);
+		if (!playing) return;
+		hideControlsTimeout.current = setTimeout(() => setShowControls(false), 3000);
+	}, [playing]);
 
 	return (
 		<div
