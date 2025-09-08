@@ -1,9 +1,9 @@
 'use server';
-import { draftMode } from 'next/headers.js';
-import { redirect } from 'next/navigation.js';
-import { cookies } from 'next/headers.js';
-export default async function draft(request) {
-    const { searchParams } = new URL(request.url);
+import { draftMode } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
+export default async function draft(request, searchParams) {
+    searchParams = searchParams ?? new URL(request.url).searchParams;
     const secret = searchParams.get('secret');
     const slug = searchParams.get('slug');
     const maxAge = searchParams.get('max-age');
