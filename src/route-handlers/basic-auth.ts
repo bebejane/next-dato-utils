@@ -15,11 +15,13 @@ export default async function basicAuth(
 	const auth = basicAuth.split(' ')[1];
 	const [user, pwd] = Buffer.from(auth, 'base64').toString().split(':');
 	const username = options?.username || process.env.BASIC_AUTH_USER;
-	const password = options?.password || process.env.BASIC_AUTH_PASSWORD;
+	const password = options?.password || process.env.BASIC_AUTH_USER;
 	const isAuthorized = user === username && pwd === password;
 
-	if (!isAuthorized)
+	if (!isAuthorized) {
+		console.log(username, password, process.env.BASIC_AUTH_USER, process.env.BASIC_AUTH_USER, user, pwd);
 		return new Response('Access denied. Wrong password or username.', { status: 401 });
+	}
 
 	if (callback) return await callback(req);
 
