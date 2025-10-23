@@ -1,3 +1,5 @@
+const u = process.env.BASIC_AUTH_USER;
+const p = process.env.BASIC_AUTH_PASSWORD;
 export default async function basicAuth(req, callback, options) {
     if (req.method === 'OPTIONS')
         return new Response('OK', { status: 200 });
@@ -11,8 +13,10 @@ export default async function basicAuth(req, callback, options) {
     const username = options?.username || process.env.BASIC_AUTH_USER;
     const password = options?.password || process.env.BASIC_AUTH_PASSWORD;
     const isAuthorized = user === username && pwd === password;
-    if (!isAuthorized)
+    if (!isAuthorized) {
+        console.log(username, password, process.env.BASIC_AUTH_USER, process.env.BASIC_AUTH_PASSWORD, user, pwd);
         return new Response('Access denied. Wrong password or username.', { status: 401 });
+    }
     if (callback)
         return await callback(req);
     return new Response('OK', { status: 200 });
