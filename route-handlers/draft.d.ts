@@ -1,1 +1,1 @@
-export default function draft(request: Request): Promise<Response | void>;
+export default function draft(request: Request, searchParams?: URLSearchParams): Promise<Response>;

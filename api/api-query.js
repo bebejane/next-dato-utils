@@ -1,5 +1,5 @@
-import { draftMode } from 'next/headers.js';
-import { print } from 'graphql/language/printer.js';
+import { draftMode } from 'next/headers';
+import { print } from 'graphql/language/printer';
 import { traverse } from 'object-traversal';
 import isInteger from 'is-integer';
 const defaultOptions = {
@@ -12,7 +12,9 @@ const defaultOptions = {
     generateTags: false,
     maxTags: 64,
     logs: false,
-    all: false
+    all: false,
+    apiToken: undefined,
+    environment: process.env.DATOCMS_ENVIRONMENT ?? process.env.NEXT_PUBLIC_DATOCMS_ENVIRONMENT ?? 'main'
 };
 export default async function apiQuery(query, options) {
     const opt = { ...defaultOptions, ...(options ?? {}) };
@@ -25,7 +27,7 @@ export default async function apiQuery(query, options) {
     const queryId = (query.definitions?.[0]).name?.value;
     if (typeof options?.includeDrafts === 'undefined')
         try {
-            opt.includeDrafts = draftMode().isEnabled;
+            opt.includeDrafts = (await draftMode()).isEnabled;
         }
         catch (e) { }
     const dedupeOptions = {
@@ -68,9 +70,9 @@ const paginatedQuery = async (query, options, data, queryId) => {
             if ((!filter && metaFilter) || (filter && !metaFilter) || JSON.stringify(filter) !== JSON.stringify(metaFilter))
                 throw new Error(`Query must have same filter argument on ${k} and ${pageKeyMap[k]}`);
         });
-        const first = options.variables?.first ?? firstVariable?.defaultValue?.value ?? 100;
-        if (first > 100)
-            throw new Error('"first" variable must be less than or equal to 100');
+        const first = options.variables?.first ?? firstVariable?.defaultValue?.value ?? 500;
+        if (first > 500)
+            throw new Error('"first" variable must be less than or equal to 500');
         let count = 0;
         while (Object.keys(pageKeyMap).some(k => data[k].count > data[pageKeyMap[k]].length)) {
             const maxPageKey = pageKeyMap[Object.keys(pageKeyMap).sort((a, b) => data[a].count > data[b].count ? -1 : 1)[0]];
@@ -96,9 +98,10 @@ const paginatedQuery = async (query, options, data, queryId) => {
     }
 };
 const dedupedFetch = async (options) => {
-    const { url, body, includeDrafts, excludeInvalid, visualEditingBaseUrl, revalidate, tags, queryId, logs } = options;
+    const { url, body, includeDrafts, excludeInvalid, visualEditingBaseUrl, revalidate, tags, queryId, logs, apiToken, environment } = options;
     const headers = {
-        'Authorization': `Bearer ${process.env.DATOCMS_API_TOKEN ?? process.env.NEXT_PUBLIC_DATOCMS_API_TOKEN}`,
+        'Authorization': `Bearer ${apiToken ?? process.env.DATOCMS_API_TOKEN ?? process.env.NEXT_PUBLIC_DATOCMS_API_TOKEN}`,
+        'X-Environment': environment,
         ...(includeDrafts ? { 'X-Include-Drafts': 'true' } : {}),
         ...(excludeInvalid ? { 'X-Exclude-Invalid': 'true' } : {}),
         ...(visualEditingBaseUrl
@@ -106,10 +109,7 @@ const dedupedFetch = async (options) => {
                 'X-Visual-Editing': 'vercel-v1',
                 'X-Base-Editing-Url': visualEditingBaseUrl,
             }
-            : {}),
-        ...(process.env.DATOCMS_ENVIRONMENT
-            ? { 'X-Environment': process.env.DATOCMS_ENVIRONMENT ?? process.env.NEXT_PUBLIC_DATOCMS_ENVIRONMENT }
-            : {}),
+            : {})
     };
     const response = await fetch(url ?? 'https://graphql.datocms.com/', {
         method: 'POST',
