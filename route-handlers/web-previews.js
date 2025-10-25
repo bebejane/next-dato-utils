@@ -16,14 +16,8 @@ export default async function webPreviews(req, generatePreviewUrl) {
         path = url.pathname;
     }
     if (path) {
-        previewLinks.push({
-            label: 'Live',
-            url: `${baseUrl}${path}?secret=${process.env.DATOCMS_PREVIEW_SECRET}`,
-        });
-        previewLinks.push({
-            label: 'Draft',
-            url: `${baseUrl}/api/draft?slug=${path}&secret=${process.env.DATOCMS_PREVIEW_SECRET}`,
-        });
+        previewLinks.push({ label: 'Live', url: `${baseUrl}${path}?secret=${process.env.DATOCMS_PREVIEW_SECRET}` });
+        previewLinks.push({ label: 'Draft', url: `${baseUrl}/api/draft?slug=${path}&secret=${process.env.DATOCMS_PREVIEW_SECRET}` });
     }
     return new Response(JSON.stringify({ previewLinks }), {
         status: 200,

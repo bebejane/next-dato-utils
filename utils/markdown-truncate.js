@@ -1,4 +1,4 @@
-const markdownTruncate = (text = '', options = { limit: 1, ellipsis: false }) => {
+export default function (text = '', options = { limit: 1, ellipsis: false }) {
     const { limit, ellipsis } = options || {};
     if (text.length <= limit) {
         return text;
@@ -7,7 +7,8 @@ const markdownTruncate = (text = '', options = { limit: 1, ellipsis: false }) =>
     outputText = truncate(outputText, limit, ellipsis);
     outputText = replaceFormatPlaceholdersWithMarkers(outputText);
     return outputText;
-};
+}
+;
 const ASTERISK_ITALIC = '*';
 const UNDERSCORE_ITALIC = '_';
 const ASTERISK_BOLD = '**';
@@ -125,5 +126,4 @@ const truncate = (text, limit, ellipsis) => {
     }
     return outputText;
 };
-export default markdownTruncate;
 //# sourceMappingURL=markdown-truncate.js.map

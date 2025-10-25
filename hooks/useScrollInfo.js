@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef, useCallback } from "react";
 export default function useScrollInfo(pageBottomLimit = 0) {
     const isServer = typeof window === 'undefined';
     const [scrollInfo, setScrollInfo] = useState({
@@ -20,7 +20,7 @@ export default function useScrollInfo(pageBottomLimit = 0) {
         const documentHeight = Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight);
         const viewportHeight = isServer ? 0 : window.innerHeight;
         const scrolledPosition = isServer ? 0 : Math.max(0, Math.ceil(window.pageYOffset));
-        const isPageBottom = isServer ? false : window.innerHeight + scrolledPosition >= documentHeight - pageBottomLimit;
+        const isPageBottom = isServer ? false : (window.innerHeight + scrolledPosition) >= documentHeight - pageBottomLimit;
         const isPageTop = isServer ? true : window.pageYOffset <= 0;
         const isScrolledUp = scrolledPosition < lastScrollInfo.current.scrolledPosition;
         const isScrolledDown = scrolledPosition > lastScrollInfo.current.scrolledPosition;
@@ -35,7 +35,7 @@ export default function useScrollInfo(pageBottomLimit = 0) {
             scrolledPosition,
             documentHeight,
             viewportHeight,
-            timer,
+            timer
         };
         setScrollInfo(scrollInfo);
         lastScrollInfo.current = {
@@ -43,16 +43,15 @@ export default function useScrollInfo(pageBottomLimit = 0) {
             timer: setTimeout(() => setScrollInfo({
                 ...scrollInfo,
                 viewportHeight: isServer ? 0 : window.innerHeight,
-                scrolledPosition: isServer ? 0 : Math.max(0, Math.ceil(window.pageYOffset)),
-                isScrolling: false,
-            }), 100),
+                isScrolling: false
+            }), 100)
         };
     }, [isServer, pageBottomLimit]);
     useEffect(() => {
         handleScroll();
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener("scroll", handleScroll);
         return () => {
-            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener("scroll", handleScroll);
         };
     }, [handleScroll]);
     return scrollInfo;

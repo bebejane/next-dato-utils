@@ -1,9 +1,9 @@
 'use server';
-import { draftMode } from 'next/headers';
-import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
-export default async function draft(request, searchParams) {
-    searchParams = searchParams ?? new URL(request.url).searchParams;
+import { draftMode } from 'next/headers.js';
+import { redirect } from 'next/navigation.js';
+import { cookies } from 'next/headers.js';
+export default async function draft(request) {
+    const { searchParams } = new URL(request.url);
     const secret = searchParams.get('secret');
     const slug = searchParams.get('slug');
     const maxAge = searchParams.get('max-age');
@@ -11,17 +11,18 @@ export default async function draft(request, searchParams) {
     if (secret !== process.env.DATOCMS_PREVIEW_SECRET)
         return new Response('Invalid token', { status: 401 });
     if (exit !== null) {
-        (await draftMode()).disable();
+        console.log('Disabling draft mode');
+        draftMode().disable();
     }
     else {
-        (await draftMode()).enable();
+        console.log('Enabling draft mode');
+        draftMode().enable();
     }
     if (maxAge) {
-        const bypassCookie = (await cookies()).get('__prerender_bypass');
-        if (!bypassCookie) {
+        const bypassCookie = cookies().get('__prerender_bypass');
+        if (!bypassCookie)
             throw new Error('No bypass cookie found');
-        }
-        (await cookies()).set(bypassCookie.name, bypassCookie.value, {
+        cookies().set(bypassCookie.name, bypassCookie.value, {
             httpOnly: true,
             sameSite: 'none',
             secure: true,

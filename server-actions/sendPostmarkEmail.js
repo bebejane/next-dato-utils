@@ -1,5 +1,5 @@
 'use server';
-import { sendPostmarkEmail } from '../utils/postmark';
+import { sendPostmarkEmail } from '../utils/postmark.js';
 export default async function sendPostmarkEmailServerAction(prevState, formData) {
     try {
         const fields = ['subject', 'html', 'text', 'template'];
