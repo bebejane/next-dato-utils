@@ -1,7 +1,7 @@
 import { default as ReactMarkdown, Components } from 'react-markdown';
 import gfm from 'remark-gfm';
-import Link from 'next/link';
-import markdownTruncate from '../utils/markdown-truncate';
+import Link from 'next/link.js';
+import markdownTruncate from '../utils/markdown-truncate.js';
 import remarkBreaks from 'remark-breaks';
 import type { UrlObject } from 'url';
 
@@ -56,6 +56,7 @@ export default function Markdown({
 				components ?? {
 					//@ts-ignore
 					a: ({ children, href }: AnchorProp) => (
+						//@ts-ignore
 						<Link scroll={scroll} href={href}>
 							{children}
 						</Link>

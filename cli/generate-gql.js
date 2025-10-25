@@ -1,7 +1,7 @@
+import 'dotenv/config';
 import { buildClient } from '@datocms/cma-client';
 import * as fs from 'fs';
 import * as path from 'path';
-import 'dotenv/config';
 import * as prettier from 'prettier';
 import pluralize from 'pluralize';
 let client;
@@ -165,7 +165,15 @@ const videoFieldFragmentContent = `fragment VideoFieldFragment on VideoField {
 	title
 	url
 }`;
-const fragments = [imageFragmentContent, fileFragmentContent, videoFieldFragmentContent, imageThumbnailFragmentContent, mediaFragmentContent, siteFragmentContent, videoFragmentContent];
+const fragments = [
+    imageFragmentContent,
+    fileFragmentContent,
+    videoFieldFragmentContent,
+    imageThumbnailFragmentContent,
+    mediaFragmentContent,
+    siteFragmentContent,
+    videoFragmentContent,
+];
 const modelMap = new Map();
 let itemTypes = [];
 let models = [];
@@ -186,21 +194,21 @@ export default async function generateGqlFiles() {
         if (!fs.existsSync(fragmentsDir)) {
             fs.mkdirSync(fragmentsDir);
         }
-        fragments.forEach(fragment => {
+        fragments.forEach((fragment) => {
             fs.writeFileSync(path.join(fragmentsDir, fragment.split(' ')[1] + '.gql'), fragment);
             console.log('Created gql/fragments/' + fragment.split(' ')[1] + '.gql');
         });
         models = await client.itemTypes.list();
         itemTypes = await client.itemTypes.list();
         // Create a map of model IDs to their API keys and PascalCase names for easy lookup
-        models.forEach(m => modelMap.set(m.id, {
+        models.forEach((m) => modelMap.set(m.id, {
             apiKey: m.api_key,
             apiKeyPlural: pluralize(m.api_key),
             pascalName: toPascalCase(m.api_key),
             pascalNamePlural: toPascalCase(pluralize(m.api_key)),
             camelName: toCamelCase(m.api_key),
             camelNamePlural: toCamelCase(pluralize(m.api_key)),
-            singleton: m.has_singleton_item
+            singleton: m.has_singleton_item,
         }));
         for (const { modular_block, api_key, id, has_singleton_item } of models) {
             if (modular_block) {
@@ -212,8 +220,8 @@ export default async function generateGqlFiles() {
                 continue;
             const filename = path.join(gqlDir, `${api_key}.gql`);
             const fields = await client.fields.list(id);
-            const queryFields = await Promise.all(fields.map(field => generateField(id, field)));
-            const haveSlug = fields.some(field => field.api_key === 'slug') && !m.singleton;
+            const queryFields = await Promise.all(fields.map((field) => generateField(id, field)));
+            const haveSlug = fields.some((field) => field.api_key === 'slug') && !m.singleton;
             const params = haveSlug ? '($slug: String)' : '';
             const filter = haveSlug ? '(filter:{slug: {eq: $slug}})' : '';
             const fragment = `fragment ${m.pascalName}Fragment on ${m.pascalName}Record { ${queryFields.join('')} }`;
@@ -269,7 +277,8 @@ async function generateField(modelId, field) {
             break;
         case 'link':
         case 'links':
-            const linkBlocks = field.validators.item_item_type?.item_types ?? field.validators.item_item_types?.item_types;
+            const linkBlocks = field.validators.item_item_type?.item_types ??
+                field.validators.item_item_types?.item_types;
             const linkGql = await generateBlocks(linkBlocks);
             if (linkGql !== null)
                 str = `${apiKeyCamel} { ${linkGql} }`;
@@ -322,16 +331,19 @@ async function generateBlocks(blockIds) {
     const blockFields = [];
     for (const id of modelIds) {
         blockFields.push({
-            api_key: itemTypes.find(t => t.id === id)?.api_key,
-            fields: await client.fields.list(id)
+            api_key: itemTypes.find((t) => t.id === id)?.api_key,
+            fields: await client.fields.list(id),
         });
     }
     const blockQueries = await Promise.all(blockFields.map(async ({ api_key, fields }, idx) => {
-        return (await Promise.all(fields.map(field => generateField(modelIds[idx], field)))).join(' ');
+        return (await Promise.all(fields.map((field) => generateField(modelIds[idx], field)))).join(' ');
     }));
     const gql = `
-		${blockQueries.map((q, idx) => blockFields[idx]?.api_key && q ?
-        `... on ${toPascalCase(blockFields[idx].api_key)}Record { ${q} }` : '').join('\n')}`;
+		${blockQueries
+        .map((q, idx) => typeof blockFields[idx]?.api_key === 'string' && q
+        ? `... on ${toPascalCase(blockFields[idx].api_key)}Record { ${q} }`
+        : '')
+        .join('\n')}`;
     return gql;
 }
 async function writeGraphqlFile(filename, content) {

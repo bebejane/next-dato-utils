@@ -1,5 +1,5 @@
-import { draftMode } from 'next/headers';
-import { print } from 'graphql/language/printer';
+import { draftMode } from 'next/headers.js';
+import { print } from 'graphql/language/printer.js';
 import { traverse } from 'object-traversal';
 import isInteger from 'is-integer';
 const defaultOptions = {
@@ -14,7 +14,7 @@ const defaultOptions = {
     logs: false,
     all: false,
     apiToken: undefined,
-    environment: process.env.DATOCMS_ENVIRONMENT ?? process.env.NEXT_PUBLIC_DATOCMS_ENVIRONMENT ?? 'main'
+    environment: process.env.DATOCMS_ENVIRONMENT ?? process.env.NEXT_PUBLIC_DATOCMS_ENVIRONMENT ?? 'main',
 };
 export default async function apiQuery(query, options) {
     const opt = { ...defaultOptions, ...(options ?? {}) };
@@ -33,10 +33,12 @@ export default async function apiQuery(query, options) {
     const dedupeOptions = {
         body: JSON.stringify({ query: print(query), variables: options?.variables }),
         ...opt,
-        queryId
+        queryId,
     };
     const tags = opt.generateTags ? generateIdTags(await dedupedFetch(dedupeOptions), opt.tags, opt.maxTags) : opt.tags;
-    const res = opt.includeDrafts ? await dedupedFetch({ ...dedupeOptions, tags, url: 'https://graphql-listen.datocms.com/preview' }) : {};
+    const res = opt.includeDrafts
+        ? await dedupedFetch({ ...dedupeOptions, tags, url: 'https://graphql-listen.datocms.com/preview' })
+        : {};
     opt.logs && console.log('[api-query]', 'calling', queryId);
     const { data } = await dedupedFetch({ ...dedupeOptions, tags });
     if (opt.all) {
@@ -52,11 +54,11 @@ const paginatedQuery = async (query, options, data, queryId) => {
         const operation = query.definitions?.find(({ kind }) => kind === 'OperationDefinition');
         if (!operation)
             throw new Error('Query must have an operation definition');
-        const firstVariable = operation.variableDefinitions?.find(v => v.variable.name.value === 'first');
-        const skipVariable = operation.variableDefinitions?.find(v => v.variable.name.value === 'skip');
+        const firstVariable = operation.variableDefinitions?.find((v) => v.variable.name.value === 'first');
+        const skipVariable = operation.variableDefinitions?.find((v) => v.variable.name.value === 'skip');
         if (!firstVariable || !skipVariable)
             throw new Error(`Query must have first and skip variables`);
-        const pageKeys = Object.keys(data).filter(k => k.startsWith('_all') && k.endsWith('Meta'));
+        const pageKeys = Object.keys(data).filter((k) => k.startsWith('_all') && k.endsWith('Meta'));
         if (pageKeys.length === 0)
             throw new Error('Query must have at least one paginated field');
         const pageKeyMap = pageKeys.reduce((acc, cur) => {
@@ -64,9 +66,9 @@ const paginatedQuery = async (query, options, data, queryId) => {
             return acc;
         }, {});
         // Check filter diff
-        Object.keys(pageKeyMap).forEach(k => {
-            const filter = operation.selectionSet.selections.find(s => s.name.value === k)?.arguments?.find(a => a.name.value === 'filter');
-            const metaFilter = operation.selectionSet.selections.find(s => s.name.value === pageKeyMap[k])?.arguments?.find(a => a.name.value === 'filter');
+        Object.keys(pageKeyMap).forEach((k) => {
+            const filter = operation.selectionSet.selections.find((s) => s.name.value === k)?.arguments?.find((a) => a.name.value === 'filter');
+            const metaFilter = operation.selectionSet.selections.find((s) => s.name.value === pageKeyMap[k])?.arguments?.find((a) => a.name.value === 'filter');
             if ((!filter && metaFilter) || (filter && !metaFilter) || JSON.stringify(filter) !== JSON.stringify(metaFilter))
                 throw new Error(`Query must have same filter argument on ${k} and ${pageKeyMap[k]}`);
         });
@@ -74,8 +76,8 @@ const paginatedQuery = async (query, options, data, queryId) => {
         if (first > 500)
             throw new Error('"first" variable must be less than or equal to 500');
         let count = 0;
-        while (Object.keys(pageKeyMap).some(k => data[k].count > data[pageKeyMap[k]].length)) {
-            const maxPageKey = pageKeyMap[Object.keys(pageKeyMap).sort((a, b) => data[a].count > data[b].count ? -1 : 1)[0]];
+        while (Object.keys(pageKeyMap).some((k) => data[k].count > data[pageKeyMap[k]].length)) {
+            const maxPageKey = pageKeyMap[Object.keys(pageKeyMap).sort((a, b) => (data[a].count > data[b].count ? -1 : 1))[0]];
             const skip = data[maxPageKey].length;
             const pageData = await apiQuery(query, {
                 ...options,
@@ -83,10 +85,10 @@ const paginatedQuery = async (query, options, data, queryId) => {
                 variables: {
                     ...options.variables,
                     first,
-                    skip
-                }
+                    skip,
+                },
             });
-            Object.keys(pageKeyMap).forEach(k => data[pageKeyMap[k]] = [...data[pageKeyMap[k]], ...pageData[pageKeyMap[k]]]);
+            Object.keys(pageKeyMap).forEach((k) => (data[pageKeyMap[k]] = [...data[pageKeyMap[k]], ...pageData[pageKeyMap[k]]]));
             if (++count > 1000) {
                 throw new Error('Paginated query exceeded 1000 requests');
             }
@@ -98,7 +100,7 @@ const paginatedQuery = async (query, options, data, queryId) => {
     }
 };
 const dedupedFetch = async (options) => {
-    const { url, body, includeDrafts, excludeInvalid, visualEditingBaseUrl, revalidate, tags, queryId, logs, apiToken, environment } = options;
+    const { url, body, includeDrafts, excludeInvalid, visualEditingBaseUrl, revalidate, tags, queryId, logs, apiToken, environment, } = options;
     const headers = {
         'Authorization': `Bearer ${apiToken ?? process.env.DATOCMS_API_TOKEN ?? process.env.NEXT_PUBLIC_DATOCMS_API_TOKEN}`,
         'X-Environment': environment,
@@ -109,7 +111,7 @@ const dedupedFetch = async (options) => {
                 'X-Visual-Editing': 'vercel-v1',
                 'X-Base-Editing-Url': visualEditingBaseUrl,
             }
-            : {})
+            : {}),
     };
     const response = await fetch(url ?? 'https://graphql.datocms.com/', {
         method: 'POST',
@@ -117,21 +119,22 @@ const dedupedFetch = async (options) => {
         body,
         next: {
             revalidate,
-            tags: Array.isArray(tags) ? tags : undefined
-        }
+            tags: Array.isArray(tags) ? tags : undefined,
+        },
     });
     const responseBody = await response.json();
     if (!response.ok)
         throw new Error(`${response.status} ${response.statusText}: ${JSON.stringify(responseBody)}`);
     if (responseBody.errors)
         throw new Error(`${queryId}: ${responseBody.errors.map((e) => e.message).join('. ')}`);
-    logs && console.log('[api-query]', queryId, { ...options, body: undefined }, `tags: ${tags?.length ?? 0}`, response.headers.get('x-cache'));
+    logs &&
+        console.log('[api-query]', queryId, { ...options, body: undefined }, `tags: ${tags?.length ?? 0}`, response.headers.get('x-cache'));
     return responseBody;
 };
 const generateIdTags = (data, tags, maxTags) => {
     const allTags = tags?.length ? tags : [];
     traverse(data, ({ key, value }) => key === 'id' && allTags.push(String(value)));
-    const uniqueTags = allTags.filter((value, index, self) => self.indexOf(value) === index).filter(t => t);
+    const uniqueTags = allTags.filter((value, index, self) => self.indexOf(value) === index).filter((t) => t);
     return uniqueTags.slice(0, maxTags);
 };
 //# sourceMappingURL=api-query.js.map

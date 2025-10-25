@@ -1,8 +1,8 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { default as ReactMarkdown } from 'react-markdown';
 import gfm from 'remark-gfm';
-import Link from 'next/link';
-import markdownTruncate from '../utils/markdown-truncate';
+import Link from 'next/link.js';
+import markdownTruncate from '../utils/markdown-truncate.js';
 import remarkBreaks from 'remark-breaks';
 const truncateSentances = (markdown, limit) => {
     if (!markdown)
@@ -20,7 +20,9 @@ export default function Markdown({ content, truncate, className, components, sen
         //@ts-ignore
         components: components ?? {
             //@ts-ignore
-            a: ({ children, href }) => (_jsx(Link, { scroll: scroll, href: href, children: children })),
+            a: ({ children, href }) => (
+            //@ts-ignore
+            _jsx(Link, { scroll: scroll, href: href, children: children })),
         } }));
 }
 //# sourceMappingURL=Markdown.js.map

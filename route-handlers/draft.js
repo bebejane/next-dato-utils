@@ -1,7 +1,7 @@
 'use server';
-import { draftMode } from 'next/headers';
-import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
+import { draftMode } from 'next/headers.js';
+import { redirect } from 'next/navigation.js';
+import { cookies } from 'next/headers.js';
 export default async function draft(request, searchParams) {
     searchParams = searchParams ?? new URL(request.url).searchParams;
     const secret = searchParams.get('secret');
@@ -26,7 +26,7 @@ export default async function draft(request, searchParams) {
             sameSite: 'none',
             secure: true,
             path: '/',
-            maxAge: parseInt(maxAge)
+            maxAge: parseInt(maxAge),
         });
     }
     if (slug)

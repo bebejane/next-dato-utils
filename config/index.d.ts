@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-export { default as router, type RouteHandler } from './router';
+export { default as router, type RouteHandler } from './router.js';
 export type DatoCmsConfig = {
     name: string;
     description: string;

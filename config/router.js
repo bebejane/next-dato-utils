@@ -1,4 +1,4 @@
-import { backup, revalidate, test, webPreviews, draft, basicAuth } from '../route-handlers';
+import { backup, revalidate, test, webPreviews, draft, basicAuth } from '../route-handlers/index.js';
 const POST = async (req, { params }, config) => {
     const { route } = await params;
     try {
