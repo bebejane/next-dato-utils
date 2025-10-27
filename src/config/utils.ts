@@ -19,6 +19,7 @@ export async function getItemReferenceRoutes(itemId: string, locales?: string[])
 			limit: 500,
 			nested: true,
 		});
+
 		const itemPathnames = await itemsToRoutes(items, locales);
 		itemPathnames && pathnames.push.apply(pathnames, itemPathnames);
 	} catch (e) {
@@ -33,7 +34,7 @@ export async function getItemReferenceRoutes(itemId: string, locales?: string[])
 }
 
 export async function getUploadReferenceRoutes(uploadId: string, locales?: string[]): Promise<string[] | null> {
-	if (!uploadId) throw new Error('datocms.config: Missing reference: itemId');
+	if (!uploadId) throw new Error('datocms.config: Missing reference: uploadId');
 	const pathnames: string[] = [];
 
 	try {
@@ -59,9 +60,10 @@ async function itemsToRoutes(items: Item[], locales?: string[]): Promise<string[
 	const pathnames: string[] = [];
 	const config = loadConfig();
 	const itemTypes = await client.itemTypes.list();
+	console.log('config', config);
 	for (const item of items) {
 		const itemType = itemTypes.find(({ id }) => id === item.item_type.id);
-		console.log(itemType);
+
 		if (!itemType) {
 			console.error(`Item type not found: ${item.item_type.id}`);
 			console.log(item);

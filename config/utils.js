@@ -30,7 +30,7 @@ export async function getItemReferenceRoutes(itemId, locales) {
 }
 export async function getUploadReferenceRoutes(uploadId, locales) {
     if (!uploadId)
-        throw new Error('datocms.config: Missing reference: itemId');
+        throw new Error('datocms.config: Missing reference: uploadId');
     const pathnames = [];
     try {
         const uploads = await client.uploads.references(uploadId, {
@@ -55,9 +55,9 @@ async function itemsToRoutes(items, locales) {
     const pathnames = [];
     const config = loadConfig();
     const itemTypes = await client.itemTypes.list();
+    console.log('config', config);
     for (const item of items) {
         const itemType = itemTypes.find(({ id }) => id === item.item_type.id);
-        console.log(itemType);
         if (!itemType) {
             console.error(`Item type not found: ${item.item_type.id}`);
             console.log(item);
