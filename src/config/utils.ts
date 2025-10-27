@@ -61,6 +61,7 @@ async function itemsToRoutes(items: Item[], locales?: string[]): Promise<string[
 	const itemTypes = await client.itemTypes.list();
 	for (const item of items) {
 		const itemType = itemTypes.find(({ id }) => id === item.item_type.id);
+		console.log(itemType);
 		if (!itemType) {
 			console.error(`Item type not found: ${item.item_type.id}`);
 			console.log(item);
