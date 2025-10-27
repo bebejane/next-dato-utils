@@ -92,7 +92,6 @@ export async function getItemWithLinked(id: string): Promise<any> {
 	const ids = new Set<string>();
 
 	for (const f of linkFields) {
-		console.log('get item link references', f.api_key);
 		const value = (record as any)[f.api_key];
 		if (!value) continue;
 		if (Array.isArray(value)) value.forEach((v) => ids.add(v));

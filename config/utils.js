@@ -84,7 +84,6 @@ export async function getItemWithLinked(id) {
     const linkFields = fields.filter((f) => f.field_type === 'link' || f.field_type === 'links');
     const ids = new Set();
     for (const f of linkFields) {
-        console.log('get item link references', f.api_key);
         const value = record[f.api_key];
         if (!value)
             continue;
