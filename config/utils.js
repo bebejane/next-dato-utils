@@ -57,8 +57,11 @@ async function itemsToRoutes(items, locales) {
     const itemTypes = await client.itemTypes.list();
     for (const item of items) {
         const itemType = itemTypes.find(({ id }) => id === item.item_type.id);
-        if (!itemType)
+        if (!itemType) {
+            console.error(`Item type not found: ${item.item_type.id}`);
+            console.log(item);
             continue;
+        }
         const record = await getItemWithLinked(item.id);
         if (locales) {
             for (const locale of locales) {
