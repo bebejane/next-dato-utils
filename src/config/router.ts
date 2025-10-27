@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server.js';
-import { DatoCmsConfig } from '../config/index.js';
+import { DatoCmsConfig } from './config.js';
 import { backup, revalidate, test, webPreviews, draft, basicAuth } from '../route-handlers/index.js';
 
 export type RouteHandler = (
