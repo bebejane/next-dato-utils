@@ -1,16 +1,6 @@
 import { MetadataRoute } from 'next';
 
 export type DatoCmsConfig = {
-	name: string;
-	description: string;
-	theme: {
-		color: string;
-		background: string;
-	};
-	url: {
-		dev: string;
-		public: string;
-	};
 	i18n?: {
 		locales: string[];
 		defaultLocale: string;
@@ -18,5 +8,7 @@ export type DatoCmsConfig = {
 	routes: {
 		[api_key: string]: (record: any, locale?: string) => Promise<string[] | null>;
 	};
+	manifest?: () => Promise<MetadataRoute.Manifest>;
 	sitemap?: () => Promise<MetadataRoute.Sitemap>;
+	robots?: () => Promise<MetadataRoute.Robots>;
 };
