@@ -10,7 +10,6 @@
 		"release": "npm version patch --force && git push && git push --tags && gh release create $(git describe --tags --abbrev=0) --generate-notes",
 		"dev": "npx nodemon --watch \"src/**/*\" --watch \"./package.json\" -e tsx,ts,scss,json --exec \"npm run build\"",
 		"dev:cli": "tsx src/cli/index.ts",
-		"clean": "rm -rf ./dist",
 		"tsc": "tsc -p tsconfig.json",
 		"copy-files": "copyfiles -u 1 src/**/*.scss ./build && rsync -a ./build/* ./ && rm -rf ./build"
 	},
