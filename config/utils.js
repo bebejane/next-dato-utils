@@ -15,6 +15,7 @@ export async function getItemReferenceRoutes(itemId, locales) {
             limit: 500,
             nested: true,
         });
+        console.log('get item references', itemId);
         const itemPathnames = await itemsToRoutes(items, locales);
         itemPathnames && pathnames.push.apply(pathnames, itemPathnames);
     }
@@ -55,7 +56,6 @@ async function itemsToRoutes(items, locales) {
     const pathnames = [];
     const config = await loadConfig();
     const itemTypes = await client.itemTypes.list();
-    console.log('config check', config);
     for (const item of items) {
         const itemType = itemTypes.find(({ id }) => id === item.item_type.id);
         if (!itemType) {
@@ -84,6 +84,7 @@ export async function getItemWithLinked(id) {
     const linkFields = fields.filter((f) => f.field_type === 'link' || f.field_type === 'links');
     const ids = new Set();
     for (const f of linkFields) {
+        console.log('get item link references', f.api_key);
         const value = record[f.api_key];
         if (!value)
             continue;
