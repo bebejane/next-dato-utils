@@ -9,15 +9,8 @@ const client = buildClient({
 	environment: process.env.DATOCMS_ENVIRONMENT,
 });
 
-export async function getItemReferenceRoutes(
-	itemId: string,
-	routes: DatoCmsConfig['routes'],
-	locales?: string[]
-): Promise<string[] | null> {
+export async function getItemReferenceRoutes(itemId: string, locales?: string[]): Promise<string[] | null> {
 	if (!itemId) throw new Error('datocms.config: Missing reference: itemId');
-
-	//@ts-expect-error
-	const c = import('../../../datocms.config');
 	const pathnames: string[] = [];
 
 	try {
@@ -26,7 +19,7 @@ export async function getItemReferenceRoutes(
 			limit: 500,
 			nested: true,
 		});
-		const itemPathnames = await itemsToRoutes(items, routes, locales);
+		const itemPathnames = await itemsToRoutes(items, locales);
 		itemPathnames && pathnames.push.apply(pathnames, itemPathnames);
 	} catch (e) {
 		if (e instanceof ApiError) {
@@ -39,11 +32,7 @@ export async function getItemReferenceRoutes(
 	return pathnames;
 }
 
-export async function getUploadReferenceRoutes(
-	uploadId: string,
-	routes: DatoCmsConfig['routes'],
-	locales?: string[]
-): Promise<string[] | null> {
+export async function getUploadReferenceRoutes(uploadId: string, locales?: string[]): Promise<string[] | null> {
 	if (!uploadId) throw new Error('datocms.config: Missing reference: itemId');
 	const pathnames: string[] = [];
 
@@ -53,7 +42,7 @@ export async function getUploadReferenceRoutes(
 			limit: 500,
 			nested: true,
 		});
-		const itemPathnames = await itemsToRoutes(uploads, routes, locales);
+		const itemPathnames = await itemsToRoutes(uploads, locales);
 		itemPathnames && pathnames.push.apply(pathnames, itemPathnames);
 	} catch (e) {
 		if (e instanceof ApiError) {
@@ -66,12 +55,9 @@ export async function getUploadReferenceRoutes(
 	return pathnames;
 }
 
-async function itemsToRoutes(
-	items: Item[],
-	routes: DatoCmsConfig['routes'],
-	locales?: string[]
-): Promise<string[] | null> {
+async function itemsToRoutes(items: Item[], locales?: string[]): Promise<string[] | null> {
 	const pathnames: string[] = [];
+	const config = loadConfig();
 	const itemTypes = await client.itemTypes.list();
 	for (const item of items) {
 		const itemType = itemTypes.find(({ id }) => id === item.item_type.id);
@@ -79,11 +65,11 @@ async function itemsToRoutes(
 		const record = await getItemWithLinked(item.id);
 		if (locales) {
 			for (const locale of locales) {
-				const p = await routes[itemType.api_key]?.(record, locale);
+				const p = await config.routes[itemType.api_key]?.(record, locale);
 				p && pathnames.push.apply(pathnames, p);
 			}
 		} else {
-			const p = await routes[itemType.api_key]?.(record);
+			const p = await config.routes[itemType.api_key]?.(record);
 			p && pathnames.push.apply(pathnames, p);
 		}
 	}
@@ -115,4 +101,14 @@ export async function getItemWithLinked(id: string): Promise<any> {
 		record[key] = linkedRecords.find((r) => r.id === record[key]) ?? record[key];
 	});
 	return record;
+}
+
+function loadConfig(): DatoCmsConfig {
+	try {
+		//@ts-expect-error
+		const c = import('../../../datocms.config');
+		return c as unknown as DatoCmsConfig;
+	} catch (e) {
+		throw new Error('datocms.config not found');
+	}
 }
