@@ -1,13 +1,14 @@
 {
 	"name": "next-dato-utils",
-	"version": "1.0.777",
+	"version": "1.0.778",
 	"description": "",
 	"type": "module",
 	"main": "./index.js",
 	"module": "./index.js",
 	"scripts": {
 		"build": "node ./clean.js && npm run tsc && npm run copy-files",
-		"pub": "npm version patch --force && npm run build && git add . && git commit -m \"updates\" && git push",
+		"pub": "npm run build && git add . && git commit -m \"updates\" && git push",
+		"release": "npm version patch --force && git push && git push --tags && gh release create $(git describe --tags --abbrev=0) --generate-notes",
 		"dev": "npx nodemon --watch \"src/**/*\" --watch \"./package.json\" -e tsx,ts,scss,json --exec \"npm run build\"",
 		"dev:cli": "tsx src/cli/index.ts",
 		"clean": "rm -rf ./dist",
