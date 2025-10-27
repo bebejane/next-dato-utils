@@ -53,9 +53,9 @@ export async function getUploadReferenceRoutes(uploadId, locales) {
 }
 async function itemsToRoutes(items, locales) {
     const pathnames = [];
-    const config = loadConfig();
+    const config = await loadConfig();
     const itemTypes = await client.itemTypes.list();
-    console.log('config', config);
+    console.log('config check', config);
     for (const item of items) {
         const itemType = itemTypes.find(({ id }) => id === item.item_type.id);
         if (!itemType) {
@@ -103,10 +103,10 @@ export async function getItemWithLinked(id) {
     });
     return record;
 }
-function loadConfig() {
+async function loadConfig() {
     try {
         //@ts-expect-error
-        const c = import('../../../datocms.config');
+        const c = await import('../../../datocms.config');
         return c;
     }
     catch (e) {

@@ -58,9 +58,9 @@ export async function getUploadReferenceRoutes(uploadId: string, locales?: strin
 
 async function itemsToRoutes(items: Item[], locales?: string[]): Promise<string[] | null> {
 	const pathnames: string[] = [];
-	const config = loadConfig();
+	const config = await loadConfig();
 	const itemTypes = await client.itemTypes.list();
-	console.log('config', config);
+	console.log('config check', config);
 	for (const item of items) {
 		const itemType = itemTypes.find(({ id }) => id === item.item_type.id);
 
@@ -110,10 +110,10 @@ export async function getItemWithLinked(id: string): Promise<any> {
 	return record;
 }
 
-function loadConfig(): DatoCmsConfig {
+async function loadConfig(): Promise<DatoCmsConfig> {
 	try {
 		//@ts-expect-error
-		const c = import('../../../datocms.config');
+		const c = await import('../../../datocms.config');
 		return c as unknown as DatoCmsConfig;
 	} catch (e) {
 		throw new Error('datocms.config not found');
