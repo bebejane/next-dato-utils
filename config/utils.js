@@ -106,7 +106,7 @@ export async function getItemWithLinked(id) {
 async function loadConfig() {
     try {
         //@ts-expect-error
-        const c = await import('../../../datocms.config');
+        const c = (await import('../../../datocms.config')).default;
         return c;
     }
     catch (e) {
