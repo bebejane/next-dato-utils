@@ -1,101 +1,105 @@
 'use client';
 
-import type { DocumentNode } from 'graphql';
-import { useEffect, useState, useCallback } from "react";
-import { apiQuery } from '../api/index.js';
+import { useEffect, useState, useCallback } from 'react';
+import { apiQuery, type TypedDocumentNode } from '../api/index.js';
 
 export type UseApiQueryProps = {
-  variables?: any
-  initialData?: any
-  pageSize?: number
-  includeDrafts?: boolean
-}
-
-export type Pagination = {
-  no: number,
-  count: number,
-  size: number,
-  end: boolean
-}
-
-const useApiQuery = <T, V>(document: DocumentNode, { variables, initialData, pageSize = 100, includeDrafts = false }: UseApiQueryProps = {}) => {
-
-  const [initial, setInitial] = useState<T>(initialData)
-  const [data, setData] = useState<T>(initialData)
-  const [page, setPage] = useState<Pagination | undefined>(pageSize ? {
-    no: 1,
-    count: initialData.pagination?.count || 0,
-    size: pageSize,
-    end: initialData.pagination?.count > 0 ? initialData.pagination?.count <= pageSize : false
-  } : undefined)
-  const [error, setError] = useState<Error | undefined>()
-  const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    if (JSON.stringify(initialData) !== JSON.stringify(initial)) {
-      setData(initialData)
-      setInitial(initialData)
-    }
-  }, [initialData])
-
-  const loadMore = (vars: any) => load(vars)
-
-  const load = useCallback((vars?: any) => {
-    setLoading(true)
-
-    return apiQuery<T, V>(document, { variables: { ...variables, ...vars }, includeDrafts })
-      .then((res: any) => {
-        const d = mergeData(res, data)
-        setData(d)
-        return d
-      })
-      .finally(() => setLoading(false))
-
-  }, [document, variables, data])
-
-  const nextPage = useCallback(async () => {
-    if (!page)
-      return setError(new Error('No page size set!'))
-
-    const first = page.size
-    const skip = page.no * page.size
-
-    if (skip > page.count && page.count > 0)
-      return page
-
-    try {
-      const d = await load({ ...variables.variables, first, skip })
-      const k = Object.keys(d).find(k => typeof d[k].count === 'number')
-      if (!k) throw new Error('No count found in response')
-      const count = d[k]?.count || 0;
-      const no = page.no + 1
-      const end = no * pageSize >= count
-      const p = { ...page, no, count, end }
-
-      setPage(p)
-      return p;
-
-    } catch (err) {
-      setError(err as Error)
-      return page;
-    }
-  }, [page, variables, pageSize, setPage, setError, load])
-
-  const mergeData = (newData: any, oldData: any) => {
-
-    if (!oldData || !newData) return newData
-
-    Object.keys(newData).forEach(k => {
-      if (oldData[k] && Array.isArray(oldData[k]))
-        newData[k] = oldData[k].concat(newData[k])
-    })
-
-    return newData;
-  }
-
-  useEffect(() => { !initialData && load() }, [initialData, load])
-
-  return { data, error, loading, loadMore, nextPage, page }
+	variables?: any;
+	initialData?: any;
+	pageSize?: number;
+	includeDrafts?: boolean;
 };
 
-export default useApiQuery
+export type Pagination = {
+	no: number;
+	count: number;
+	size: number;
+	end: boolean;
+};
+
+const useApiQuery = <TResult = any, TVariables = Record<string, any>>(
+	document: TypedDocumentNode<TResult, TVariables>,
+	{ variables, initialData, pageSize = 100, includeDrafts = false }: UseApiQueryProps = {}
+) => {
+	const [initial, setInitial] = useState<TResult>(initialData);
+	const [data, setData] = useState<TResult>(initialData);
+	const [page, setPage] = useState<Pagination | undefined>(
+		pageSize
+			? {
+					no: 1,
+					count: initialData.pagination?.count || 0,
+					size: pageSize,
+					end: initialData.pagination?.count > 0 ? initialData.pagination?.count <= pageSize : false,
+				}
+			: undefined
+	);
+	const [error, setError] = useState<Error | undefined>();
+	const [loading, setLoading] = useState(false);
+
+	useEffect(() => {
+		if (JSON.stringify(initialData) !== JSON.stringify(initial)) {
+			setData(initialData);
+			setInitial(initialData);
+		}
+	}, [initialData]);
+
+	const loadMore = (vars: any) => load(vars);
+
+	const load = useCallback(
+		(vars?: any) => {
+			setLoading(true);
+
+			return apiQuery(document, { variables: { ...variables, ...vars }, includeDrafts })
+				.then((res: any) => {
+					const d = mergeData(res, data);
+					setData(d);
+					return d;
+				})
+				.finally(() => setLoading(false));
+		},
+		[document, variables, data]
+	);
+
+	const nextPage = useCallback(async () => {
+		if (!page) return setError(new Error('No page size set!'));
+
+		const first = page.size;
+		const skip = page.no * page.size;
+
+		if (skip > page.count && page.count > 0) return page;
+
+		try {
+			const d = await load({ ...variables.variables, first, skip });
+			const k = Object.keys(d).find((k) => typeof d[k].count === 'number');
+			if (!k) throw new Error('No count found in response');
+			const count = d[k]?.count || 0;
+			const no = page.no + 1;
+			const end = no * pageSize >= count;
+			const p = { ...page, no, count, end };
+
+			setPage(p);
+			return p;
+		} catch (err) {
+			setError(err as Error);
+			return page;
+		}
+	}, [page, variables, pageSize, setPage, setError, load]);
+
+	const mergeData = (newData: any, oldData: any) => {
+		if (!oldData || !newData) return newData;
+
+		Object.keys(newData).forEach((k) => {
+			if (oldData[k] && Array.isArray(oldData[k])) newData[k] = oldData[k].concat(newData[k]);
+		});
+
+		return newData;
+	};
+
+	useEffect(() => {
+		!initialData && load();
+	}, [initialData, load]);
+
+	return { data, error, loading, loadMore, nextPage, page };
+};
+
+export default useApiQuery;

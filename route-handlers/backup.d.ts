@@ -1,2 +1,1 @@
-declare const backup: (req: Request) => Promise<Response>;
-export default backup;
+export default function backup(req: Request): Promise<Response>;

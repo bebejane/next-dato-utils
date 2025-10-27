@@ -1,15 +1,17 @@
 'use client';
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from 'react';
 import { apiQuery } from '../api/index.js';
 const useApiQuery = (document, { variables, initialData, pageSize = 100, includeDrafts = false } = {}) => {
     const [initial, setInitial] = useState(initialData);
     const [data, setData] = useState(initialData);
-    const [page, setPage] = useState(pageSize ? {
-        no: 1,
-        count: initialData.pagination?.count || 0,
-        size: pageSize,
-        end: initialData.pagination?.count > 0 ? initialData.pagination?.count <= pageSize : false
-    } : undefined);
+    const [page, setPage] = useState(pageSize
+        ? {
+            no: 1,
+            count: initialData.pagination?.count || 0,
+            size: pageSize,
+            end: initialData.pagination?.count > 0 ? initialData.pagination?.count <= pageSize : false,
+        }
+        : undefined);
     const [error, setError] = useState();
     const [loading, setLoading] = useState(false);
     useEffect(() => {
@@ -38,7 +40,7 @@ const useApiQuery = (document, { variables, initialData, pageSize = 100, include
             return page;
         try {
             const d = await load({ ...variables.variables, first, skip });
-            const k = Object.keys(d).find(k => typeof d[k].count === 'number');
+            const k = Object.keys(d).find((k) => typeof d[k].count === 'number');
             if (!k)
                 throw new Error('No count found in response');
             const count = d[k]?.count || 0;
@@ -56,13 +58,15 @@ const useApiQuery = (document, { variables, initialData, pageSize = 100, include
     const mergeData = (newData, oldData) => {
         if (!oldData || !newData)
             return newData;
-        Object.keys(newData).forEach(k => {
+        Object.keys(newData).forEach((k) => {
             if (oldData[k] && Array.isArray(oldData[k]))
                 newData[k] = oldData[k].concat(newData[k]);
         });
         return newData;
     };
-    useEffect(() => { !initialData && load(); }, [initialData, load]);
+    useEffect(() => {
+        !initialData && load();
+    }, [initialData, load]);
     return { data, error, loading, loadMore, nextPage, page };
 };
 export default useApiQuery;

@@ -7,4 +7,5 @@ export { default as test } from './test.js';
 export { default as vercelCronAuth } from './vercel-cron-auth.js';
 export { default as webPreviews } from './web-previews.js';
 export { default as draft } from './draft.js';
+export { default as favicon } from './favicon.js';
 //# sourceMappingURL=index.js.map

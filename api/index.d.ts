@@ -1,1 +1,1 @@
-export { default as apiQuery } from './api-query.js';
+export { default as apiQuery, type TypedDocumentNode } from './api-query.js';

@@ -1,4 +1,4 @@
-import type { DocumentNode } from 'graphql';
+import { type TypedDocumentNode } from '../api/index.js';
 export type UseApiQueryProps = {
     variables?: any;
     initialData?: any;
@@ -11,8 +11,8 @@ export type Pagination = {
     size: number;
     end: boolean;
 };
-declare const useApiQuery: <T, V>(document: DocumentNode, { variables, initialData, pageSize, includeDrafts }?: UseApiQueryProps) => {
-    data: T;
+declare const useApiQuery: <TResult = any, TVariables = Record<string, any>>(document: TypedDocumentNode<TResult, TVariables>, { variables, initialData, pageSize, includeDrafts }?: UseApiQueryProps) => {
+    data: TResult;
     error: Error | undefined;
     loading: boolean;
     loadMore: (vars: any) => Promise<any>;

@@ -46,6 +46,7 @@ function getOriginHeaders(reqOrigin: string | undefined, origin: StaticOrigin) {
     // Allow any origin
     headers.set('Access-Control-Allow-Origin', '*')
   } else if (typeof origin === 'string') {
+    // Fixed origin
     headers.set('Access-Control-Allow-Origin', origin)
     headers.append('Vary', 'Origin')
   } else {
