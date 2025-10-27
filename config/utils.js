@@ -9,7 +9,7 @@ export async function getItemReferenceRoutes(itemId, routes, locales) {
     if (!itemId)
         throw new Error('datocms.config: Missing reference: itemId');
     //@ts-expect-error
-    const c = import('./datocms.config.js');
+    const c = import('../../../datocms.config.js');
     const pathnames = [];
     try {
         const items = await client.items.references(itemId, {
