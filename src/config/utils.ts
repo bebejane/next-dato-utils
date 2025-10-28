@@ -117,7 +117,7 @@ async function loadConfig(): Promise<DatoCmsConfig> {
 	try {
 		const configPath = findConfig();
 		const path = configPath.substring(0, configPath.lastIndexOf('/'));
-
+		console.log('datocms.config path:', path);
 		const c = await (await import(path)).default;
 		return c as unknown as DatoCmsConfig;
 	} catch (e) {
