@@ -4,8 +4,6 @@ import { ApiError } from '@datocms/cma-client';
 import { buildClient } from '@datocms/cma-client';
 import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes.js';
 
-console.log('LOAD CONFIG works test');
-
 const client = buildClient({
 	apiToken: process.env.DATOCMS_API_TOKEN,
 	environment: process.env.DATOCMS_ENVIRONMENT,
@@ -116,7 +114,7 @@ export async function getItemWithLinked(id: string): Promise<any> {
 async function loadConfig(): Promise<DatoCmsConfig> {
 	try {
 		//@ts-expect-error
-		const c = await import('../../../datocms.config');
+		const c = (await import('../../../datocms.config')).default;
 		return c as unknown as DatoCmsConfig;
 	} catch (e) {
 		console.error(e);
