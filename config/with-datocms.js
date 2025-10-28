@@ -1,6 +1,5 @@
 import path from 'path';
 export default async function withDatoCms(config) {
-    const headers = await config?.headers?.();
     return {
         ...config,
         webpack: (c, context) => {
@@ -41,7 +40,6 @@ export default async function withDatoCms(config) {
                         },
                     ],
                 },
-                ...(headers ?? []),
             ];
         },
     };

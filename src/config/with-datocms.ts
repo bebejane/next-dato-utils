@@ -2,8 +2,6 @@ import { NextConfig } from 'next';
 import path from 'path';
 
 export default async function withDatoCms(config: NextConfig): Promise<NextConfig> {
-	const headers = await config?.headers?.();
-
 	return {
 		...config,
 		webpack: (c, context) => {
@@ -46,7 +44,6 @@ export default async function withDatoCms(config: NextConfig): Promise<NextConfi
 						},
 					],
 				},
-				...(headers ?? []),
 			];
 		},
 	};
