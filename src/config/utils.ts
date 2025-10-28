@@ -3,6 +3,7 @@ import type { DatoCmsConfig } from './config.js';
 import { ApiError } from '@datocms/cma-client';
 import { buildClient } from '@datocms/cma-client';
 import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes.js';
+import { findConfig } from './find.js';
 
 const client = buildClient({
 	apiToken: process.env.DATOCMS_API_TOKEN,
@@ -113,8 +114,9 @@ export async function getItemWithLinked(id: string): Promise<any> {
 
 async function loadConfig(): Promise<DatoCmsConfig> {
 	try {
-		//@ts-expect-error
-		const c = (await import('../../../datocms.config')).default;
+		const path = findConfig();
+		console.log('datocms.config path:', path);
+		const c = (await import(path)).default;
 		return c as unknown as DatoCmsConfig;
 	} catch (e) {
 		console.error(e);
