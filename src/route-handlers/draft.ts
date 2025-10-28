@@ -1,7 +1,11 @@
-import { draftMode } from 'next/headers.js';
-import { redirect } from 'next/navigation.js';
-import { cookies } from 'next/headers.js';
+//@ts-expect-error
+import { draftMode } from 'next/headers';
+//@ts-expect-error
+import { redirect } from 'next/navigation';
+//@ts-expect-error
+import { cookies } from 'next/headers';
 
+//@ts-expect-error
 export default async function draft(request: Request, searchParams?: URLSearchParams): Promise<Response> {
 	searchParams = searchParams ?? new URL(request.url).searchParams;
 
