@@ -62,6 +62,19 @@ export const renderTestResults = (results: TestResult) => {
 			<head>
 				<style>
 					{`
+					html, body{
+						font-family: sans-serif;
+					}
+					ul{
+						list-style: none;
+					}
+					h3{
+						padding:0;
+						margin:0;
+						font-size:16px;
+						font-weight:bold;
+						margin-bottom:10px;
+					}
           table {
             border-collapse: collapse;
             width: 400px;
@@ -86,10 +99,19 @@ export const renderTestResults = (results: TestResult) => {
 					<p>
 						<strong>Name:</strong> {results.site?.name}
 						<br />
-						<strong>Locales:</strong> {results.site?.locales}
+						<strong>Locales:</strong> {results.site?.locales.join(', ')}
+						<br />
+						<strong>SEO:</strong>
+						<br />
+						<ul>
+							<li>Site name: {results.site?.global_seo?.site_name}</li>
+							<li>Title: {results.site?.global_seo?.fallback_seo?.title}</li>
+							<li>Description: {results.site?.global_seo?.fallback_seo?.description}</li>
+							<li>Image: {results.site?.global_seo?.fallback_seo?.image}</li>
+						</ul>
 						<br />
 						<strong>Domain:</strong>{' '}
-						<a href={results.site.internal_domain as string}>{results.site?.internal_domain}</a>
+						<a href={`https://${results.site.internal_domain as string}`}>{results.site?.internal_domain}</a>
 						<br />
 					</p>
 				</section>
