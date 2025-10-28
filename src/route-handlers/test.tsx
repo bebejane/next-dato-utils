@@ -132,6 +132,16 @@ export const renderTestResults = (results: TestResult) => {
 						</ul>
 					</section>
 					<section>
+						<h3>Webhooks</h3>
+						<ul>
+							{results.webhooks.map((p, i) => (
+								<li key={i}>
+									<strong>{p.name}: </strong> {p.url}
+								</li>
+							))}
+						</ul>
+					</section>
+					<section>
 						<h3>Plugins</h3>
 						<ul>
 							{results.plugins.map((p, i) => (
