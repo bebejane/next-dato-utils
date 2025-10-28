@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import type { DatoCmsConfig } from './config.js';
+import { DatoCmsConfig } from './config.js';
 import { ApiError } from '@datocms/cma-client';
 import { buildClient } from '@datocms/cma-client';
 import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes.js';
@@ -114,7 +114,6 @@ export async function getItemWithLinked(id: string): Promise<any> {
 }
 
 async function loadConfig(): Promise<DatoCmsConfig> {
-	/*
 	try {
 		const configPath = findConfig();
 		console.log('datocms.config path:', configPath);
@@ -125,6 +124,4 @@ async function loadConfig(): Promise<DatoCmsConfig> {
 		console.error(e);
 		throw new Error('datocms.config not found');
 	}
-		*/
-	return {} as unknown as DatoCmsConfig;
 }
