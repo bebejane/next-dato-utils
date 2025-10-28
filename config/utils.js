@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { ApiError } from '@datocms/cma-client';
 import { buildClient } from '@datocms/cma-client';
+import { findConfig } from './find.js';
 const client = buildClient({
     apiToken: process.env.DATOCMS_API_TOKEN,
     environment: process.env.DATOCMS_ENVIRONMENT,
@@ -105,12 +106,13 @@ export async function getItemWithLinked(id) {
 }
 async function loadConfig() {
     try {
-        console.log('LOAD CONFIG');
-        //@ts-expect-error
-        const c = (await import('../../../datocms.config')).default;
+        const path = findConfig();
+        console.log('datocms.config path:', path);
+        const c = (await import(path)).default;
         return c;
     }
     catch (e) {
+        console.error(e);
         throw new Error('datocms.config not found');
     }
 }
