@@ -114,6 +114,7 @@ export async function getItemWithLinked(id: string): Promise<any> {
 }
 
 async function loadConfig(): Promise<DatoCmsConfig> {
+	/*
 	try {
 		const configPath = findConfig();
 		console.log('datocms.config path:', configPath);
@@ -124,4 +125,6 @@ async function loadConfig(): Promise<DatoCmsConfig> {
 		console.error(e);
 		throw new Error('datocms.config not found');
 	}
+		*/
+	return {} as unknown as DatoCmsConfig;
 }
