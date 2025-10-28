@@ -4,6 +4,7 @@ import { buildClient } from '@datocms/cma-client';
 import { findConfig } from './find.js';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import fs from 'fs';
 const client = buildClient({
     apiToken: process.env.DATOCMS_API_TOKEN,
     environment: process.env.DATOCMS_ENVIRONMENT,
@@ -107,6 +108,7 @@ export async function getItemWithLinked(id) {
     return record;
 }
 async function loadConfig() {
+    return loadConfig2();
     try {
         const cwd = process.cwd();
         const configPathFull = findConfig();
@@ -122,5 +124,15 @@ async function loadConfig() {
         console.error(e);
         throw new Error('datocms.config not founds');
     }
+}
+async function loadConfig2() {
+    const configPathFull = findConfig();
+    const configPathFullJs = configPathFull.replace('.ts', '.js');
+    const moduleText = fs.readFileSync(configPathFullJs, 'utf-8').toString();
+    const moduleBase64 = Buffer.from(moduleText).toString('base64');
+    const moduleDataURL = `data:text/javascript;base64,${moduleBase64}`;
+    const result = await import(moduleDataURL);
+    console.log(result);
+    return result.default;
 }
 //# sourceMappingURL=utils.js.map
