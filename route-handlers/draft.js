@@ -4,7 +4,6 @@ import { draftMode } from 'next/headers';
 import { redirect } from 'next/navigation';
 //@ts-expect-error
 import { cookies } from 'next/headers';
-//@ts-expect-error
 export default async function draft(request, searchParams) {
     searchParams = searchParams ?? new URL(request.url).searchParams;
     const secret = searchParams.get('secret');
@@ -33,7 +32,7 @@ export default async function draft(request, searchParams) {
         });
     }
     if (slug)
-        redirect(slug);
+        return redirect(slug);
     else
         return new Response('OK', { status: 200 });
 }

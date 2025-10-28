@@ -5,7 +5,6 @@ import { redirect } from 'next/navigation';
 //@ts-expect-error
 import { cookies } from 'next/headers';
 
-//@ts-expect-error
 export default async function draft(request: Request, searchParams?: URLSearchParams): Promise<Response> {
 	searchParams = searchParams ?? new URL(request.url).searchParams;
 
@@ -37,6 +36,6 @@ export default async function draft(request: Request, searchParams?: URLSearchPa
 		});
 	}
 
-	if (slug) redirect(slug);
+	if (slug) return redirect(slug);
 	else return new Response('OK', { status: 200 });
 }
