@@ -18,38 +18,47 @@
 		"./package.json": "./package.json",
 		"./utils": {
 			"types": "./utils/index.d.ts",
-			"import": "./utils/index.js"
+			"import": "./utils/index.js",
+			"bun": "./utils/index.js"
 		},
 		"./config": {
 			"types": "./config/index.d.ts",
-			"import": "./config/index.js"
+			"import": "./config/index.js",
+			"bun": "./config/index.js"
 		},
 		"./components": {
 			"types": "./components/index.d.ts",
-			"import": "./components/index.js"
+			"import": "./components/index.js",
+			"bun": "./components/index.js"
 		},
 		"./hooks": {
 			"types": "./hooks/index.d.ts",
-			"import": "./hooks/index.js"
+			"import": "./hooks/index.js",
+			"bun": "./hooks/index.js"
 		},
 		"./api": {
 			"types": "./api/index.d.ts",
-			"import": "./api/index.js"
+			"import": "./api/index.js",
+			"bun": "./api/index.js"
 		},
 		"./route-handlers": {
 			"types": "./route-handlers/index.d.ts",
-			"import": "./route-handlers/index.js"
+			"import": "./route-handlers/index.js",
+			"bun": "./route-handlers/index.js"
 		},
 		"./router": {
 			"types": "./router/index.d.ts",
-			"import": "./router/index.js"
+			"import": "./router/index.js",
+			"bun": "./router/index.js"
 		},
 		"./server-actions": {
 			"types": "./server-actions/index.d.ts",
-			"import": "./server-actions/index.js"
+			"import": "./server-actions/index.js",
+			"bun": "./server-actions/index.js"
 		},
 		"./server-actions*": {
-			"import": "./server-actions/*"
+			"import": "./server-actions/*",
+			"bun": "./server-actions/*"
 		}
 	},
 	"bin": {
