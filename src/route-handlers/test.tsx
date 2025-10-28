@@ -107,7 +107,7 @@ export const renderTestResults = (results: TestResult) => {
             text-align:left;
             vertical-align: top;
             white-space:pre;
-						max-width:300px;
+						max-width:400px;
 						overflow:hidden;
 						text-overflow:ellipsis;
           }
@@ -136,8 +136,8 @@ export const renderTestResults = (results: TestResult) => {
 										<th>Revalidate</th>
 									</tr>
 								</thead>
-								{results.models.map((r) => (
-									<tr>
+								{results.models.map((r, idx) => (
+									<tr key={idx}>
 										<td className={!r.previews || !r.revalidate?.revalidated ? 'error' : ''}>{r.model}</td>
 										<td>
 											{r.previews
