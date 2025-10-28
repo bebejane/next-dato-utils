@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { ApiError } from '@datocms/cma-client';
 import { buildClient } from '@datocms/cma-client';
 import { findConfig } from './find.js';
-import { fileURLToPath, pathToFileURL } from 'url';
+import { fileURLToPath } from 'url';
 import path from 'path';
 const client = buildClient({
     apiToken: process.env.DATOCMS_API_TOKEN,
@@ -112,9 +112,10 @@ async function loadConfig() {
         const configPathFull = findConfig();
         const configRootDir = configPathFull.substring(0, configPathFull.lastIndexOf('/'));
         const __filename = fileURLToPath(import.meta.url);
-        const configPath = pathToFileURL(path.relative(configRootDir, path.dirname(__filename))).toString();
-        console.log({ configRootDir, cwd, __filename, configPath });
-        const c = await (await import(configPath)).default;
+        const __dirname = path.dirname(__filename);
+        const relativePath = path.relative(__dirname, configPathFull);
+        console.log({ configRootDir, cwd, __filename, relativePath });
+        const c = await (await import(relativePath)).default;
         return c;
     }
     catch (e) {
