@@ -120,7 +120,7 @@ export const renderTestResults = (results: TestResult) => {
 					<ul>
 						{results.plugins.map((p, i) => (
 							<li key={i}>
-								<strong>{p.name}: </strong> {p.package_version}
+								<strong>{p.name}: </strong> {p.description}
 							</li>
 						))}
 					</ul>
