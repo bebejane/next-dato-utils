@@ -1,6 +1,6 @@
-//import { draftMode } from 'next/headers.js';
-//import { redirect } from 'next/navigation.js';
-//import { cookies } from 'next/headers.js';
+import { draftMode } from 'next/headers.js';
+import { redirect } from 'next/navigation.js';
+import { cookies } from 'next/headers.js';
 
 export default async function draft(request: Request, searchParams?: URLSearchParams): Promise<Response> {
 	searchParams = searchParams ?? new URL(request.url).searchParams;
@@ -12,7 +12,6 @@ export default async function draft(request: Request, searchParams?: URLSearchPa
 
 	if (secret !== process.env.DATOCMS_PREVIEW_SECRET) return new Response('Invalid token', { status: 401 });
 
-	/*
 	if (exit !== null) {
 		(await draftMode()).disable();
 	} else {
@@ -33,8 +32,7 @@ export default async function draft(request: Request, searchParams?: URLSearchPa
 			maxAge: parseInt(maxAge),
 		});
 	}
-		*/
 
-	//if (slug) redirect(slug);
-	return new Response('OK', { status: 200 });
+	if (slug) redirect(slug);
+	else return new Response('OK', { status: 200 });
 }
