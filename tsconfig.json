@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
     "rootDir": "./src",
-    "outDir": "./dist",
+    "outDir": "./build",
     "strict": true,
     "target": "esnext",
     "module": "nodenext",
     "moduleResolution": "nodenext",
+    "sourceRoot": "./src",
     "jsx": "react-jsx",
     "sourceMap": true,
     "esModuleInterop": true,

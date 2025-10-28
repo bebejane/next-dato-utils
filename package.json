@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "2.0.25",
+	"version": "2.0.24",
 	"description": "",
 	"type": "module",
 	"main": "./index.js",
@@ -12,48 +12,48 @@
 		"dev": "npx nodemon --watch \"src/**/*\" --watch \"./package.json\" -e tsx,ts,scss,json --exec \"npm run build\"",
 		"dev:cli": "tsx src/cli/index.ts",
 		"tsc": "tsc -p tsconfig.json",
-		"copy-files": "copyfiles -u 1 src/**/*.scss ./dist"
+		"copy-files": "copyfiles -u 1 src/**/*.scss ./build && rsync -a ./build/* ./ && rm -rf ./build"
 	},
 	"exports": {
 		"./package.json": "./package.json",
 		"./utils": {
-			"types": "./dist/utils/index.d.ts",
-			"import": "./dist/utils/index.js"
+			"types": "./utils/index.d.ts",
+			"import": "./utils/index.js"
 		},
 		"./config": {
-			"types": "./dist/config/index.d.ts",
-			"import": "./dist/config/index.js"
+			"types": "./config/index.d.ts",
+			"import": "./config/index.js"
 		},
 		"./components": {
-			"types": "./dist/components/index.d.ts",
-			"import": "./dist/components/index.js"
+			"types": "./components/index.d.ts",
+			"import": "./components/index.js"
 		},
 		"./hooks": {
-			"types": "./dist/hooks/index.d.ts",
-			"import": "./dist/hooks/index.js"
+			"types": "./hooks/index.d.ts",
+			"import": "./hooks/index.js"
 		},
 		"./api": {
-			"types": "./dist/api/index.d.ts",
-			"import": "./dist/api/index.js"
+			"types": "./api/index.d.ts",
+			"import": "./api/index.js"
 		},
 		"./route-handlers": {
-			"types": "./dist/route-handlers/index.d.ts",
-			"import": "./dist/route-handlers/index.js"
+			"types": "./route-handlers/index.d.ts",
+			"import": "./route-handlers/index.js"
 		},
 		"./router": {
-			"types": "./dist/router/index.d.ts",
-			"import": "./dist/router/index.js"
+			"types": "./router/index.d.ts",
+			"import": "./router/index.js"
 		},
 		"./server-actions": {
-			"types": "./dist/server-actions/index.d.ts",
-			"import": "./dist/server-actions/index.js"
+			"types": "./server-actions/index.d.ts",
+			"import": "./server-actions/index.js"
 		},
 		"./server-actions*": {
-			"import": "./dist/server-actions/*"
+			"import": "./server-actions/*"
 		}
 	},
 	"bin": {
-		"nextdato": "./dist/cli/index.js"
+		"nextdato": "./cli/index.js"
 	},
 	"engines": {
 		"node": ">=0.18"

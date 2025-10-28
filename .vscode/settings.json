@@ -11,6 +11,7 @@
     "route-handlers": false,
     "server-actions": false,
     "utils": false,
-    "config": false
+    "config": false,
+    "router": false
   }
 }
