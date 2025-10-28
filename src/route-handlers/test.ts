@@ -108,6 +108,8 @@ export const testResultsToString = (results: TestResult[]) => {
 };
 
 export const testResultsToHtml = (results: TestResult[]) => {
+	console.log('TEST API');
+	console.log(JSON.stringify(results, null, 2));
 	return `
     <html>
       <head>
@@ -171,7 +173,7 @@ const testWebPreviewsEndpoint = async (itemType: any, client: Client, locale: st
 		nested: true,
 		filter: { type: itemType.api_key },
 	});
-	console.log(items);
+
 	const item = items[0];
 	const res = await fetch(`${baseApiUrl}/web-previews`, {
 		method: 'POST',
