@@ -1,18 +1,19 @@
 {
   "compilerOptions": {
     "rootDir": "./src",
-    "outDir": "./build",
+    "outDir": "./",
     "strict": true,
     "target": "esnext",
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "jsx": "react-jsx",
-    "sourceMap": false,
+    "sourceMap": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
     "skipLibCheck": true,
   },
+  "exclude": [],
   "include": [
     "./src",
     "./types"

@@ -57,3 +57,4 @@ export default function useScrollInfo(pageBottomLimit = 0) {
     }, [handleScroll]);
     return scrollInfo;
 }
+//# sourceMappingURL=useScrollInfo.js.map

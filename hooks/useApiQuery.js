@@ -70,3 +70,4 @@ const useApiQuery = (document, { variables, initialData, pageSize = 100, include
     return { data, error, loading, loadMore, nextPage, page };
 };
 export default useApiQuery;
+//# sourceMappingURL=useApiQuery.js.map

@@ -40,3 +40,4 @@ export default async function mailchimpNewsletterSignup(prevState, formData) {
         return { error: e instanceof Error ? e.message : e, success: false };
     }
 }
+//# sourceMappingURL=mailchimpNewsletterSignup.js.map

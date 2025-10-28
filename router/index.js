@@ -73,3 +73,4 @@ const router = async function (req, { params }, config) {
     }
 };
 export default router;
+//# sourceMappingURL=index.js.map

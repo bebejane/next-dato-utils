@@ -96,3 +96,4 @@ export async function pathExistsAndIsAccessible(path) {
         return false;
     }
 }
+//# sourceMappingURL=findUp.js.map

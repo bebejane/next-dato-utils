@@ -12,7 +12,7 @@
 		"dev": "npx nodemon --watch \"src/**/*\" --watch \"./package.json\" -e tsx,ts,scss,json --exec \"npm run build\"",
 		"dev:cli": "tsx src/cli/index.ts",
 		"tsc": "tsc -p tsconfig.json",
-		"copy-files": "copyfiles -u 1 src/**/*.scss ./build && rsync -a ./build/* ./ && rm -rf ./build"
+		"copy-files": "copyfiles -u 1 src/**/*.scss ./"
 	},
 	"exports": {
 		"./package.json": "./package.json",

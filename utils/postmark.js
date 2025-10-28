@@ -50,3 +50,4 @@ export async function sendPostmarkEmail({ to, subject, html, text, template, tem
         return { success: false, error: error instanceof Error ? error.message : error };
     }
 }
+//# sourceMappingURL=postmark.js.map

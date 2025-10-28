@@ -107,3 +107,4 @@ export default async function cors(req, res, options) {
 export function initCors(options) {
     return (req, res) => cors(req, res, options);
 }
+//# sourceMappingURL=cors.js.map

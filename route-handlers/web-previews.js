@@ -30,3 +30,4 @@ export default async function webPreviews(req, generatePreviewUrl) {
         headers: { 'Content-Type': 'application/json' },
     });
 }
+//# sourceMappingURL=web-previews.js.map

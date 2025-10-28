@@ -126,3 +126,4 @@ const truncate = (text, limit, ellipsis) => {
     return outputText;
 };
 export default markdownTruncate;
+//# sourceMappingURL=markdown-truncate.js.map

@@ -36,3 +36,4 @@ export default async function draft(request, searchParams) {
     else
         return new Response('OK', { status: 200 });
 }
+//# sourceMappingURL=draft.js.map

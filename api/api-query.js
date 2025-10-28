@@ -118,3 +118,4 @@ const dedupedFetch = async (options) => {
     const _cacheTags = response.headers.get('X-Cache-Tags') ? response.headers.get('X-Cache-Tags')?.split(' ') : [];
     return { ...responseBody, _cacheTags };
 };
+//# sourceMappingURL=api-query.js.map

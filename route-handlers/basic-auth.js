@@ -21,3 +21,4 @@ export default async function basicAuth(req, callback, options) {
         return await callback(req);
     return new Response('OK', { status: 200 });
 }
+//# sourceMappingURL=basic-auth.js.map

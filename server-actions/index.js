@@ -12,3 +12,4 @@ export async function revalidateTag(tag) {
 export async function revalidatePath(path) {
     Array.isArray(path) ? path.forEach((p) => rp(p)) : rp(path);
 }
+//# sourceMappingURL=index.js.map
