@@ -65,8 +65,22 @@ export const renderTestResults = (results: TestResult) => {
 					html, body{
 						font-family: sans-serif;
 					}
+					body{
+						display:flex;
+						flex-direction:row;
+					}
+					.left{
+						flex: 1 1 70%;
+					}
+					.right{
+						flex: 1 1 auto;
+					}
 					ul{
 						list-style: none;
+						padding-left:2rem;
+					}
+					li{
+
 					}
 					h3{
 						padding:0;
@@ -94,63 +108,65 @@ export const renderTestResults = (results: TestResult) => {
 				</style>
 			</head>
 			<body>
-				<section>
-					<h3>Site</h3>
-					<p>
+				<div className='left'>
+					<section>
+						<h3>Endpoints</h3>
+						<table>
+							<tbody>
+								<thead>
+									<tr>
+										<th>Model</th>
+										<th>Previews</th>
+										<th>Revalidate</th>
+									</tr>
+								</thead>
+								{results.models.map((r) => (
+									<tr>
+										<td className={!r.previews || !r.revalidate?.revalidated ? 'error' : ''}>{r.model}</td>
+										<td>
+											{r.previews
+												?.filter(({ label, url }) => label === 'Live' && new URL(url).pathname)
+												.map((p) => new URL(p.url).pathname)
+												.join('\n') ?? ''}
+										</td>
+										<td>{r.revalidate?.paths?.join('\n') ?? ''}</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</section>
+				</div>
+				<div className='right'>
+					<section>
+						<h3>Site</h3>
 						<strong>Name:</strong> {results.site?.name}
 						<br />
 						<strong>Locales:</strong> {results.site?.locales.join(', ')}
 						<br />
-						<strong>SEO:</strong>
+						<strong>Domain:</strong>{' '}
+						<a href={`https://${results.site.internal_domain as string}`} target='_blank'>
+							{results.site?.internal_domain}
+						</a>
 						<br />
+						<strong>SEO:</strong>
 						<ul>
 							<li>Site name: {results.site?.global_seo?.site_name}</li>
 							<li>Title: {results.site?.global_seo?.fallback_seo?.title}</li>
 							<li>Description: {results.site?.global_seo?.fallback_seo?.description}</li>
 							<li>Image: {results.site?.global_seo?.fallback_seo?.image}</li>
 						</ul>
-						<br />
-						<strong>Domain:</strong>{' '}
-						<a href={`https://${results.site.internal_domain as string}`}>{results.site?.internal_domain}</a>
-						<br />
-					</p>
-				</section>
-				<section>
-					<h3>Plugins</h3>
-					<ul>
-						{results.plugins.map((p, i) => (
-							<li key={i}>
-								<strong>{p.name}: </strong> {p.description}
-							</li>
-						))}
-					</ul>
-				</section>
-				<section>
-					<h3>Endpoints</h3>
-					<table>
-						<tbody>
-							<thead>
-								<tr>
-									<th>Model</th>
-									<th>Previews</th>
-									<th>Revalidate</th>
-								</tr>
-							</thead>
-							{results.models.map((r) => (
-								<tr>
-									<td className={!r.previews || !r.revalidate?.revalidated ? 'error' : ''}>{r.model}</td>
-									<td>
-										{r.previews
-											?.filter(({ label, url }) => label === 'Live' && new URL(url).pathname)
-											.map((p) => new URL(p.url).pathname)
-											.join('\n') ?? ''}
-									</td>
-									<td>{r.revalidate?.paths?.join('\n') ?? ''}</td>
-								</tr>
+					</section>
+					<section>
+						<h3>Plugins</h3>
+						<ul>
+							{results.plugins.map((p, i) => (
+								<li key={i}>
+									<strong>{p.name}: </strong> {p.description}
+								</li>
 							))}
-						</tbody>
-					</table>
-				</section>
+						</ul>
+					</section>
+				</div>
 			</body>
 		</html>
 	);

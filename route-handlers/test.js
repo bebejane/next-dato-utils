@@ -27,8 +27,22 @@ export const renderTestResults = (results) => {
 					html, body{
 						font-family: sans-serif;
 					}
+					body{
+						display:flex;
+						flex-direction:row;
+					}
+					.left{
+						flex: 1 1 70%;
+					}
+					.right{
+						flex: 1 1 auto;
+					}
 					ul{
 						list-style: none;
+						padding-left:2rem;
+					}
+					li{
+
 					}
 					h3{
 						padding:0;
@@ -52,10 +66,10 @@ export const renderTestResults = (results) => {
           }
           .error{
             color:red;
-          }` }) }), _jsxs("body", { children: [_jsxs("section", { children: [_jsx("h3", { children: "Site" }), _jsxs("p", { children: [_jsx("strong", { children: "Name:" }), " ", results.site?.name, _jsx("br", {}), _jsx("strong", { children: "Locales:" }), " ", results.site?.locales.join(', '), _jsx("br", {}), _jsx("strong", { children: "SEO:" }), _jsx("br", {}), _jsxs("ul", { children: [_jsxs("li", { children: ["Site name: ", results.site?.global_seo?.site_name] }), _jsxs("li", { children: ["Title: ", results.site?.global_seo?.fallback_seo?.title] }), _jsxs("li", { children: ["Description: ", results.site?.global_seo?.fallback_seo?.description] }), _jsxs("li", { children: ["Image: ", results.site?.global_seo?.fallback_seo?.image] })] }), _jsx("br", {}), _jsx("strong", { children: "Domain:" }), ' ', _jsx("a", { href: `https://${results.site.internal_domain}`, children: results.site?.internal_domain }), _jsx("br", {})] })] }), _jsxs("section", { children: [_jsx("h3", { children: "Plugins" }), _jsx("ul", { children: results.plugins.map((p, i) => (_jsxs("li", { children: [_jsxs("strong", { children: [p.name, ": "] }), " ", p.description] }, i))) })] }), _jsxs("section", { children: [_jsx("h3", { children: "Endpoints" }), _jsx("table", { children: _jsxs("tbody", { children: [_jsx("thead", { children: _jsxs("tr", { children: [_jsx("th", { children: "Model" }), _jsx("th", { children: "Previews" }), _jsx("th", { children: "Revalidate" })] }) }), results.models.map((r) => (_jsxs("tr", { children: [_jsx("td", { className: !r.previews || !r.revalidate?.revalidated ? 'error' : '', children: r.model }), _jsx("td", { children: r.previews
-                                                        ?.filter(({ label, url }) => label === 'Live' && new URL(url).pathname)
-                                                        .map((p) => new URL(p.url).pathname)
-                                                        .join('\n') ?? '' }), _jsx("td", { children: r.revalidate?.paths?.join('\n') ?? '' })] })))] }) })] })] })] }));
+          }` }) }), _jsxs("body", { children: [_jsx("div", { className: 'left', children: _jsxs("section", { children: [_jsx("h3", { children: "Endpoints" }), _jsx("table", { children: _jsxs("tbody", { children: [_jsx("thead", { children: _jsxs("tr", { children: [_jsx("th", { children: "Model" }), _jsx("th", { children: "Previews" }), _jsx("th", { children: "Revalidate" })] }) }), results.models.map((r) => (_jsxs("tr", { children: [_jsx("td", { className: !r.previews || !r.revalidate?.revalidated ? 'error' : '', children: r.model }), _jsx("td", { children: r.previews
+                                                            ?.filter(({ label, url }) => label === 'Live' && new URL(url).pathname)
+                                                            .map((p) => new URL(p.url).pathname)
+                                                            .join('\n') ?? '' }), _jsx("td", { children: r.revalidate?.paths?.join('\n') ?? '' })] })))] }) })] }) }), _jsxs("div", { className: 'right', children: [_jsxs("section", { children: [_jsx("h3", { children: "Site" }), _jsx("strong", { children: "Name:" }), " ", results.site?.name, _jsx("br", {}), _jsx("strong", { children: "Locales:" }), " ", results.site?.locales.join(', '), _jsx("br", {}), _jsx("strong", { children: "Domain:" }), ' ', _jsx("a", { href: `https://${results.site.internal_domain}`, target: '_blank', children: results.site?.internal_domain }), _jsx("br", {}), _jsx("strong", { children: "SEO:" }), _jsxs("ul", { children: [_jsxs("li", { children: ["Site name: ", results.site?.global_seo?.site_name] }), _jsxs("li", { children: ["Title: ", results.site?.global_seo?.fallback_seo?.title] }), _jsxs("li", { children: ["Description: ", results.site?.global_seo?.fallback_seo?.description] }), _jsxs("li", { children: ["Image: ", results.site?.global_seo?.fallback_seo?.image] })] })] }), _jsxs("section", { children: [_jsx("h3", { children: "Plugins" }), _jsx("ul", { children: results.plugins.map((p, i) => (_jsxs("li", { children: [_jsxs("strong", { children: [p.name, ": "] }), " ", p.description] }, i))) })] })] })] })] }));
 };
 export async function testApiEndpoints(locale) {
     const site = await client.site.find();
