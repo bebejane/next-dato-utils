@@ -122,9 +122,10 @@ async function loadConfig(): Promise<DatoCmsConfig> {
 		const __dirname = path.dirname(__filename);
 		const relativePath = path.relative(__dirname, configPathFull);
 		const relativeConfigPath = relativePath.substring(0, relativePath.lastIndexOf('.'));
+
 		console.log({ __filename, relativePath, relativeConfigPath });
 
-		const c = (await import(relativeConfigPath)).default as DatoCmsConfig;
+		const c = (await import(relativeConfigPath + '.js')).default as DatoCmsConfig;
 		return c;
 	} catch (e) {
 		console.error(e);

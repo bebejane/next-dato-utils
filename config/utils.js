@@ -115,7 +115,7 @@ async function loadConfig() {
         const relativePath = path.relative(__dirname, configPathFull);
         const relativeConfigPath = relativePath.substring(0, relativePath.lastIndexOf('.'));
         console.log({ __filename, relativePath, relativeConfigPath });
-        const c = (await import(relativeConfigPath)).default;
+        const c = (await import(relativeConfigPath + '.js')).default;
         return c;
     }
     catch (e) {
