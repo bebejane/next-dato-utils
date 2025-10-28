@@ -1,4 +1,5 @@
-import { redirect } from 'next/navigation.js';
+//import { draftMode } from 'next/headers.js';
+//import { redirect } from 'next/navigation.js';
 //import { cookies } from 'next/headers.js';
 export default async function draft(request, searchParams) {
     searchParams = searchParams ?? new URL(request.url).searchParams;
@@ -30,9 +31,7 @@ export default async function draft(request, searchParams) {
         });
     }
         */
-    if (slug)
-        redirect(slug);
-    else
-        return new Response('OK', { status: 200 });
+    //if (slug) redirect(slug);
+    return new Response('OK', { status: 200 });
 }
 //# sourceMappingURL=draft.js.map
