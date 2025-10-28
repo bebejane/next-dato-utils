@@ -116,7 +116,7 @@ async function loadConfig() {
         const relativeConfigPath = relativePath.substring(0, relativePath.lastIndexOf('.'));
         console.log({ __filename, relativePath, relativeConfigPath });
         //@ts-ignore
-        const c = (await import('@/datocms.config')).default;
+        const c = (await import('@datocms.config')).default;
         return c;
     }
     catch (e) {
