@@ -107,7 +107,13 @@ export const renderTestResults = (results: TestResult) => {
             text-align:left;
             vertical-align: top;
             white-space:pre;
+						max-width:300px;
+						overflow:hidden;
+						text-overflow:ellipsis;
           }
+					hr{
+						widht:100%;
+					}
           .center{
             text-align:center;
           }
@@ -138,7 +144,7 @@ export const renderTestResults = (results: TestResult) => {
 												.map((p) => new URL(p.url).pathname)
 												.map((p, i) => (
 													<React.Fragment key={i}>
-														{p}
+														<span title={p}>{p}</span>
 														<br />
 													</React.Fragment>
 												))}
@@ -146,7 +152,7 @@ export const renderTestResults = (results: TestResult) => {
 										<td>
 											{r.revalidate?.paths?.map((p, i) => (
 												<React.Fragment key={i}>
-													{p}
+													<span title={p}>{p}</span>
 													<br />
 												</React.Fragment>
 											))}
@@ -157,8 +163,10 @@ export const renderTestResults = (results: TestResult) => {
 						</table>
 					</section>
 				</div>
+				<hr />
 				<div className='left'>
 					<section>
+						<h3>Config</h3>
 						<strong>Name:</strong> {results.site?.name}
 						<br />
 						<strong>Locales:</strong> {results.site?.locales.join(', ')}
