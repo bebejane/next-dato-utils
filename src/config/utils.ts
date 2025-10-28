@@ -113,6 +113,7 @@ export async function getItemWithLinked(id: string): Promise<any> {
 
 async function loadConfig(): Promise<DatoCmsConfig> {
 	try {
+		console.log('LOAD CONFIG');
 		//@ts-expect-error
 		const c = (await import('../../../datocms.config')).default;
 		return c as unknown as DatoCmsConfig;
