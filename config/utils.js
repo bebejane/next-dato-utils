@@ -110,12 +110,12 @@ async function loadConfig() {
     try {
         const cwd = process.cwd();
         const configPathFull = findConfig();
-        const configRootDir = configPathFull.substring(0, configPathFull.lastIndexOf('/'));
         const __filename = fileURLToPath(import.meta.url);
         const __dirname = path.dirname(__filename);
         const relativePath = path.relative(__dirname, configPathFull);
-        console.log({ configRootDir, cwd, __filename, relativePath });
-        const c = await (await import(relativePath)).default;
+        const relativeConfigPath = relativePath.substring(0, relativePath.lastIndexOf('.'));
+        console.log({ cwd, __filename, relativePath, relativeConfigPath });
+        const c = await (await import(relativeConfigPath)).default;
         return c;
     }
     catch (e) {
