@@ -64,6 +64,8 @@ export const renderTestResults = (results: TestResult) => {
 					{`
 					html, body{
 						font-family: sans-serif;
+						color:#333;
+						background:#f5f5f5;
 					}
 					body{
 						display:flex;
@@ -117,7 +119,6 @@ export const renderTestResults = (results: TestResult) => {
 			<body>
 				<div className='left'>
 					<section>
-						<h3>Config</h3>
 						<strong>Name:</strong> {results.site?.name}
 						<br />
 						<strong>Locales:</strong> {results.site?.locales.join(', ')}
@@ -149,9 +150,7 @@ export const renderTestResults = (results: TestResult) => {
 						<h3>Plugins</h3>
 						<ul>
 							{results.plugins.map((p, i) => (
-								<li key={i}>
-									<strong>{p.name}: </strong> {p.description}
-								</li>
+								<li key={i}>{p.name}</li>
 							))}
 						</ul>
 					</section>
