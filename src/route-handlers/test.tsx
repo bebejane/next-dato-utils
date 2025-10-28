@@ -70,13 +70,16 @@ export const renderTestResults = (results: TestResult) => {
 						flex-direction:row;
 					}
 					.left{
-						flex: 1 1 70%;
+						flex: 0 0;
+						paddding-right:2rem;
 					}
 					.right{
 						flex: 1 1 auto;
 					}
 					ul{
 						list-style: none;
+						padding:0;
+						margin:0;
 						padding-left:2rem;
 					}
 					li{
@@ -110,35 +113,6 @@ export const renderTestResults = (results: TestResult) => {
 			<body>
 				<div className='left'>
 					<section>
-						<h3>Endpoints</h3>
-						<table>
-							<tbody>
-								<thead>
-									<tr>
-										<th>Model</th>
-										<th>Previews</th>
-										<th>Revalidate</th>
-									</tr>
-								</thead>
-								{results.models.map((r) => (
-									<tr>
-										<td className={!r.previews || !r.revalidate?.revalidated ? 'error' : ''}>{r.model}</td>
-										<td>
-											{r.previews
-												?.filter(({ label, url }) => label === 'Live' && new URL(url).pathname)
-												.map((p) => new URL(p.url).pathname)
-												.join('\n') ?? ''}
-										</td>
-										<td>{r.revalidate?.paths?.join('\n') ?? ''}</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
-					</section>
-				</div>
-				<div className='right'>
-					<section>
-						<h3>Site</h3>
 						<strong>Name:</strong> {results.site?.name}
 						<br />
 						<strong>Locales:</strong> {results.site?.locales.join(', ')}
@@ -165,6 +139,34 @@ export const renderTestResults = (results: TestResult) => {
 								</li>
 							))}
 						</ul>
+					</section>
+				</div>
+				<div className='right'>
+					<section>
+						<h3>Endpoints</h3>
+						<table>
+							<tbody>
+								<thead>
+									<tr>
+										<th>Model</th>
+										<th>Previews</th>
+										<th>Revalidate</th>
+									</tr>
+								</thead>
+								{results.models.map((r) => (
+									<tr>
+										<td className={!r.previews || !r.revalidate?.revalidated ? 'error' : ''}>{r.model}</td>
+										<td>
+											{r.previews
+												?.filter(({ label, url }) => label === 'Live' && new URL(url).pathname)
+												.map((p) => new URL(p.url).pathname)
+												.join('\n') ?? ''}
+										</td>
+										<td>{r.revalidate?.paths?.join('\n') ?? ''}</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
 					</section>
 				</div>
 			</body>
