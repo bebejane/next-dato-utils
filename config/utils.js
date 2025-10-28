@@ -2,6 +2,7 @@ import 'dotenv/config';
 import { ApiError } from '@datocms/cma-client';
 import { buildClient } from '@datocms/cma-client';
 import { findConfig } from './find.js';
+import { pathToFileURL } from 'url';
 const client = buildClient({
     apiToken: process.env.DATOCMS_API_TOKEN,
     environment: process.env.DATOCMS_ENVIRONMENT,
@@ -106,9 +107,10 @@ export async function getItemWithLinked(id) {
 }
 async function loadConfig() {
     try {
-        const path = findConfig();
-        console.log('datocms.config path:', path);
-        const c = (await import(path)).default;
+        const configPath = findConfig();
+        console.log('datocms.config path:', configPath);
+        const c = await (await import(pathToFileURL(configPath).toString())).default;
+        //const c = (await import(path)).default;
         return c;
     }
     catch (e) {

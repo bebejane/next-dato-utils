@@ -7,7 +7,8 @@
 	"module": "./index.js",
 	"scripts": {
 		"build": "node ./clean.js && npm run tsc && npm run copy-files",
-		"release": "npm run build && npm version patch --force && git push && git push --tags && gh release create $(git describe --tags --abbrev=0) --generate-notes",
+		"push": "npm run build && git add . && git commit -m \"update\" && git push",
+		"release": "npm run push && npm version patch --force && git push && git push --tags && gh release create $(git describe --tags --abbrev=0) --generate-notes",
 		"dev": "npx nodemon --watch \"src/**/*\" --watch \"./package.json\" -e tsx,ts,scss,json --exec \"npm run build\"",
 		"dev:cli": "tsx src/cli/index.ts",
 		"tsc": "tsc -p tsconfig.json",
