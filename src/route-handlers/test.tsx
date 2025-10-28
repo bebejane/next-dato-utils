@@ -69,6 +69,9 @@ export const renderTestResults = (results: TestResult) => {
 						display:flex;
 						flex-direction:row;
 					}
+					section{
+						margin-bottom:20px;
+					}
 					.left{
 						flex: 1 1 300px;
 						padding-right:2rem;
@@ -114,6 +117,7 @@ export const renderTestResults = (results: TestResult) => {
 			<body>
 				<div className='left'>
 					<section>
+						<h3>Config</h3>
 						<strong>Name:</strong> {results.site?.name}
 						<br />
 						<strong>Locales:</strong> {results.site?.locales.join(', ')}
@@ -123,7 +127,7 @@ export const renderTestResults = (results: TestResult) => {
 							{results.site?.internal_domain}
 						</a>
 						<br />
-						<strong>SEO:</strong>
+						<strong>SEO</strong>
 						<ul>
 							<li>Site name: {results.site?.global_seo?.site_name}</li>
 							<li>Title: {results.site?.global_seo?.fallback_seo?.title}</li>
@@ -136,7 +140,7 @@ export const renderTestResults = (results: TestResult) => {
 						<ul>
 							{results.webhooks.map((p, i) => (
 								<li key={i}>
-									<strong>{p.name}: </strong> {p.url}
+									{p.name}: {p.url}
 								</li>
 							))}
 						</ul>
