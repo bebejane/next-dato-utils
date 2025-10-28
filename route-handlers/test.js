@@ -204,7 +204,7 @@ const testRevalidateEndpoint = async (itemType, client, locale) => {
     });
     if (res.status === 200) {
         const json = await res.json();
-        return json;
+        return json.response;
     }
     else {
         throw new Error(`Error testing revalidate endpoint: ${res.status} ${res.statusText}`);
