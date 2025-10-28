@@ -12,48 +12,48 @@
 		"dev": "npx nodemon --watch \"src/**/*\" --watch \"./package.json\" -e tsx,ts,scss,json --exec \"npm run build\"",
 		"dev:cli": "tsx src/cli/index.ts",
 		"tsc": "tsc -p tsconfig.json",
-		"copy-files": "copyfiles -u 1 src/**/*.scss ./build && rsync -a ./build/* ./ && rm -rf ./build"
+		"copy-files": "copyfiles -u 1 src/**/*.scss ./dist"
 	},
 	"exports": {
 		"./package.json": "./package.json",
 		"./utils": {
-			"types": "./utils/index.d.ts",
-			"import": "./utils/index.js"
+			"types": "./dist/utils/index.d.ts",
+			"import": "./dist/utils/index.js"
 		},
 		"./config": {
-			"types": "./config/index.d.ts",
-			"import": "./config/index.js"
+			"types": "./dist/config/index.d.ts",
+			"import": "./dist/config/index.js"
 		},
 		"./components": {
-			"types": "./components/index.d.ts",
-			"import": "./components/index.js"
+			"types": "./dist/components/index.d.ts",
+			"import": "./dist/components/index.js"
 		},
 		"./hooks": {
-			"types": "./hooks/index.d.ts",
-			"import": "./hooks/index.js"
+			"types": "./dist/hooks/index.d.ts",
+			"import": "./dist/hooks/index.js"
 		},
 		"./api": {
-			"types": "./api/index.d.ts",
-			"import": "./api/index.js"
+			"types": "./dist/api/index.d.ts",
+			"import": "./dist/api/index.js"
 		},
 		"./route-handlers": {
-			"types": "./route-handlers/index.d.ts",
-			"import": "./route-handlers/index.js"
+			"types": "./dist/route-handlers/index.d.ts",
+			"import": "./dist/route-handlers/index.js"
 		},
 		"./router": {
-			"types": "./router/index.d.ts",
-			"import": "./router/index.js"
+			"types": "./dist/router/index.d.ts",
+			"import": "./dist/router/index.js"
 		},
 		"./server-actions": {
-			"types": "./server-actions/index.d.ts",
-			"import": "./server-actions/index.js"
+			"types": "./dist/server-actions/index.d.ts",
+			"import": "./dist/server-actions/index.js"
 		},
 		"./server-actions*": {
-			"import": "./server-actions/*"
+			"import": "./dist/server-actions/*"
 		}
 	},
 	"bin": {
-		"nextdato": "./cli/index.js"
+		"nextdato": "./dist/cli/index.js"
 	},
 	"engines": {
 		"node": ">=0.18"
