@@ -12,6 +12,11 @@
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
     "skipLibCheck": true,
+    "paths": {
+      "@/datocms.config": [
+        "./datocms.config.ts"
+      ]
+    }
   },
   "exclude": [],
   "include": [

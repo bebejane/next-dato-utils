@@ -116,7 +116,6 @@ export async function getItemWithLinked(id: string): Promise<any> {
 }
 
 async function loadConfig(): Promise<DatoCmsConfig> {
-	return loadConfig2();
 	try {
 		const cwd = process.cwd();
 		const configPathFull = findConfig();
@@ -127,43 +126,11 @@ async function loadConfig(): Promise<DatoCmsConfig> {
 
 		console.log({ __filename, relativePath, relativeConfigPath });
 
-		const c = (await import(relativeConfigPath)).default as DatoCmsConfig;
+		//@ts-ignore
+		const c = (await import('@/datocms.config')).default as DatoCmsConfig;
 		return c;
 	} catch (e) {
 		console.error(e);
 		throw new Error('datocms.config not founds');
 	}
-}
-
-async function loadConfig2(): Promise<DatoCmsConfig> {
-	try {
-		//@ts-expect-error
-		return (await import('../datocms.config')).default as DatoCmsConfig;
-	} catch (e) {}
-	try {
-		//@ts-expect-error
-		return (await import('../../datocms.config')).default as DatoCmsConfig;
-	} catch (e) {}
-	try {
-		//@ts-expect-error
-		return (await import('../../../datocms.config')).default as DatoCmsConfig;
-	} catch (e) {}
-	try {
-		//@ts-expect-error
-		return (await import('../../../../datocms.config')).default as DatoCmsConfig;
-	} catch (e) {}
-	try {
-		//@ts-expect-error
-		return (await import('../../../../../datocms.config')).default as DatoCmsConfig;
-	} catch (e) {}
-	try {
-		//@ts-expect-error
-		return (await import('../../../../../../datocms.config')).default as DatoCmsConfig;
-	} catch (e) {}
-	try {
-		//@ts-expect-error
-		return (await import('../../../../../../../datocms.config')).default as DatoCmsConfig;
-	} catch (e) {}
-
-	throw new Error('datocms.config not found');
 }
