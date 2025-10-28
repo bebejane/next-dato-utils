@@ -1,34 +1,58 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import basicAuth from './basic-auth.js';
-import { buildClient } from '@datocms/cma-client-browser';
-const tests = async (req) => {
+import { buildClient } from '@datocms/cma-client';
+import { renderToStaticMarkup } from 'react-dom/server';
+const client = buildClient({
+    apiToken: process.env.DATOCMS_API_TOKEN,
+    environment: process.env.DATOCMS_ENVIRONMENT || 'main',
+});
+const baseApiUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api`;
+export default async function test(req) {
     return await basicAuth(req, async (req) => {
         const params = new URLSearchParams(req.url.split('?')[1]);
-        const results = await testApiEndpoints(params.get('locale') || params.get('l') || 'en');
-        if (params.get('json'))
-            return new Response(JSON.stringify(results), {
-                status: 200,
-                headers: { 'Content-Type': 'application/json' },
-            });
-        else
-            return new Response(testResultsToHtml(results), {
-                status: 200,
-                headers: { 'Content-Type': 'text/html' },
-            });
+        const results = {
+            site: await client.site.find(),
+            webhooks: await client.webhooks.list(),
+            plugins: await client.plugins.list(),
+            models: await testApiEndpoints(params.get('locale') || params.get('l') || 'en'),
+        };
+        return new Response(renderToStaticMarkup(renderTestResults(results)), {
+            status: 200,
+            headers: { 'Content-Type': 'text/html' },
+        });
     });
+}
+export const renderTestResults = (results) => {
+    return (_jsxs("html", { children: [_jsx("head", { children: _jsx("style", { children: `
+          table {
+            border-collapse: collapse;
+            width: 400px;
+          }
+          th, td {
+            padding: 5px;
+            text-align:left;
+            vertical-align: top;
+            white-space:pre;
+          }
+          .center{
+            text-align:center;
+          }
+          .error{
+            color:red;
+          }` }) }), _jsxs("body", { children: [_jsxs("section", { children: [_jsx("h3", { children: "Site" }), _jsxs("p", { children: [_jsx("strong", { children: "Name:" }), " ", results.site?.name, _jsx("br", {}), _jsx("strong", { children: "Locales:" }), " ", results.site?.locales, _jsx("br", {}), _jsx("strong", { children: "Domain:" }), ' ', _jsx("a", { href: results.site.internal_domain, children: results.site?.internal_domain }), _jsx("br", {})] })] }), _jsxs("section", { children: [_jsx("h3", { children: "Plugins" }), _jsx("ul", { children: results.plugins.map((p, i) => (_jsxs("li", { children: [_jsxs("strong", { children: [p.name, ": "] }), " ", p.package_version] }, i))) })] }), _jsxs("section", { children: [_jsx("h3", { children: "Endpoints" }), _jsx("table", { children: _jsxs("tbody", { children: [_jsx("thead", { children: _jsxs("tr", { children: [_jsx("th", { children: "Model" }), _jsx("th", { children: "Previews" }), _jsx("th", { children: "Revalidate" })] }) }), results.models.map((r) => (_jsxs("tr", { children: [_jsx("td", { className: !r.previews || !r.revalidate?.revalidated ? 'error' : '', children: r.model }), _jsx("td", { children: r.previews
+                                                        ?.filter(({ label, url }) => label === 'Live' && new URL(url).pathname)
+                                                        .map((p) => new URL(p.url).pathname)
+                                                        .join('\n') ?? '' }), _jsx("td", { children: r.revalidate?.paths?.join('\n') ?? '' })] })))] }) })] })] })] }));
 };
-export default tests;
-const baseApiUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api`;
 export async function testApiEndpoints(locale) {
-    const client = buildClient({
-        apiToken: process.env.DATOCMS_API_TOKEN,
-        environment: process.env.DATOCMS_ENVIRONMENT || 'main',
-    });
     const site = await client.site.find();
     console.log(`Testing site: ${site.name}`);
     const itemTypes = await client.itemTypes.list();
     const models = itemTypes.filter((t) => !t.modular_block);
     const results = await Promise.all(models.map(async (model, i) => {
-        const r = { model: model.api_key };
+        const r = {
+            model: model.api_key,
+        };
         console.log(`${i + 1}/${models.length}: ${r.model}`);
         try {
             const previews = await testWebPreviewsEndpoint(model, client, locale);
@@ -45,88 +69,6 @@ export async function testApiEndpoints(locale) {
     }));
     return results.sort((a, b) => (a.model > b.model ? 1 : -1));
 }
-export const testResultsToString = (results) => {
-    const tests = results
-        .map((r) => {
-        return `${r.model} - Previews: ${r.previews ? 'YES' : 'NO'} / Revalidate: ${r.revalidate ? 'YES' : 'NO'}`;
-    })
-        .join('\n');
-    const previews = results
-        .filter((r) => r.previews)
-        .map((r) => r.model)
-        .sort((a, b) => (a > b ? 1 : -1))
-        .join('\n');
-    const revalidate = results
-        .filter((r) => r.revalidate?.paths.length)
-        .map((r) => r.model)
-        .sort((a, b) => (a > b ? 1 : -1))
-        .join('\n');
-    const nopreviews = results
-        .filter((r) => !r.previews)
-        .map((r) => r.model)
-        .sort((a, b) => (a > b ? 1 : -1))
-        .join('\n');
-    const norevalidate = results
-        .filter((r) => !r.revalidate || !r.revalidate?.paths.length)
-        .map((r) => r.model)
-        .sort((a, b) => (a > b ? 1 : -1))
-        .join('\n');
-    return `WEB PREVIEWS\n${previews}\n\nNO WEB PREVIEWS:\n${nopreviews}\n\nREVALIDATE\n${revalidate}\n\nNO REVALIDATE\n${norevalidate}`;
-};
-export const testResultsToHtml = (results) => {
-    console.log('TEST API');
-    console.log(JSON.stringify(results, null, 2));
-    return `
-    <html>
-      <head>
-        <style>
-          table {
-            border-collapse: collapse;
-            width: 400px;
-          }
-          th, td {
-            padding: 5px;
-            text-align:left;
-            vertical-align: top;
-            white-space:pre;
-          }
-          .center{
-            text-align:center;
-          }
-          .error{
-            color:red;
-          }
-        </style>
-      </head>
-      <body>
-        <pre>
-        <table>
-          <thead>
-            <tr>
-              <th>Model</th>
-              <th>Previews</th>
-              <th>Revalidate</th> 
-            </tr>
-          </thead>
-          <tbody>
-            ${results
-        .map((r) => `
-              <tr>
-                <td class="${!r.previews || !r.revalidate?.revalidated ? 'error' : ''}">${r.model}</td>
-                <td>${r.previews
-        ?.filter(({ label, url }) => label === 'Live' && new URL(url).pathname)
-        .map((p) => new URL(p.url).pathname)
-        .join('\n') ?? ''}</td>
-                <td>${r.revalidate?.paths?.join('\n') ?? ''}</td>
-              </tr>
-            `)
-        .join('')}
-          </tbody>
-        </pre>
-      </body>
-    </html>
-  `;
-};
 const testWebPreviewsEndpoint = async (itemType, client, locale) => {
     const items = await client.items.list({
         limit: 1,

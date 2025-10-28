@@ -1,5 +1,4 @@
-declare const tests: (req: Request) => Promise<Response>;
-export default tests;
+import { PluginAttributes, SiteAttributes, WebhookAttributes } from '@datocms/cma-client/dist/types/generated/RawApiTypes.js';
 type PreviewLink = {
     label: string;
     url: string;
@@ -10,11 +9,18 @@ type RevalidateResponse = {
     delays: number;
     event_type: string;
 };
-type TestResult = {
+type Model = {
     model: string;
     previews?: PreviewLink[];
     revalidate?: RevalidateResponse;
 };
-export declare function testApiEndpoints(locale: string): Promise<TestResult[]>;
-export declare const testResultsToString: (results: TestResult[]) => string;
-export declare const testResultsToHtml: (results: TestResult[]) => string;
+type TestResult = {
+    site: SiteAttributes;
+    plugins: PluginAttributes[];
+    webhooks: WebhookAttributes[];
+    models: Model[];
+};
+export default function test(req: Request): Promise<Response>;
+export declare const renderTestResults: (results: TestResult) => import("react/jsx-runtime").JSX.Element;
+export declare function testApiEndpoints(locale: string): Promise<Model[]>;
+export {};
