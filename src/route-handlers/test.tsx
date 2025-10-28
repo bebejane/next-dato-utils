@@ -6,6 +6,7 @@ import {
 import basicAuth from './basic-auth.js';
 import { Client, buildClient } from '@datocms/cma-client';
 import { renderToStaticMarkup } from 'react-dom/server';
+import React from 'react';
 
 const client = buildClient({
 	apiToken: process.env.DATOCMS_API_TOKEN,
@@ -69,17 +70,16 @@ export const renderTestResults = (results: TestResult) => {
 					}
 					body{
 						display:flex;
-						flex-direction:row;
+						flex-direction:column;
 					}
 					section{
 						margin-bottom:20px;
 					}
 					.left{
-						flex: 1 1 300px;
-						padding-right:2rem;
+						
 					}
 					.right{
-						flex: 1 1 auto;
+						
 					}
 					ul{
 						list-style: none;
@@ -117,6 +117,46 @@ export const renderTestResults = (results: TestResult) => {
 				</style>
 			</head>
 			<body>
+				<div className='right'>
+					<section>
+						<h3>Endpoints</h3>
+						<table>
+							<tbody>
+								<thead>
+									<tr>
+										<th>Model</th>
+										<th>Previews</th>
+										<th>Revalidate</th>
+									</tr>
+								</thead>
+								{results.models.map((r) => (
+									<tr>
+										<td className={!r.previews || !r.revalidate?.revalidated ? 'error' : ''}>{r.model}</td>
+										<td>
+											{r.previews
+												?.filter(({ label, url }) => label === 'Live' && new URL(url).pathname)
+												.map((p) => new URL(p.url).pathname)
+												.map((p, i) => (
+													<React.Fragment key={i}>
+														{p}
+														<br />
+													</React.Fragment>
+												))}
+										</td>
+										<td>
+											{r.revalidate?.paths?.map((p, i) => (
+												<React.Fragment key={i}>
+													{p}
+													<br />
+												</React.Fragment>
+											))}
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</section>
+				</div>
 				<div className='left'>
 					<section>
 						<strong>Name:</strong> {results.site?.name}
@@ -153,46 +193,6 @@ export const renderTestResults = (results: TestResult) => {
 								<li key={i}>{p.name}</li>
 							))}
 						</ul>
-					</section>
-				</div>
-				<div className='right'>
-					<section>
-						<h3>Endpoints</h3>
-						<table>
-							<tbody>
-								<thead>
-									<tr>
-										<th>Model</th>
-										<th>Previews</th>
-										<th>Revalidate</th>
-									</tr>
-								</thead>
-								{results.models.map((r) => (
-									<tr>
-										<td className={!r.previews || !r.revalidate?.revalidated ? 'error' : ''}>{r.model}</td>
-										<td>
-											{r.previews
-												?.filter(({ label, url }) => label === 'Live' && new URL(url).pathname)
-												.map((p) => new URL(p.url).pathname)
-												.map((p) => (
-													<>
-														{p}
-														<br />
-													</>
-												)) ?? ''}
-										</td>
-										<td>
-											{r.revalidate?.paths?.map((p) => (
-												<>
-													{p}
-													<br />
-												</>
-											))}
-										</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
 					</section>
 				</div>
 			</body>
