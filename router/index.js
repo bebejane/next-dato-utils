@@ -1,4 +1,4 @@
-import { backup, revalidate, test, webPreviews, basicAuth } from '../route-handlers/index.js';
+import { backup, revalidate, test, webPreviews, draft, basicAuth } from '../route-handlers/index.js';
 const POST = async (req, { params }, config) => {
     const { route } = await params;
     try {
@@ -51,8 +51,8 @@ const GET = async (req, { params }, config) => {
         switch (route) {
             case 'test':
                 return test(req);
-            //case 'draft':
-            //return draft(req, searchParams);
+            case 'draft':
+                return draft(req, searchParams);
             default:
                 return new Response('Not Found', { status: 404 });
         }
@@ -73,4 +73,4 @@ const router = async function (req, { params }, config) {
     }
 };
 export default router;
-//# sourceMappingURL=router.js.map
+//# sourceMappingURL=index.js.map

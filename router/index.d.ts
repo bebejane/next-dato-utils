@@ -1,4 +1,4 @@
-import { DatoCmsConfig } from './config.js';
+import { DatoCmsConfig } from '../config/index.js';
 export type RouteHandler = (req: Request, { params }: {
     params: Promise<{
         route: string;

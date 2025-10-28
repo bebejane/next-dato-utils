@@ -40,6 +40,10 @@
 			"types": "./route-handlers/index.d.ts",
 			"import": "./route-handlers/index.js"
 		},
+		"./router": {
+			"types": "./router/index.d.ts",
+			"import": "./router/index.js"
+		},
 		"./server-actions": {
 			"types": "./server-actions/index.d.ts",
 			"import": "./server-actions/index.js"

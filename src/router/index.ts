@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server.js';
-import { DatoCmsConfig } from './config.js';
-import { backup, revalidate, test, webPreviews, basicAuth } from '../route-handlers/index.js';
+import { DatoCmsConfig } from '../config/index.js';
+import { backup, revalidate, test, webPreviews, draft, basicAuth } from '../route-handlers/index.js';
 
 export type RouteHandler = (
 	req: Request,
@@ -67,8 +67,8 @@ const GET: RouteHandler = async (req, { params }, config) => {
 		switch (route) {
 			case 'test':
 				return test(req);
-			//case 'draft':
-			//return draft(req, searchParams);
+			case 'draft':
+				return draft(req, searchParams);
 			default:
 				return new Response('Not Found', { status: 404 });
 		}
