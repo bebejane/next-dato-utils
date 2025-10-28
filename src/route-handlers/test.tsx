@@ -174,9 +174,21 @@ export const renderTestResults = (results: TestResult) => {
 											{r.previews
 												?.filter(({ label, url }) => label === 'Live' && new URL(url).pathname)
 												.map((p) => new URL(p.url).pathname)
-												.join('\n') ?? ''}
+												.map((p) => (
+													<>
+														{p}
+														<br />
+													</>
+												)) ?? ''}
 										</td>
-										<td>{r.revalidate?.paths?.join('\n') ?? ''}</td>
+										<td>
+											{r.revalidate?.paths?.map((p) => (
+												<>
+													{p}
+													<br />
+												</>
+											))}
+										</td>
 									</tr>
 								))}
 							</tbody>
