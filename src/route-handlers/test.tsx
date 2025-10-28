@@ -70,8 +70,8 @@ export const renderTestResults = (results: TestResult) => {
 						flex-direction:row;
 					}
 					.left{
-						flex: 0 0;
-						paddding-right:2rem;
+						flex: 1 1 300px;
+						padding-right:2rem;
 					}
 					.right{
 						flex: 1 1 auto;
@@ -80,7 +80,7 @@ export const renderTestResults = (results: TestResult) => {
 						list-style: none;
 						padding:0;
 						margin:0;
-						padding-left:2rem;
+						padding-left:10px;
 					}
 					li{
 
@@ -98,6 +98,7 @@ export const renderTestResults = (results: TestResult) => {
           }
           th, td {
             padding: 5px;
+						padding-left:0;
             text-align:left;
             vertical-align: top;
             white-space:pre;
