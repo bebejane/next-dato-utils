@@ -116,9 +116,10 @@ export async function getItemWithLinked(id: string): Promise<any> {
 async function loadConfig(): Promise<DatoCmsConfig> {
 	try {
 		const configPath = findConfig();
-		console.log('datocms.config path:', configPath);
-		const c = await (await import(configPath)).default;
-		//const c = (await import(path)).default;
+
+		const path = configPath.substring(0, configPath.lastIndexOf('/') - 1);
+		console.log('datocms.config path', path);
+		const c = await (await import(path)).default;
 		return c as unknown as DatoCmsConfig;
 	} catch (e) {
 		console.error(e);

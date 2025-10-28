@@ -107,9 +107,9 @@ export async function getItemWithLinked(id) {
 async function loadConfig() {
     try {
         const configPath = findConfig();
-        console.log('datocms.config path:', configPath);
-        const c = await (await import(configPath)).default;
-        //const c = (await import(path)).default;
+        const path = configPath.substring(0, configPath.lastIndexOf('/') - 1);
+        console.log('datocms.config path', path);
+        const c = await (await import(path)).default;
         return c;
     }
     catch (e) {
