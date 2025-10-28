@@ -27,4 +27,3 @@ export default async function favicon(req) {
         return notfound;
     }
 }
-//# sourceMappingURL=favicon.js.map

@@ -25,4 +25,3 @@ export default function Markdown({ content, truncate, className, components, sen
             _jsx(Link, { scroll: scroll, href: href, children: children })),
         } }));
 }
-//# sourceMappingURL=Markdown.js.map

@@ -195,4 +195,3 @@ const testRevalidateEndpoint = async (itemType, client, locale) => {
         throw new Error(`Error testing revalidate endpoint: ${res.status} ${res.statusText}`);
     }
 };
-//# sourceMappingURL=test.js.map

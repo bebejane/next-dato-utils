@@ -50,4 +50,3 @@ const parseDelay = (entity) => {
     return (Date.now() -
         Math.max(new Date(updated_at).getTime(), new Date(published_at).getTime(), new Date(created_at).getTime()));
 };
-//# sourceMappingURL=revalidate.js.map

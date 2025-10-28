@@ -6,13 +6,12 @@
     "target": "esnext",
     "module": "nodenext",
     "moduleResolution": "nodenext",
-    "sourceRoot": "./src",
     "jsx": "react-jsx",
-    "sourceMap": true,
+    "sourceMap": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
   },
   "include": [
     "./src",

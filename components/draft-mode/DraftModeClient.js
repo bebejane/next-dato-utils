@@ -60,4 +60,3 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
         return null;
     return (_jsxs("div", { className: s.draftMode, children: [_jsxs("div", { className: s.label, children: [_jsx("img", { className: loading ? s.loading : undefined, width: '20', height: '20' }), _jsx("div", { children: "Draft mode" })] }), _jsx("div", { className: s.button, children: _jsx("button", { onClick: () => startTransition(() => actions.disableDraftMode(pathname)), children: "Exit" }) })] }));
 }
-//# sourceMappingURL=DraftModeClient.js.map

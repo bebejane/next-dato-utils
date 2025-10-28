@@ -6,4 +6,3 @@ export default async function vercelCronAuth(req, callback) {
     else
         return new Response('Access denied', { status: 401 });
 }
-//# sourceMappingURL=vercel-cron-auth.js.map

@@ -83,4 +83,3 @@ export const findConfig = () => {
     }
     throw new Error('Error: cannot find DatoCms config. Please create a configuration file located at the root of your current working directory called "datocms.config.js" or "datocms.config.ts".');
 };
-//# sourceMappingURL=find.js.map

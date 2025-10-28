@@ -15,4 +15,3 @@ export const handler = (...middleware) => async (request) => {
     throw new Error('Your handler or middleware must return a NextResponse!');
 };
 export default handler;
-//# sourceMappingURL=middleware.js.map

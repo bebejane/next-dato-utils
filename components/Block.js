@@ -6,4 +6,3 @@ export default function Block({ data, onClick, components, className }) {
         return _jsxs("div", { children: ["No block match: ", data.__typename] });
     return _jsx(BlockComponent, { data: data, onClick: onClick, className: className });
 }
-//# sourceMappingURL=Block.js.map

@@ -111,4 +111,3 @@ async function usage() {
   `);
     console.log(text);
 }
-//# sourceMappingURL=index.js.map

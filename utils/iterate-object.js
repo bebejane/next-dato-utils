@@ -14,4 +14,3 @@ export default function iterateObject(obj, fn) {
         }
     }
 }
-//# sourceMappingURL=iterate-object.js.map

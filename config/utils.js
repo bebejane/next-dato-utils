@@ -123,4 +123,3 @@ async function loadConfig() {
         throw new Error('datocms.config not founds');
     }
 }
-//# sourceMappingURL=utils.js.map

@@ -89,4 +89,3 @@ export default function StructuredContent({ content, className, blocks, styles, 
             }),
         ] }));
 }
-//# sourceMappingURL=StructuredContent.js.map
