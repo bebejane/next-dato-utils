@@ -112,7 +112,8 @@ export const renderTestResults = (results: TestResult) => {
 						text-overflow:ellipsis;
           }
 					hr{
-						widht:100%;
+						width:100%;
+						margin-bottom:1rem;
 					}
           .center{
             text-align:center;
