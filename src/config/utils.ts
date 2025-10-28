@@ -124,10 +124,10 @@ async function loadConfig(): Promise<DatoCmsConfig> {
 		const relativeConfigPath = relativePath.substring(0, relativePath.lastIndexOf('.'));
 		console.log({ cwd, __filename, relativePath, relativeConfigPath });
 
-		const c = (await import(relativeConfigPath)).default;
-		return c as unknown as DatoCmsConfig;
+		const c = (await import(relativeConfigPath)).default as DatoCmsConfig;
+		return c;
 	} catch (e) {
 		console.error(e);
-		throw new Error('datocms.config not found');
+		throw new Error('datocms.config not founds');
 	}
 }
