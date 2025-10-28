@@ -23,8 +23,6 @@ export async function getItemReferenceRoutes(itemId: string, locales?: string[])
 			limit: 500,
 			nested: true,
 		});
-
-		console.log('get item references', itemId);
 		const itemPathnames = await itemsToRoutes(items, locales);
 		itemPathnames && pathnames.push.apply(pathnames, itemPathnames);
 	} catch (e) {
@@ -117,15 +115,15 @@ export async function getItemWithLinked(id: string): Promise<any> {
 
 async function loadConfig(): Promise<DatoCmsConfig> {
 	try {
+		/*
 		const cwd = process.cwd();
 		const configPathFull = findConfig();
 		const __filename = fileURLToPath(import.meta.url);
 		const __dirname = path.dirname(__filename);
 		const relativePath = path.relative(__dirname, configPathFull);
 		const relativeConfigPath = relativePath.substring(0, relativePath.lastIndexOf('.'));
-
 		console.log({ __filename, relativePath, relativeConfigPath });
-
+*/
 		//@ts-ignore
 		const c = (await import('datocms.config')).default as DatoCmsConfig;
 		return c;
