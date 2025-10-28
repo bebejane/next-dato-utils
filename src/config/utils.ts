@@ -141,7 +141,8 @@ async function loadConfig2(): Promise<DatoCmsConfig> {
 	const moduleText = fs.readFileSync(configPathFullJs, 'utf-8').toString();
 	const moduleBase64 = Buffer.from(moduleText).toString('base64');
 	const moduleDataURL = `data:text/javascript;base64,${moduleBase64}`;
+	console.log(moduleText);
 	const result = await import(moduleDataURL);
-	console.log(result);
+
 	return result.default as DatoCmsConfig;
 }
