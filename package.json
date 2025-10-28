@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "2.0.3",
+	"version": "2.0.4",
 	"description": "",
 	"type": "module",
 	"main": "./index.js",
@@ -64,6 +64,7 @@
 		"datocms-structured-text-utils": "^5.0.0",
 		"dedent-js": "^1.0.1",
 		"dotenv": "^16.4.4",
+		"get-tsconfig": "^4.13.0",
 		"graphql": "^16.10.0",
 		"ico-utils": "^0.1.4",
 		"is-integer": "^1.0.7",
