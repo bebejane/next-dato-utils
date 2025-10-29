@@ -63,6 +63,9 @@ export const renderTestResults = (results: TestResult) => {
 			<head>
 				<style>
 					{`
+					:root{
+						--gray:#cdcbcb;
+					}
 					html, body{
 						font-family: sans-serif;
 						color:#333;
@@ -110,11 +113,14 @@ export const renderTestResults = (results: TestResult) => {
 						max-width:400px;
 						overflow:hidden;
 						text-overflow:ellipsis;
-						border-bottom: 1px solid #eee;
+						border-bottom: 1px solid var(--gray);
           }
+					td{
+						padding-right:2rem;	
+					}
 					hr{
 						width:100%;
-						background-color: #eee;
+						background-color: var(--gray);
 						margin-bottom:1rem;
 					}
           .center{
