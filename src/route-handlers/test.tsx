@@ -114,6 +114,7 @@ export const renderTestResults = (results: TestResult) => {
           }
 					hr{
 						width:100%;
+						background-color: #eee;
 						margin-bottom:1rem;
 					}
           .center{

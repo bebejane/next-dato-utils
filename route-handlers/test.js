@@ -76,6 +76,7 @@ export const renderTestResults = (results) => {
           }
 					hr{
 						width:100%;
+						background-color: #eee;
 						margin-bottom:1rem;
 					}
           .center{
