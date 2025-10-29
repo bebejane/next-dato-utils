@@ -26,7 +26,7 @@ const POST = async (req, { params }, config) => {
                         paths = (await config.routes?.[api_key]?.(record)) ?? [];
                     }
                     const tags = [api_key, id].filter((t) => t);
-                    return await revalidate(paths, tags, true);
+                    return await revalidate(paths, tags, false);
                 }));
             case 'web-previews':
                 return webPreviews(req, async (payload) => {

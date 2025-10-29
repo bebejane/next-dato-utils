@@ -40,7 +40,7 @@ const POST: RouteHandler = async (req, { params }, config) => {
 							paths = (await config.routes?.[api_key]?.(record)) ?? [];
 						}
 						const tags: string[] = [api_key, id].filter((t) => t);
-						return await revalidate(paths, tags, true);
+						return await revalidate(paths, tags, false);
 					})
 				);
 			case 'web-previews':
