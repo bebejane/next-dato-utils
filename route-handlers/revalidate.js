@@ -14,7 +14,7 @@ export default async function revalidate(req, callback) {
         try {
             if ((!paths && !tags) || (!paths.length && !tags.length)) {
                 if (logs) {
-                    console.log('revalidate', 'FAILED', 'no paths or tags');
+                    console.log('FAILED', 'revalidate', 'no paths or tags');
                     console.log(payload);
                 }
                 response = { ...response, revalidated: false, payload };
