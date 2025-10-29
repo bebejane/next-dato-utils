@@ -113,7 +113,7 @@ export async function getItemWithLinked(id: string): Promise<any> {
 	return record;
 }
 
-async function loadConfig(): Promise<DatoCmsConfig> {
+export async function loadConfig(): Promise<DatoCmsConfig> {
 	try {
 		/*
 		const cwd = process.cwd();

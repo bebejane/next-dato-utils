@@ -102,7 +102,7 @@ export async function getItemWithLinked(id) {
     });
     return record;
 }
-async function loadConfig() {
+export async function loadConfig() {
     try {
         /*
         const cwd = process.cwd();

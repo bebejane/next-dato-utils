@@ -6,7 +6,9 @@ import {
 import basicAuth from './basic-auth.js';
 import { Client, buildClient } from '@datocms/cma-client';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { loadConfig } from '../config/utils.js';
 import React from 'react';
+import { DatoCmsConfig } from '../config/config.js';
 
 const client = buildClient({
 	apiToken: process.env.DATOCMS_API_TOKEN,
@@ -42,12 +44,15 @@ type TestResult = {
 export default async function test(req: Request): Promise<Response> {
 	return await basicAuth(req, async (req: Request) => {
 		const params = new URLSearchParams(req.url.split('?')[1]);
-
+		let config: DatoCmsConfig | null = null;
+		try {
+			config = await loadConfig();
+		} catch (e) {}
 		const results: TestResult = {
 			site: await client.site.find(),
 			webhooks: await client.webhooks.list(),
 			plugins: await client.plugins.list(),
-			models: await testApiEndpoints(params.get('locale') || params.get('l') || 'en'),
+			models: await testApiEndpoints(params.get('locale') || params.get('l') || config?.i18n?.defaultLocale || 'en'),
 		};
 
 		return new Response(renderToStaticMarkup(renderTestResults(results)), {

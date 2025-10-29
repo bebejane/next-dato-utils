@@ -2,6 +2,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import basicAuth from './basic-auth.js';
 import { buildClient } from '@datocms/cma-client';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { loadConfig } from '../config/utils.js';
 import React from 'react';
 const client = buildClient({
     apiToken: process.env.DATOCMS_API_TOKEN,
@@ -11,11 +12,16 @@ const baseApiUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api`;
 export default async function test(req) {
     return await basicAuth(req, async (req) => {
         const params = new URLSearchParams(req.url.split('?')[1]);
+        let config = null;
+        try {
+            config = await loadConfig();
+        }
+        catch (e) { }
         const results = {
             site: await client.site.find(),
             webhooks: await client.webhooks.list(),
             plugins: await client.plugins.list(),
-            models: await testApiEndpoints(params.get('locale') || params.get('l') || 'en'),
+            models: await testApiEndpoints(params.get('locale') || params.get('l') || config?.i18n?.defaultLocale || 'en'),
         };
         return new Response(renderToStaticMarkup(renderTestResults(results)), {
             status: 200,
