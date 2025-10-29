@@ -109,14 +109,11 @@
 		"@datocms/cma-client": ">=5.0.0",
 		"@datocms/cma-client-browser": ">=5.0.0",
 		"@datocms/cma-client-node": ">=5.0.0",
-		"@types/react-dom": ">=18.2.1",
 		"datocms-structured-text-utils": ">=2.0.0",
 		"graphql": ">=16.0.0",
 		"next": ">=14.0.0",
 		"postmark": ">=4.0.0",
-		"react": ">=18.0.0",
 		"react-datocms": ">=4.0.0",
-		"react-dom": "=>18.0.0",
 		"sass": ">=1.69.0",
 		"zod": ">=3.0.0"
 	}
