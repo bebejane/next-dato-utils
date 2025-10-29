@@ -189,12 +189,23 @@ export const renderTestResults = (results: TestResult) => {
 						</a>
 						<br />
 						<strong>SEO</strong>
-						<ul>
-							<li>Site name: {results.site?.global_seo?.site_name}</li>
-							<li>Title: {results.site?.global_seo?.fallback_seo?.title}</li>
-							<li>Description: {results.site?.global_seo?.fallback_seo?.description}</li>
-							<li>Image: {results.site?.global_seo?.fallback_seo?.image}</li>
-						</ul>
+						{results.site?.locales.map((locale) => {
+							const isMultiLocale = results.site?.locales.length > 1;
+							const seo = isMultiLocale
+								? (results.site?.global_seo?.[locale] as SiteAttributes['global_seo'])
+								: results.site?.global_seo;
+							return (
+								<React.Fragment key={locale}>
+									<strong>{locale}</strong>
+									<ul key={locale}>
+										<li>Site name: {seo?.site_name}</li>
+										<li>Title: {seo?.fallback_seo?.title}</li>
+										<li>Description: {seo?.fallback_seo?.description}</li>
+										<li>Image: {seo?.fallback_seo?.image}</li>
+									</ul>
+								</React.Fragment>
+							);
+						})}
 					</section>
 					<section>
 						<h3>Webhooks</h3>
