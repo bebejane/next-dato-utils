@@ -189,6 +189,7 @@ export const renderTestResults = (results: TestResult) => {
 						</a>
 						<br />
 						<strong>SEO</strong>
+						<br />
 						{results.site?.locales.map((locale) => {
 							const isMultiLocale = results.site?.locales.length > 1;
 							const seo = isMultiLocale
@@ -196,7 +197,7 @@ export const renderTestResults = (results: TestResult) => {
 								: results.site?.global_seo;
 							return (
 								<React.Fragment key={locale}>
-									<strong>{locale}</strong>
+									<strong>Locale: {locale}</strong>
 									<ul key={locale}>
 										<li>Site name: {seo?.site_name}</li>
 										<li>Title: {seo?.fallback_seo?.title}</li>
