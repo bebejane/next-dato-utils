@@ -13,7 +13,9 @@
     "declaration": true,
     "skipLibCheck": true,
   },
-  "exclude": [],
+  "exclude": [
+    "./node_modules",
+  ],
   "include": [
     "./src",
     "./types"

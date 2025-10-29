@@ -15,7 +15,6 @@ export default function StructuredContent({ content, className, blocks, styles, 
             if (!Block)
                 return null;
             return _jsx(Block, { data: record }, record?.id);
-            ////onClick={(id: string) => onClick?.(id)}
         }, renderInlineBlock: ({ record }) => {
             const Block = blocks[record?.__typename?.replace('Record', '')];
             if (!Block)
@@ -40,24 +39,26 @@ export default function StructuredContent({ content, className, blocks, styles, 
                 const firstChild = node.children[0];
                 const lastChild = node.children[node.children.length - 1];
                 // Remove trailing <br>
-                if (isRoot(ancestors[0]) && lastChild.type === 'span' && lastChild.value?.endsWith('\n')) {
+                if (isRoot(ancestors[0]) && lastChild?.type === 'span' && lastChild?.value?.endsWith('\n')) {
                     let index = node.children.length;
-                    while (index >= 0 && firstChild.type === 'span' && firstChild.value[index] === '\n')
+                    while (index >= 0 && firstChild?.type === 'span' && firstChild?.value?.[index] === '\n')
                         index--;
                     // remove trailing br
                     if (children && Array.isArray(children) && typeof children[0] === 'object')
+                        //@ts-ignore
                         Array.isArray(children[0].props.children) && children[0].props.children.splice(index);
                 }
-                ////@ts-ignore // Remove leading <br>
-                if (isRoot(ancestors[0]) && firstChild.type === 'span' && firstChild.value.startsWith('\n')) {
+                // Remove leading <br>
+                if (isRoot(ancestors[0]) && firstChild?.type === 'span' && firstChild?.value?.startsWith('\n')) {
                     let index = 0;
                     while (index < firstChild.value.length && firstChild.value[index] === '\n')
                         index++;
                     if (children && Array.isArray(children) && typeof children[0] === 'object')
+                        //@ts-ignore
                         Array.isArray(children[0].props.children) && children[0].props.children?.splice(0, index + 1);
                 }
                 // Filter out empty paragraphs
-                children = children?.filter((c) => !(typeof c === 'object' && c.props.children?.length === 1 && !c.props.children[0]));
+                children = children?.filter((c) => !(typeof c === 'object' && c.props?.children?.length === 1 && !c.props.children[0]));
                 // If no children remove tag completely
                 if (!children?.length)
                     return null;

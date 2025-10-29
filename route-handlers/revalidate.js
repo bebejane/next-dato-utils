@@ -1,5 +1,4 @@
 import { revalidatePath, revalidateTag } from 'next/cache.js';
-//import basicAuth from "./basic-auth";
 export default async function revalidate(req, callback) {
     const payload = (await req.json());
     if (!payload || !payload?.entity)

@@ -52,7 +52,7 @@ export default async function test(req: Request): Promise<Response> {
 
 		return new Response(renderToStaticMarkup(renderTestResults(results)), {
 			status: 200,
-			headers: { 'Content-Type': 'text/html' },
+			headers: { 'Content-Type': 'text/html; charset=utf-8' },
 		});
 	});
 }
@@ -110,6 +110,7 @@ export const renderTestResults = (results: TestResult) => {
 						max-width:400px;
 						overflow:hidden;
 						text-overflow:ellipsis;
+						border-bottom: 1px solid #eee;
           }
 					hr{
 						width:100%;
@@ -122,11 +123,13 @@ export const renderTestResults = (results: TestResult) => {
             color:red;
           }`}
 				</style>
+				<title>DatoCMS Test</title>
 			</head>
 			<body>
 				<div className='right'>
 					<section>
 						<h3>Endpoints</h3>
+						<hr />
 						<table>
 							<tbody>
 								<thead>
@@ -164,10 +167,11 @@ export const renderTestResults = (results: TestResult) => {
 						</table>
 					</section>
 				</div>
-				<hr />
+
 				<div className='left'>
 					<section>
 						<h3>Config</h3>
+						<hr />
 						<strong>Name:</strong> {results.site?.name}
 						<br />
 						<strong>Locales:</strong> {results.site?.locales.join(', ')}
@@ -212,17 +216,16 @@ export const renderTestResults = (results: TestResult) => {
 export async function testApiEndpoints(locale: string) {
 	const site = await client.site.find();
 
-	console.log(`Testing site: ${site.name}`);
-
 	const itemTypes = await client.itemTypes.list();
 	const models = itemTypes.filter((t) => !t.modular_block);
+
+	console.log(`Testing site: ${site.name} with ${models.length} models`);
 
 	const results = await Promise.all(
 		models.map(async (model, i) => {
 			const r: Model = {
 				model: model.api_key,
 			};
-			console.log(`${i + 1}/${models.length}: ${r.model}`);
 
 			try {
 				const previews = await testWebPreviewsEndpoint(model, client, locale);
