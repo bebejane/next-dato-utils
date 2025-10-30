@@ -1,7 +1,6 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import basicAuth from './basic-auth.js';
 import { buildClient } from '@datocms/cma-client';
-import { renderToStaticMarkup } from 'react-dom/server';
 import { loadConfig } from '../config/utils.js';
 import React from 'react';
 import { testAllEndpoints } from '../tests/endpoints.js';
@@ -23,7 +22,8 @@ export default async function test(req) {
             plugins: await client.plugins.list(),
             endpoints: await testAllEndpoints(params.get('locale') || params.get('l') || config?.i18n?.defaultLocale || 'en'),
         };
-        return new Response(renderToStaticMarkup(renderTestResults(results)), {
+        const ReactDOMServer = (await import('react-dom/server')).default;
+        return new Response(ReactDOMServer.renderToStaticMarkup(renderTestResults(results)), {
             status: 200,
             headers: { 'Content-Type': 'text/html; charset=utf-8' },
         });
@@ -96,10 +96,10 @@ export const renderTestResults = (results) => {
           }
           .error{
             color:red;
-          }` }), _jsx("title", { children: "DatoCMS Test" })] }), _jsxs("body", { children: [_jsx("div", { className: 'right', children: _jsxs("section", { children: [_jsx("h3", { children: "Endpoints" }), _jsx("hr", {}), _jsx("table", { children: _jsxs("tbody", { children: [_jsx("thead", { children: _jsxs("tr", { children: [_jsx("th", { children: "Model" }), _jsx("th", { children: "Previews" }), _jsx("th", { children: "Revalidate" }), _jsx("th", { children: "Item" })] }) }), results.endpoints.map(({ preview, revalidate }, idx) => (_jsxs("tr", { children: [_jsx("td", { className: !preview || !revalidate?.revalidated ? 'error' : '', children: preview?.api_key }), _jsx("td", { children: preview?.links
+          }` }), _jsx("title", { children: `DatoCMS Test: ${results.site?.name}` })] }), _jsxs("body", { children: [_jsx("div", { className: 'right', children: _jsxs("section", { children: [_jsx("h3", { children: "Endpoints" }), _jsx("hr", {}), _jsx("table", { children: _jsxs("tbody", { children: [_jsx("thead", { children: _jsxs("tr", { children: [_jsx("th", { children: "Model" }), _jsx("th", { children: "Previews" }), _jsx("th", { children: "Revalidate" }), _jsx("th", { children: "Item" })] }) }), results.endpoints.map(({ preview, revalidate }, idx) => (_jsxs("tr", { children: [_jsx("td", { className: !preview || !revalidate?.revalidated ? 'error' : '', children: revalidate?.api_key }), _jsx("td", { children: preview?.links
                                                             ?.filter(({ label, url }) => label === 'Live' && new URL(url).pathname)
                                                             .map((p) => new URL(p.url).pathname)
-                                                            .map((p, i) => (_jsxs(React.Fragment, { children: [_jsx("span", { title: p, children: p }), _jsx("br", {})] }, i))) }), _jsx("td", { children: revalidate?.paths?.map((p, i) => (_jsxs(React.Fragment, { children: [_jsx("span", { title: p, children: p }), _jsx("br", {})] }, i))) }), _jsx("td", { children: preview?.item?.id && results.site?.domain && (_jsx("a", { href: `https://${results.site?.domain}editor/item_types/${preview.item.item_type?.id}/items/${preview.item.id}`, target: '_blank', children: preview?.item?.id })) })] }, idx)))] }) })] }) }), _jsxs("div", { className: 'left', children: [_jsxs("section", { children: [_jsx("h3", { children: "Config" }), _jsx("hr", {}), _jsx("strong", { children: "Name:" }), " ", results.site?.name, _jsx("br", {}), _jsx("strong", { children: "Locales:" }), " ", results.site?.locales.join(', '), _jsx("br", {}), _jsx("strong", { children: "Domain:" }), ' ', _jsxs("a", { href: `https://${results.site.internal_domain}`, target: '_blank', children: ["https://", results.site?.internal_domain] }), _jsx("br", {}), _jsx("strong", { children: "SEO" }), _jsx("br", {}), results.site?.locales.map((locale) => {
+                                                            .map((p, i) => (_jsxs(React.Fragment, { children: [_jsx("span", { title: p, children: p }), _jsx("br", {})] }, i))) }), _jsx("td", { children: revalidate?.paths?.map((p, i) => (_jsxs(React.Fragment, { children: [_jsx("span", { title: p, children: p }), _jsx("br", {})] }, i))) }), _jsx("td", { children: revalidate?.itemId && results.site?.internal_domain && (_jsx("a", { href: `https://${results.site?.internal_domain}${revalidate.api_key !== 'upload' ? `/editor/item_types/${revalidate.itemTypeId}/items/${revalidate.itemId}` : `/media/assets/${revalidate.itemId}`}`, target: '_blank', children: revalidate?.itemId })) })] }, idx)))] }) })] }) }), _jsxs("div", { className: 'left', children: [_jsxs("section", { children: [_jsx("h3", { children: "Config" }), _jsx("hr", {}), _jsx("strong", { children: "Name:" }), " ", results.site?.name, _jsx("br", {}), _jsx("strong", { children: "Locales:" }), " ", results.site?.locales.join(', '), _jsx("br", {}), _jsx("strong", { children: "Domain:" }), ' ', _jsxs("a", { href: `https://${results.site.internal_domain}`, target: '_blank', children: ["https://", results.site?.internal_domain] }), _jsx("br", {}), _jsx("strong", { children: "SEO" }), _jsx("br", {}), results.site?.locales.map((locale) => {
                                         const isMultiLocale = results.site?.locales.length > 1;
                                         const seo = isMultiLocale
                                             ? results.site?.global_seo?.[locale]

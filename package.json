@@ -6,13 +6,15 @@
 	"main": "./index.js",
 	"module": "./index.js",
 	"scripts": {
-		"build": "node ./clean.js && npm run tsc && npm run copy-files",
+		"dev": "tsc-watch -b ./tsconfig.json --onSuccess \"npm run postbuild\" & pnpm dev:server",
+		"dev:server": "cd /Users/bebejane/Projects/next-dato-boiler && pnpm dev",
+		"clear:server": "rm -rf /Users/bebejane/Projects/next-dato-boiler/.next/.cache",
+		"build": "node ./clean.js && npm run tsc && npm run postbuild",
+		"postbuild": "copyfiles -u 1 src/**/*.scss ./",
 		"push": "npm run build && git add . && git commit -m \"update\" && git push",
 		"release": "npm run push && npm version patch --force && git push && git push origin $(git describe --tags --abbrev=0) && git tag -f latest && git push origin latest --force && gh release create $(git describe --tags --abbrev=0) --generate-notes",
-		"dev": "npx nodemon --watch \"src/**/*\" --watch \"./package.json\" -e tsx,ts,scss,json --exec \"npm run build\"",
 		"dev:cli": "tsx src/cli/index.ts",
-		"tsc": "tsc -p tsconfig.json",
-		"copy-files": "copyfiles -u 1 src/**/*.scss ./"
+		"tsc": "tsc -p tsconfig.json"
 	},
 	"exports": {
 		"./package.json": "./package.json",
@@ -101,12 +103,14 @@
 		"@datocms/cma-client-node": "^5.1.24",
 		"@types/node": "^22.18.13",
 		"@types/pluralize": "^0.0.33",
+		"@types/react-dom": "^19.2.2",
 		"copyfiles": "^2.4.1",
 		"graphql": "^16.10.0",
 		"next": "14.2.33",
 		"nodemon": "^3.0.3",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
+		"tsc-watch": "^7.2.0",
 		"zod": "^3.25.76"
 	},
 	"peerDependencies": {

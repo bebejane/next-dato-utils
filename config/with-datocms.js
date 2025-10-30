@@ -32,7 +32,7 @@ export default async function withDatoCms(config) {
                     source: '/api/backup',
                     headers: [
                         { key: 'Access-Control-Allow-Credentials', value: 'true' },
-                        { key: 'Access-Control-Allow-Origin', value: '*' },
+                        { key: 'Access-Control-Allow-Origin', value: '*' }, // replace this your actual origin
                         { key: 'Access-Control-Allow-Methods', value: 'POST,OPTIONS' },
                         {
                             key: 'Access-Control-Allow-Headers',

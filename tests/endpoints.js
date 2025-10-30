@@ -28,7 +28,7 @@ export const testWebPreviewsEndpoint = async (api_key, locale) => {
         }),
     });
     const json = await res.json();
-    return { links: json.previewLinks, item, api_key, locale };
+    return { links: json.previewLinks, itemId: item.id, api_key, locale, itemTypeId: itemType.id };
 };
 export const testRevalidateEndpoint = async (api_key, locale) => {
     const item = (await client.items.list({ filter: { type: api_key }, version: 'published', limit: 1 }))?.[0];
@@ -78,17 +78,61 @@ export const testRevalidateEndpoint = async (api_key, locale) => {
     });
     if (res.status === 200) {
         const json = await res.json();
-        return { ...json.response, api_key, locale, item };
+        return { ...json.response, api_key, locale, itemId: item.id, itemTypeId: itemType.id };
     }
     else {
         throw new Error(`Error revalidate ${api_key}: ${res.status} ${res.statusText}`);
     }
 };
+export const testRevalidateUploadEndpoint = async () => {
+    let upload = null;
+    let count = 0;
+    for await (const u of client.uploads.listPagedIterator({ version: 'current', order_by: '_updated_at_DESC' })) {
+        const ref = await client.uploads.references(u.id, { version: 'current', limit: 1 });
+        process.stdout.write('.');
+        if (ref.length > 0) {
+            console.log('found upload:', u.id);
+            upload = u;
+            break;
+        }
+        if (count++ > 100)
+            break;
+    }
+    if (!upload)
+        throw `Revalidate: no upload with ref found`;
+    const fetchOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Basic ${btoa(`${process.env.BASIC_AUTH_USER}:${process.env.BASIC_AUTH_PASSWORD}`)}`,
+        },
+        body: JSON.stringify({
+            environment: process.env.DATOCMS_ENVIRONMENT || 'main',
+            entity_type: 'upload',
+            event_type: 'update',
+            entity: {
+                id: upload.id,
+                type: 'item',
+                attributes: {
+                    ...upload,
+                },
+                relationships: {},
+                meta: {},
+            },
+            related_entities: [],
+        }),
+    };
+    const r = await fetch(`${baseApiUrl}/revalidate`, fetchOptions);
+    const result = { revalidate: null, preview: null };
+    if (r.status === 200)
+        result.revalidate = { ...(await r.json()).response, api_key: 'upload', itemId: upload.id, itemTypeId: null };
+    return result;
+};
 export async function testAllEndpoints(locale, limit = 5) {
     const site = await client.site.find();
     const itemTypes = await client.itemTypes.list();
     const models = itemTypes.filter((t) => !t.modular_block);
-    console.log(`Testing site: ${site.name} with ${models.length} models`);
+    console.log(`Testing site: ${site.name} with ${models.length} models!`);
     const results = await promiseBatch(models.map((m) => async () => {
         const [revalidate, preview] = await Promise.all([
             testRevalidateEndpoint(m.api_key, locale),
@@ -99,6 +143,12 @@ export async function testAllEndpoints(locale, limit = 5) {
         });
         return { revalidate, preview };
     }), limit);
-    return results.sort((a, b) => (a?.preview?.api_key > b?.preview?.api_key ? 1 : -1));
+    const uploadResult = await testRevalidateUploadEndpoint();
+    if (uploadResult)
+        results.push(uploadResult);
+    console.log(`Testing site: ${site.name} with ${models.length} models.`);
+    console.log(uploadResult);
+    //@ts-ignore
+    return results.sort((a, b) => (a?.revalidate?.api_key > b?.revalidate?.api_key ? 1 : -1));
 }
 //# sourceMappingURL=endpoints.js.map

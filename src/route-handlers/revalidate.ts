@@ -12,8 +12,10 @@ export default async function revalidate(
 	if (!payload || !payload?.entity) return new Response('Payload empty or missing entity', { status: 400 });
 
 	const { entity, related_entities, event_type, entity_type, environment } = payload;
-	const api_key = related_entities?.find(({ id }) => id === entity.relationships?.item_type?.data?.id)?.attributes
-		?.api_key;
+	const api_key =
+		entity_type === 'upload'
+			? 'upload'
+			: related_entities?.find(({ id }) => id === entity.relationships?.item_type?.data?.id)?.attributes?.api_key;
 	const delay = parseDelay(entity);
 	const now = Date.now();
 

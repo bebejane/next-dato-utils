@@ -5,7 +5,6 @@ import {
 } from '@datocms/cma-client/dist/types/generated/RawApiTypes.js';
 import basicAuth from './basic-auth.js';
 import { buildClient } from '@datocms/cma-client';
-import { renderToStaticMarkup } from 'react-dom/server';
 import { loadConfig } from '../config/utils.js';
 import React from 'react';
 import { DatoCmsConfig } from '../config/config.js';
@@ -38,7 +37,9 @@ export default async function test(req: Request): Promise<Response> {
 			endpoints: await testAllEndpoints(params.get('locale') || params.get('l') || config?.i18n?.defaultLocale || 'en'),
 		};
 
-		return new Response(renderToStaticMarkup(renderTestResults(results)), {
+		const ReactDOMServer = (await import('react-dom/server')).default;
+
+		return new Response(ReactDOMServer.renderToStaticMarkup(renderTestResults(results)), {
 			status: 200,
 			headers: { 'Content-Type': 'text/html; charset=utf-8' },
 		});
@@ -118,7 +119,7 @@ export const renderTestResults = (results: TestResult) => {
             color:red;
           }`}
 				</style>
-				<title>DatoCMS Test</title>
+				<title>{`DatoCMS Test: ${results.site?.name}`}</title>
 			</head>
 			<body>
 				<div className='right'>
@@ -137,7 +138,7 @@ export const renderTestResults = (results: TestResult) => {
 								</thead>
 								{results.endpoints.map(({ preview, revalidate }, idx) => (
 									<tr key={idx}>
-										<td className={!preview || !revalidate?.revalidated ? 'error' : ''}>{preview?.api_key}</td>
+										<td className={!preview || !revalidate?.revalidated ? 'error' : ''}>{revalidate?.api_key}</td>
 										<td>
 											{preview?.links
 												?.filter(({ label, url }) => label === 'Live' && new URL(url).pathname)
@@ -158,12 +159,12 @@ export const renderTestResults = (results: TestResult) => {
 											))}
 										</td>
 										<td>
-											{preview?.item?.id && results.site?.domain && (
+											{revalidate?.itemId && results.site?.internal_domain && (
 												<a
-													href={`https://${results.site?.domain}editor/item_types/${preview.item.item_type?.id}/items/${preview.item.id}`}
+													href={`https://${results.site?.internal_domain}${revalidate.api_key !== 'upload' ? `/editor/item_types/${revalidate.itemTypeId}/items/${revalidate.itemId}` : `/media/assets/${revalidate.itemId}`}`}
 													target='_blank'
 												>
-													{preview?.item?.id}
+													{revalidate?.itemId}
 												</a>
 											)}
 										</td>

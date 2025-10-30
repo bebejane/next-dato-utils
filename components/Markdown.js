@@ -19,7 +19,6 @@ export default function Markdown({ content, truncate, className, components, sen
     return (_jsx(ReactMarkdown, { remarkPlugins: disableBreaks ? [gfm] : [gfm, remarkBreaks], className: className, children: truncatedContent, allowedElements: allowedElements, 
         //@ts-ignore
         components: components ?? {
-            //@ts-ignore
             a: ({ children, href }) => (
             //@ts-ignore
             _jsx(Link, { scroll: scroll, href: href, children: children })),

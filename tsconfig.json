@@ -13,11 +13,21 @@
     "declaration": true,
     "skipLibCheck": true,
   },
+  "watchOptions": {
+    "watchFile": "useFsEvents",
+    "watchDirectory": "useFsEvents",
+    "fallbackPolling": "dynamicPriority",
+    "synchronousWatchDirectory": true,
+    "excludeDirectories": [
+      "**/node_modules",
+    ],
+    "excludeFiles": []
+  },
   "exclude": [
     "./node_modules",
   ],
   "include": [
     "./src",
     "./types"
-  ]
+  ],
 }

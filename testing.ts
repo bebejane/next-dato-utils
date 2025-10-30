@@ -9,8 +9,10 @@ const client = buildClient({
 
 async function test() {
 	console.time('test');
-	const res = await testAllEndpoints('en', 15);
-	console.log(JSON.stringify(res, null, 2));
+	//const res = await testAllEndpoints('en', 15);
+	//console.log(JSON.stringify(res, null, 2));
+	const uploads = await client.uploads.list({ version: 'published', limit: 500 });
+	console.log(uploads[0]);
 	console.timeEnd('test');
 }
 

@@ -54,7 +54,6 @@ export default function Markdown({
 			//@ts-ignore
 			components={
 				components ?? {
-					//@ts-ignore
 					a: ({ children, href }: AnchorProp) => (
 						//@ts-ignore
 						<Link scroll={scroll} href={href}>
