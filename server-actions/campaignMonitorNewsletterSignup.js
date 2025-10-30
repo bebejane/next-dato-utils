@@ -1,15 +1,17 @@
 'use server';
 import { z } from 'zod';
 export default async function campaignMonitorNewsletterSignup(prevState, formData) {
+    const email = formData.get('email');
     try {
         if (!process.env.CAMPAIGN_MONITOR_API_KEY || !process.env.CAMPAIGN_MONITOR_LIST_ID)
             throw new Error('Newsletter signup is not configured');
-        const email = formData.get('email');
         try {
-            z.string().email({ message: "Invalid e-mail address" }).parse(email);
+            z.string()
+                .email({ message: 'Invalid e-mail address' })
+                .parse(email);
         }
         catch (e) {
-            throw new Error("Invalid e-mail address");
+            throw new Error('Invalid e-mail address');
         }
         const apiEndpoint = 'https://api.createsend.com/api/v3.3';
         const signupEndpoint = `${apiEndpoint}/subscribers/${process.env.CAMPAIGN_MONITOR_LIST_ID}.json`;
@@ -20,7 +22,7 @@ export default async function campaignMonitorNewsletterSignup(prevState, formDat
                 Name: '',
                 Resubscribe: false,
                 RestartSubscriptionBasedAutoresponders: true,
-                ConsentToTrack: 'Yes'
+                ConsentToTrack: 'Yes',
             }),
             method: 'POST',
             cache: 'no-store',
@@ -35,7 +37,7 @@ export default async function campaignMonitorNewsletterSignup(prevState, formDat
         return { success: true };
     }
     catch (error) {
-        return { success: false, error: error instanceof Error ? error.message : error };
+        return { success: false, error: error instanceof Error ? error.message : error, email };
     }
 }
 //# sourceMappingURL=campaignMonitorNewsletterSignup.js.map
