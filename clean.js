@@ -1,6 +1,17 @@
 import fs from 'fs';
 
-const packages = ['api', 'components', 'hooks', 'route-handlers', 'server-actions', 'utils', 'cli', 'config', 'router'];
+const packages = [
+	'api',
+	'components',
+	'hooks',
+	'route-handlers',
+	'server-actions',
+	'utils',
+	'cli',
+	'config',
+	'router',
+	'tests',
+];
 
 export default function clean() {
 	console.log('Cleaning up...');

@@ -15,6 +15,7 @@ export async function getItemReferenceRoutes(itemId, locales) {
             limit: 500,
             nested: true,
         });
+        console.log('get item refs:', itemId, items.length);
         const itemPathnames = await itemsToRoutes(items, locales);
         itemPathnames && pathnames.push.apply(pathnames, itemPathnames);
     }

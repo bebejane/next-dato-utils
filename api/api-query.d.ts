@@ -10,6 +10,7 @@ export interface TypedDocumentNode<TResult = {
 }
 export type ApiQueryOptions<V = void> = {
     variables?: V;
+    tags?: string[];
     includeDrafts?: boolean;
     excludeInvalid?: boolean;
     cacheTags?: boolean;
@@ -21,6 +22,7 @@ export type ApiQueryOptions<V = void> = {
 };
 export type DefaultApiQueryOptions = ApiQueryOptions & {
     variables: undefined;
+    tags: undefined;
     includeDrafts: boolean;
     excludeInvalid: boolean;
     cacheTags: boolean;

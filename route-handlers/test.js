@@ -4,11 +4,11 @@ import { buildClient } from '@datocms/cma-client';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { loadConfig } from '../config/utils.js';
 import React from 'react';
+import { testAllEndpoints } from '../tests/endpoints.js';
 const client = buildClient({
     apiToken: process.env.DATOCMS_API_TOKEN,
     environment: process.env.DATOCMS_ENVIRONMENT || 'main',
 });
-const baseApiUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api`;
 export default async function test(req) {
     return await basicAuth(req, async (req) => {
         const params = new URLSearchParams(req.url.split('?')[1]);
@@ -21,7 +21,7 @@ export default async function test(req) {
             site: await client.site.find(),
             webhooks: await client.webhooks.list(),
             plugins: await client.plugins.list(),
-            models: await testApiEndpoints(params.get('locale') || params.get('l') || config?.i18n?.defaultLocale || 'en'),
+            endpoints: await testAllEndpoints(params.get('locale') || params.get('l') || config?.i18n?.defaultLocale || 'en'),
         };
         return new Response(renderToStaticMarkup(renderTestResults(results)), {
             status: 200,
@@ -96,122 +96,15 @@ export const renderTestResults = (results) => {
           }
           .error{
             color:red;
-          }` }), _jsx("title", { children: "DatoCMS Test" })] }), _jsxs("body", { children: [_jsx("div", { className: 'right', children: _jsxs("section", { children: [_jsx("h3", { children: "Endpoints" }), _jsx("hr", {}), _jsx("table", { children: _jsxs("tbody", { children: [_jsx("thead", { children: _jsxs("tr", { children: [_jsx("th", { children: "Model" }), _jsx("th", { children: "Previews" }), _jsx("th", { children: "Revalidate" })] }) }), results.models.map((r, idx) => (_jsxs("tr", { children: [_jsx("td", { className: !r.previews || !r.revalidate?.revalidated ? 'error' : '', children: r.model }), _jsx("td", { children: r.previews
+          }` }), _jsx("title", { children: "DatoCMS Test" })] }), _jsxs("body", { children: [_jsx("div", { className: 'right', children: _jsxs("section", { children: [_jsx("h3", { children: "Endpoints" }), _jsx("hr", {}), _jsx("table", { children: _jsxs("tbody", { children: [_jsx("thead", { children: _jsxs("tr", { children: [_jsx("th", { children: "Model" }), _jsx("th", { children: "Previews" }), _jsx("th", { children: "Revalidate" })] }) }), results.endpoints.map(({ preview, revalidate }, idx) => (_jsxs("tr", { children: [_jsx("td", { className: !preview || !revalidate?.revalidated ? 'error' : '', children: preview?.api_key }), _jsx("td", { children: preview.links
                                                             ?.filter(({ label, url }) => label === 'Live' && new URL(url).pathname)
                                                             .map((p) => new URL(p.url).pathname)
-                                                            .map((p, i) => (_jsxs(React.Fragment, { children: [_jsx("span", { title: p, children: p }), _jsx("br", {})] }, i))) }), _jsx("td", { children: r.revalidate?.paths?.map((p, i) => (_jsxs(React.Fragment, { children: [_jsx("span", { title: p, children: p }), _jsx("br", {})] }, i))) })] }, idx)))] }) })] }) }), _jsxs("div", { className: 'left', children: [_jsxs("section", { children: [_jsx("h3", { children: "Config" }), _jsx("hr", {}), _jsx("strong", { children: "Name:" }), " ", results.site?.name, _jsx("br", {}), _jsx("strong", { children: "Locales:" }), " ", results.site?.locales.join(', '), _jsx("br", {}), _jsx("strong", { children: "Domain:" }), ' ', _jsx("a", { href: `https://${results.site.internal_domain}`, target: '_blank', children: results.site?.internal_domain }), _jsx("br", {}), _jsx("strong", { children: "SEO" }), _jsx("br", {}), results.site?.locales.map((locale) => {
+                                                            .map((p, i) => (_jsxs(React.Fragment, { children: [_jsx("span", { title: p, children: p }), _jsx("br", {})] }, i))) }), _jsx("td", { children: revalidate?.paths?.map((p, i) => (_jsxs(React.Fragment, { children: [_jsx("span", { title: p, children: p }), _jsx("br", {})] }, i))) })] }, idx)))] }) })] }) }), _jsxs("div", { className: 'left', children: [_jsxs("section", { children: [_jsx("h3", { children: "Config" }), _jsx("hr", {}), _jsx("strong", { children: "Name:" }), " ", results.site?.name, _jsx("br", {}), _jsx("strong", { children: "Locales:" }), " ", results.site?.locales.join(', '), _jsx("br", {}), _jsx("strong", { children: "Domain:" }), ' ', _jsxs("a", { href: `https://${results.site.internal_domain}`, target: '_blank', children: ["https://", results.site?.internal_domain] }), _jsx("br", {}), _jsx("strong", { children: "SEO" }), _jsx("br", {}), results.site?.locales.map((locale) => {
                                         const isMultiLocale = results.site?.locales.length > 1;
                                         const seo = isMultiLocale
                                             ? results.site?.global_seo?.[locale]
                                             : results.site?.global_seo;
                                         return (_jsxs(React.Fragment, { children: [_jsxs("strong", { children: ["Locale: ", locale] }), _jsxs("ul", { children: [_jsxs("li", { children: ["Site name: ", seo?.site_name] }), _jsxs("li", { children: ["Title: ", seo?.fallback_seo?.title] }), _jsxs("li", { children: ["Description: ", seo?.fallback_seo?.description] }), _jsxs("li", { children: ["Image: ", seo?.fallback_seo?.image] })] }, locale)] }, locale));
                                     })] }), _jsxs("section", { children: [_jsx("h3", { children: "Webhooks" }), _jsx("ul", { children: results.webhooks.map((p, i) => (_jsxs("li", { children: [p.name, ": ", p.url] }, i))) })] }), _jsxs("section", { children: [_jsx("h3", { children: "Plugins" }), _jsx("ul", { children: results.plugins.map((p, i) => (_jsx("li", { children: p.name }, i))) })] })] })] })] }));
-};
-export async function testApiEndpoints(locale) {
-    const site = await client.site.find();
-    const itemTypes = await client.itemTypes.list();
-    const models = itemTypes.filter((t) => !t.modular_block);
-    console.log(`Testing site: ${site.name} with ${models.length} models`);
-    const results = await Promise.all(models.map(async (model, i) => {
-        const r = {
-            model: model.api_key,
-        };
-        try {
-            const previews = await testWebPreviewsEndpoint(model, client, locale);
-            if (previews.length > 0) {
-                r.previews = previews;
-            }
-        }
-        catch (e) { }
-        try {
-            r.revalidate = await testRevalidateEndpoint(model, client, locale);
-        }
-        catch (e) { }
-        return r;
-    }));
-    return results.sort((a, b) => (a.model > b.model ? 1 : -1));
-}
-const testWebPreviewsEndpoint = async (itemType, client, locale) => {
-    const items = await client.items.list({
-        limit: 1,
-        version: 'published',
-        nested: true,
-        filter: { type: itemType.api_key },
-    });
-    const item = items[0];
-    const res = await fetch(`${baseApiUrl}/web-previews`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Basic ${btoa(`${process.env.BASIC_AUTH_USER}:${process.env.BASIC_AUTH_PASSWORD}`)}`,
-        },
-        body: JSON.stringify({
-            item: {
-                attributes: item || {},
-            },
-            itemType: {
-                attributes: itemType,
-            },
-            environmentId: process.env.DATOCMS_ENVIRONMENT || 'main',
-            locale,
-        }),
-    });
-    const json = await res.json();
-    return json.previewLinks;
-};
-const testRevalidateEndpoint = async (itemType, client, locale) => {
-    const item = (await client.items.list({
-        filter: { type: itemType.api_key },
-        version: 'published',
-        limit: 1,
-    }))?.[0];
-    const res = await fetch(`${baseApiUrl}/revalidate`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Basic ${btoa(`${process.env.BASIC_AUTH_USER}:${process.env.BASIC_AUTH_PASSWORD}`)}`,
-        },
-        body: JSON.stringify({
-            locale: locale,
-            environment: process.env.DATOCMS_ENVIRONMENT || 'main',
-            entity_type: 'item',
-            event_type: 'update',
-            entity: {
-                id: item.id,
-                type: 'item',
-                attributes: {
-                    ...(item || {}),
-                },
-                relationships: {
-                    item_type: {
-                        data: {
-                            id: itemType.id,
-                            type: 'item_type',
-                        },
-                    },
-                },
-                meta: {
-                    ...item.meta,
-                    updated_at: new Date().toISOString(),
-                    published_at: new Date().toISOString(),
-                    created_at: new Date().toISOString(),
-                },
-            },
-            related_entities: [
-                {
-                    id: itemType.id,
-                    type: 'item_type',
-                    attributes: itemType,
-                },
-            ],
-        }),
-    });
-    if (res.status === 200) {
-        const json = await res.json();
-        return json.response;
-    }
-    else {
-        throw new Error(`Error testing revalidate endpoint: ${res.status} ${res.statusText}`);
-    }
 };
 //# sourceMappingURL=test.js.map

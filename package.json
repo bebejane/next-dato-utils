@@ -59,6 +59,11 @@
 		"./server-actions*": {
 			"import": "./server-actions/*",
 			"bun": "./server-actions/*"
+		},
+		"./tests": {
+			"types": "./tests/index.d.ts",
+			"import": "./tests/index.js",
+			"bun": "./tests/index.js"
 		}
 	},
 	"bin": {

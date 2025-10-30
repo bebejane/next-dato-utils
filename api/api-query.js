@@ -2,6 +2,7 @@ import { draftMode } from 'next/headers.js';
 import { print } from 'graphql/language/printer.js';
 const defaultOptions = {
     variables: undefined,
+    tags: undefined,
     includeDrafts: false,
     excludeInvalid: true,
     cacheTags: false,
@@ -107,6 +108,7 @@ const dedupedFetch = async (options) => {
         body,
         next: {
             revalidate,
+            tags: options.tags,
         },
     });
     const responseBody = await response.json();

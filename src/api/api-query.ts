@@ -13,6 +13,7 @@ export interface TypedDocumentNode<TResult = { [key: string]: any }, TVariables 
 
 export type ApiQueryOptions<V = void> = {
 	variables?: V;
+	tags?: string[];
 	includeDrafts?: boolean;
 	excludeInvalid?: boolean;
 	cacheTags?: boolean;
@@ -25,6 +26,7 @@ export type ApiQueryOptions<V = void> = {
 
 export type DefaultApiQueryOptions = ApiQueryOptions & {
 	variables: undefined;
+	tags: undefined;
 	includeDrafts: boolean;
 	excludeInvalid: boolean;
 	cacheTags: boolean;
@@ -38,6 +40,7 @@ export type DefaultApiQueryOptions = ApiQueryOptions & {
 
 const defaultOptions: DefaultApiQueryOptions = {
 	variables: undefined,
+	tags: undefined,
 	includeDrafts: false,
 	excludeInvalid: true,
 	cacheTags: false,
@@ -200,6 +203,7 @@ const dedupedFetch = async (options: DedupeOptions) => {
 		body,
 		next: {
 			revalidate,
+			tags: options.tags,
 		},
 	} as RequestInit);
 
