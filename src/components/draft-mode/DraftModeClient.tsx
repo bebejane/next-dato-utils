@@ -1,6 +1,6 @@
 'use client';
 
-import s from './DraftModeClient.module.scss';
+import s from './DraftModeClient.module.css';
 import { usePathname } from 'next/navigation.js';
 import { useEffect, useTransition, useRef } from 'react';
 import { sleep } from '../../utils/index.js';
@@ -81,11 +81,13 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }: Dra
 	return (
 		<div className={s.draftMode}>
 			<div className={s.label}>
-				<img className={loading ? s.loading : undefined} width='20' height='20' />
+				<img className={`${s.image}  ${loading ? s.loading : undefined}`} width='20' height='20' />
 				<div>Draft mode</div>
 			</div>
 			<div className={s.button}>
-				<button onClick={() => startTransition(() => actions.disableDraftMode(pathname))}>Exit</button>
+				<button className={s.button} onClick={() => startTransition(() => actions.disableDraftMode(pathname))}>
+					Exit
+				</button>
 			</div>
 		</div>
 	);
