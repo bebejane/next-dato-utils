@@ -56,7 +56,7 @@
 			"import": "./server-actions/index.js",
 			"bun": "./server-actions/index.js"
 		},
-		"./server-actions*": {
+		"./server-actions/*": {
 			"import": "./server-actions/*",
 			"bun": "./server-actions/*"
 		},
