@@ -132,13 +132,14 @@ export const renderTestResults = (results: TestResult) => {
 										<th>Model</th>
 										<th>Previews</th>
 										<th>Revalidate</th>
+										<th>Item</th>
 									</tr>
 								</thead>
 								{results.endpoints.map(({ preview, revalidate }, idx) => (
 									<tr key={idx}>
 										<td className={!preview || !revalidate?.revalidated ? 'error' : ''}>{preview?.api_key}</td>
 										<td>
-											{preview.links
+											{preview?.links
 												?.filter(({ label, url }) => label === 'Live' && new URL(url).pathname)
 												.map((p) => new URL(p.url).pathname)
 												.map((p, i) => (
@@ -155,6 +156,16 @@ export const renderTestResults = (results: TestResult) => {
 													<br />
 												</React.Fragment>
 											))}
+										</td>
+										<td>
+											{preview?.item?.id && results.site?.domain && (
+												<a
+													href={`https://${results.site?.domain}editor/item_types/${preview.item.item_type?.id}/items/${preview.item.id}`}
+													target='_blank'
+												>
+													{preview?.item?.id}
+												</a>
+											)}
 										</td>
 									</tr>
 								))}

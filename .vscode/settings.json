@@ -12,6 +12,7 @@
     "server-actions": true,
     "utils": true,
     "config": true,
-    "router": true
+    "router": true,
+    "tests": true
   }
 }
