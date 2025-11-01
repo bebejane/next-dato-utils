@@ -132,7 +132,7 @@ export async function testAllEndpoints(locale, limit = 5) {
     const site = await client.site.find();
     const itemTypes = await client.itemTypes.list();
     const models = itemTypes.filter((t) => !t.modular_block);
-    console.log(`Testing site: ${site.name} with ${models.length} models!`);
+    console.log(`Testing site: ${site.name} with ${models.length} models. Locale: ${locale}`);
     const results = await promiseBatch(models.map((m) => async () => {
         const [revalidate, preview] = await Promise.all([
             testRevalidateEndpoint(m.api_key, locale),
@@ -146,8 +146,6 @@ export async function testAllEndpoints(locale, limit = 5) {
     const uploadResult = await testRevalidateUploadEndpoint();
     if (uploadResult)
         results.push(uploadResult);
-    console.log(`Testing site: ${site.name} with ${models.length} models.`);
-    console.log(uploadResult);
     //@ts-ignore
     return results.sort((a, b) => (a?.revalidate?.api_key > b?.revalidate?.api_key ? 1 : -1));
 }

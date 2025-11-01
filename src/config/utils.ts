@@ -3,10 +3,6 @@ import { DatoCmsConfig } from './config.js';
 import { ApiError } from '@datocms/cma-client';
 import { buildClient } from '@datocms/cma-client';
 import { Item } from '@datocms/cma-client/dist/types/generated/ApiTypes.js';
-import { findConfig } from './find.js';
-import { fileURLToPath, pathToFileURL } from 'url';
-import path from 'path';
-import fs from 'fs';
 
 const client = buildClient({
 	apiToken: process.env.DATOCMS_API_TOKEN,
@@ -23,7 +19,6 @@ export async function getItemReferenceRoutes(itemId: string, locales?: string[])
 			limit: 500,
 			nested: true,
 		});
-		console.log('get item refs:', itemId, items.length);
 		const itemPathnames = await itemsToRoutes(items, locales);
 		itemPathnames && pathnames.push.apply(pathnames, itemPathnames);
 	} catch (e) {

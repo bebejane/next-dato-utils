@@ -138,7 +138,13 @@ export const renderTestResults = (results: TestResult) => {
 								</thead>
 								{results.endpoints.map(({ preview, revalidate }, idx) => (
 									<tr key={idx}>
-										<td className={!preview || !revalidate?.revalidated ? 'error' : ''}>{revalidate?.api_key}</td>
+										<td
+											className={
+												(!preview || !revalidate?.revalidated) && revalidate?.api_key !== 'upload' ? 'error' : ''
+											}
+										>
+											{revalidate?.api_key}
+										</td>
 										<td>
 											{preview?.links
 												?.filter(({ label, url }) => label === 'Live' && new URL(url).pathname)
