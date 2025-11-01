@@ -31,7 +31,7 @@ const POST = async (req, { params }, config) => {
             case 'web-previews':
                 return webPreviews(req, async (payload) => {
                     const { item, itemType, locale } = payload;
-                    const paths = await config.routes[itemType.attributes.api_key]?.(item.attributes, locale);
+                    const paths = await config.routes[itemType.attributes.api_key]?.({ id: item.id, ...item.attributes }, locale);
                     return paths?.[0] ?? null;
                 });
             case 'backup':
