@@ -4,4 +4,4 @@ export type BlockProps = {
     onClick?: (ids: string) => void;
     components: any;
 };
-export default function Block({ data, onClick, components, className }: BlockProps): import("react/jsx-runtime").JSX.Element;
+export default function Block({ data, onClick, components, className }: BlockProps): import("react/jsx-runtime").JSX.Element | null;
