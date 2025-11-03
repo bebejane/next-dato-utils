@@ -3,6 +3,7 @@
 import s from './DraftModeClient.module.css';
 import { usePathname } from 'next/navigation.js';
 import { useEffect, useTransition, useRef } from 'react';
+import Modal from '../Modal.js';
 import { sleep } from '../../utils/index.js';
 
 export type DraftModeProps = {
@@ -79,11 +80,13 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }: Dra
 	if (!enabled) return null;
 
 	return (
-		<div className={s.draftMode}>
-			<span className={s.label}>Draft mode</span>
-			<button className={s.button} onClick={() => startTransition(() => actions.disableDraftMode(pathname))}>
-				{loading ? <div className={s.loader} /> : <span>×</span>}
-			</button>
-		</div>
+		<Modal>
+			<div className={s.draftMode}>
+				<span className={s.label}>Draft mode</span>
+				<button className={s.button} onClick={() => startTransition(() => actions.disableDraftMode(pathname))}>
+					{loading ? <div className={s.loader} /> : <span>×</span>}
+				</button>
+			</div>
+		</Modal>
 	);
 }

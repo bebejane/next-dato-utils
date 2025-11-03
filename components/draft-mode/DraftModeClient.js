@@ -3,6 +3,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import s from './DraftModeClient.module.css';
 import { usePathname } from 'next/navigation.js';
 import { useEffect, useTransition, useRef } from 'react';
+import Modal from '../Modal.js';
 import { sleep } from '../../utils/index.js';
 export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
     const pathname = usePathname();
@@ -58,6 +59,6 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
     }, [draftUrl, tag, path, enabled]);
     if (!enabled)
         return null;
-    return (_jsxs("div", { className: s.draftMode, children: [_jsx("span", { className: s.label, children: "Draft mode" }), _jsx("button", { className: s.button, onClick: () => startTransition(() => actions.disableDraftMode(pathname)), children: loading ? _jsx("div", { className: s.loader }) : _jsx("span", { children: "\u00D7" }) })] }));
+    return (_jsx(Modal, { children: _jsxs("div", { className: s.draftMode, children: [_jsx("span", { className: s.label, children: "Draft mode" }), _jsx("button", { className: s.button, onClick: () => startTransition(() => actions.disableDraftMode(pathname)), children: loading ? _jsx("div", { className: s.loader }) : _jsx("span", { children: "\u00D7" }) })] }) }));
 }
 //# sourceMappingURL=DraftModeClient.js.map
