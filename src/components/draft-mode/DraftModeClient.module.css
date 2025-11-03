@@ -4,8 +4,8 @@
 	bottom: 14px;
 	left: 14px;
 	height: 40px;
-	padding-left: 10px;
-	padding-right: 10px;
+	padding-left: 8px;
+	padding-right: 8px;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -31,12 +31,11 @@
 	justify-content: center;
 	padding: 4px;
 	border-radius: 50%;
-	width: 16px;
-	height: 16px;
+	width: 20px;
+	height: 20px;
 	color: #fff;
 	cursor: pointer;
-	border: 1px solid rgba(255, 255, 255, 225, 1);
-	font-size: 14px;
+	font-size: 16px;
 	transition: none !important;
 }
 
@@ -47,6 +46,7 @@
 .button span {
 	all: unset !important;
 }
+
 .loader {
 	all: unset;
 	width: 50px;
