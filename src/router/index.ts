@@ -1,6 +1,15 @@
 import { NextRequest } from 'next/server.js';
 import { DatoCmsConfig } from '../config/index.js';
-import { backup, revalidate, test, webPreviews, draft, basicAuth } from '../route-handlers/index.js';
+import {
+	backup,
+	revalidate,
+	test,
+	webPreviews,
+	draft,
+	basicAuth,
+	search,
+	searchIndex,
+} from '../route-handlers/index.js';
 
 export type RouteHandler = (
 	req: Request,
@@ -51,6 +60,7 @@ const POST: RouteHandler = async (req, { params }, config) => {
 				});
 			case 'backup':
 				return backup(req);
+
 			default:
 				return new Response('Not Found', { status: 404 });
 		}
@@ -65,6 +75,10 @@ const GET: RouteHandler = async (req, { params }, config) => {
 		const searchParams = (req as NextRequest).nextUrl.searchParams;
 
 		switch (route) {
+			case 'search':
+				return search(req);
+			case 'search-index':
+				return searchIndex(req);
 			case 'test':
 				return test(req);
 			case 'draft':

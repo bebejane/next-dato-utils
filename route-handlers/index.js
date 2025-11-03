@@ -8,4 +8,6 @@ export { default as vercelCronAuth } from './vercel-cron-auth.js';
 export { default as webPreviews } from './web-previews.js';
 export { default as draft } from './draft.js';
 export { default as favicon } from './favicon.js';
+export { default as searchIndex } from './search-index.js';
+export { default as search } from './search.js';
 //# sourceMappingURL=index.js.map

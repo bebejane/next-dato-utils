@@ -1,4 +1,4 @@
-import { backup, revalidate, test, webPreviews, draft, basicAuth } from '../route-handlers/index.js';
+import { backup, revalidate, test, webPreviews, draft, basicAuth, search, searchIndex, } from '../route-handlers/index.js';
 const POST = async (req, { params }, config) => {
     const { route } = await params;
     try {
@@ -49,6 +49,10 @@ const GET = async (req, { params }, config) => {
         const { route } = await params;
         const searchParams = req.nextUrl.searchParams;
         switch (route) {
+            case 'search':
+                return search(req);
+            case 'search-index':
+                return searchIndex(req);
             case 'test':
                 return test(req);
             case 'draft':
