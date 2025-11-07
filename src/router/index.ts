@@ -58,8 +58,6 @@ const POST: RouteHandler = async (req, { params }, config) => {
 					const paths = await config.routes[itemType.attributes.api_key]?.({ id: item.id, ...item.attributes }, locale);
 					return paths?.[0] ?? null;
 				});
-			case 'backup':
-				return backup(req);
 
 			default:
 				return new Response('Not Found', { status: 404 });
@@ -83,6 +81,8 @@ const GET: RouteHandler = async (req, { params }, config) => {
 				return test(req);
 			case 'draft':
 				return draft(req, searchParams);
+			case 'backup':
+				return backup(req);
 			default:
 				return new Response('Not Found', { status: 404 });
 		}
