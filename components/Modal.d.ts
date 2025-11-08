@@ -1,5 +1,5 @@
 import React from 'react';
-type ModalProps = {
+export type ModalProps = {
     children: React.ReactElement | React.ReactElement[];
     targetId?: string;
 };
