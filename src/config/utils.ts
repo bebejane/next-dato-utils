@@ -9,7 +9,7 @@ const client = buildClient({
 	environment: process.env.DATOCMS_ENVIRONMENT,
 });
 
-export async function getItemReferenceRoutes(itemId: string, locales?: string[]): Promise<string[] | null> {
+export async function getItemReferenceRoutes(itemId: string, locales?: string[]): Promise<string[]> {
 	if (!itemId) throw new Error('datocms.config: Missing reference: itemId');
 	const pathnames: string[] = [];
 
@@ -32,7 +32,7 @@ export async function getItemReferenceRoutes(itemId: string, locales?: string[])
 	return pathnames;
 }
 
-export async function getUploadReferenceRoutes(uploadId: string, locales?: string[]): Promise<string[] | null> {
+export async function getUploadReferenceRoutes(uploadId: string, locales?: string[]): Promise<string[]> {
 	if (!uploadId) throw new Error('datocms.config: Missing reference: uploadId');
 	const pathnames: string[] = [];
 
@@ -55,7 +55,7 @@ export async function getUploadReferenceRoutes(uploadId: string, locales?: strin
 	return pathnames;
 }
 
-async function itemsToRoutes(items: Item[], locales?: string[]): Promise<string[] | null> {
+async function itemsToRoutes(items: Item[], locales?: string[]): Promise<string[]> {
 	const pathnames: string[] = [];
 	const config = await loadConfig();
 	const itemTypes = await client.itemTypes.list();
@@ -79,7 +79,7 @@ async function itemsToRoutes(items: Item[], locales?: string[]): Promise<string[
 			p && pathnames.push.apply(pathnames, p);
 		}
 	}
-	return pathnames.length ? pathnames : null;
+	return pathnames.length ? pathnames : [];
 }
 
 export async function getItemWithLinked(id: string): Promise<any> {

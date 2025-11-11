@@ -74,7 +74,7 @@ async function itemsToRoutes(items, locales) {
             p && pathnames.push.apply(pathnames, p);
         }
     }
-    return pathnames.length ? pathnames : null;
+    return pathnames.length ? pathnames : [];
 }
 export async function getItemWithLinked(id) {
     const record = await client.items.find(id, { nested: true, version: 'current' });
