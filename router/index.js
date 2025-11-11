@@ -16,7 +16,7 @@ const POST = async (req, { params }, config) => {
                         paths = (await config.routes?.[api_key]?.(record, config.i18n?.defaultLocale)) ?? [];
                         paths.forEach((path) => {
                             config.i18n?.locales
-                                .filter((l) => l !== config.i18n?.defaultLocale)
+                                //.filter((l) => l !== config.i18n?.defaultLocale)
                                 .forEach((locale) => {
                                 paths.push(path == '/' ? `/${locale}` : `/${locale}${path}`);
                             });
