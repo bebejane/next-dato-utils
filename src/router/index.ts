@@ -37,13 +37,11 @@ const POST: RouteHandler = async (req, { params }, config) => {
 						let paths: string[] = [];
 						const record = { ...attributes, id };
 						if (config.i18n) {
-							paths = (await config.routes?.[api_key]?.(record, config.i18n?.defaultLocale)) ?? [];
-							paths.forEach((path) => {
-								config.i18n?.locales
-									//.filter((l) => l !== config.i18n?.defaultLocale)
-									.forEach((locale) => {
-										paths.push(path == '/' ? `/${locale}` : `/${locale}${path}`);
-									});
+							const pathsWithoutLocale = (await config.routes?.[api_key]?.(record, config.i18n?.defaultLocale)) ?? [];
+							pathsWithoutLocale.forEach((path) => {
+								config.i18n?.locales.forEach((locale) => {
+									paths.push(path == '/' ? `/${locale}` : `/${locale}${path}`);
+								});
 							});
 						} else {
 							paths = (await config.routes?.[api_key]?.(record)) ?? [];
