@@ -60,6 +60,8 @@ async function itemsToRoutes(items: Item[], locales?: string[]): Promise<string[
 	const config = await loadConfig();
 	const itemTypes = await client.itemTypes.list();
 
+	locales = locales ?? config.i18n?.locales ?? [];
+
 	for (const item of items) {
 		const itemType = itemTypes.find(({ id }) => id === item.item_type.id);
 
@@ -69,7 +71,7 @@ async function itemsToRoutes(items: Item[], locales?: string[]): Promise<string[
 			continue;
 		}
 		const record = await getItemWithLinked(item.id);
-		if (locales) {
+		if (locales?.length) {
 			for (const locale of locales) {
 				const p = await config.routes[itemType.api_key]?.(record, locale);
 				p && pathnames.push.apply(pathnames, p);
