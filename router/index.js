@@ -29,7 +29,9 @@ const POST = async (req, { params }, config) => {
             case 'web-previews':
                 return webPreviews(req, async (payload) => {
                     const { item, itemType, locale } = payload;
-                    const paths = await config.routes[itemType.attributes.api_key]?.({ id: item.id, ...item.attributes }, locale);
+                    const record = { id: item.id, ...item.attributes };
+                    console.log('web-previews router:', locale, record);
+                    const paths = await config.routes[itemType.attributes.api_key]?.(record, locale);
                     return paths?.[0] ?? null;
                 });
             default:
