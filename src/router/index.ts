@@ -30,22 +30,21 @@ const POST: RouteHandler = async (req, { params }, config) => {
 			case 'revalidate':
 				return basicAuth(req, (req) =>
 					revalidate(req, async (payload, revalidate) => {
-						const { entity, entity_type } = payload;
+						const { entity } = payload;
 						const api_key = payload.entity_type === 'upload' ? 'upload' : payload.api_key;
 						const { id, attributes } = entity;
 						if (!api_key) throw new Error('No api_key found');
 						let paths: string[] = [];
+
 						const record = { ...attributes, id };
+
 						if (config.i18n) {
-							const pathsWithoutLocale = (await config.routes?.[api_key]?.(record, config.i18n?.defaultLocale)) ?? [];
-							pathsWithoutLocale.forEach((path) => {
-								config.i18n?.locales.forEach((locale) => {
-									paths.push(path == '/' ? `/${locale}` : `/${locale}${path}`);
-								});
-							});
-						} else {
-							paths = (await config.routes?.[api_key]?.(record)) ?? [];
-						}
+							for (const locale of config.i18n.locales) {
+								const p = await config.routes?.[api_key]?.(record, locale);
+								p && paths.push.apply(paths, p);
+							}
+						} else paths = (await config.routes?.[api_key]?.(record)) ?? [];
+
 						const tags: string[] = [api_key, id].filter((t) => t);
 						return await revalidate(paths, tags, true);
 					})
@@ -54,7 +53,6 @@ const POST: RouteHandler = async (req, { params }, config) => {
 				return webPreviews(req, async (payload) => {
 					const { item, itemType, locale } = payload;
 					const record = { id: item.id, ...item.attributes };
-					console.log('web-previews router:', locale, record);
 					const paths = await config.routes[itemType.attributes.api_key]?.(record, locale);
 					return paths?.[0] ?? null;
 				});
