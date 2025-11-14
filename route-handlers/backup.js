@@ -1,3 +1,4 @@
+import { sleep } from '../utils/utilities.js';
 import vercelCronAuth from './vercel-cron-auth.js';
 import { buildClient } from '@datocms/cma-client-browser';
 export default async function backup(req) {
@@ -26,17 +27,18 @@ export default async function backup(req) {
             for (let i = 0; i < backups.reverse().slice(maxBackups - 1).length; i++) {
                 try {
                     console.log('Deleting old backup...', backups[i].id);
-                    await client.environments.destroy(backups[i].id);
+                    client.environments.destroy(backups[i].id);
                 }
                 catch (e) {
                     console.error(e);
                 }
             }
             await client.environments.fork(process.env.DATOCMS_ENVIRONMENT, { id: name }, {
-                immediate_return: false,
+                immediate_return: true,
                 fast: true,
                 force: true,
             });
+            await sleep(50);
             console.log('Backup done!');
             return new Response(`Backup done ${process.env.DATOCMS_ENVIRONMENT} > ${name}`, { status: 200 });
         }
