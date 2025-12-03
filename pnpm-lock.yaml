@@ -67,14 +67,14 @@ importers:
         specifier: ^0.2.7
         version: 0.2.7(graphql@16.11.0)
       '@datocms/cma-client':
-        specifier: 5.1.24
-        version: 5.1.24
+        specifier: 5.2.0
+        version: 5.2.0
       '@datocms/cma-client-browser':
-        specifier: ^5.1.24
-        version: 5.1.26
+        specifier: ^5.2.0
+        version: 5.2.0
       '@datocms/cma-client-node':
-        specifier: ^5.1.24
-        version: 5.1.26
+        specifier: ^5.2.0
+        version: 5.2.0
       '@types/node':
         specifier: ^22.18.13
         version: 22.18.13
@@ -129,17 +129,14 @@ packages:
   '@datocms/cda-client@0.2.7':
     resolution: {integrity: sha512-0dH411Os2NkjwLJrmrEH+9N2Scne8o7qaYFlil11ma22VBWJsPL9VgK2DwDK7n+3QfE1TA+lNvy4SYmRCYt+Ng==}
 
-  '@datocms/cma-client-browser@5.1.26':
-    resolution: {integrity: sha512-IYJg9EImzgwrWIDd3eQuBPduusljRzSH1nUiFlmX8EdHA0/NmOqJuimDf9mMvoKCz+7m/ETb4oxdbzv3MLfugw==}
+  '@datocms/cma-client-browser@5.2.0':
+    resolution: {integrity: sha512-8XvNuJE7zDdAUXswtBwTcrhiqrh72+20DBk+V2A6vmHf4tP6ROghBJm4+far/QjYHnmLsNn376cgLcwQ2np1nQ==}
 
-  '@datocms/cma-client-node@5.1.26':
-    resolution: {integrity: sha512-AzJfDOMKQ2ZJxFuZ875pPVowB7Y8feRyJwi096qOiQwhEPaJCxhTEtf6WSUGYbezsd8TRvSK28iBE8Yi4MhDnQ==}
+  '@datocms/cma-client-node@5.2.0':
+    resolution: {integrity: sha512-Me/q9xuURkGGmqrlNLZnWrbAENx37wPuAj3nawg+WnsoEKRZvdjmW+ONo847I1U7IaD6fYWLIqNdrkZKPrAhOA==}
 
-  '@datocms/cma-client@5.1.24':
-    resolution: {integrity: sha512-qs6qvtUAmDYjeDtbZmoxP2MpZ/IP3y/BP6c6GIZDhbf2+56PzHSo02DbRxFpyJDsfLr/AQlwEn3/VEa1dLkIOA==}
-
-  '@datocms/cma-client@5.1.26':
-    resolution: {integrity: sha512-qR/J7VAe0adVlqQPNysk3v4PzHCoubkUe75dHydVwtk0ciobNTvCQDEz/toc7MfHoRp7BlAC3GfgPpkMQyaTmQ==}
+  '@datocms/cma-client@5.2.0':
+    resolution: {integrity: sha512-DwutVF0p60/a3Q4/FdWIC2Lm2C5JySNd8BT/1vQlDiceXi41ImPRq5l2jx7mT7dmmVK+J83kj4byzQBt78bRWg==}
 
   '@datocms/rest-client-utils@5.1.13':
     resolution: {integrity: sha512-0sGxoLnjagcMb8/lCcar3XuAW7UCszraNsAiCBnb14ibodJbhCQwERkO8kmR9APYh+hlcm8DJ2yVyQAcg413ng==}
@@ -1436,25 +1433,19 @@ snapshots:
     transitivePeerDependencies:
       - graphql
 
-  '@datocms/cma-client-browser@5.1.26':
+  '@datocms/cma-client-browser@5.2.0':
     dependencies:
-      '@datocms/cma-client': 5.1.26
+      '@datocms/cma-client': 5.2.0
       '@datocms/rest-client-utils': 5.1.13
 
-  '@datocms/cma-client-node@5.1.26':
+  '@datocms/cma-client-node@5.2.0':
     dependencies:
-      '@datocms/cma-client': 5.1.26
+      '@datocms/cma-client': 5.2.0
       '@datocms/rest-client-utils': 5.1.13
       mime-types: 2.1.35
       tmp-promise: 3.0.3
 
-  '@datocms/cma-client@5.1.24':
-    dependencies:
-      '@datocms/rest-client-utils': 5.1.13
-      datocms-structured-text-utils: 5.1.6
-      uuid: 9.0.1
-
-  '@datocms/cma-client@5.1.26':
+  '@datocms/cma-client@5.2.0':
     dependencies:
       '@datocms/rest-client-utils': 5.1.13
       datocms-structured-text-utils: 5.1.6

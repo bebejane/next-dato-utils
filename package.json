@@ -1,132 +1,132 @@
 {
-	"name": "next-dato-utils",
-	"version": "2.0.82",
-	"description": "",
-	"type": "module",
-	"main": "./index.js",
-	"module": "./index.js",
-	"scripts": {
-		"dev": "tsc-watch -b ./tsconfig.json --onSuccess \"npm run postbuild\" & pnpm dev:server",
-		"dev:server": "cd /Users/bebejane/Projects/next-dato-boiler && pnpm dev",
-		"clear:server": "rm -rf /Users/bebejane/Projects/next-dato-boiler/.next/.cache",
-		"build": "node ./clean.js && npm run tsc && npm run postbuild",
-		"postbuild": "copyfiles -u 1 src/**/*.css ./",
-		"push": "npm run build && git add . && git commit -m \"update\" && git push",
-		"release": "npm run push && npm version patch --force && git push && git push origin $(git describe --tags --abbrev=0) && git tag -f latest && git push origin latest --force && gh release create $(git describe --tags --abbrev=0) --generate-notes",
-		"dev:cli": "tsx src/cli/index.ts",
-		"tsc": "tsc -p tsconfig.json"
-	},
-	"exports": {
-		"./package.json": "./package.json",
-		"./utils": {
-			"types": "./utils/index.d.ts",
-			"import": "./utils/index.js",
-			"bun": "./utils/index.js"
-		},
-		"./config": {
-			"types": "./config/index.d.ts",
-			"import": "./config/index.js",
-			"bun": "./config/index.js"
-		},
-		"./components": {
-			"types": "./components/index.d.ts",
-			"import": "./components/index.js",
-			"bun": "./components/index.js"
-		},
-		"./hooks": {
-			"types": "./hooks/index.d.ts",
-			"import": "./hooks/index.js",
-			"bun": "./hooks/index.js"
-		},
-		"./api": {
-			"types": "./api/index.d.ts",
-			"import": "./api/index.js",
-			"bun": "./api/index.js"
-		},
-		"./route-handlers": {
-			"types": "./route-handlers/index.d.ts",
-			"import": "./route-handlers/index.js",
-			"bun": "./route-handlers/index.js"
-		},
-		"./router": {
-			"types": "./router/index.d.ts",
-			"import": "./router/index.js",
-			"bun": "./router/index.js"
-		},
-		"./server-actions": {
-			"types": "./server-actions/index.d.ts",
-			"import": "./server-actions/index.js",
-			"bun": "./server-actions/index.js"
-		},
-		"./server-actions/*": {
-			"import": "./server-actions/*",
-			"bun": "./server-actions/*"
-		},
-		"./tests": {
-			"types": "./tests/index.d.ts",
-			"import": "./tests/index.js",
-			"bun": "./tests/index.js"
-		}
-	},
-	"bin": {
-		"nextdato": "./cli/index.js"
-	},
-	"engines": {
-		"node": ">=0.18"
-	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
-	"dependencies": {
-		"@opentelemetry/api": "^1.9.0",
-		"commander": "^11.1.0",
-		"datocms-listen": "^0.1.15",
-		"datocms-structured-text-utils": "^5.0.0",
-		"dedent-js": "^1.0.1",
-		"dotenv": "^16.4.4",
-		"get-tsconfig": "^4.13.0",
-		"ico-utils": "^0.1.4",
-		"pluralize": "^8.0.0",
-		"prettier": "^3.5.3",
-		"pretty-bytes": "^6.1.1",
-		"react-datocms": "^7.2.2",
-		"react-markdown": "^9.0.1",
-		"remark-breaks": "^4.0.0",
-		"remark-gfm": "^4.0.0",
-		"sass": "^1.86.3",
-		"table": "^6.8.1"
-	},
-	"devDependencies": {
-		"@datocms/cda-client": "^0.2.7",
-		"@datocms/cma-client": "5.1.24",
-		"@datocms/cma-client-browser": "^5.1.24",
-		"@datocms/cma-client-node": "^5.1.24",
-		"@types/node": "^22.18.13",
-		"@types/pluralize": "^0.0.33",
-		"@types/react-dom": "^19.2.2",
-		"copyfiles": "^2.4.1",
-		"glob": "^11.0.3",
-		"graphql": "^16.10.0",
-		"next": "14.2.33",
-		"nodemon": "^3.0.3",
-		"react": "^19.2.0",
-		"react-dom": "^19.2.0",
-		"tsc-watch": "^7.2.0",
-		"zod": "^3.25.76"
-	},
-	"peerDependencies": {
-		"@datocms/cda-client": ">=0.2.7",
-		"@datocms/cma-client": ">=5.0.0",
-		"@datocms/cma-client-browser": ">=5.0.0",
-		"@datocms/cma-client-node": ">=5.0.0",
-		"datocms-structured-text-utils": ">=2.0.0",
-		"graphql": ">=16.0.0",
-		"next": ">=14.0.0",
-		"postmark": ">=4.0.0",
-		"react": "19.x",
-		"react-dom": "19.x",
-		"react-datocms": ">=4.0.0",
-		"sass": ">=1.69.0",
-		"zod": ">=3.0.0"
-	}
+  "name": "next-dato-utils",
+  "version": "2.0.82",
+  "description": "",
+  "type": "module",
+  "main": "./index.js",
+  "module": "./index.js",
+  "scripts": {
+    "dev": "tsc-watch -b ./tsconfig.json --onSuccess \"npm run postbuild\" & pnpm dev:server",
+    "dev:server": "cd /Users/bebejane/Projects/next-dato-boiler && pnpm dev",
+    "clear:server": "rm -rf /Users/bebejane/Projects/next-dato-boiler/.next/.cache",
+    "build": "node ./clean.js && npm run tsc && npm run postbuild",
+    "postbuild": "copyfiles -u 1 src/**/*.css ./",
+    "push": "npm run build && git add . && git commit -m \"update\" && git push",
+    "release": "npm run push && npm version patch --force && git push && git push origin $(git describe --tags --abbrev=0) && git tag -f latest && git push origin latest --force && gh release create $(git describe --tags --abbrev=0) --generate-notes",
+    "dev:cli": "tsx src/cli/index.ts",
+    "tsc": "tsc -p tsconfig.json"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    "./utils": {
+      "types": "./utils/index.d.ts",
+      "import": "./utils/index.js",
+      "bun": "./utils/index.js"
+    },
+    "./config": {
+      "types": "./config/index.d.ts",
+      "import": "./config/index.js",
+      "bun": "./config/index.js"
+    },
+    "./components": {
+      "types": "./components/index.d.ts",
+      "import": "./components/index.js",
+      "bun": "./components/index.js"
+    },
+    "./hooks": {
+      "types": "./hooks/index.d.ts",
+      "import": "./hooks/index.js",
+      "bun": "./hooks/index.js"
+    },
+    "./api": {
+      "types": "./api/index.d.ts",
+      "import": "./api/index.js",
+      "bun": "./api/index.js"
+    },
+    "./route-handlers": {
+      "types": "./route-handlers/index.d.ts",
+      "import": "./route-handlers/index.js",
+      "bun": "./route-handlers/index.js"
+    },
+    "./router": {
+      "types": "./router/index.d.ts",
+      "import": "./router/index.js",
+      "bun": "./router/index.js"
+    },
+    "./server-actions": {
+      "types": "./server-actions/index.d.ts",
+      "import": "./server-actions/index.js",
+      "bun": "./server-actions/index.js"
+    },
+    "./server-actions/*": {
+      "import": "./server-actions/*",
+      "bun": "./server-actions/*"
+    },
+    "./tests": {
+      "types": "./tests/index.d.ts",
+      "import": "./tests/index.js",
+      "bun": "./tests/index.js"
+    }
+  },
+  "bin": {
+    "nextdato": "./cli/index.js"
+  },
+  "engines": {
+    "node": ">=0.18"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
+    "commander": "^11.1.0",
+    "datocms-listen": "^0.1.15",
+    "datocms-structured-text-utils": "^5.0.0",
+    "dedent-js": "^1.0.1",
+    "dotenv": "^16.4.4",
+    "get-tsconfig": "^4.13.0",
+    "ico-utils": "^0.1.4",
+    "pluralize": "^8.0.0",
+    "prettier": "^3.5.3",
+    "pretty-bytes": "^6.1.1",
+    "react-datocms": "^7.2.2",
+    "react-markdown": "^9.0.1",
+    "remark-breaks": "^4.0.0",
+    "remark-gfm": "^4.0.0",
+    "sass": "^1.86.3",
+    "table": "^6.8.1"
+  },
+  "devDependencies": {
+    "@datocms/cda-client": "^0.2.7",
+    "@datocms/cma-client": "5.2.0",
+    "@datocms/cma-client-browser": "^5.2.0",
+    "@datocms/cma-client-node": "^5.2.0",
+    "@types/node": "^22.18.13",
+    "@types/pluralize": "^0.0.33",
+    "@types/react-dom": "^19.2.2",
+    "copyfiles": "^2.4.1",
+    "glob": "^11.0.3",
+    "graphql": "^16.10.0",
+    "next": "14.2.33",
+    "nodemon": "^3.0.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tsc-watch": "^7.2.0",
+    "zod": "^3.25.76"
+  },
+  "peerDependencies": {
+    "@datocms/cda-client": ">=0.2.7",
+    "@datocms/cma-client": ">=5.0.0",
+    "@datocms/cma-client-browser": ">=5.0.0",
+    "@datocms/cma-client-node": ">=5.0.0",
+    "datocms-structured-text-utils": ">=2.0.0",
+    "graphql": ">=16.0.0",
+    "next": ">=14.0.0",
+    "postmark": ">=4.0.0",
+    "react": "19.x",
+    "react-datocms": ">=4.0.0",
+    "react-dom": "19.x",
+    "sass": ">=1.69.0",
+    "zod": ">=3.0.0"
+  }
 }

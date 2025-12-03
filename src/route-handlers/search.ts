@@ -11,7 +11,7 @@ type SearchQuery = {
 export default async function search(req: Request): Promise<Response> {
 	try {
 		if (!process.env.DATOCMS_API_TOKEN) throw 'DATOCMS_API_TOKEN not set in .env';
-		if (!process.env.DATOCMS_BUILD_TRIGGER_ID) throw 'DATOCMS_BUILD_TRIGGER_ID not set in .env';
+		if (!process.env.DATOCMS_SEARCH_INDEX_ID) throw 'DATOCMS_SEARCH_INDEX_ID not set in .env';
 
 		const client = buildClient({ apiToken: process.env.DATOCMS_API_TOKEN as string });
 		const payload = (await req.json()) as SearchQuery;
@@ -32,7 +32,7 @@ export default async function search(req: Request): Promise<Response> {
 			filter: {
 				fuzzy,
 				query,
-				build_trigger_id: process.env.DATOCMS_BUILD_TRIGGER_ID,
+				search_index_id: process.env.DATOCMS_SEARCH_INDEX_ID,
 				locale: locale ?? undefined,
 			},
 			page: {
