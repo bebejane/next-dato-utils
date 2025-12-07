@@ -5,7 +5,10 @@ import path from 'path';
 
 const version = JSON.parse(fs.readFileSync('./package.json', 'utf8')).version;
 const basePath = '/Users/bebejane/work/konstochteknik';
-let packages = globSync(`${basePath}/**/package.json`, { maxDepth: 3, ignore: ['**/node_modules/**', '**/.git/**'] });
+let packages = globSync(`${basePath}/**/package.json`, {
+	maxDepth: 3,
+	ignore: ['**/node_modules/**', '**/.git/**'],
+});
 
 const project = process.argv.slice(2)?.[0] ?? null;
 
@@ -52,6 +55,7 @@ if (project) {
 
 		try {
 			console.log(`${name}: updating package ${version}...`);
+			//execSync(`pnpm i react@19.2.1 react-dom@19.2.1`, { cwd, stdio: 'pipe' });
 			execSync(`pnpm i github:bebejane/next-dato-utils#v${version}`, { cwd, stdio: 'pipe' });
 		} catch (e) {
 			console.log(`${name}: failed to update package`);
@@ -61,10 +65,13 @@ if (project) {
 		}
 		try {
 			console.log(`${name}: git push`);
-			execSync(`git add . && git commit -m \"updated next-dato-utils to v${version}\" && git push`, {
-				cwd,
-				stdio: 'pipe',
-			});
+			execSync(
+				`git add . && git commit -m \"updated next-dato-utils to v${version}\" && git push`,
+				{
+					cwd,
+					stdio: 'pipe',
+				}
+			);
 			console.log(`${name}: done!`);
 			stats.failed++;
 		} catch (e) {
@@ -74,5 +81,7 @@ if (project) {
 			continue;
 		}
 	}
-	console.log(`\nDone! ${stats.success} repos updated, ${stats.failed} failed, ${stats.skipped} skipped`);
+	console.log(
+		`\nDone! ${stats.success} repos updated, ${stats.failed} failed, ${stats.skipped} skipped`
+	);
 })();
