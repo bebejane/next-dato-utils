@@ -8,9 +8,6 @@ export default async function basicAuth(
 ): Promise<Response> {
 	if (req.method === 'OPTIONS') return new Response('OK', { status: 200 });
 
-	if (process.env.NODE_ENV === 'development')
-		return callback ? await callback(req) : new Response('OK', { status: 200 });
-
 	const basicAuth = req.headers.get('authorization');
 	let isAuthorized = false;
 
