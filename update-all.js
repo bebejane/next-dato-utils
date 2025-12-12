@@ -55,7 +55,7 @@ if (project) {
 
 		try {
 			console.log(`${name}: updating package ${version}...`);
-			//execSync(`pnpm i react@19.2.1 react-dom@19.2.1`, { cwd, stdio: 'pipe' });
+			execSync(`pnpm i next@16.0.10 react@19.2.3 react-dom@19.2.3 `, { cwd, stdio: 'pipe' });
 			execSync(`pnpm i github:bebejane/next-dato-utils#v${version}`, { cwd, stdio: 'pipe' });
 		} catch (e) {
 			console.log(`${name}: failed to update package`);
