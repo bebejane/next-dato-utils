@@ -32,6 +32,7 @@ if (project) {
 	};
 
 	for (let i = 0; i < packages.length; i++) {
+		const npmPacakges = ['react@19.2.3', 'react-dom@19.2.3'];
 		const pckg = JSON.parse(fs.readFileSync(packages[i], 'utf8'));
 		if (!pckg.dependencies || !Object.keys(pckg.dependencies).includes('next-dato-utils')) continue;
 
@@ -40,6 +41,19 @@ if (project) {
 		const currentVersion = JSON.parse(
 			fs.readFileSync(`${cwd}/node_modules/next-dato-utils/package.json`, 'utf8')
 		).version;
+
+		const nextVersion = JSON.parse(
+			fs.readFileSync(`${cwd}/node_modules/next/package.json`, 'utf8')
+		).version;
+
+		if (nextVersion.startsWith('14.')) {
+			npmPacakges.push('next@14.2.35');
+		} else if (nextVersion.startsWith('15.')) {
+			npmPacakges.push('next@15.5.9');
+		} else if (nextVersion.startsWith('16.')) {
+			npmPacakges.push('next@16.0.10');
+		}
+
 		const isClean = execSync(`git status --porcelain --untracked-files=no`, { cwd }).length === 0;
 
 		if (isClean && currentVersion === version) {
@@ -55,7 +69,8 @@ if (project) {
 
 		try {
 			console.log(`${name}: updating package ${version}...`);
-			execSync(`pnpm i next@16.0.10 react@19.2.3 react-dom@19.2.3 `, { cwd, stdio: 'pipe' });
+			if (npmPacakges.length > 0)
+				execSync(`pnpm i ${npmPacakges.join(' ')}`, { cwd, stdio: 'pipe' });
 			execSync(`pnpm i github:bebejane/next-dato-utils#v${version}`, { cwd, stdio: 'pipe' });
 		} catch (e) {
 			console.log(`${name}: failed to update package`);
