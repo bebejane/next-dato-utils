@@ -19,7 +19,7 @@ export default async function draft(
 
 	if (redirect) {
 		(await draftMode()).enable();
-		return new Response('OK', { status: 302, headers: { Location: redirect } });
+		return new Response('OK', { status: 307, headers: { Location: redirect } });
 	}
 
 	if (secret !== process.env.DATOCMS_PREVIEW_SECRET)
