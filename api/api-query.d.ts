@@ -53,4 +53,6 @@ export type DedupeOptions = {
     logs: boolean;
     apiToken?: string;
     environment?: string;
+    contentLink?: string;
+    baseEditingUrl?: string;
 };

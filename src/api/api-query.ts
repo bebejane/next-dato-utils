@@ -213,6 +213,8 @@ export type DedupeOptions = {
 	logs: boolean;
 	apiToken?: string;
 	environment?: string;
+	contentLink?: string;
+	baseEditingUrl?: string;
 };
 
 const dedupedFetch = async (options: DedupeOptions) => {
@@ -227,6 +229,8 @@ const dedupedFetch = async (options: DedupeOptions) => {
 		logs,
 		apiToken,
 		environment,
+		contentLink,
+		baseEditingUrl,
 	} = options;
 
 	const headers = {
@@ -235,6 +239,10 @@ const dedupedFetch = async (options: DedupeOptions) => {
 		...(includeDrafts ? { 'X-Include-Drafts': 'true' } : {}),
 		...(excludeInvalid ? { 'X-Exclude-Invalid': 'true' } : {}),
 		...(cacheTags ? { 'X-Cache-Tags': 'true' } : {}),
+		...(contentLink ? { 'X-Visual-Editing': 'vercel-v1' } : {}),
+		...(contentLink
+			? { 'X-Base-Editing-Url': process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL ?? baseEditingUrl }
+			: {}),
 	} as unknown as HeadersInit;
 
 	const response = await fetch(url ?? 'https://graphql.datocms.com/', {
