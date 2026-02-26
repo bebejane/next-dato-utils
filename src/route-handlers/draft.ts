@@ -46,8 +46,6 @@ export default async function draft(
 		});
 	}
 
-	if (slug)
-		//@ts-expect-error
-		return redirect(slug);
+	if (slug) return new Response('OK', { status: 307, headers: { Location: slug } });
 	else return new Response('OK', { status: 200 });
 }

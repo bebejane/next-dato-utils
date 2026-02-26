@@ -14,8 +14,6 @@ const defaultOptions = {
     all: false,
     apiToken: undefined,
     environment: process.env.DATOCMS_ENVIRONMENT ?? process.env.NEXT_PUBLIC_DATOCMS_ENVIRONMENT ?? 'main',
-    contentLink: undefined,
-    baseEditingUrl: undefined,
 };
 export default async function apiQuery(query, options) {
     const opt = { ...defaultOptions, ...(options ?? {}) };
@@ -100,16 +98,18 @@ const paginatedQuery = async (query, options, data, queryId) => {
     }
 };
 const dedupedFetch = async (options) => {
-    const { url, body, includeDrafts, excludeInvalid, cacheTags, revalidate, queryId, logs, apiToken, environment, contentLink, baseEditingUrl, } = options;
+    const { url, body, includeDrafts, excludeInvalid, cacheTags, revalidate, queryId, logs, apiToken, environment, } = options;
     const headers = {
         'Authorization': `Bearer ${apiToken ?? process.env.DATOCMS_API_TOKEN ?? process.env.NEXT_PUBLIC_DATOCMS_API_TOKEN}`,
         'X-Environment': environment,
         ...(includeDrafts ? { 'X-Include-Drafts': 'true' } : {}),
         ...(excludeInvalid ? { 'X-Exclude-Invalid': 'true' } : {}),
         ...(cacheTags ? { 'X-Cache-Tags': 'true' } : {}),
-        ...(contentLink ? { 'X-Visual-Editing': 'vercel-v1' } : {}),
-        ...(contentLink
-            ? { 'X-Base-Editing-Url': process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL ?? baseEditingUrl }
+        ...(process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL
+            ? { 'X-Visual-Editing': 'vercel-v1' }
+            : {}),
+        ...(process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL
+            ? { 'X-Base-Editing-Url': process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL }
             : {}),
     };
     const response = await fetch(url ?? 'https://graphql.datocms.com/', {

@@ -64,8 +64,6 @@ const defaultOptions: DefaultApiQueryOptions = {
 	apiToken: undefined,
 	environment:
 		process.env.DATOCMS_ENVIRONMENT ?? process.env.NEXT_PUBLIC_DATOCMS_ENVIRONMENT ?? 'main',
-	contentLink: undefined,
-	baseEditingUrl: undefined,
 };
 
 export default async function apiQuery<TResult = any, TVariables = Record<string, any>>(
@@ -213,8 +211,6 @@ export type DedupeOptions = {
 	logs: boolean;
 	apiToken?: string;
 	environment?: string;
-	contentLink?: string;
-	baseEditingUrl?: string;
 };
 
 const dedupedFetch = async (options: DedupeOptions) => {
@@ -229,8 +225,6 @@ const dedupedFetch = async (options: DedupeOptions) => {
 		logs,
 		apiToken,
 		environment,
-		contentLink,
-		baseEditingUrl,
 	} = options;
 
 	const headers = {
@@ -239,9 +233,11 @@ const dedupedFetch = async (options: DedupeOptions) => {
 		...(includeDrafts ? { 'X-Include-Drafts': 'true' } : {}),
 		...(excludeInvalid ? { 'X-Exclude-Invalid': 'true' } : {}),
 		...(cacheTags ? { 'X-Cache-Tags': 'true' } : {}),
-		...(contentLink ? { 'X-Visual-Editing': 'vercel-v1' } : {}),
-		...(contentLink
-			? { 'X-Base-Editing-Url': process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL ?? baseEditingUrl }
+		...(process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL
+			? { 'X-Visual-Editing': 'vercel-v1' }
+			: {}),
+		...(process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL
+			? { 'X-Base-Editing-Url': process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL }
 			: {}),
 	} as unknown as HeadersInit;
 
