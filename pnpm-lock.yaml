@@ -44,9 +44,6 @@ importers:
       pretty-bytes:
         specifier: ^6.1.1
         version: 6.1.1
-      react-datocms:
-        specifier: ^7.2.2
-        version: 7.2.3(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(graphql@16.11.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       react-markdown:
         specifier: ^9.0.1
         version: 9.1.0(@types/react@19.2.2)(react@19.2.0)
@@ -102,6 +99,9 @@ importers:
       react:
         specifier: ^19.2.0
         version: 19.2.0
+      react-datocms:
+        specifier: ^8.0.0
+        version: 8.0.0(@mux/mux-player-react@3.7.0(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(graphql@16.11.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       react-dom:
         specifier: ^19.2.0
         version: 19.2.0(react@19.2.0)
@@ -137,6 +137,10 @@ packages:
 
   '@datocms/cma-client@5.2.0':
     resolution: {integrity: sha512-DwutVF0p60/a3Q4/FdWIC2Lm2C5JySNd8BT/1vQlDiceXi41ImPRq5l2jx7mT7dmmVK+J83kj4byzQBt78bRWg==}
+
+  '@datocms/content-link@0.3.18':
+    resolution: {integrity: sha512-bBiZgvJYWcR6Q0XyeV9zV9BBxbqi2UIDexqkUy9aKJ7qPN6cVzkk6SWQox3o51tJ/R4JlPnVpCraGedsj2LeLA==}
+    engines: {node: '>=18'}
 
   '@datocms/rest-client-utils@5.1.13':
     resolution: {integrity: sha512-0sGxoLnjagcMb8/lCcar3XuAW7UCszraNsAiCBnb14ibodJbhCQwERkO8kmR9APYh+hlcm8DJ2yVyQAcg413ng==}
@@ -513,6 +517,9 @@ packages:
   datocms-listen@0.1.15:
     resolution: {integrity: sha512-0LcdKYW/ilWdyrRzQ+YbkAk4r2dge63vzHtfv19L8pfbfYurQgXP9/ck703QZL//YqBoc0OKBS4BP4WUQ6JDKA==}
 
+  datocms-listen@1.0.2:
+    resolution: {integrity: sha512-7E1VFqd6/DEZAgfr9GtVFPPgI6xzIKOHR4Iths9FrjEKiE85rK9lzHhgPOTUiQJFALu1KNyARJUsL8Uj8iehxw==}
+
   datocms-structured-text-generic-html-renderer@5.1.6:
     resolution: {integrity: sha512-1qaxEoyPKhFm+P4kbV0XuKUbTMxrgMILCW6+3xJKeIaufrnqQwSh+qL1//0LtNo7eXxv3Sc8gKCGqw5aF6JTFQ==}
 
@@ -666,11 +673,12 @@ packages:
   glob@11.0.3:
     resolution: {integrity: sha512-2Nim7dha1KVkaiF4q6Dj+ngPPMdfvLJEOpZk/jKiUAkqKebpGAWQXAq9z1xu9HKu5lWfqw/FASuccEjyznjPaA==}
     engines: {node: 20 || >=22}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   gopd@1.2.0:
     resolution: {integrity: sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==}
@@ -995,6 +1003,7 @@ packages:
   next@14.2.33:
     resolution: {integrity: sha512-GiKHLsD00t4ACm1p00VgrI0rUFAC9cRDGReKyERlM57aeEZkOQGcZTpIbsGn0b562FTPJWmYfKwplfO9EaT6ng==}
     engines: {node: '>=18.17.0'}
+    deprecated: This version has a security vulnerability. Please upgrade to a patched version. See https://nextjs.org/blog/security-update-2025-12-11 for more details.
     hasBin: true
     peerDependencies:
       '@opentelemetry/api': ^1.1.0
@@ -1106,11 +1115,15 @@ packages:
   pstree.remy@1.1.8:
     resolution: {integrity: sha512-77DZwxQmxKnu3aR542U+X8FypNzbfJ+C5XQDk3uWjWxn6151aIMGthWYRXTqT1E5oJvg+ljaa2OJi+VfvCOQ8w==}
 
-  react-datocms@7.2.3:
-    resolution: {integrity: sha512-gUJJD5J2Dq/VmF3Fi83p8aIqVXoNc5zC1Ikyhs59bygQlaHxPqoHMFcplQ5fFzjCLktOE0CnunVDyfbk/gbtRw==}
+  react-datocms@8.0.0:
+    resolution: {integrity: sha512-NgfvvyebtP8BCqDV3cbgc/C6dwSco0tp2WF+M3SPz2p+gbcxLe5mAVgORA5EwGrjB2tlZGY/bZZW9c1VkveBDQ==}
     engines: {node: '>=8.0.0'}
     peerDependencies:
-      react: '>= 16.12.0 || ^19.0.0-rc'
+      '@mux/mux-player-react': '>=2.5.0'
+      react: '>= 16.12.0'
+    peerDependenciesMeta:
+      '@mux/mux-player-react':
+        optional: true
 
   react-dom@19.2.0:
     resolution: {integrity: sha512-UlbRu4cAiGaIewkPyiRGJk0imDN2T3JjieT6spoL2UeSf5od4n5LB/mQ4ejmxhCFT1tYe8IvaFulzynWovsEFQ==}
@@ -1451,6 +1464,8 @@ snapshots:
       datocms-structured-text-utils: 5.1.6
       uuid: 9.0.1
 
+  '@datocms/content-link@0.3.18': {}
+
   '@datocms/rest-client-utils@5.1.13':
     dependencies:
       async-scheduler: 1.4.4
@@ -1473,6 +1488,7 @@ snapshots:
   '@mux/mux-data-google-ima@0.2.8':
     dependencies:
       mux-embed: 5.9.0
+    optional: true
 
   '@mux/mux-player-react@3.7.0(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
@@ -1484,6 +1500,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.2
       '@types/react-dom': 19.2.2(@types/react@19.2.2)
+    optional: true
 
   '@mux/mux-player@3.7.0(react@19.2.0)':
     dependencies:
@@ -1493,6 +1510,7 @@ snapshots:
       player.style: 0.2.0(react@19.2.0)
     transitivePeerDependencies:
       - react
+    optional: true
 
   '@mux/mux-video@0.27.1':
     dependencies:
@@ -1501,11 +1519,13 @@ snapshots:
       castable-video: 1.1.11
       custom-media-element: 1.4.5
       media-tracks: 0.3.3
+    optional: true
 
   '@mux/playback-core@0.31.1':
     dependencies:
       hls.js: 1.6.13
       mux-embed: 5.13.0
+    optional: true
 
   '@next/env@14.2.33': {}
 
@@ -1713,12 +1733,14 @@ snapshots:
   castable-video@1.1.11:
     dependencies:
       custom-media-element: 1.4.5
+    optional: true
 
   ccount@2.0.1: {}
 
   ce-la-react@0.3.1(react@19.2.0):
     dependencies:
       react: 19.2.0
+    optional: true
 
   character-entities-html4@2.1.0: {}
 
@@ -1788,11 +1810,19 @@ snapshots:
 
   csstype@3.1.3: {}
 
-  custom-media-element@1.4.5: {}
+  custom-media-element@1.4.5:
+    optional: true
 
   datocms-listen@0.1.15(graphql@16.11.0):
     dependencies:
       '@0no-co/graphql.web': 1.2.0(graphql@16.11.0)
+    transitivePeerDependencies:
+      - graphql
+
+  datocms-listen@1.0.2(graphql@16.11.0):
+    dependencies:
+      '@0no-co/graphql.web': 1.2.0(graphql@16.11.0)
+      '@datocms/cda-client': 0.2.7(graphql@16.11.0)
     transitivePeerDependencies:
       - graphql
 
@@ -1996,7 +2026,8 @@ snapshots:
     dependencies:
       '@types/hast': 3.0.4
 
-  hls.js@1.6.13: {}
+  hls.js@1.6.13:
+    optional: true
 
   html-url-attributes@3.0.1: {}
 
@@ -2052,7 +2083,8 @@ snapshots:
     dependencies:
       '@isaacs/cliui': 8.0.2
 
-  js-tokens@4.0.0: {}
+  js-tokens@4.0.0:
+    optional: true
 
   json-schema-traverse@1.0.0: {}
 
@@ -2063,6 +2095,7 @@ snapshots:
   loose-envify@1.4.0:
     dependencies:
       js-tokens: 4.0.0
+    optional: true
 
   lru-cache@11.2.2: {}
 
@@ -2235,14 +2268,17 @@ snapshots:
       ce-la-react: 0.3.1(react@19.2.0)
     transitivePeerDependencies:
       - react
+    optional: true
 
   media-chrome@4.14.0(react@19.2.0):
     dependencies:
       ce-la-react: 0.3.1(react@19.2.0)
     transitivePeerDependencies:
       - react
+    optional: true
 
-  media-tracks@0.3.3: {}
+  media-tracks@0.3.3:
+    optional: true
 
   micromark-core-commonmark@2.0.3:
     dependencies:
@@ -2461,9 +2497,11 @@ snapshots:
 
   ms@2.1.3: {}
 
-  mux-embed@5.13.0: {}
+  mux-embed@5.13.0:
+    optional: true
 
-  mux-embed@5.9.0: {}
+  mux-embed@5.9.0:
+    optional: true
 
   nanoid@3.3.11: {}
 
@@ -2519,7 +2557,8 @@ snapshots:
 
   normalize-path@3.0.0: {}
 
-  object-assign@4.1.1: {}
+  object-assign@4.1.1:
+    optional: true
 
   once@1.4.0:
     dependencies:
@@ -2559,6 +2598,7 @@ snapshots:
       media-chrome: 4.13.1(react@19.2.0)
     transitivePeerDependencies:
       - react
+    optional: true
 
   pluralize@8.0.0: {}
 
@@ -2585,6 +2625,7 @@ snapshots:
       loose-envify: 1.4.0
       object-assign: 4.1.1
       react-is: 16.13.1
+    optional: true
 
   property-information@7.1.0: {}
 
@@ -2596,19 +2637,19 @@ snapshots:
 
   pstree.remy@1.1.8: {}
 
-  react-datocms@7.2.3(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(graphql@16.11.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  react-datocms@8.0.0(@mux/mux-player-react@3.7.0(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(graphql@16.11.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
     dependencies:
-      '@mux/mux-player-react': 3.7.0(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      datocms-listen: 0.1.15(graphql@16.11.0)
+      '@datocms/content-link': 0.3.18
+      datocms-listen: 1.0.2(graphql@16.11.0)
       datocms-structured-text-generic-html-renderer: 5.1.6
       datocms-structured-text-utils: 5.1.6
       react: 19.2.0
       react-intersection-observer: 9.16.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       react-string-replace: 1.1.1
       use-deep-compare-effect: 1.8.1(react@19.2.0)
+    optionalDependencies:
+      '@mux/mux-player-react': 3.7.0(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
     transitivePeerDependencies:
-      - '@types/react'
-      - '@types/react-dom'
       - graphql
       - react-dom
 
@@ -2623,7 +2664,8 @@ snapshots:
     optionalDependencies:
       react-dom: 19.2.0(react@19.2.0)
 
-  react-is@16.13.1: {}
+  react-is@16.13.1:
+    optional: true
 
   react-markdown@9.1.0(@types/react@19.2.2)(react@19.2.0):
     dependencies:

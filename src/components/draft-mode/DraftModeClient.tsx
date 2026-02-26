@@ -1,7 +1,8 @@
 'use client';
 
 import s from './DraftModeClient.module.css';
-import { usePathname } from 'next/navigation.js';
+import { usePathname, useRouter } from 'next/navigation.js';
+import { ContentLink } from 'react-datocms';
 import { useEffect, useTransition, useRef } from 'react';
 import Modal from '../Modal.js';
 import { sleep } from '../../utils/index.js';
@@ -19,6 +20,7 @@ export type DraftModeProps = {
 };
 
 export default function DraftMode({ enabled, draftUrl, tag, path, actions }: DraftModeProps) {
+	const router = useRouter();
 	const pathname = usePathname();
 	const [loading, startTransition] = useTransition();
 	const listener = useRef<EventSource | null>(null);
@@ -80,13 +82,23 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }: Dra
 	if (!enabled) return null;
 
 	return (
-		<Modal>
-			<div className={s.draftMode}>
-				<span className={s.label}>Draft mode</span>
-				<button className={s.button} onClick={() => startTransition(() => actions.disableDraftMode(pathname))}>
-					{loading ? <div className={s.loader} /> : <span>×</span>}
-				</button>
-			</div>
-		</Modal>
+		<>
+			<Modal>
+				<div className={s.draftMode}>
+					<span className={s.label}>Draft mode</span>
+					<button
+						className={s.button}
+						onClick={() => startTransition(() => actions.disableDraftMode(pathname))}
+					>
+						{loading ? <div className={s.loader} /> : <span>×</span>}
+					</button>
+				</div>
+				<ContentLink
+					currentPath={pathname}
+					onNavigateTo={() => router.push(pathname)}
+					enableClickToEdit={{ hoverOnly: true }}
+				/>
+			</Modal>
+		</>
 	);
 }
