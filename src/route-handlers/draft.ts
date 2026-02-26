@@ -1,19 +1,30 @@
 //@ts-expect-error
 import { draftMode } from 'next/headers';
 //@ts-expect-error
-import { redirect } from 'next/navigation';
+import {} from 'next/navigation';
 //@ts-expect-error
 import { cookies } from 'next/headers';
 
-export default async function draft(request: Request, searchParams?: URLSearchParams): Promise<Response> {
+export default async function draft(
+	request: Request,
+	searchParams?: URLSearchParams,
+): Promise<Response> {
 	searchParams = searchParams ?? new URL(request.url).searchParams;
 
 	const secret = searchParams.get('secret');
 	const slug = searchParams.get('slug');
 	const maxAge = searchParams.get('max-age');
 	const exit = searchParams.get('exit');
+	const redirect = searchParams.get('redirect');
 
-	if (secret !== process.env.DATOCMS_PREVIEW_SECRET) return new Response('Invalid token', { status: 401 });
+	if (redirect) {
+		(await draftMode()).enable();
+		//@ts-expect-error
+		return redirect(redirect);
+	}
+
+	if (secret !== process.env.DATOCMS_PREVIEW_SECRET)
+		return new Response('Invalid token', { status: 401 });
 
 	if (exit !== null) {
 		(await draftMode()).disable();
@@ -36,6 +47,8 @@ export default async function draft(request: Request, searchParams?: URLSearchPa
 		});
 	}
 
-	if (slug) return redirect(slug);
+	if (slug)
+		//@ts-expect-error
+		return redirect(slug);
 	else return new Response('OK', { status: 200 });
 }
