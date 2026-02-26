@@ -19,6 +19,8 @@ export type ApiQueryOptions<V = void> = {
     all?: boolean;
     apiToken?: string;
     environment?: string;
+    contentLink?: string;
+    baseEditingUrl?: string;
 };
 export type DefaultApiQueryOptions = ApiQueryOptions & {
     variables: undefined;
@@ -32,6 +34,8 @@ export type DefaultApiQueryOptions = ApiQueryOptions & {
     all: boolean;
     apiToken?: string;
     environment?: string;
+    contentLink?: string;
+    baseEditingUrl?: string;
 };
 export default function apiQuery<TResult = any, TVariables = Record<string, any>>(query: TypedDocumentNode<TResult, TVariables>, options?: ApiQueryOptions<TVariables>): Promise<TResult & {
     draftUrl: string | null;

@@ -1,11 +1,18 @@
 import { draftMode } from 'next/headers.js';
 import type { RequestInit } from 'next/dist/server/web/spec-extension/request.js';
-import type { DocumentNode, FieldNode, OperationDefinitionNode, VariableDefinitionNode } from 'graphql';
+import type {
+	DocumentNode,
+	FieldNode,
+	OperationDefinitionNode,
+	VariableDefinitionNode,
+} from 'graphql';
 import { print } from 'graphql/language/printer.js';
 
 // TypedDocumentNode allows for type inference from the query document
-export interface TypedDocumentNode<TResult = { [key: string]: any }, TVariables = { [key: string]: any }>
-	extends DocumentNode {
+export interface TypedDocumentNode<
+	TResult = { [key: string]: any },
+	TVariables = { [key: string]: any },
+> extends DocumentNode {
 	__apiType?: (variables: TVariables) => TResult;
 	__resultType?: TResult;
 	__variablesType?: TVariables;
@@ -22,6 +29,8 @@ export type ApiQueryOptions<V = void> = {
 	all?: boolean;
 	apiToken?: string;
 	environment?: string;
+	contentLink?: string;
+	baseEditingUrl?: string;
 };
 
 export type DefaultApiQueryOptions = ApiQueryOptions & {
@@ -36,6 +45,8 @@ export type DefaultApiQueryOptions = ApiQueryOptions & {
 	all: boolean;
 	apiToken?: string;
 	environment?: string;
+	contentLink?: string;
+	baseEditingUrl?: string;
 };
 
 const defaultOptions: DefaultApiQueryOptions = {
@@ -45,16 +56,21 @@ const defaultOptions: DefaultApiQueryOptions = {
 	excludeInvalid: true,
 	cacheTags: false,
 	visualEditingBaseUrl: undefined,
-	revalidate: !isNaN(parseInt(process.env.REVALIDATE_TIME)) ? parseInt(process.env.REVALIDATE_TIME) : 3600,
+	revalidate: !isNaN(parseInt(process.env.REVALIDATE_TIME))
+		? parseInt(process.env.REVALIDATE_TIME)
+		: 3600,
 	logs: false,
 	all: false,
 	apiToken: undefined,
-	environment: process.env.DATOCMS_ENVIRONMENT ?? process.env.NEXT_PUBLIC_DATOCMS_ENVIRONMENT ?? 'main',
+	environment:
+		process.env.DATOCMS_ENVIRONMENT ?? process.env.NEXT_PUBLIC_DATOCMS_ENVIRONMENT ?? 'main',
+	contentLink: undefined,
+	baseEditingUrl: undefined,
 };
 
 export default async function apiQuery<TResult = any, TVariables = Record<string, any>>(
 	query: TypedDocumentNode<TResult, TVariables>,
-	options?: ApiQueryOptions<TVariables>
+	options?: ApiQueryOptions<TVariables>,
 ): Promise<TResult & { draftUrl: string | null }> {
 	const opt = { ...defaultOptions, ...(options ?? {}) };
 
@@ -95,23 +111,27 @@ const paginatedQuery = async <TResult = any, TVariables = Record<string, any>>(
 	query: TypedDocumentNode<TResult, TVariables>,
 	options: ApiQueryOptions<any>,
 	data: any,
-	queryId: string
+	queryId: string,
 ): Promise<TResult> => {
 	try {
-		if (typeof data !== 'object' || data === null || data === undefined) throw new Error('Data must be an object');
+		if (typeof data !== 'object' || data === null || data === undefined)
+			throw new Error('Data must be an object');
 
-		const operation = query.definitions?.find(({ kind }) => kind === 'OperationDefinition') as OperationDefinitionNode;
+		const operation = query.definitions?.find(
+			({ kind }) => kind === 'OperationDefinition',
+		) as OperationDefinitionNode;
 
 		if (!operation) throw new Error('Query must have an operation definition');
 
 		const firstVariable = operation.variableDefinitions?.find(
-			(v) => v.variable.name.value === 'first'
+			(v) => v.variable.name.value === 'first',
 		) as VariableDefinitionNode;
 		const skipVariable = operation.variableDefinitions?.find(
-			(v) => v.variable.name.value === 'skip'
+			(v) => v.variable.name.value === 'skip',
 		) as VariableDefinitionNode;
 
-		if (!firstVariable || !skipVariable) throw new Error(`Query must have first and skip variables`);
+		if (!firstVariable || !skipVariable)
+			throw new Error(`Query must have first and skip variables`);
 
 		const pageKeys = Object.keys(data).filter((k) => k.startsWith('_all') && k.endsWith('Meta'));
 
@@ -125,12 +145,20 @@ const paginatedQuery = async <TResult = any, TVariables = Record<string, any>>(
 		// Check filter diff
 		Object.keys(pageKeyMap).forEach((k) => {
 			const filter = (
-				operation.selectionSet.selections.find((s) => (s as FieldNode).name.value === k) as FieldNode
+				operation.selectionSet.selections.find(
+					(s) => (s as FieldNode).name.value === k,
+				) as FieldNode
 			)?.arguments?.find((a) => a.name.value === 'filter');
 			const metaFilter = (
-				operation.selectionSet.selections.find((s) => (s as FieldNode).name.value === pageKeyMap[k]) as FieldNode
+				operation.selectionSet.selections.find(
+					(s) => (s as FieldNode).name.value === pageKeyMap[k],
+				) as FieldNode
 			)?.arguments?.find((a) => a.name.value === 'filter');
-			if ((!filter && metaFilter) || (filter && !metaFilter) || JSON.stringify(filter) !== JSON.stringify(metaFilter))
+			if (
+				(!filter && metaFilter) ||
+				(filter && !metaFilter) ||
+				JSON.stringify(filter) !== JSON.stringify(metaFilter)
+			)
 				throw new Error(`Query must have same filter argument on ${k} and ${pageKeyMap[k]}`);
 		});
 
@@ -142,7 +170,9 @@ const paginatedQuery = async <TResult = any, TVariables = Record<string, any>>(
 
 		while (Object.keys(pageKeyMap).some((k) => data[k].count > data[pageKeyMap[k]].length)) {
 			const maxPageKey =
-				pageKeyMap[Object.keys(pageKeyMap).sort((a, b) => (data[a].count > data[b].count ? -1 : 1))[0]];
+				pageKeyMap[
+					Object.keys(pageKeyMap).sort((a, b) => (data[a].count > data[b].count ? -1 : 1))[0]
+				];
 			const skip = data[maxPageKey].length;
 
 			const pageData: any = await apiQuery(query, {
@@ -156,7 +186,7 @@ const paginatedQuery = async <TResult = any, TVariables = Record<string, any>>(
 			});
 
 			Object.keys(pageKeyMap).forEach(
-				(k) => (data[pageKeyMap[k]] = [...data[pageKeyMap[k]], ...pageData[pageKeyMap[k]]])
+				(k) => (data[pageKeyMap[k]] = [...data[pageKeyMap[k]], ...pageData[pageKeyMap[k]]]),
 			);
 
 			if (++count > 1000) {
@@ -186,8 +216,18 @@ export type DedupeOptions = {
 };
 
 const dedupedFetch = async (options: DedupeOptions) => {
-	const { url, body, includeDrafts, excludeInvalid, cacheTags, revalidate, queryId, logs, apiToken, environment } =
-		options;
+	const {
+		url,
+		body,
+		includeDrafts,
+		excludeInvalid,
+		cacheTags,
+		revalidate,
+		queryId,
+		logs,
+		apiToken,
+		environment,
+	} = options;
 
 	const headers = {
 		'Authorization': `Bearer ${apiToken ?? process.env.DATOCMS_API_TOKEN ?? process.env.NEXT_PUBLIC_DATOCMS_API_TOKEN}`,
@@ -209,11 +249,21 @@ const dedupedFetch = async (options: DedupeOptions) => {
 
 	const responseBody = await response.json();
 
-	if (!response.ok) throw new Error(`${response.status} ${response.statusText}: ${JSON.stringify(responseBody)}`);
-	if (responseBody.errors) throw new Error(`${queryId}: ${responseBody.errors.map((e: any) => e.message).join('. ')}`);
+	if (!response.ok)
+		throw new Error(`${response.status} ${response.statusText}: ${JSON.stringify(responseBody)}`);
+	if (responseBody.errors)
+		throw new Error(`${queryId}: ${responseBody.errors.map((e: any) => e.message).join('. ')}`);
 
-	logs && console.log('[api-query]', queryId, { ...options, body: undefined }, response.headers.get('x-cache'));
+	logs &&
+		console.log(
+			'[api-query]',
+			queryId,
+			{ ...options, body: undefined },
+			response.headers.get('x-cache'),
+		);
 
-	const _cacheTags = response.headers.get('X-Cache-Tags') ? response.headers.get('X-Cache-Tags')?.split(' ') : [];
+	const _cacheTags = response.headers.get('X-Cache-Tags')
+		? response.headers.get('X-Cache-Tags')?.split(' ')
+		: [];
 	return { ...responseBody, _cacheTags };
 };

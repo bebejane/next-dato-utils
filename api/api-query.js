@@ -7,11 +7,15 @@ const defaultOptions = {
     excludeInvalid: true,
     cacheTags: false,
     visualEditingBaseUrl: undefined,
-    revalidate: !isNaN(parseInt(process.env.REVALIDATE_TIME)) ? parseInt(process.env.REVALIDATE_TIME) : 3600,
+    revalidate: !isNaN(parseInt(process.env.REVALIDATE_TIME))
+        ? parseInt(process.env.REVALIDATE_TIME)
+        : 3600,
     logs: false,
     all: false,
     apiToken: undefined,
     environment: process.env.DATOCMS_ENVIRONMENT ?? process.env.NEXT_PUBLIC_DATOCMS_ENVIRONMENT ?? 'main',
+    contentLink: undefined,
+    baseEditingUrl: undefined,
 };
 export default async function apiQuery(query, options) {
     const opt = { ...defaultOptions, ...(options ?? {}) };
@@ -63,7 +67,9 @@ const paginatedQuery = async (query, options, data, queryId) => {
         Object.keys(pageKeyMap).forEach((k) => {
             const filter = operation.selectionSet.selections.find((s) => s.name.value === k)?.arguments?.find((a) => a.name.value === 'filter');
             const metaFilter = operation.selectionSet.selections.find((s) => s.name.value === pageKeyMap[k])?.arguments?.find((a) => a.name.value === 'filter');
-            if ((!filter && metaFilter) || (filter && !metaFilter) || JSON.stringify(filter) !== JSON.stringify(metaFilter))
+            if ((!filter && metaFilter) ||
+                (filter && !metaFilter) ||
+                JSON.stringify(filter) !== JSON.stringify(metaFilter))
                 throw new Error(`Query must have same filter argument on ${k} and ${pageKeyMap[k]}`);
         });
         const first = options.variables?.first ?? firstVariable?.defaultValue?.value ?? 500;
@@ -94,7 +100,7 @@ const paginatedQuery = async (query, options, data, queryId) => {
     }
 };
 const dedupedFetch = async (options) => {
-    const { url, body, includeDrafts, excludeInvalid, cacheTags, revalidate, queryId, logs, apiToken, environment } = options;
+    const { url, body, includeDrafts, excludeInvalid, cacheTags, revalidate, queryId, logs, apiToken, environment, } = options;
     const headers = {
         'Authorization': `Bearer ${apiToken ?? process.env.DATOCMS_API_TOKEN ?? process.env.NEXT_PUBLIC_DATOCMS_API_TOKEN}`,
         'X-Environment': environment,
@@ -116,8 +122,11 @@ const dedupedFetch = async (options) => {
         throw new Error(`${response.status} ${response.statusText}: ${JSON.stringify(responseBody)}`);
     if (responseBody.errors)
         throw new Error(`${queryId}: ${responseBody.errors.map((e) => e.message).join('. ')}`);
-    logs && console.log('[api-query]', queryId, { ...options, body: undefined }, response.headers.get('x-cache'));
-    const _cacheTags = response.headers.get('X-Cache-Tags') ? response.headers.get('X-Cache-Tags')?.split(' ') : [];
+    logs &&
+        console.log('[api-query]', queryId, { ...options, body: undefined }, response.headers.get('x-cache'));
+    const _cacheTags = response.headers.get('X-Cache-Tags')
+        ? response.headers.get('X-Cache-Tags')?.split(' ')
+        : [];
     return { ...responseBody, _cacheTags };
 };
 //# sourceMappingURL=api-query.js.map
