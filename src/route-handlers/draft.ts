@@ -1,7 +1,7 @@
 //@ts-expect-error
 import { draftMode } from 'next/headers';
 //@ts-expect-error
-import {} from 'next/navigation';
+import { redirect } from 'next/navigation';
 //@ts-expect-error
 import { cookies } from 'next/headers';
 
@@ -19,8 +19,7 @@ export default async function draft(
 
 	if (redirect) {
 		(await draftMode()).enable();
-		//@ts-expect-error
-		return redirect(redirect);
+		return new Response('OK', { status: 302, headers: { Location: redirect } });
 	}
 
 	if (secret !== process.env.DATOCMS_PREVIEW_SECRET)

@@ -11,8 +11,7 @@ export default async function draft(request, searchParams) {
     const redirect = searchParams.get('redirect');
     if (redirect) {
         (await draftMode()).enable();
-        //@ts-expect-error
-        return redirect(redirect);
+        return new Response('OK', { status: 302, headers: { Location: redirect } });
     }
     if (secret !== process.env.DATOCMS_PREVIEW_SECRET)
         return new Response('Invalid token', { status: 401 });
