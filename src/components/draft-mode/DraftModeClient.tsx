@@ -55,9 +55,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 		disconnect(url);
 
 		let updates = 0;
-		const listener = new EventSource(url, {
-			withCredentials: true,
-		});
+		const listener = new EventSource(url);
 
 		listener.addEventListener('disconnect', async (event) => {
 			console.log('DraftModeClient: for real disconnect');
