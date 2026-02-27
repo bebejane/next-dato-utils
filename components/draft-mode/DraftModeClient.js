@@ -32,6 +32,8 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
                     console.log(JSON.parse(event.data));
                 }
                 catch (e) { }
+                console.log('revalidate', 'tags', tags);
+                console.log('revalidate', 'paths', paths);
                 startTransition(() => {
                     if (tags)
                         actions.revalidateTag(tags);
@@ -40,12 +42,12 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
                 });
             });
             listener.current.addEventListener('channelError', (err) => {
-                console.log('channel error');
+                console.log('DraftModeClient: channel error');
                 console.log(err);
             });
             const statusCheck = setInterval(async () => {
                 if (listener.current?.readyState === 2) {
-                    console.log('channel closed');
+                    console.log('DraftModeClient: channel closed');
                     clearInterval(statusCheck);
                     await disconnect();
                     connect();
@@ -56,8 +58,10 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
             if (listener.current) {
                 listener.current.close();
                 listener.current = null;
+                console.log('DraftModeClient: diconnected listener');
             }
-            await sleep(1000);
+            console.log('DraftModeClient: diconnected');
+            await sleep(300);
         };
         connect();
         return () => {
