@@ -95,7 +95,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 		});
 
 		const interval = setInterval(async () => {
-			if (listener.readyState === 2) reconnect(url);
+			//if (listener.readyState === 2) reconnect(url);
 		}, 1000);
 
 		listener.addEventListener('open', () => {
