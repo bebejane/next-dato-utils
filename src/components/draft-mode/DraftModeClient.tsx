@@ -100,13 +100,13 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }: Dra
 		<>
 			<Modal>
 				<div className={s.draftMode}>
-					<span className={s.label}>Draft mode</span>
+					{/* <span className={s.label}>Draft mode</span>
 					<button
 						className={s.button}
 						onClick={() => startTransition(() => actions.disableDraftMode(pathname))}
-					>
-						{loading ? <div className={s.loader} /> : <span>×</span>}
-					</button>
+					> */}
+					{loading ? <div className={s.loader} /> : <span></span>}
+					{/* </button> */}
 				</div>
 				<ContentLink
 					currentPath={pathname}
