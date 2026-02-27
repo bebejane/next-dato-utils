@@ -39,23 +39,25 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
                 console.log('DraftModeClient: connected to channel');
             });
             listener.addEventListener('disconnect', async (event) => {
-                console.log('for real disconnect');
+                console.log('DraftModeClient: for real disconnect');
             });
             listener.addEventListener('close', async (event) => {
-                console.log('for real close');
+                console.log('DraftModeClient: for real close');
+            });
+            listener.addEventListener('error', async (err) => {
+                console.log('DraftModeClient: error', err);
             });
             listener.addEventListener('update', async (event) => {
                 console.log('update', event);
                 if (++updates <= 1)
                     return;
-                console.log('DraftModeClient: update');
-                console.log(event);
+                console.log('DraftModeClient: update', event);
                 try {
                     console.log(JSON.parse(event.data));
                 }
                 catch (e) { }
-                console.log('revalidate', 'tags', tags);
-                console.log('revalidate', 'paths', paths);
+                console.log('DraftModeClient: revalidate', 'tags', tags);
+                console.log('DraftModeClient:revalidate', 'paths', paths);
                 startTransition(() => {
                     if (tags)
                         actions.revalidateTag(tags);
