@@ -100,9 +100,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 			});
 
 			const interval = setInterval(async () => {
-				console.log('DraftModeClient: readyState', listener.readyState, url);
 				if (listener.readyState === 2) {
-					console.log('DraftModeClient: channel closed', url);
 					await disconnect(url);
 					await sleep(1000);
 					connect(url);
