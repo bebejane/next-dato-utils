@@ -5,7 +5,6 @@ import { usePathname, useRouter } from 'next/navigation.js';
 import { ContentLink } from 'react-datocms';
 import { useEffect, useTransition, useRef, useState } from 'react';
 import Modal from '../Modal.js';
-import { sleep } from '../../utils/index.js';
 export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
     const router = useRouter();
     const pathname = usePathname();
@@ -19,9 +18,21 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
         setMounted(true);
     }, []);
     useEffect(() => {
-        if (!urls.length || !enabled || Object.keys(listeners?.current).length > 0)
+        if (!urls.length || !enabled)
             return;
+        if (Object.keys(listeners?.current).length > 0) {
+        }
         console.log('DraftModeClient (start):', urls);
+        urls.forEach((u) => disconnect(u));
+        const disconnect = async (url) => {
+            if (listeners.current[url]) {
+                listeners.current[url].listener.close();
+                clearInterval(listeners.current[url].interval);
+                delete listeners.current[url];
+                console.log('DraftModeClient: diconnected listener');
+            }
+            console.log('DraftModeClient: diconnected');
+        };
         const connect = (url) => {
             console.log('DraftModeClient: connecting...');
             let updates = 0;
@@ -68,16 +79,6 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
             }, 1000);
             listeners.current[url] = { listener, interval };
             return { listener, interval };
-        };
-        const disconnect = async (url) => {
-            if (listeners.current[url]) {
-                listeners.current[url].listener.close();
-                clearInterval(listeners.current[url].interval);
-                delete listeners.current[url];
-                console.log('DraftModeClient: diconnected listener');
-            }
-            await sleep(300);
-            console.log('DraftModeClient: diconnected');
         };
         urls.forEach((u) => connect(u));
         return () => {

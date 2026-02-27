@@ -38,9 +38,24 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 	}, []);
 
 	useEffect(() => {
-		if (!urls.length || !enabled || Object.keys(listeners?.current).length > 0) return;
+		if (!urls.length || !enabled) return;
 
+		if (Object.keys(listeners?.current).length > 0) {
+		}
 		console.log('DraftModeClient (start):', urls);
+
+		urls.forEach((u) => disconnect(u));
+
+		const disconnect = async (url: string) => {
+			if (listeners.current[url]) {
+				listeners.current[url].listener.close();
+				clearInterval(listeners.current[url].interval);
+				delete listeners.current[url];
+				console.log('DraftModeClient: diconnected listener');
+			}
+
+			console.log('DraftModeClient: diconnected');
+		};
 
 		const connect = (url: string): { listener: EventSource; interval: NodeJS.Timeout } => {
 			console.log('DraftModeClient: connecting...');
@@ -94,17 +109,6 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 
 			listeners.current[url] = { listener, interval };
 			return { listener, interval };
-		};
-
-		const disconnect = async (url: string) => {
-			if (listeners.current[url]) {
-				listeners.current[url].listener.close();
-				clearInterval(listeners.current[url].interval);
-				delete listeners.current[url];
-				console.log('DraftModeClient: diconnected listener');
-			}
-			await sleep(300);
-			console.log('DraftModeClient: diconnected');
 		};
 
 		urls.forEach((u) => connect(u));
