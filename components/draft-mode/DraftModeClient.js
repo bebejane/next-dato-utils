@@ -86,6 +86,6 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
     }, [urls, tag, path, enabled]);
     if (!enabled || !mounted)
         return null;
-    return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [_jsx("div", { className: s.draftMode, children: loading ? _jsx("div", { className: s.loader }) : _jsx("span", {}) }), _jsx(ContentLink, { currentPath: pathname, onNavigateTo: () => router.push(pathname), enableClickToEdit: { hoverOnly: true } })] }) }));
+    return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [_jsx("div", { className: s.draftMode, children: _jsx("div", { className: s.loader }) }), _jsx(ContentLink, { currentPath: pathname, onNavigateTo: () => router.push(pathname), enableClickToEdit: { hoverOnly: true } })] }) }));
 }
 //# sourceMappingURL=DraftModeClient.js.map

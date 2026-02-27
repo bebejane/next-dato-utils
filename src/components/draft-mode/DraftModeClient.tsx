@@ -120,7 +120,9 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 	return (
 		<>
 			<Modal>
-				<div className={s.draftMode}>{loading ? <div className={s.loader} /> : <span></span>}</div>
+				<div className={s.draftMode}>
+					<div className={s.loader} />
+				</div>
 				<ContentLink
 					currentPath={pathname}
 					onNavigateTo={() => router.push(pathname)}
