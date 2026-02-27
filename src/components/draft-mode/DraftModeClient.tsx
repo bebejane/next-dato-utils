@@ -42,6 +42,11 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 		console.log('DraftModeClient: diconnected');
 	}
 
+	async function reconnect(url: string) {
+		await sleep(2000);
+		connect(url);
+	}
+
 	function connect(url: string): { listener: EventSource; interval: NodeJS.Timeout } {
 		console.log('DraftModeClient: connecting...');
 
@@ -91,11 +96,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 		});
 
 		const interval = setInterval(async () => {
-			if (listener.readyState === 2) {
-				await disconnect(url);
-				await sleep(1000);
-				connect(url);
-			}
+			if (listener.readyState === 2) reconnect(url);
 		}, 1000);
 
 		listeners.current[url] = { listener, interval };

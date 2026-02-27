@@ -9,4 +9,4 @@ export type Props = {
         unwrapParagraphs?: boolean;
     };
 };
-export default function StructuredContent({ content, className, blocks, styles, options }: Props): import("react/jsx-runtime").JSX.Element | null;
+export default function StructuredContent({ content, className, blocks, styles, options, }: Props): import("react/jsx-runtime").JSX.Element | null;

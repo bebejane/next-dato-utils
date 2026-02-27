@@ -23,6 +23,10 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
         delete listeners.current[url];
         console.log('DraftModeClient: diconnected');
     }
+    async function reconnect(url) {
+        await sleep(2000);
+        connect(url);
+    }
     function connect(url) {
         console.log('DraftModeClient: connecting...');
         disconnect(url);
@@ -63,11 +67,8 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
             console.log(err);
         });
         const interval = setInterval(async () => {
-            if (listener.readyState === 2) {
-                await disconnect(url);
-                await sleep(1000);
-                connect(url);
-            }
+            if (listener.readyState === 2)
+                reconnect(url);
         }, 1000);
         listeners.current[url] = { listener, interval };
         return { listener, interval };

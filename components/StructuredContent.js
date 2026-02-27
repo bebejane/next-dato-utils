@@ -2,7 +2,7 @@ import { jsx as _jsx } from "react/jsx-runtime";
 import { StructuredText, renderNodeRule, renderMarkRule } from 'react-datocms';
 import { isParagraph, isHeading, isRoot, isInlineBlock } from 'datocms-structured-text-utils';
 import React from 'react';
-export default function StructuredContent({ content, className, blocks, styles, options = {} }) {
+export default function StructuredContent({ content, className, blocks, styles, options = {}, }) {
     if (!content)
         return null;
     const customMarkRules = (styles &&
@@ -39,23 +39,33 @@ export default function StructuredContent({ content, className, blocks, styles, 
                 const firstChild = node.children[0];
                 const lastChild = node.children[node.children.length - 1];
                 // Remove trailing <br>
-                if (isRoot(ancestors[0]) && lastChild?.type === 'span' && lastChild?.value?.endsWith('\n')) {
+                if (isRoot(ancestors[0]) &&
+                    lastChild?.type === 'span' &&
+                    lastChild?.value?.endsWith('\n')) {
                     let index = node.children.length;
-                    while (index >= 0 && firstChild?.type === 'span' && firstChild?.value?.[index] === '\n')
+                    while (index >= 0 &&
+                        firstChild?.type === 'span' &&
+                        firstChild?.value?.[index] === '\n')
                         index--;
                     // remove trailing br
                     if (children && Array.isArray(children) && typeof children[0] === 'object')
                         //@ts-ignore
-                        Array.isArray(children[0].props.children) && children[0].props.children.splice(index);
+                        Array.isArray(children[0].props.children) &&
+                            //@ts-ignore
+                            children[0].props.children.splice(index);
                 }
                 // Remove leading <br>
-                if (isRoot(ancestors[0]) && firstChild?.type === 'span' && firstChild?.value?.startsWith('\n')) {
+                if (isRoot(ancestors[0]) &&
+                    firstChild?.type === 'span' &&
+                    firstChild?.value?.startsWith('\n')) {
                     let index = 0;
                     while (index < firstChild.value.length && firstChild.value[index] === '\n')
                         index++;
                     if (children && Array.isArray(children) && typeof children[0] === 'object')
                         //@ts-ignore
-                        Array.isArray(children[0].props.children) && children[0].props.children?.splice(0, index + 1);
+                        Array.isArray(children[0].props.children) &&
+                            //@ts-ignore
+                            children[0].props.children?.splice(0, index + 1);
                 }
                 // Filter out empty paragraphs
                 children = children?.filter((c) => !(typeof c === 'object' && c.props?.children?.length === 1 && !c.props.children[0]));
@@ -65,7 +75,9 @@ export default function StructuredContent({ content, className, blocks, styles, 
                 const classNames = [];
                 isRoot(ancestors[0]) && className && classNames.push(className);
                 node.style && styles?.[node.style] && classNames.push(styles[node.style]);
-                node.style && !styles?.[node.style] && console.warn(node.style, 'does not exist in styles', 'P');
+                node.style &&
+                    !styles?.[node.style] &&
+                    console.warn(node.style, 'does not exist in styles', 'P');
                 if (options.unwrapParagraphs) {
                     return _jsx(React.Fragment, { children: children }, key);
                 }
@@ -79,7 +91,9 @@ export default function StructuredContent({ content, className, blocks, styles, 
             renderNodeRule(isHeading, ({ adapter: { renderNode }, node, children, key, ancestors }) => {
                 const classNames = [];
                 node.style && styles?.[node.style] && classNames.push(styles[node.style]);
-                node.style && !styles?.[node.style] && console.warn(node.style, 'does not exist in styles', 'H');
+                node.style &&
+                    !styles?.[node.style] &&
+                    console.warn(node.style, 'does not exist in styles', 'H');
                 return renderNode(`h${node.level}`, {
                     key,
                     className: classNames.length ? classNames.join(' ') : undefined,
