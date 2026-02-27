@@ -1,6 +1,6 @@
 import React from 'react';
 export type ModalProps = {
-    children: React.ReactElement | React.ReactElement[];
+    children?: any;
     targetId?: string;
 };
 declare const Modal: React.ForwardRefExoticComponent<ModalProps & React.RefAttributes<HTMLDivElement>>;

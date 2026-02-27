@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 
 export type ModalProps = {
-	children: React.ReactElement | React.ReactElement[];
+	children?: any;
 	targetId?: string;
 };
 
