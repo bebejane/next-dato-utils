@@ -48,13 +48,11 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
             if (++updates <= 1)
                 return;
             console.log('DraftModeClient: update', event);
-            try {
-                console.log(JSON.parse(event.data));
-            }
-            catch (e) { }
+            if (tags?.length === 0 && paths?.length === 0)
+                return;
+            disconnect(url);
             console.log('DraftModeClient: revalidate', 'tags', tags);
             console.log('DraftModeClient:revalidate', 'paths', paths);
-            disconnect(url);
             startTransition(() => {
                 if (tags)
                     actions.revalidateTag(tags);
