@@ -11,6 +11,7 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
     const pathname = usePathname();
     const [loading, startTransition] = useTransition();
     const [mounted, setMounted] = useState(false);
+    const statusRef = useRef(null);
     const listener = useRef(null);
     const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
     const paths = path ? (Array.isArray(path) ? path : [path]) : [];
@@ -50,11 +51,11 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
                 console.log('DraftModeClient: channel error');
                 console.log(err);
             });
-            const statusCheck = setInterval(async () => {
+            statusRef.current = setInterval(async () => {
                 console.log('DraftModeClient: statusCheck', listener.current?.readyState);
                 if (listener.current?.readyState === 2) {
                     console.log('DraftModeClient: channel closed');
-                    clearInterval(statusCheck);
+                    statusRef.current && clearInterval(statusRef.current);
                     await disconnect();
                     connect();
                 }
@@ -71,6 +72,7 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
         };
         connect();
         return () => {
+            statusRef.current && clearInterval(statusRef.current);
             disconnect();
         };
     }, [draftUrl, tag, path, enabled]);
