@@ -123,11 +123,13 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 		<>
 			<Modal>
 				{loading && <div className={s.loader} />}
-				<ContentLink
-					currentPath={pathname}
-					onNavigateTo={() => router.push(pathname)}
-					enableClickToEdit={{ hoverOnly: true }}
-				/>
+				{enabled && (
+					<ContentLink
+						currentPath={pathname}
+						onNavigateTo={() => router.push(pathname)}
+						enableClickToEdit={{ hoverOnly: true }}
+					/>
+				)}
 			</Modal>
 		</>
 	);
