@@ -28,6 +28,7 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
                 console.log('DraftModeClient: connected to channel');
             });
             listener.current.addEventListener('update', async (event) => {
+                console.log('update', event);
                 if (++updates <= 1)
                     return;
                 console.log('DraftModeClient: update');
@@ -50,7 +51,7 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
                 console.log(err);
             });
             const statusCheck = setInterval(async () => {
-                console.log(listener.current?.readyState);
+                console.log('DraftModeClient: statusCheck', listener.current?.readyState);
                 if (listener.current?.readyState === 2) {
                     console.log('DraftModeClient: channel closed');
                     clearInterval(statusCheck);
