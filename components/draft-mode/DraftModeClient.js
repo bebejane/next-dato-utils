@@ -50,6 +50,7 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
                 console.log(err);
             });
             const statusCheck = setInterval(async () => {
+                console.log(listener.current?.readyState);
                 if (listener.current?.readyState === 2) {
                     console.log('DraftModeClient: channel closed');
                     clearInterval(statusCheck);

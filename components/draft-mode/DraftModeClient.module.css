@@ -47,22 +47,39 @@
 }
 
 .loader {
-	all: unset;
-	width: 20px;
-	height: 20px;
-	margin: 20px;
-	padding: 20px;
-	aspect-ratio: 1;
+	width: 48px;
+	height: 48px;
+	border: 10px solid #fff;
 	border-radius: 50%;
-	opacity: 0.8;
-	background:
-		radial-gradient(farthest-side, rgba(2255, 255, 255, 0.5) 94%, #0000) top/8px 8px no-repeat,
-		conic-gradient(#0000 30%, rgba(2255, 255, 255, 0.5));
-	mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
-	animation: l13 1s infinite linear;
+	position: relative;
+	transform: rotate(45deg);
+	box-sizing: border-box;
 }
-@keyframes l13 {
+
+.loader::before {
+	content: '';
+	position: absolute;
+	box-sizing: border-box;
+	inset: -10px;
+	border-radius: 50%;
+	border: 10px solid #000000;
+	animation: prixClipFix 2s infinite linear;
+}
+
+@keyframes prixClipFix {
+	0% {
+		clip-path: polygon(50% 50%, 0 0, 0 0, 0 0, 0 0, 0 0);
+	}
+	25% {
+		clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 0, 100% 0, 100% 0);
+	}
+	50% {
+		clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 100% 100%, 100% 100%);
+	}
+	75% {
+		clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 100%);
+	}
 	100% {
-		transform: rotate(1turn);
+		clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0);
 	}
 }
