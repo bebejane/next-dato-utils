@@ -49,7 +49,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 		connect(url);
 	}
 
-	function connect(url: string) {
+	async function connect(url: string) {
 		console.log('DraftModeClient: connecting...');
 
 		disconnect(url);
@@ -81,6 +81,8 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 
 			console.log('DraftModeClient: revalidate', 'tags', tags);
 			console.log('DraftModeClient:revalidate', 'paths', paths);
+
+			disconnect(url);
 
 			startTransition(() => {
 				if (tags) actions.revalidateTag(tags);

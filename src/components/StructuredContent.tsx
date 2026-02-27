@@ -138,8 +138,7 @@ export default function StructuredContent({
 							'p',
 							{
 								key,
-								'data-datocms-content-link-boundary': 'true',
-								'className': classNames.length ? classNames.join(' ') : undefined,
+								className: classNames.length ? classNames.join(' ') : undefined,
 							},
 							children,
 						);
