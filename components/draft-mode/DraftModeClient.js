@@ -14,25 +14,23 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
     const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
     const paths = path ? (Array.isArray(path) ? path : [path]) : [];
     const urls = (_url ? (Array.isArray(_url) ? _url : [_url]) : []).filter((u) => u);
+    async function disconnect(url) {
+        if (listeners.current[url]) {
+            listeners.current[url].listener.close();
+            clearInterval(listeners.current[url].interval);
+            delete listeners.current[url];
+            console.log('DraftModeClient: diconnected listener');
+        }
+        console.log('DraftModeClient: diconnected');
+    }
     useEffect(() => {
         setMounted(true);
     }, []);
     useEffect(() => {
         if (!urls.length || !enabled)
             return;
-        if (Object.keys(listeners?.current).length > 0) {
-        }
         console.log('DraftModeClient (start):', urls);
         urls.forEach((u) => disconnect(u));
-        const disconnect = async (url) => {
-            if (listeners.current[url]) {
-                listeners.current[url].listener.close();
-                clearInterval(listeners.current[url].interval);
-                delete listeners.current[url];
-                console.log('DraftModeClient: diconnected listener');
-            }
-            console.log('DraftModeClient: diconnected');
-        };
         const connect = (url) => {
             console.log('DraftModeClient: connecting...');
             let updates = 0;
