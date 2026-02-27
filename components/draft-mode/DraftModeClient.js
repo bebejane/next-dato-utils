@@ -3,16 +3,20 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
 import s from './DraftModeClient.module.css';
 import { usePathname, useRouter } from 'next/navigation.js';
 import { ContentLink } from 'react-datocms';
-import { useEffect, useTransition, useRef } from 'react';
+import { useEffect, useTransition, useRef, useState } from 'react';
 import Modal from '../Modal.js';
 import { sleep } from '../../utils/index.js';
 export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
     const router = useRouter();
     const pathname = usePathname();
     const [loading, startTransition] = useTransition();
+    const [mounted, setMounted] = useState(false);
     const listener = useRef(null);
     const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
     const paths = path ? (Array.isArray(path) ? path : [path]) : [];
+    useEffect(() => {
+        setMounted(true);
+    }, []);
     useEffect(() => {
         if (!draftUrl || !enabled || listener?.current)
             return;
@@ -68,7 +72,7 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
             disconnect();
         };
     }, [draftUrl, tag, path, enabled]);
-    if (!enabled)
+    if (!enabled || !mounted)
         return null;
     return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [_jsxs("div", { className: s.draftMode, children: [_jsx("span", { className: s.label, children: "Draft mode" }), _jsx("button", { className: s.button, onClick: () => startTransition(() => actions.disableDraftMode(pathname)), children: loading ? _jsx("div", { className: s.loader }) : _jsx("span", { children: "\u00D7" }) })] }), _jsx(ContentLink, { currentPath: pathname, onNavigateTo: () => router.push(pathname), enableClickToEdit: { hoverOnly: true } })] }) }));
 }

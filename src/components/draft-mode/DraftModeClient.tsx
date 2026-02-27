@@ -3,7 +3,7 @@
 import s from './DraftModeClient.module.css';
 import { usePathname, useRouter } from 'next/navigation.js';
 import { ContentLink } from 'react-datocms';
-import { useEffect, useTransition, useRef } from 'react';
+import { useEffect, useTransition, useRef, useState } from 'react';
 import Modal from '../Modal.js';
 import { sleep } from '../../utils/index.js';
 
@@ -23,9 +23,14 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }: Dra
 	const router = useRouter();
 	const pathname = usePathname();
 	const [loading, startTransition] = useTransition();
+	const [mounted, setMounted] = useState(false);
 	const listener = useRef<EventSource | null>(null);
 	const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
 	const paths = path ? (Array.isArray(path) ? path : [path]) : [];
+
+	useEffect(() => {
+		setMounted(true);
+	}, []);
 
 	useEffect(() => {
 		if (!draftUrl || !enabled || listener?.current) return;
@@ -89,7 +94,7 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }: Dra
 		};
 	}, [draftUrl, tag, path, enabled]);
 
-	if (!enabled) return null;
+	if (!enabled || !mounted) return null;
 
 	return (
 		<>
