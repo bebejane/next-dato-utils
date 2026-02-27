@@ -1,5 +1,5 @@
 'use client';
-import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
+import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
 import s from './DraftModeClient.module.css';
 import { usePathname, useRouter } from 'next/navigation.js';
 import { ContentLink } from 'react-datocms';
@@ -86,6 +86,6 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
     }, [urls, tag, path, enabled]);
     if (!enabled || !mounted)
         return null;
-    return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [_jsx("div", { className: s.draftMode, children: _jsx("div", { className: s.loader }) }), _jsx(ContentLink, { currentPath: pathname, onNavigateTo: () => router.push(pathname), enableClickToEdit: { hoverOnly: true } })] }) }));
+    return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [loading ? _jsx("div", { className: s.loader }) : _jsx(_Fragment, {}), _jsx(ContentLink, { currentPath: pathname, onNavigateTo: () => router.push(pathname), enableClickToEdit: { hoverOnly: true } })] }) }));
 }
 //# sourceMappingURL=DraftModeClient.js.map
