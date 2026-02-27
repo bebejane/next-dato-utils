@@ -5,7 +5,7 @@ export type DraftModeProps = {
     path?: string | string[] | null | undefined;
     actions: {
         revalidateTag: (tag: string | string[]) => void;
-        revalidatePath: (path: string | string[]) => void;
+        revalidatePath: (path: string | string[], type: 'page' | 'layout') => void;
         disableDraftMode: (path: string) => void;
     };
 };

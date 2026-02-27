@@ -11,9 +11,9 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
     const pathname = usePathname();
     const [loading, startTransition] = useTransition();
     const [mounted, setMounted] = useState(false);
-    const listeners = useRef({});
     const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
     const paths = path ? (Array.isArray(path) ? path : [path]) : [];
+    const listeners = useRef({});
     const urls = (_url ? (Array.isArray(_url) ? _url : [_url]) : []).filter((u) => u);
     function disconnect(url) {
         if (!listeners.current[url])
@@ -53,12 +53,11 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
             disconnect(url);
             console.log('DraftModeClient: revalidate', 'tags', tags);
             console.log('DraftModeClient:revalidate', 'paths', paths);
-            startTransition(() => {
-                if (tags)
-                    actions.revalidateTag(tags);
-                if (paths)
-                    actions.revalidatePath(paths);
-            });
+            //startTransition(() => {
+            //if (tags) actions.revalidateTag(tags);
+            if (paths)
+                actions.revalidatePath(paths, 'page');
+            //});
         });
         listener.addEventListener('channelError', (err) => {
             console.log('DraftModeClient: channel error');
@@ -66,18 +65,17 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
         });
         listener.addEventListener('open', () => {
             console.log('DraftModeClient: connected to channel');
-            const interval = setInterval(async () => {
-                if (listener.readyState === 2)
-                    reconnect(url);
-            }, 1000);
-            listeners.current[url] = { listener, interval };
+            listeners.current[url] = {
+                listener,
+                interval: setInterval(async () => listener.readyState === 2 && reconnect(url), 2000),
+            };
         });
     }
     useEffect(() => {
         setMounted(true);
     }, []);
     useEffect(() => {
-        if (!urls.length || !enabled)
+        if (!urls?.length || !enabled)
             return;
         console.log('DraftModeClient (start):', urls);
         urls.forEach((u) => connect(u));
@@ -87,6 +85,6 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
     }, [urls, tag, path, enabled]);
     if (!enabled || !mounted)
         return null;
-    return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [loading && _jsx("div", { className: s.loader }), enabled && (_jsx(ContentLink, { currentPath: pathname, onNavigateTo: () => router.push(pathname), enableClickToEdit: { hoverOnly: true } }))] }) }));
+    return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [loading && _jsx("div", { className: s.loader }), _jsx(ContentLink, { currentPath: pathname, onNavigateTo: () => router.push(pathname), enableClickToEdit: { hoverOnly: true } })] }) }));
 }
 //# sourceMappingURL=DraftModeClient.js.map

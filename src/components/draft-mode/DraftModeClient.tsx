@@ -14,7 +14,7 @@ export type DraftModeProps = {
 	path?: string | string[] | null | undefined;
 	actions: {
 		revalidateTag: (tag: string | string[]) => void;
-		revalidatePath: (path: string | string[]) => void;
+		revalidatePath: (path: string | string[], type: 'page' | 'layout') => void;
 		disableDraftMode: (path: string) => void;
 	};
 };
@@ -24,11 +24,11 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 	const pathname = usePathname();
 	const [loading, startTransition] = useTransition();
 	const [mounted, setMounted] = useState(false);
+	const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
+	const paths = path ? (Array.isArray(path) ? path : [path]) : [];
 	const listeners = useRef<{ [key: string]: { listener: EventSource; interval: NodeJS.Timeout } }>(
 		{},
 	);
-	const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
-	const paths = path ? (Array.isArray(path) ? path : [path]) : [];
 	const urls: string[] = (_url ? (Array.isArray(_url) ? _url : [_url]) : []).filter(
 		(u) => u,
 	) as string[];
@@ -82,10 +82,10 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 			console.log('DraftModeClient: revalidate', 'tags', tags);
 			console.log('DraftModeClient:revalidate', 'paths', paths);
 
-			startTransition(() => {
-				if (tags) actions.revalidateTag(tags);
-				if (paths) actions.revalidatePath(paths);
-			});
+			//startTransition(() => {
+			//if (tags) actions.revalidateTag(tags);
+			if (paths) actions.revalidatePath(paths, 'page');
+			//});
 		});
 
 		listener.addEventListener('channelError', (err) => {
@@ -95,10 +95,10 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 
 		listener.addEventListener('open', () => {
 			console.log('DraftModeClient: connected to channel');
-			const interval = setInterval(async () => {
-				if (listener.readyState === 2) reconnect(url);
-			}, 1000);
-			listeners.current[url] = { listener, interval };
+			listeners.current[url] = {
+				listener,
+				interval: setInterval(async () => listener.readyState === 2 && reconnect(url), 2000),
+			};
 		});
 	}
 
@@ -107,7 +107,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 	}, []);
 
 	useEffect(() => {
-		if (!urls.length || !enabled) return;
+		if (!urls?.length || !enabled) return;
 
 		console.log('DraftModeClient (start):', urls);
 		urls.forEach((u) => connect(u));
@@ -123,13 +123,11 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 		<>
 			<Modal>
 				{loading && <div className={s.loader} />}
-				{enabled && (
-					<ContentLink
-						currentPath={pathname}
-						onNavigateTo={() => router.push(pathname)}
-						enableClickToEdit={{ hoverOnly: true }}
-					/>
-				)}
+				<ContentLink
+					currentPath={pathname}
+					onNavigateTo={() => router.push(pathname)}
+					enableClickToEdit={{ hoverOnly: true }}
+				/>
 			</Modal>
 		</>
 	);
