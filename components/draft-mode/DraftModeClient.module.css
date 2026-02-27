@@ -8,7 +8,6 @@
 	height: 28px;
 	border-radius: 50%;
 	display: inline-block;
-	position: relative;
 	border: 6px solid;
 	border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.35) rgba(0, 0, 0, 0.5);
 	box-sizing: border-box;
