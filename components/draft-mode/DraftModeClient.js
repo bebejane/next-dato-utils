@@ -19,7 +19,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
         setMounted(true);
     }, []);
     useEffect(() => {
-        if (!urls.length || !enabled || listeners?.current)
+        if (!urls.length || !enabled || Object.keys(listeners?.current).length > 0)
             return;
         const connect = (url) => {
             console.log('DraftModeClient: connecting...');
