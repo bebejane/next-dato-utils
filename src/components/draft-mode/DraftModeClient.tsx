@@ -40,7 +40,8 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 	useEffect(() => {
 		if (!urls.length || !enabled || Object.keys(listeners?.current).length > 0) return;
 
-		console.log('DraftModeClient:', urls);
+		console.log('DraftModeClient (start):', urls);
+
 		const connect = (url: string): { listener: EventSource; interval: NodeJS.Timeout } => {
 			console.log('DraftModeClient: connecting...');
 
@@ -49,6 +50,13 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 
 			listener.addEventListener('open', () => {
 				console.log('DraftModeClient: connected to channel');
+			});
+
+			listener.addEventListener('disconnect', async (event) => {
+				console.log('for real disconnect');
+			});
+			listener.addEventListener('close', async (event) => {
+				console.log('for real close');
 			});
 
 			listener.addEventListener('update', async (event) => {
@@ -95,9 +103,8 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 				delete listeners.current[url];
 				console.log('DraftModeClient: diconnected listener');
 			}
-
-			console.log('DraftModeClient: diconnected');
 			await sleep(300);
+			console.log('DraftModeClient: diconnected');
 		};
 
 		urls.forEach((u) => connect(u));

@@ -5,14 +5,10 @@ import { cookies } from 'next/headers';
 export default async function draft(request, searchParams) {
     searchParams = searchParams ?? new URL(request.url).searchParams;
     const secret = searchParams.get('secret');
-    const slug = searchParams.get('slug');
+    const slug = searchParams.get('slug') ?? searchParams.get('redirect');
     const maxAge = searchParams.get('max-age');
     const exit = searchParams.get('exit');
     const redirect = searchParams.get('redirect');
-    if (redirect) {
-        (await draftMode()).enable();
-        return new Response('OK', { status: 307, headers: { Location: redirect } });
-    }
     if (secret !== process.env.DATOCMS_PREVIEW_SECRET)
         return new Response('Invalid token', { status: 401 });
     if (exit !== null) {
