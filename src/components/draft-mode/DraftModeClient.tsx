@@ -40,6 +40,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 	useEffect(() => {
 		if (!urls.length || !enabled || Object.keys(listeners?.current).length > 0) return;
 
+		console.log('DraftModeClient:', urls);
 		const connect = (url: string): { listener: EventSource; interval: NodeJS.Timeout } => {
 			console.log('DraftModeClient: connecting...');
 
