@@ -25,7 +25,8 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
     }
     async function reconnect(url) {
         console.log('DraftModeClient: reconnect');
-        await sleep(5000);
+        disconnect(url);
+        await sleep(2000);
         connect(url);
     }
     function connect(url) {
@@ -66,14 +67,14 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
             console.log('DraftModeClient: channel error');
             console.log(err);
         });
-        const interval = setInterval(async () => {
-            //if (listener.readyState === 2) reconnect(url);
-        }, 1000);
         listener.addEventListener('open', () => {
             console.log('DraftModeClient: connected to channel');
+            const interval = setInterval(async () => {
+                if (listener.readyState === 2)
+                    reconnect(url);
+            }, 1000);
             listeners.current[url] = { listener, interval };
         });
-        return { listener, interval };
     }
     useEffect(() => {
         setMounted(true);
