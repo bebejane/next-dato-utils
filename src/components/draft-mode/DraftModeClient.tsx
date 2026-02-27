@@ -33,13 +33,73 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 		(u) => u,
 	) as string[];
 
-	async function disconnect(url: string) {
+	function disconnect(url: string) {
 		if (!listeners.current[url]) return;
 
 		listeners.current[url].listener.close();
 		clearInterval(listeners.current[url].interval);
 		delete listeners.current[url];
 		console.log('DraftModeClient: diconnected');
+	}
+
+	function connect(url: string): { listener: EventSource; interval: NodeJS.Timeout } {
+		console.log('DraftModeClient: connecting...');
+
+		disconnect(url);
+
+		let updates = 0;
+		const listener = new EventSource(url);
+
+		listener.addEventListener('open', () => {
+			console.log('DraftModeClient: connected to channel');
+		});
+
+		listener.addEventListener('disconnect', async (event) => {
+			console.log('DraftModeClient: for real disconnect');
+		});
+
+		listener.addEventListener('close', async (event) => {
+			console.log('DraftModeClient: for real close');
+		});
+
+		listener.addEventListener('error', async (err) => {
+			console.log('DraftModeClient: error', err);
+		});
+
+		listener.addEventListener('update', async (event) => {
+			console.log('update', event);
+			if (++updates <= 1) return;
+
+			console.log('DraftModeClient: update', event);
+
+			try {
+				console.log(JSON.parse(event.data));
+			} catch (e) {}
+
+			console.log('DraftModeClient: revalidate', 'tags', tags);
+			console.log('DraftModeClient:revalidate', 'paths', paths);
+
+			startTransition(() => {
+				if (tags) actions.revalidateTag(tags);
+				if (paths) actions.revalidatePath(paths);
+			});
+		});
+
+		listener.addEventListener('channelError', (err) => {
+			console.log('DraftModeClient: channel error');
+			console.log(err);
+		});
+
+		const interval = setInterval(async () => {
+			if (listener.readyState === 2) {
+				await disconnect(url);
+				await sleep(1000);
+				connect(url);
+			}
+		}, 1000);
+
+		listeners.current[url] = { listener, interval };
+		return { listener, interval };
 	}
 
 	useEffect(() => {
@@ -50,67 +110,6 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 		if (!urls.length || !enabled) return;
 
 		console.log('DraftModeClient (start):', urls);
-
-		urls.forEach((u) => disconnect(u));
-
-		const connect = (url: string): { listener: EventSource; interval: NodeJS.Timeout } => {
-			console.log('DraftModeClient: connecting...');
-
-			let updates = 0;
-			const listener = new EventSource(url);
-
-			listener.addEventListener('open', () => {
-				console.log('DraftModeClient: connected to channel');
-			});
-
-			listener.addEventListener('disconnect', async (event) => {
-				console.log('DraftModeClient: for real disconnect');
-			});
-
-			listener.addEventListener('close', async (event) => {
-				console.log('DraftModeClient: for real close');
-			});
-
-			listener.addEventListener('error', async (err) => {
-				console.log('DraftModeClient: error', err);
-			});
-
-			listener.addEventListener('update', async (event) => {
-				console.log('update', event);
-				if (++updates <= 1) return;
-
-				console.log('DraftModeClient: update', event);
-
-				try {
-					console.log(JSON.parse(event.data));
-				} catch (e) {}
-
-				console.log('DraftModeClient: revalidate', 'tags', tags);
-				console.log('DraftModeClient:revalidate', 'paths', paths);
-
-				startTransition(() => {
-					if (tags) actions.revalidateTag(tags);
-					if (paths) actions.revalidatePath(paths);
-				});
-			});
-
-			listener.addEventListener('channelError', (err) => {
-				console.log('DraftModeClient: channel error');
-				console.log(err);
-			});
-
-			const interval = setInterval(async () => {
-				if (listener.readyState === 2) {
-					await disconnect(url);
-					await sleep(1000);
-					connect(url);
-				}
-			}, 1000);
-
-			listeners.current[url] = { listener, interval };
-			return { listener, interval };
-		};
-
 		urls.forEach((u) => connect(u));
 
 		return () => {
