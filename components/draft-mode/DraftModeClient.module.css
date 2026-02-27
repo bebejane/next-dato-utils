@@ -49,7 +49,7 @@
 .loader {
 	width: 28px;
 	height: 28px;
-	border: 10px solid #fff;
+	border: 5px solid #fff;
 	border-radius: 50%;
 	position: relative;
 	transform: rotate(45deg);
@@ -60,10 +60,10 @@
 	content: '';
 	position: absolute;
 	box-sizing: border-box;
-	inset: -10px;
+	inset: -5px;
 	border-radius: 50%;
-	border: 10px solid #000000;
-	animation: prixClipFix 2s infinite linear;
+	border: 5px solid #000000;
+	animation: prixClipFix 0.5s infinite linear;
 }
 
 @keyframes prixClipFix {
