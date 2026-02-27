@@ -31,17 +31,22 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }: Dra
 		if (!draftUrl || !enabled || listener?.current) return;
 
 		const connect = () => {
-			console.log('connecting to channel');
+			console.log('DraftModeClient: connecting...');
 			let updates = 0;
 			listener.current = new EventSource(draftUrl);
 
 			listener.current.addEventListener('open', () => {
-				console.log('connected to channel!');
+				console.log('DraftModeClient: connected to channel');
 			});
 
 			listener.current.addEventListener('update', async (event) => {
 				if (++updates <= 1) return;
+
+				console.log('DraftModeClient: update');
 				console.log(event);
+				try {
+					console.log(JSON.parse(event.data));
+				} catch (e) {}
 
 				startTransition(() => {
 					if (tags) actions.revalidateTag(tags);
