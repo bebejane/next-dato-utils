@@ -43,6 +43,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 	}
 
 	async function reconnect(url: string) {
+		console.log('DraftModeClient: reconnect');
 		await sleep(2000);
 		connect(url);
 	}
@@ -53,7 +54,9 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 		disconnect(url);
 
 		let updates = 0;
-		const listener = new EventSource(url);
+		const listener = new EventSource(url, {
+			withCredentials: true,
+		});
 
 		listener.addEventListener('open', () => {
 			console.log('DraftModeClient: connected to channel');

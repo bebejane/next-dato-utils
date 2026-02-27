@@ -24,6 +24,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
         console.log('DraftModeClient: diconnected');
     }
     async function reconnect(url) {
+        console.log('DraftModeClient: reconnect');
         await sleep(2000);
         connect(url);
     }
@@ -31,7 +32,9 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
         console.log('DraftModeClient: connecting...');
         disconnect(url);
         let updates = 0;
-        const listener = new EventSource(url);
+        const listener = new EventSource(url, {
+            withCredentials: true,
+        });
         listener.addEventListener('open', () => {
             console.log('DraftModeClient: connected to channel');
         });
