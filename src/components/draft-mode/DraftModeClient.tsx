@@ -36,8 +36,8 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 	function disconnect(url: string) {
 		if (!listeners.current[url]) return;
 
-		listeners.current[url].listener.close();
 		clearInterval(listeners.current[url].interval);
+		listeners.current[url].listener.close();
 		delete listeners.current[url];
 		console.log('DraftModeClient: diconnected');
 	}
