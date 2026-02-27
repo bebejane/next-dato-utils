@@ -34,13 +34,11 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 	) as string[];
 
 	async function disconnect(url: string) {
-		if (listeners.current[url]) {
-			listeners.current[url].listener.close();
-			clearInterval(listeners.current[url].interval);
-			delete listeners.current[url];
-			console.log('DraftModeClient: diconnected listener');
-		}
+		if (!listeners.current[url]) return;
 
+		listeners.current[url].listener.close();
+		clearInterval(listeners.current[url].interval);
+		delete listeners.current[url];
 		console.log('DraftModeClient: diconnected');
 	}
 
@@ -97,10 +95,11 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 			});
 
 			const interval = setInterval(async () => {
-				console.log('DraftModeClient: statusCheck', listener.readyState);
+				console.log('DraftModeClient: readyState', listener.readyState, url);
 				if (listener.readyState === 2) {
-					console.log('DraftModeClient: channel closed');
+					console.log('DraftModeClient: channel closed', url);
 					await disconnect(url);
+					await sleep(1000);
 					connect(url);
 				}
 			}, 1000);

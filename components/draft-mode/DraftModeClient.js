@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation.js';
 import { ContentLink } from 'react-datocms';
 import { useEffect, useTransition, useRef, useState } from 'react';
 import Modal from '../Modal.js';
+import { sleep } from '../../utils/index.js';
 export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
     const router = useRouter();
     const pathname = usePathname();
@@ -15,12 +16,11 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
     const paths = path ? (Array.isArray(path) ? path : [path]) : [];
     const urls = (_url ? (Array.isArray(_url) ? _url : [_url]) : []).filter((u) => u);
     async function disconnect(url) {
-        if (listeners.current[url]) {
-            listeners.current[url].listener.close();
-            clearInterval(listeners.current[url].interval);
-            delete listeners.current[url];
-            console.log('DraftModeClient: diconnected listener');
-        }
+        if (!listeners.current[url])
+            return;
+        listeners.current[url].listener.close();
+        clearInterval(listeners.current[url].interval);
+        delete listeners.current[url];
         console.log('DraftModeClient: diconnected');
     }
     useEffect(() => {
@@ -68,10 +68,11 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
                 console.log(err);
             });
             const interval = setInterval(async () => {
-                console.log('DraftModeClient: statusCheck', listener.readyState);
+                console.log('DraftModeClient: readyState', listener.readyState, url);
                 if (listener.readyState === 2) {
-                    console.log('DraftModeClient: channel closed');
+                    console.log('DraftModeClient: channel closed', url);
                     await disconnect(url);
+                    await sleep(1000);
                     connect(url);
                 }
             }, 1000);
