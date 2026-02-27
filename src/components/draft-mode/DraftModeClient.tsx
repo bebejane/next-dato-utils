@@ -92,6 +92,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 			if (listeners.current[url]) {
 				listeners.current[url].listener.close();
 				clearInterval(listeners.current[url].interval);
+				delete listeners.current[url];
 				console.log('DraftModeClient: diconnected listener');
 			}
 
