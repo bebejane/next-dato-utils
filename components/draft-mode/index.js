@@ -7,6 +7,6 @@ export default async function DraftMode({ url, tag, path }) {
     if (!url || (!tag && !path))
         return null;
     const enabled = (await draftMode()).isEnabled;
-    return (_jsx(DraftModeClient, { enabled: enabled, draftUrl: url, tag: tag, path: path, actions: { revalidateTag, revalidatePath, disableDraftMode } }));
+    return (_jsx(DraftModeClient, { enabled: enabled, url: url, tag: tag, path: path, actions: { revalidateTag, revalidatePath, disableDraftMode } }));
 }
 //# sourceMappingURL=index.js.map

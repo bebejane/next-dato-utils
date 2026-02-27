@@ -1,6 +1,6 @@
 export type DraftModeProps = {
     enabled: boolean;
-    draftUrl?: string[] | string | null | undefined;
+    url?: (string | null | undefined)[] | string | undefined | null;
     tag?: string | string[] | null | undefined;
     path?: string | string[] | null | undefined;
     actions: {
@@ -9,4 +9,4 @@ export type DraftModeProps = {
         disableDraftMode: (path: string) => void;
     };
 };
-export default function DraftMode({ enabled, draftUrl, tag, path, actions }: DraftModeProps): import("react/jsx-runtime").JSX.Element | null;
+export default function DraftMode({ enabled, url: _url, tag, path, actions }: DraftModeProps): import("react/jsx-runtime").JSX.Element | null;

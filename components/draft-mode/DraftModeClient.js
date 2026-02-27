@@ -6,7 +6,7 @@ import { ContentLink } from 'react-datocms';
 import { useEffect, useTransition, useRef, useState } from 'react';
 import Modal from '../Modal.js';
 import { sleep } from '../../utils/index.js';
-export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
+export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
     const router = useRouter();
     const pathname = usePathname();
     const [loading, startTransition] = useTransition();
@@ -14,12 +14,12 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
     const listeners = useRef({});
     const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
     const paths = path ? (Array.isArray(path) ? path : [path]) : [];
-    const urls = draftUrl ? (Array.isArray(draftUrl) ? draftUrl : [draftUrl]) : [];
+    const urls = (_url ? (Array.isArray(_url) ? _url : [_url]) : []).filter((u) => u);
     useEffect(() => {
         setMounted(true);
     }, []);
     useEffect(() => {
-        if (!draftUrl || !enabled || listeners?.current)
+        if (!urls.length || !enabled || listeners?.current)
             return;
         const connect = (url) => {
             console.log('DraftModeClient: connecting...');
@@ -71,11 +71,11 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }) {
             console.log('DraftModeClient: diconnected');
             await sleep(300);
         };
-        urls.forEach((url) => connect(url));
+        urls.forEach((u) => connect(u));
         return () => {
-            urls.forEach((url) => disconnect(url));
+            urls.forEach((u) => disconnect(u));
         };
-    }, [draftUrl, tag, path, enabled]);
+    }, [urls, tag, path, enabled]);
     if (!enabled || !mounted)
         return null;
     return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [_jsx("div", { className: s.draftMode, children: loading ? _jsx("div", { className: s.loader }) : _jsx("span", {}) }), _jsx(ContentLink, { currentPath: pathname, onNavigateTo: () => router.push(pathname), enableClickToEdit: { hoverOnly: true } })] }) }));

@@ -9,7 +9,7 @@ import { sleep } from '../../utils/index.js';
 
 export type DraftModeProps = {
 	enabled: boolean;
-	draftUrl?: string[] | string | null | undefined;
+	url?: (string | null | undefined)[] | string | undefined | null;
 	tag?: string | string[] | null | undefined;
 	path?: string | string[] | null | undefined;
 	actions: {
@@ -19,7 +19,7 @@ export type DraftModeProps = {
 	};
 };
 
-export default function DraftMode({ enabled, draftUrl, tag, path, actions }: DraftModeProps) {
+export default function DraftMode({ enabled, url: _url, tag, path, actions }: DraftModeProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const [loading, startTransition] = useTransition();
@@ -29,14 +29,16 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }: Dra
 	);
 	const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
 	const paths = path ? (Array.isArray(path) ? path : [path]) : [];
-	const urls = draftUrl ? (Array.isArray(draftUrl) ? draftUrl : [draftUrl]) : [];
+	const urls: string[] = (_url ? (Array.isArray(_url) ? _url : [_url]) : []).filter(
+		(u) => u,
+	) as string[];
 
 	useEffect(() => {
 		setMounted(true);
 	}, []);
 
 	useEffect(() => {
-		if (!draftUrl || !enabled || listeners?.current) return;
+		if (!urls.length || !enabled || listeners?.current) return;
 
 		const connect = (url: string): { listener: EventSource; interval: NodeJS.Timeout } => {
 			console.log('DraftModeClient: connecting...');
@@ -96,12 +98,12 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }: Dra
 			await sleep(300);
 		};
 
-		urls.forEach((url) => connect(url));
+		urls.forEach((u) => connect(u));
 
 		return () => {
-			urls.forEach((url) => disconnect(url));
+			urls.forEach((u) => disconnect(u));
 		};
-	}, [draftUrl, tag, path, enabled]);
+	}, [urls, tag, path, enabled]);
 
 	if (!enabled || !mounted) return null;
 
