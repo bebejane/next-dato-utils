@@ -102,13 +102,13 @@ const dedupedFetch = async (options) => {
     const headers = {
         'Authorization': `Bearer ${apiToken ?? process.env.DATOCMS_API_TOKEN ?? process.env.NEXT_PUBLIC_DATOCMS_API_TOKEN}`,
         'X-Environment': environment,
-        ...(includeDrafts ? { 'X-Include-Drafts': 'true' } : {}),
         ...(excludeInvalid ? { 'X-Exclude-Invalid': 'true' } : {}),
         ...(cacheTags ? { 'X-Cache-Tags': 'true' } : {}),
-        ...(process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL
+        ...(includeDrafts ? { 'X-Include-Drafts': 'true' } : {}),
+        ...(includeDrafts && process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL
             ? { 'X-Visual-Editing': 'vercel-v1' }
             : {}),
-        ...(process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL
+        ...(includeDrafts && process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL
             ? { 'X-Base-Editing-Url': process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL }
             : {}),
     };
