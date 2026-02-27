@@ -13,16 +13,12 @@ export default async function draft(
 	const slug = searchParams.get('slug') ?? searchParams.get('redirect');
 	const maxAge = searchParams.get('max-age');
 	const exit = searchParams.get('exit');
-	const redirect = searchParams.get('redirect');
 
 	if (secret !== process.env.DATOCMS_PREVIEW_SECRET)
 		return new Response('Invalid token', { status: 401 });
 
-	if (exit !== null) {
-		(await draftMode()).disable();
-	} else {
-		(await draftMode()).enable();
-	}
+	if (exit !== null) (await draftMode()).disable();
+	else (await draftMode()).enable();
 
 	if (maxAge) {
 		const bypassCookie = (await cookies()).get('__prerender_bypass');
