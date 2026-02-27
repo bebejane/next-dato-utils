@@ -9,7 +9,7 @@ import { sleep } from '../../utils/index.js';
 
 export type DraftModeProps = {
 	enabled: boolean;
-	draftUrl?: string | null | undefined;
+	draftUrl?: string[] | string | null | undefined;
 	tag?: string | string[] | null | undefined;
 	path?: string | string[] | null | undefined;
 	actions: {
@@ -24,28 +24,31 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }: Dra
 	const pathname = usePathname();
 	const [loading, startTransition] = useTransition();
 	const [mounted, setMounted] = useState(false);
-	const statusRef = useRef<NodeJS.Timeout | null>(null);
-	const listener = useRef<EventSource | null>(null);
+	const listeners = useRef<{ [key: string]: { listener: EventSource; interval: NodeJS.Timeout } }>(
+		{},
+	);
 	const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
 	const paths = path ? (Array.isArray(path) ? path : [path]) : [];
+	const urls = draftUrl ? (Array.isArray(draftUrl) ? draftUrl : [draftUrl]) : [];
 
 	useEffect(() => {
 		setMounted(true);
 	}, []);
 
 	useEffect(() => {
-		if (!draftUrl || !enabled || listener?.current) return;
+		if (!draftUrl || !enabled || listeners?.current) return;
 
-		const connect = () => {
+		const connect = (url: string): { listener: EventSource; interval: NodeJS.Timeout } => {
 			console.log('DraftModeClient: connecting...');
-			let updates = 0;
-			listener.current = new EventSource(draftUrl);
 
-			listener.current.addEventListener('open', () => {
+			let updates = 0;
+			const listener = new EventSource(url);
+
+			listener.addEventListener('open', () => {
 				console.log('DraftModeClient: connected to channel');
 			});
 
-			listener.current.addEventListener('update', async (event) => {
+			listener.addEventListener('update', async (event) => {
 				console.log('update', event);
 				if (++updates <= 1) return;
 
@@ -64,26 +67,28 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }: Dra
 				});
 			});
 
-			listener.current.addEventListener('channelError', (err) => {
+			listener.addEventListener('channelError', (err) => {
 				console.log('DraftModeClient: channel error');
 				console.log(err);
 			});
 
-			statusRef.current = setInterval(async () => {
-				console.log('DraftModeClient: statusCheck', listener.current?.readyState);
-				if (listener.current?.readyState === 2) {
+			const interval = setInterval(async () => {
+				console.log('DraftModeClient: statusCheck', listener.readyState);
+				if (listener.readyState === 2) {
 					console.log('DraftModeClient: channel closed');
-					statusRef.current && clearInterval(statusRef.current);
-					await disconnect();
-					connect();
+					await disconnect(url);
+					connect(url);
 				}
 			}, 1000);
+
+			listeners.current[url] = { listener, interval };
+			return { listener, interval };
 		};
 
-		const disconnect = async () => {
-			if (listener.current) {
-				listener.current.close();
-				listener.current = null;
+		const disconnect = async (url: string) => {
+			if (listeners.current[url]) {
+				listeners.current[url].listener.close();
+				clearInterval(listeners.current[url].interval);
 				console.log('DraftModeClient: diconnected listener');
 			}
 
@@ -91,11 +96,10 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }: Dra
 			await sleep(300);
 		};
 
-		connect();
+		urls.forEach((url) => connect(url));
 
 		return () => {
-			statusRef.current && clearInterval(statusRef.current);
-			disconnect();
+			urls.forEach((url) => disconnect(url));
 		};
 	}, [draftUrl, tag, path, enabled]);
 
@@ -104,15 +108,7 @@ export default function DraftMode({ enabled, draftUrl, tag, path, actions }: Dra
 	return (
 		<>
 			<Modal>
-				<div className={s.draftMode}>
-					{/* <span className={s.label}>Draft mode</span>
-					<button
-						className={s.button}
-						onClick={() => startTransition(() => actions.disableDraftMode(pathname))}
-					> */}
-					{loading ? <div className={s.loader} /> : <span></span>}
-					{/* </button> */}
-				</div>
+				<div className={s.draftMode}>{loading ? <div className={s.loader} /> : <span></span>}</div>
 				<ContentLink
 					currentPath={pathname}
 					onNavigateTo={() => router.push(pathname)}

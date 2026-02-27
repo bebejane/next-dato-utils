@@ -1,6 +1,6 @@
 export type DraftModeProps = {
     enabled: boolean;
-    draftUrl?: string | null | undefined;
+    draftUrl?: string[] | string | null | undefined;
     tag?: string | string[] | null | undefined;
     path?: string | string[] | null | undefined;
     actions: {
