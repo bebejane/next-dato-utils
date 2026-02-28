@@ -17,7 +17,7 @@ export default async function draft(
 	if (exit !== null) {
 		console.log('draft mode:', 'disable', slug);
 		(await draftMode()).disable();
-		return new Response('OK', { status: 200 });
+		return new Response('OK', { status: 307, headers: { Location: slug || '/' } });
 	}
 
 	if (secret !== process.env.DATOCMS_PREVIEW_SECRET) {
