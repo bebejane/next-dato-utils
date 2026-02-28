@@ -8,12 +8,18 @@ export default async function draft(request, searchParams) {
     const slug = searchParams.get('slug') ?? searchParams.get('redirect');
     const maxAge = searchParams.get('max-age');
     const exit = searchParams.get('exit');
-    if (secret !== process.env.DATOCMS_PREVIEW_SECRET)
+    if (secret !== process.env.DATOCMS_PREVIEW_SECRET) {
+        console.log('draft mode:', 'invalid token', slug, secret);
         return new Response('Invalid token', { status: 401 });
-    if (exit !== null)
+    }
+    if (exit !== null) {
+        console.log('draft mode:', 'disable', slug);
         (await draftMode()).disable();
-    else
+    }
+    else {
+        console.log('draft mode:', 'enable', slug);
         (await draftMode()).enable();
+    }
     if (maxAge) {
         const bypassCookie = (await cookies()).get('__prerender_bypass');
         if (!bypassCookie) {

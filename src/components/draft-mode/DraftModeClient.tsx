@@ -129,7 +129,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 						console.log('DraftModeClient:', pathname);
 						router.push(pathname);
 					}}
-					enableClickToEdit={{ hoverOnly: true, scrollToNearestTarget: true }}
+					enableClickToEdit={{ hoverOnly: true }}
 				/>
 			</Modal>
 		</>

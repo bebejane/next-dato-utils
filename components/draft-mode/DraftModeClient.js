@@ -88,6 +88,6 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
     return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [loading && _jsx("div", { className: s.loader }), _jsx(ContentLink, { currentPath: pathname, onNavigateTo: () => {
                         console.log('DraftModeClient:', pathname);
                         router.push(pathname);
-                    }, enableClickToEdit: { hoverOnly: true, scrollToNearestTarget: true } })] }) }));
+                    }, enableClickToEdit: { hoverOnly: true } })] }) }));
 }
 //# sourceMappingURL=DraftModeClient.js.map
