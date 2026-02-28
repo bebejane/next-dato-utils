@@ -87,10 +87,10 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
     if (!mounted)
         return null;
     return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [_jsxs("div", { className: s.draft, style: {
-                        top: position === 'topleft' || position === 'topright' ? '0' : 'auto',
-                        bottom: position === 'bottomleft' || position === 'bottomright' ? '0' : 'auto',
-                        left: position === 'topleft' || position === 'bottomleft' ? '0' : 'auto',
-                        right: position === 'bottomright' || position === 'topright' ? '0' : 'auto',
+                        top: position === 'topleft' || position === 'topright' ? '0px' : 'auto',
+                        bottom: position === 'bottomleft' || position === 'bottomright' ? '0px' : 'auto',
+                        left: position === 'topleft' || position === 'bottomleft' ? '0px' : 'auto',
+                        right: position === 'bottomright' || position === 'topright' ? '0px' : 'auto',
                     }, children: [isDev && (_jsx("a", { href: `/api/draft?exit=1`, className: s.link, children: _jsx("button", { className: s.button, children: "Exit draft" }) })), loading && _jsx("div", { className: s.loader })] }), enabled && (_jsx(ContentLink, { currentPath: pathname, onNavigateTo: () => {
                         console.log('DraftModeClient:', pathname);
                         router.push(pathname);

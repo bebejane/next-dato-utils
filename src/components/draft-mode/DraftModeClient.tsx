@@ -133,10 +133,10 @@ export default function DraftMode({
 				<div
 					className={s.draft}
 					style={{
-						top: position === 'topleft' || position === 'topright' ? '0' : 'auto',
-						bottom: position === 'bottomleft' || position === 'bottomright' ? '0' : 'auto',
-						left: position === 'topleft' || position === 'bottomleft' ? '0' : 'auto',
-						right: position === 'bottomright' || position === 'topright' ? '0' : 'auto',
+						top: position === 'topleft' || position === 'topright' ? '0px' : 'auto',
+						bottom: position === 'bottomleft' || position === 'bottomright' ? '0px' : 'auto',
+						left: position === 'topleft' || position === 'bottomleft' ? '0px' : 'auto',
+						right: position === 'bottomright' || position === 'topright' ? '0px' : 'auto',
 					}}
 				>
 					{isDev && (
