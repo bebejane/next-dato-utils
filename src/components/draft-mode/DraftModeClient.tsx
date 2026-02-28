@@ -33,6 +33,7 @@ export default function DraftMode({
 	const router = useRouter();
 	const pathname = usePathname();
 	const [loading, startTransition] = useTransition();
+	const [reloading, setReloading] = useState(false);
 	const [mounted, setMounted] = useState(false);
 	const controls =
 		process.env.NODE_ENV === 'development' && process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
@@ -143,9 +144,10 @@ export default function DraftMode({
 					{controls && (
 						<a
 							href={`/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`}
+							onClick={() => setReloading(true)}
 							className={s.link}
 						>
-							{loading ? (
+							{loading || reloading ? (
 								<div className={s.loader} data-draft={enabled} />
 							) : (
 								<button aria-checked={enabled} className={s.button}>
