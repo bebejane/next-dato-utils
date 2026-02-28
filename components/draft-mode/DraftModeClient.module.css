@@ -24,11 +24,11 @@
 	padding-right: 14px;
 	white-space: nowrap;
 	text-transform: uppercase;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 14px;
+	font-family: Arial, Helvetica, sans-serif !important;
+	font-size: 14px !important;
 	border: 1px solid rgba(0, 0, 0, 0.1);
-	background-color: #fff;
-	color: #000;
+	background-color: #fff !important;
+	color: #000 !important;
 }
 
 .button[aria-checked='true'] {
@@ -37,8 +37,8 @@
 }
 
 button[aria-checked='true']:hover {
-	background-color: #fff;
-	color: #000;
+	background-color: #fff !important;
+	color: #000 !important;
 }
 
 .loader {
