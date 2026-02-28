@@ -11,7 +11,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
     const pathname = usePathname();
     const [loading, startTransition] = useTransition();
     const [mounted, setMounted] = useState(false);
-    const isDev = process.env.NODE_ENV === 'development';
+    const controls = process.env.NODE_ENV === 'development' && process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
     const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
     const paths = path ? (Array.isArray(path) ? path : [path]) : [];
     const listeners = useRef({});
@@ -91,7 +91,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
                         bottom: position === 'bottomleft' || position === 'bottomright' ? '0px' : 'auto',
                         left: position === 'topleft' || position === 'bottomleft' ? '0px' : 'auto',
                         right: position === 'bottomright' || position === 'topright' ? '0px' : 'auto',
-                    }, children: [loading && _jsx("div", { className: s.loader }), isDev && (_jsx("a", { href: `/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`, className: s.link, children: _jsx("button", { "aria-checked": enabled, className: s.button, children: enabled ? 'Draft' : 'Draft' }) }))] }), enabled && (_jsx(ContentLink, { currentPath: pathname, onNavigateTo: () => {
+                    }, children: [loading && _jsx("div", { className: s.loader }), controls && (_jsx("a", { href: `/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`, className: s.link, children: _jsx("button", { "aria-checked": enabled, className: s.button, children: enabled ? 'Draft' : 'Draft' }) }))] }), enabled && (_jsx(ContentLink, { currentPath: pathname, onNavigateTo: () => {
                         console.log('DraftModeClient:', pathname);
                         router.push(pathname);
                     }, enableClickToEdit: { hoverOnly: true } }))] }) }));

@@ -34,7 +34,8 @@ export default function DraftMode({
 	const pathname = usePathname();
 	const [loading, startTransition] = useTransition();
 	const [mounted, setMounted] = useState(false);
-	const isDev = process.env.NODE_ENV === 'development';
+	const controls =
+		process.env.NODE_ENV === 'development' && process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
 	const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
 	const paths = path ? (Array.isArray(path) ? path : [path]) : [];
 	const listeners = useRef<{ [key: string]: { listener: EventSource; interval: NodeJS.Timeout } }>(
@@ -142,7 +143,7 @@ export default function DraftMode({
 					}}
 				>
 					{loading && <div className={s.loader} />}
-					{isDev && (
+					{controls && (
 						<a
 							href={`/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`}
 							className={s.link}
