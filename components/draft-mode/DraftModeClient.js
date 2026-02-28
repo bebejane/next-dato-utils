@@ -53,12 +53,11 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
             disconnect(url);
             console.log('DraftModeClient: revalidate', 'tags', tags);
             console.log('DraftModeClient:revalidate', 'paths', paths);
-            startTransition(() => {
-                if (tags)
-                    actions.revalidateTag(tags);
-                if (paths)
-                    actions.revalidatePath(paths, 'page');
-            });
+            router.refresh();
+            // startTransition(() => {
+            // 	if (tags) actions.revalidateTag(tags);
+            // 	if (paths) actions.revalidatePath(paths, 'page');
+            // });
         });
         listener.addEventListener('channelError', (err) => {
             console.log('DraftModeClient: channel error');
@@ -89,6 +88,6 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
     return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [loading && _jsx("div", { className: s.loader }), _jsx(ContentLink, { currentPath: pathname, onNavigateTo: () => {
                         console.log('DraftModeClient:', pathname);
                         router.push(pathname);
-                    }, enableClickToEdit: { hoverOnly: true } })] }) }));
+                    }, enableClickToEdit: { hoverOnly: true, scrollToNearestTarget: true } })] }) }));
 }
 //# sourceMappingURL=DraftModeClient.js.map

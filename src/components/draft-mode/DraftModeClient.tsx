@@ -81,11 +81,11 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 
 			console.log('DraftModeClient: revalidate', 'tags', tags);
 			console.log('DraftModeClient:revalidate', 'paths', paths);
-
-			startTransition(() => {
-				if (tags) actions.revalidateTag(tags);
-				if (paths) actions.revalidatePath(paths, 'page');
-			});
+			router.refresh();
+			// startTransition(() => {
+			// 	if (tags) actions.revalidateTag(tags);
+			// 	if (paths) actions.revalidatePath(paths, 'page');
+			// });
 		});
 
 		listener.addEventListener('channelError', (err) => {
@@ -129,7 +129,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 						console.log('DraftModeClient:', pathname);
 						router.push(pathname);
 					}}
-					enableClickToEdit={{ hoverOnly: true }}
+					enableClickToEdit={{ hoverOnly: true, scrollToNearestTarget: true }}
 				/>
 			</Modal>
 		</>
