@@ -129,6 +129,7 @@ export default function DraftMode({
 
 	if (!mounted) return null;
 
+	console.log({ isDev });
 	return (
 		<>
 			<Modal>

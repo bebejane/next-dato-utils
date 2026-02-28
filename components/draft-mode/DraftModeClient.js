@@ -86,6 +86,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
     }, [urls, tag, path, enabled]);
     if (!mounted)
         return null;
+    console.log({ isDev });
     return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [_jsxs("div", { className: s.draft, style: {
                         top: position === 'topleft' || position === 'topright' ? '0px' : 'auto',
                         bottom: position === 'bottomleft' || position === 'bottomright' ? '0px' : 'auto',
