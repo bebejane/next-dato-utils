@@ -147,13 +147,9 @@ export default function DraftMode({
 							onClick={() => setReloading(true)}
 							className={s.link}
 						>
-							{loading || reloading ? (
-								<div className={s.loader} data-draft={enabled} />
-							) : (
-								<button aria-checked={enabled} className={s.button}>
-									{enabled ? 'Draft' : 'Draft'}
-								</button>
-							)}
+							<button aria-checked={enabled} className={s.button}>
+								{loading || reloading ? <div className={s.loader} data-draft={enabled} /> : 'Draft'}
+							</button>
 						</a>
 					)}
 				</div>

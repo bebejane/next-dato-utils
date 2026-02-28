@@ -56,7 +56,7 @@
 
 .loader[data-draft='true'] {
 	border-color: rgba(255, 255, 255, 0.85) rgba(255, 255, 255, 0.75) rgba(255, 255, 255, 0.65)
-		rgba(255, 255, 255, 0.55);
+		rgba(255, 255, 255, 0.55) !important;
 }
 
 @keyframes rotation {
