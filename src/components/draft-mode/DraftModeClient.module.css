@@ -21,8 +21,8 @@
 	align-items: center;
 	justify-content: center;
 	padding: 6px !important;
-	padding-left: 14px !important;
-	padding-right: 14px !important;
+	width: 32px !important;
+	height: 30px !important;
 	white-space: nowrap;
 	text-transform: uppercase;
 	border: 1px solid rgba(0, 0, 0, 1) !important;
