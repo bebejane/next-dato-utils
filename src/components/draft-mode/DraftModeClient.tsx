@@ -143,10 +143,12 @@ export default function DraftMode({
 				>
 					{isDev && (
 						<a
-							href={`/api/draft?secret=${secret}&slug=${path}${!enabled ? '' : '&exit=1'}`}
+							href={`/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`}
 							className={s.link}
 						>
-							<button className={s.button}>{enabled ? 'Exit' : 'Draft'}</button>
+							<button aria-checked={enabled} className={s.button}>
+								{enabled ? 'Draft' : 'Draft'}
+							</button>
 						</a>
 					)}
 					{loading && <div className={s.loader} />}
