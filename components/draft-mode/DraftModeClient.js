@@ -68,7 +68,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
             console.log('DraftModeClient: connected to channel');
             listeners.current[url] = {
                 listener,
-                interval: setInterval(async () => listener.readyState === 2 && reconnect(url), 2000),
+                interval: setInterval(async () => listener.readyState === 2 && reconnect(url), 1000),
             };
         });
     }
