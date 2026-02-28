@@ -43,8 +43,8 @@ button[aria-checked='true']:hover {
 
 .loader {
 	all: unset;
-	width: 28px;
-	height: 28px;
+	width: 20px;
+	height: 20px;
 	border-radius: 50%;
 	display: inline-block;
 	border: 6px solid;

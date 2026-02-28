@@ -151,7 +151,7 @@ export default function DraftMode({
 							</button>
 						</a>
 					)}
-					{loading && <div className={s.loader} />}
+					<div className={s.loader} />
 				</div>
 				{enabled && (
 					<ContentLink
