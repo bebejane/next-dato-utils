@@ -140,15 +140,18 @@ export default function DraftMode({
 		<>
 			<Modal>
 				<div className={s.draft} style={style}>
-					{loading && <div className={s.loader} />}
 					{controls && (
 						<a
 							href={`/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`}
 							className={s.link}
 						>
-							<button aria-checked={enabled} className={s.button}>
-								{enabled ? 'Draft' : 'Draft'}
-							</button>
+							{loading ? (
+								<div className={s.loader} data-draft={enabled} />
+							) : (
+								<button aria-checked={enabled} className={s.button}>
+									{enabled ? 'Draft' : 'Draft'}
+								</button>
+							)}
 						</a>
 					)}
 				</div>
