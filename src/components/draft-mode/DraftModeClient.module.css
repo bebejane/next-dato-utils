@@ -22,16 +22,21 @@
 	padding: 10px;
 	padding-left: 14px;
 	padding-right: 14px;
-	background-color: #000;
-	color: #fff;
 	white-space: nowrap;
 	text-transform: uppercase;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
 	border: 1px solid rgba(0, 0, 0, 0.1);
+	background-color: #fff;
+	color: #000;
 }
 
 .button[aria-checked='true'] {
+	background-color: #000;
+	color: #fff;
+}
+
+button:not[aria-checked='true']:hover {
 	background-color: #fff;
 	color: #000;
 }
