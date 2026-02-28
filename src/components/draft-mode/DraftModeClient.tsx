@@ -141,6 +141,7 @@ export default function DraftMode({
 						right: position === 'bottomright' || position === 'topright' ? '0px' : 'auto',
 					}}
 				>
+					{loading && <div className={s.loader} />}
 					{isDev && (
 						<a
 							href={`/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`}
@@ -151,7 +152,6 @@ export default function DraftMode({
 							</button>
 						</a>
 					)}
-					<div className={s.loader} />
 				</div>
 				{enabled && (
 					<ContentLink
