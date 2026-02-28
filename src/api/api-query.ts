@@ -82,11 +82,8 @@ export default async function apiQuery<TResult = any, TVariables = Record<string
 	if (typeof options?.includeDrafts === 'undefined')
 		try {
 			opt.includeDrafts = (await draftMode()).isEnabled;
-		} catch (e) {
-			console.log(e);
-		}
+		} catch (e) {}
 
-	console.log('includeDrafts', opt.includeDrafts);
 	const dedupeOptions: DedupeOptions = {
 		body: JSON.stringify({ query: print(query), variables: options?.variables }) as string,
 		...opt,

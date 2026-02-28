@@ -26,10 +26,7 @@ export default async function apiQuery(query, options) {
         try {
             opt.includeDrafts = (await draftMode()).isEnabled;
         }
-        catch (e) {
-            console.log(e);
-        }
-    console.log('includeDrafts', opt.includeDrafts);
+        catch (e) { }
     const dedupeOptions = {
         body: JSON.stringify({ query: print(query), variables: options?.variables }),
         ...opt,

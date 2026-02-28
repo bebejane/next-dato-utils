@@ -12,7 +12,7 @@ export type Props = {
 };
 
 export default async function DraftMode({ url, tag, path, position = 'bottomright' }: Props) {
-	if (!url || (!tag && !path)) return null;
+	if (!tag && !path) throw new Error('DraftMode: tag or path is required');
 
 	const enabled = (await draftMode()).isEnabled;
 	const secret =
