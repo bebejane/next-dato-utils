@@ -25,11 +25,11 @@
 	padding-right: 14px !important;
 	white-space: nowrap;
 	text-transform: uppercase;
-	border: 1px solid rgba(0, 0, 0, 0.1) !important;
+	border: 1px solid rgba(0, 0, 0, 0.07) !important;
 	font-size: 12px !important;
 	font-family: Arial, Helvetica, sans-serif !important;
-	background-color: #fff !important;
-	color: #000 !important;
+	background-color: #fff;
+	color: #000;
 }
 
 .button[aria-checked='true'] {
@@ -37,7 +37,7 @@
 	color: #fff !important;
 }
 
-.button[aria-checked='true']:hover {
+.button[aria-checked='false'] {
 	background-color: #fff !important;
 	color: #000 !important;
 }
@@ -49,7 +49,7 @@
 	border-radius: 50%;
 	display: inline-block;
 	border: 6px solid;
-	border-color: rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.35) rgba(0, 0, 0, 0.45) rgba(0, 0, 0, 0.6);
+	border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.35) rgba(0, 0, 0, 0.5);
 	box-sizing: border-box;
 	animation: rotation 1s linear infinite;
 	margin-right: 10px;
