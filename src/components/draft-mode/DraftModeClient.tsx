@@ -12,13 +12,13 @@ export type DraftModeProps = {
 	url?: (string | null | undefined)[] | string | undefined | null;
 	tag?: string | string[] | null | undefined;
 	path?: string | string[] | null | undefined;
+	position: 'topleft' | 'topright' | 'bottomleft' | 'bottomright';
+	secret?: string;
 	actions: {
 		revalidateTag: (tag: string | string[]) => void;
 		revalidatePath: (path: string | string[], type: 'page' | 'layout') => void;
 		disableDraftMode: (path: string) => void;
 	};
-	position: 'topleft' | 'topright' | 'bottomleft' | 'bottomright';
-	secret?: string;
 };
 
 export default function DraftMode({
@@ -130,18 +130,16 @@ export default function DraftMode({
 
 	if (!mounted) return null;
 
+	const style = {
+		top: position === 'topleft' || position === 'topright' ? '0px' : 'auto',
+		bottom: position === 'bottomleft' || position === 'bottomright' ? '0px' : 'auto',
+		left: position === 'topleft' || position === 'bottomleft' ? '0px' : 'auto',
+		right: position === 'bottomright' || position === 'topright' ? '0px' : 'auto',
+	};
 	return (
 		<>
 			<Modal>
-				<div
-					className={s.draft}
-					style={{
-						top: position === 'topleft' || position === 'topright' ? '0px' : 'auto',
-						bottom: position === 'bottomleft' || position === 'bottomright' ? '0px' : 'auto',
-						left: position === 'topleft' || position === 'bottomleft' ? '0px' : 'auto',
-						right: position === 'bottomright' || position === 'topright' ? '0px' : 'auto',
-					}}
-				>
+				<div className={s.draft} style={style}>
 					{loading && <div className={s.loader} />}
 					{controls && (
 						<a
@@ -157,11 +155,11 @@ export default function DraftMode({
 				{enabled && (
 					<ContentLink
 						currentPath={pathname}
+						enableClickToEdit={{ hoverOnly: true }}
 						onNavigateTo={() => {
 							console.log('DraftModeClient:', pathname);
 							router.push(pathname);
 						}}
-						enableClickToEdit={{ hoverOnly: true }}
 					/>
 				)}
 			</Modal>

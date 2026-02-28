@@ -3,12 +3,12 @@ export type DraftModeProps = {
     url?: (string | null | undefined)[] | string | undefined | null;
     tag?: string | string[] | null | undefined;
     path?: string | string[] | null | undefined;
+    position: 'topleft' | 'topright' | 'bottomleft' | 'bottomright';
+    secret?: string;
     actions: {
         revalidateTag: (tag: string | string[]) => void;
         revalidatePath: (path: string | string[], type: 'page' | 'layout') => void;
         disableDraftMode: (path: string) => void;
     };
-    position: 'topleft' | 'topright' | 'bottomleft' | 'bottomright';
-    secret?: string;
 };
 export default function DraftMode({ enabled, url: _url, tag, path, actions, position, secret, }: DraftModeProps): import("react/jsx-runtime").JSX.Element | null;

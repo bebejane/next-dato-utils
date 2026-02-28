@@ -99,18 +99,17 @@ const paginatedQuery = async (query, options, data, queryId) => {
 };
 const dedupedFetch = async (options) => {
     const { url, body, includeDrafts, excludeInvalid, cacheTags, revalidate, queryId, logs, apiToken, environment, } = options;
+    const apiKey = apiToken || process.env.DATOCMS_API_TOKEN || process.env.NEXT_PUBLIC_DATOCMS_API_TOKEN;
+    const baseEditingUrl = process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
+    const visualEditing = baseEditingUrl ? 'vercel-v1' : undefined;
     const headers = {
-        'Authorization': `Bearer ${apiToken ?? process.env.DATOCMS_API_TOKEN ?? process.env.NEXT_PUBLIC_DATOCMS_API_TOKEN}`,
+        'Authorization': `Bearer ${apiKey}`,
         'X-Environment': environment,
         ...(excludeInvalid ? { 'X-Exclude-Invalid': 'true' } : {}),
         ...(cacheTags ? { 'X-Cache-Tags': 'true' } : {}),
         ...(includeDrafts ? { 'X-Include-Drafts': 'true' } : {}),
-        ...(includeDrafts && process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL
-            ? { 'X-Visual-Editing': 'vercel-v1' }
-            : {}),
-        ...(process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL
-            ? { 'X-Base-Editing-Url': process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL }
-            : {}),
+        ...(includeDrafts && visualEditing ? { 'X-Visual-Editing': 'vercel-v1' } : {}),
+        ...(baseEditingUrl ? { 'X-Base-Editing-Url': baseEditingUrl } : {}),
     };
     const response = await fetch(url ?? 'https://graphql.datocms.com/', {
         method: 'POST',

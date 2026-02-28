@@ -1,14 +1,13 @@
 import { draftMode } from 'next/headers.js';
 import type { RequestInit } from 'next/dist/server/web/spec-extension/request.js';
+import { print } from 'graphql/language/printer.js';
 import type {
 	DocumentNode,
 	FieldNode,
 	OperationDefinitionNode,
 	VariableDefinitionNode,
 } from 'graphql';
-import { print } from 'graphql/language/printer.js';
 
-// TypedDocumentNode allows for type inference from the query document
 export interface TypedDocumentNode<
 	TResult = { [key: string]: any },
 	TVariables = { [key: string]: any },
@@ -227,18 +226,19 @@ const dedupedFetch = async (options: DedupeOptions) => {
 		environment,
 	} = options;
 
+	const apiKey =
+		apiToken || process.env.DATOCMS_API_TOKEN || process.env.NEXT_PUBLIC_DATOCMS_API_TOKEN;
+	const baseEditingUrl = process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
+	const visualEditing = baseEditingUrl ? 'vercel-v1' : undefined;
+
 	const headers = {
-		'Authorization': `Bearer ${apiToken ?? process.env.DATOCMS_API_TOKEN ?? process.env.NEXT_PUBLIC_DATOCMS_API_TOKEN}`,
+		'Authorization': `Bearer ${apiKey}`,
 		'X-Environment': environment,
 		...(excludeInvalid ? { 'X-Exclude-Invalid': 'true' } : {}),
 		...(cacheTags ? { 'X-Cache-Tags': 'true' } : {}),
 		...(includeDrafts ? { 'X-Include-Drafts': 'true' } : {}),
-		...(includeDrafts && process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL
-			? { 'X-Visual-Editing': 'vercel-v1' }
-			: {}),
-		...(process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL
-			? { 'X-Base-Editing-Url': process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL }
-			: {}),
+		...(includeDrafts && visualEditing ? { 'X-Visual-Editing': 'vercel-v1' } : {}),
+		...(baseEditingUrl ? { 'X-Base-Editing-Url': baseEditingUrl } : {}),
 	} as unknown as HeadersInit;
 
 	const response = await fetch(url ?? 'https://graphql.datocms.com/', {
