@@ -20,21 +20,21 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 6px;
-	padding-left: 14px;
-	padding-right: 14px;
+	padding: 6px !important;
+	padding-left: 14px !important;
+	padding-right: 14px !important;
 	white-space: nowrap;
 	text-transform: uppercase;
-	font-family: Arial, Helvetica, sans-serif !important;
+	border: 1px solid rgba(0, 0, 0, 0.1) !important;
 	font-size: 14px !important;
-	border: 1px solid rgba(0, 0, 0, 0.1);
+	font-family: Arial, Helvetica, sans-serif !important;
 	background-color: #fff !important;
 	color: #000 !important;
 }
 
 .button[aria-checked='true'] {
-	background-color: #000;
-	color: #fff;
+	background-color: #000 !important;
+	color: #fff !important;
 }
 
 button[aria-checked='true']:hover {
