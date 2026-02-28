@@ -108,7 +108,7 @@ const dedupedFetch = async (options) => {
         ...(includeDrafts && process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL
             ? { 'X-Visual-Editing': 'vercel-v1' }
             : {}),
-        ...(includeDrafts && process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL
+        ...(process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL
             ? { 'X-Base-Editing-Url': process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL }
             : {}),
     };
