@@ -6,7 +6,7 @@ import { ContentLink } from 'react-datocms';
 import { useEffect, useTransition, useRef, useState } from 'react';
 import Modal from '../Modal.js';
 import { sleep } from '../../utils/index.js';
-export default function DraftMode({ enabled, url: _url, tag, path, actions, position, }) {
+export default function DraftMode({ enabled, url: _url, tag, path, actions, position, secret, }) {
     const router = useRouter();
     const pathname = usePathname();
     const [loading, startTransition] = useTransition();
@@ -91,7 +91,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
                         bottom: position === 'bottomleft' || position === 'bottomright' ? '0px' : 'auto',
                         left: position === 'topleft' || position === 'bottomleft' ? '0px' : 'auto',
                         right: position === 'bottomright' || position === 'topright' ? '0px' : 'auto',
-                    }, children: [isDev && (_jsx("a", { href: `/api/draft?exit=1`, className: s.link, children: _jsx("button", { className: s.button, children: "Exit draft" }) })), loading && _jsx("div", { className: s.loader })] }), enabled && (_jsx(ContentLink, { currentPath: pathname, onNavigateTo: () => {
+                    }, children: [isDev && (_jsx("a", { href: `/api/draft?secret=${secret}&slug=${path}${!enabled ? '' : '&exit=1'}`, className: s.link, children: _jsx("button", { className: s.button, children: enabled ? 'Exit' : 'Draft' }) })), loading && _jsx("div", { className: s.loader })] }), enabled && (_jsx(ContentLink, { currentPath: pathname, onNavigateTo: () => {
                         console.log('DraftModeClient:', pathname);
                         router.push(pathname);
                     }, enableClickToEdit: { hoverOnly: true } }))] }) }));

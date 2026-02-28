@@ -15,6 +15,8 @@ export default async function DraftMode({ url, tag, path, position = 'bottomrigh
 	if (!url || (!tag && !path)) return null;
 
 	const enabled = (await draftMode()).isEnabled;
+	const secret =
+		process.env.NODE_ENV === 'development' ? process.env.DATOCMS_PREVIEW_SECRET : undefined;
 
 	return (
 		<DraftModeClient
@@ -23,6 +25,7 @@ export default async function DraftMode({ url, tag, path, position = 'bottomrigh
 			tag={tag}
 			path={path}
 			position={position}
+			secret={secret}
 			actions={{ revalidateTag, revalidatePath, disableDraftMode }}
 		/>
 	);

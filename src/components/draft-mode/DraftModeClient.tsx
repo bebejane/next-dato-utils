@@ -18,6 +18,7 @@ export type DraftModeProps = {
 		disableDraftMode: (path: string) => void;
 	};
 	position: 'topleft' | 'topright' | 'bottomleft' | 'bottomright';
+	secret?: string;
 };
 
 export default function DraftMode({
@@ -27,6 +28,7 @@ export default function DraftMode({
 	path,
 	actions,
 	position,
+	secret,
 }: DraftModeProps) {
 	const router = useRouter();
 	const pathname = usePathname();
@@ -140,8 +142,11 @@ export default function DraftMode({
 					}}
 				>
 					{isDev && (
-						<a href={`/api/draft?exit=1`} className={s.link}>
-							<button className={s.button}>Exit draft</button>
+						<a
+							href={`/api/draft?secret=${secret}&slug=${path}${!enabled ? '' : '&exit=1'}`}
+							className={s.link}
+						>
+							<button className={s.button}>{enabled ? 'Exit' : 'Draft'}</button>
 						</a>
 					)}
 					{loading && <div className={s.loader} />}

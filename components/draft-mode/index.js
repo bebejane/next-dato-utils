@@ -7,6 +7,7 @@ export default async function DraftMode({ url, tag, path, position = 'bottomrigh
     if (!url || (!tag && !path))
         return null;
     const enabled = (await draftMode()).isEnabled;
-    return (_jsx(DraftModeClient, { enabled: enabled, url: url, tag: tag, path: path, position: position, actions: { revalidateTag, revalidatePath, disableDraftMode } }));
+    const secret = process.env.NODE_ENV === 'development' ? process.env.DATOCMS_PREVIEW_SECRET : undefined;
+    return (_jsx(DraftModeClient, { enabled: enabled, url: url, tag: tag, path: path, position: position, secret: secret, actions: { revalidateTag, revalidatePath, disableDraftMode } }));
 }
 //# sourceMappingURL=index.js.map
