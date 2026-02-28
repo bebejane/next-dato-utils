@@ -37,7 +37,7 @@
 	color: #fff !important;
 }
 
-button[aria-checked='true']:hover {
+.button[aria-checked='true']:hover {
 	background-color: #fff !important;
 	color: #000 !important;
 }
