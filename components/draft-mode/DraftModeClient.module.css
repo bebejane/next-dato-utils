@@ -1,45 +1,45 @@
 .draft {
 	all: unset;
 	position: fixed;
-	margin: 20px;
 	width: 28px;
 	height: 28px;
 	border-radius: 50%;
-	display: block;
+	margin: 20px;
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	bottom: 0;
 	right: 0;
+}
 
-	.loader {
-		all: unset;
-		width: 28px;
-		height: 28px;
-		border-radius: 50%;
-		display: inline-block;
-		border: 6px solid;
-		border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.35) rgba(0, 0, 0, 0.5);
-		box-sizing: border-box;
-		animation: rotation 1s linear infinite;
-	}
+.link {
+	all: unset;
+	margin-left: 5px;
+	cursor: pointer;
+}
 
-	a {
-		all: unset;
-		margin-left: 5px;
+.button {
+	all: unset;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 10px;
+	background-color: #000;
+	color: #fff;
+	font-family: Arial, Helvetica, sans-serif;
+}
 
-		button {
-			all: unset;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			padding: 10px;
-			background-color: #000;
-			color: #fff;
-			font-family: Arial, Helvetica, sans-serif;
-		}
-	}
+.loader {
+	all: unset;
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	display: inline-block;
+	border: 6px solid;
+	border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.35) rgba(0, 0, 0, 0.5);
+	box-sizing: border-box;
+	animation: rotation 1s linear infinite;
 }
 
 @keyframes rotation {

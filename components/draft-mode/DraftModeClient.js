@@ -91,7 +91,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
                         bottom: position === 'bottomleft' || position === 'bottomright' ? '0' : 'auto',
                         left: position === 'topleft' || position === 'bottomleft' ? '0' : 'auto',
                         right: position === 'bottomright' || position === 'topright' ? '0' : 'auto',
-                    }, children: [isDev && (_jsx("a", { href: `/api/draft?exit=1`, children: _jsx("button", { children: "Exit draft" }) })), loading && _jsx("div", { className: s.loader })] }), enabled && (_jsx(ContentLink, { currentPath: pathname, onNavigateTo: () => {
+                    }, children: [isDev && (_jsx("a", { href: `/api/draft?exit=1`, className: s.link, children: _jsx("button", { className: s.button, children: "Exit draft" }) })), loading && _jsx("div", { className: s.loader })] }), enabled && (_jsx(ContentLink, { currentPath: pathname, onNavigateTo: () => {
                         console.log('DraftModeClient:', pathname);
                         router.push(pathname);
                     }, enableClickToEdit: { hoverOnly: true } }))] }) }));

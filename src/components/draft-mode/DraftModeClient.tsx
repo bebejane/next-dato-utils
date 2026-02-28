@@ -140,8 +140,8 @@ export default function DraftMode({
 					}}
 				>
 					{isDev && (
-						<a href={`/api/draft?exit=1`}>
-							<button>Exit draft</button>
+						<a href={`/api/draft?exit=1`} className={s.link}>
+							<button className={s.button}>Exit draft</button>
 						</a>
 					)}
 					{loading && <div className={s.loader} />}
