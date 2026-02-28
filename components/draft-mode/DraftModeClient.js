@@ -53,11 +53,12 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
             disconnect(url);
             console.log('DraftModeClient: revalidate', 'tags', tags);
             console.log('DraftModeClient:revalidate', 'paths', paths);
-            //startTransition(() => {
-            //if (tags) actions.revalidateTag(tags);
-            if (paths)
-                actions.revalidatePath(paths, 'page');
-            //});
+            startTransition(() => {
+                if (tags)
+                    actions.revalidateTag(tags);
+                if (paths)
+                    actions.revalidatePath(paths, 'page');
+            });
         });
         listener.addEventListener('channelError', (err) => {
             console.log('DraftModeClient: channel error');
@@ -85,6 +86,9 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
     }, [urls, tag, path, enabled]);
     if (!enabled || !mounted)
         return null;
-    return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [loading && _jsx("div", { className: s.loader }), _jsx(ContentLink, { currentPath: pathname, onNavigateTo: () => router.push(pathname), enableClickToEdit: { hoverOnly: true } })] }) }));
+    return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [loading && _jsx("div", { className: s.loader }), _jsx(ContentLink, { currentPath: pathname, onNavigateTo: () => {
+                        console.log('DraftModeClient:', pathname);
+                        router.push(pathname);
+                    }, enableClickToEdit: { hoverOnly: true } })] }) }));
 }
 //# sourceMappingURL=DraftModeClient.js.map
