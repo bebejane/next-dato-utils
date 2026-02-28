@@ -8,9 +8,10 @@ export type Props = {
 	url?: (string | null | undefined)[] | string | undefined | null;
 	tag?: string | string[] | undefined | null;
 	path?: string | string[] | undefined | null;
+	position?: 'topleft' | 'topright' | 'bottomleft' | 'bottomright';
 };
 
-export default async function DraftMode({ url, tag, path }: Props) {
+export default async function DraftMode({ url, tag, path, position = 'bottomright' }: Props) {
 	if (!url || (!tag && !path)) return null;
 
 	const enabled = (await draftMode()).isEnabled;
@@ -21,6 +22,7 @@ export default async function DraftMode({ url, tag, path }: Props) {
 			url={url}
 			tag={tag}
 			path={path}
+			position={position}
 			actions={{ revalidateTag, revalidatePath, disableDraftMode }}
 		/>
 	);

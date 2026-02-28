@@ -6,11 +6,12 @@ import { ContentLink } from 'react-datocms';
 import { useEffect, useTransition, useRef, useState } from 'react';
 import Modal from '../Modal.js';
 import { sleep } from '../../utils/index.js';
-export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
+export default function DraftMode({ enabled, url: _url, tag, path, actions, position, }) {
     const router = useRouter();
     const pathname = usePathname();
     const [loading, startTransition] = useTransition();
     const [mounted, setMounted] = useState(false);
+    const isDev = process.env.NODE_ENV === 'development';
     const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
     const paths = path ? (Array.isArray(path) ? path : [path]) : [];
     const listeners = useRef({});
@@ -85,7 +86,12 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }) {
     }, [urls, tag, path, enabled]);
     if (!enabled || !mounted)
         return null;
-    return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [loading && _jsx("div", { className: s.loader }), _jsx(ContentLink, { currentPath: pathname, onNavigateTo: () => {
+    return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [_jsxs("div", { className: s.draft, style: {
+                        top: position === 'topleft' ? '0' : 'auto',
+                        bottom: position === 'bottomleft' ? '0' : 'auto',
+                        left: position === 'topleft' ? '0' : 'auto',
+                        right: position === 'bottomleft' ? '0' : 'auto',
+                    }, children: [isDev && (_jsx("a", { href: `/api/draft?exit=1`, children: _jsx("button", { children: "Exit draft" }) })), loading && _jsx("div", { className: s.loader })] }), _jsx(ContentLink, { currentPath: pathname, onNavigateTo: () => {
                         console.log('DraftModeClient:', pathname);
                         router.push(pathname);
                     }, enableClickToEdit: { hoverOnly: true } })] }) }));

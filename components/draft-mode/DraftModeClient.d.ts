@@ -8,5 +8,6 @@ export type DraftModeProps = {
         revalidatePath: (path: string | string[], type: 'page' | 'layout') => void;
         disableDraftMode: (path: string) => void;
     };
+    position: 'topleft' | 'topright' | 'bottomleft' | 'bottomright';
 };
-export default function DraftMode({ enabled, url: _url, tag, path, actions }: DraftModeProps): import("react/jsx-runtime").JSX.Element | null;
+export default function DraftMode({ enabled, url: _url, tag, path, actions, position, }: DraftModeProps): import("react/jsx-runtime").JSX.Element | null;

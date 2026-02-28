@@ -17,13 +17,22 @@ export type DraftModeProps = {
 		revalidatePath: (path: string | string[], type: 'page' | 'layout') => void;
 		disableDraftMode: (path: string) => void;
 	};
+	position: 'topleft' | 'topright' | 'bottomleft' | 'bottomright';
 };
 
-export default function DraftMode({ enabled, url: _url, tag, path, actions }: DraftModeProps) {
+export default function DraftMode({
+	enabled,
+	url: _url,
+	tag,
+	path,
+	actions,
+	position,
+}: DraftModeProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const [loading, startTransition] = useTransition();
 	const [mounted, setMounted] = useState(false);
+	const isDev = process.env.NODE_ENV === 'development';
 	const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
 	const paths = path ? (Array.isArray(path) ? path : [path]) : [];
 	const listeners = useRef<{ [key: string]: { listener: EventSource; interval: NodeJS.Timeout } }>(
@@ -122,7 +131,22 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions }: Dr
 	return (
 		<>
 			<Modal>
-				{loading && <div className={s.loader} />}
+				<div
+					className={s.draft}
+					style={{
+						top: position === 'topleft' ? '0' : 'auto',
+						bottom: position === 'bottomleft' ? '0' : 'auto',
+						left: position === 'topleft' ? '0' : 'auto',
+						right: position === 'bottomleft' ? '0' : 'auto',
+					}}
+				>
+					{isDev && (
+						<a href={`/api/draft?exit=1`}>
+							<button>Exit draft</button>
+						</a>
+					)}
+					{loading && <div className={s.loader} />}
+				</div>
 				<ContentLink
 					currentPath={pathname}
 					onNavigateTo={() => {
