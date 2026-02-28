@@ -88,13 +88,12 @@ export default function DraftMode({
 
 			disconnect(url);
 
-			console.log('DraftModeClient: revalidate', 'tags', tags);
-			console.log('DraftModeClient:revalidate', 'paths', paths);
-			router.refresh();
-			// startTransition(() => {
-			// 	if (tags) actions.revalidateTag(tags);
-			// 	if (paths) actions.revalidatePath(paths, 'page');
-			// });
+			console.log('DraftModeClient: revalidate', 'paths', paths, 'tags', tags);
+
+			startTransition(() => {
+				if (tags?.length) actions.revalidateTag(tags);
+				if (paths?.length) actions.revalidatePath(paths, 'page');
+			});
 		});
 
 		listener.addEventListener('channelError', (err) => {
@@ -126,7 +125,7 @@ export default function DraftMode({
 		};
 	}, [urls, tag, path, enabled]);
 
-	if (!enabled || !mounted) return null;
+	if (!mounted) return null;
 
 	return (
 		<>
@@ -147,14 +146,16 @@ export default function DraftMode({
 					)}
 					{loading && <div className={s.loader} />}
 				</div>
-				<ContentLink
-					currentPath={pathname}
-					onNavigateTo={() => {
-						console.log('DraftModeClient:', pathname);
-						router.push(pathname);
-					}}
-					enableClickToEdit={{ hoverOnly: true }}
-				/>
+				{enabled && (
+					<ContentLink
+						currentPath={pathname}
+						onNavigateTo={() => {
+							console.log('DraftModeClient:', pathname);
+							router.push(pathname);
+						}}
+						enableClickToEdit={{ hoverOnly: true }}
+					/>
+				)}
 			</Modal>
 		</>
 	);

@@ -52,13 +52,13 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
             if (tags?.length === 0 && paths?.length === 0)
                 return;
             disconnect(url);
-            console.log('DraftModeClient: revalidate', 'tags', tags);
-            console.log('DraftModeClient:revalidate', 'paths', paths);
-            router.refresh();
-            // startTransition(() => {
-            // 	if (tags) actions.revalidateTag(tags);
-            // 	if (paths) actions.revalidatePath(paths, 'page');
-            // });
+            console.log('DraftModeClient: revalidate', 'paths', paths, 'tags', tags);
+            startTransition(() => {
+                if (tags?.length)
+                    actions.revalidateTag(tags);
+                if (paths?.length)
+                    actions.revalidatePath(paths, 'page');
+            });
         });
         listener.addEventListener('channelError', (err) => {
             console.log('DraftModeClient: channel error');
@@ -84,16 +84,16 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
             urls.forEach((u) => disconnect(u));
         };
     }, [urls, tag, path, enabled]);
-    if (!enabled || !mounted)
+    if (!mounted)
         return null;
     return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [_jsxs("div", { className: s.draft, style: {
                         top: position === 'topleft' || position === 'topright' ? '0' : 'auto',
                         bottom: position === 'bottomleft' || position === 'bottomright' ? '0' : 'auto',
                         left: position === 'topleft' || position === 'bottomleft' ? '0' : 'auto',
                         right: position === 'bottomright' || position === 'topright' ? '0' : 'auto',
-                    }, children: [isDev && (_jsx("a", { href: `/api/draft?exit=1`, children: _jsx("button", { children: "Exit draft" }) })), loading && _jsx("div", { className: s.loader })] }), _jsx(ContentLink, { currentPath: pathname, onNavigateTo: () => {
+                    }, children: [isDev && (_jsx("a", { href: `/api/draft?exit=1`, children: _jsx("button", { children: "Exit draft" }) })), loading && _jsx("div", { className: s.loader })] }), enabled && (_jsx(ContentLink, { currentPath: pathname, onNavigateTo: () => {
                         console.log('DraftModeClient:', pathname);
                         router.push(pathname);
-                    }, enableClickToEdit: { hoverOnly: true } })] }) }));
+                    }, enableClickToEdit: { hoverOnly: true } }))] }) }));
 }
 //# sourceMappingURL=DraftModeClient.js.map
