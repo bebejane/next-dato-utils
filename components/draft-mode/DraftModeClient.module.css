@@ -51,7 +51,7 @@
 	display: inline-block;
 	border: 3px solid;
 	box-sizing: border-box;
-	animation: rotation 1s linear infinite;
+	animation: rotation 0.5s linear infinite;
 	border-color: rgba(0, 0, 0, 0.1) rgba(134, 9, 9, 0.881) rgba(0, 0, 0, 0.3) rgba(26, 183, 240, 0.4);
 }
 
