@@ -70,8 +70,9 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
             console.log('DraftModeClient: notice');
             console.log(notice);
         });
-        listener.addEventListener('ping', (notice) => {
+        listener.addEventListener('ping', (ping) => {
             console.log('DraftModeClient: ping');
+            console.log(ping);
         });
         listener.addEventListener('pong', (notice) => {
             console.log('DraftModeClient: pong');
