@@ -28,6 +28,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
     }
     function connect(url) {
         const listener = new DraftModeListener(url);
+        listeners.current[url] = listener;
         listener.on('update', (url) => {
             console.log('DraftModeClient: update', url);
             if (tags?.length === 0 && paths?.length === 0)
@@ -48,6 +49,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
             console.log('DraftModeClient: disconnect', url);
             delete listeners.current[url];
         });
+        listener.on('error', (url) => { });
     }
     useEffect(() => {
         if (!urls?.length || !enabled || loading)

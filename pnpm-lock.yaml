@@ -14,9 +14,6 @@ importers:
       commander:
         specifier: ^11.1.0
         version: 11.1.0
-      datocms-listen:
-        specifier: ^1.0.2
-        version: 1.0.2(graphql@16.13.0)
       datocms-structured-text-utils:
         specifier: ^5.0.0
         version: 5.1.7
@@ -84,6 +81,9 @@ importers:
       copyfiles:
         specifier: ^2.4.1
         version: 2.4.1
+      datocms-listen:
+        specifier: ^1.0.2
+        version: 1.0.2(graphql@16.13.0)
       glob:
         specifier: ^11.0.3
         version: 11.1.0

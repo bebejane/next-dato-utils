@@ -56,6 +56,7 @@ export default function DraftMode({
 
 	function connect(url: string) {
 		const listener = new DraftModeListener(url);
+		listeners.current[url] = listener;
 
 		listener.on('update', (url) => {
 			console.log('DraftModeClient: update', url);
@@ -76,6 +77,7 @@ export default function DraftMode({
 			console.log('DraftModeClient: disconnect', url);
 			delete listeners.current[url];
 		});
+		listener.on('error', (url) => {});
 	}
 
 	useEffect(() => {
