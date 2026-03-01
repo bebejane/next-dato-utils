@@ -12,7 +12,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
     const [loading, startTransition] = useTransition();
     const [reloading, setReloading] = useState(false);
     const [mounted, setMounted] = useState(false);
-    const iframe = typeof window !== 'undefined' && window.self !== window.top;
+    const iframe = typeof window !== 'undefined' && window.location !== window.parent.location;
     const dev = process.env.NODE_ENV === 'development';
     const contentEditingUrl = process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
     const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
