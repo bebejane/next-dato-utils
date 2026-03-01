@@ -41,7 +41,12 @@ export default function DraftMode({
 	const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
 	const paths = path ? (Array.isArray(path) ? path : [path]) : [];
 	const listeners = useRef<{
-		[key: string]: { listener: EventSource; status: NodeJS.Timeout; reconnect: NodeJS.Timeout };
+		[key: string]: {
+			url: string;
+			listener: EventSource;
+			status: NodeJS.Timeout;
+			reconnect: NodeJS.Timeout;
+		};
 	}>({});
 	const urls: string[] = (_url ? (Array.isArray(_url) ? _url : [_url]) : []).filter(
 		(u) => u,
@@ -52,15 +57,15 @@ export default function DraftMode({
 	}, []);
 
 	function disconnect(url: string) {
-		if (!listeners.current[url]) return;
+		const l = listeners.current[url];
+		if (!l) return;
 
-		clearInterval(listeners.current[url].status);
-		clearInterval(listeners.current[url].reconnect);
+		clearInterval(l.status);
+		clearInterval(l.reconnect);
 
 		listeners.current[url].listener.close();
 		delete listeners.current[url];
-		console.log('DraftModeClient: diconnected');
-		console.log(listeners.current);
+		console.log('DraftModeClient: diconnected', url);
 	}
 
 	async function reconnect(url: string) {
@@ -71,27 +76,45 @@ export default function DraftMode({
 	}
 
 	async function connect(url: string) {
-		console.log('DraftModeClient: connecting...');
 		let updates = 0;
+
+		function destroy(url: string) {
+			const l = listeners.current[url];
+			if (l) {
+				l.listener.removeEventListener('update', handleUpdate);
+				l.listener.removeEventListener('disconnect', handleDisconnect);
+				l.listener.removeEventListener('channelError', handleChannelError);
+				l.listener.removeEventListener('close', handleClose);
+				l.listener.removeEventListener('error', handleError);
+				console.log('DraftModeClient: destroy', url);
+				disconnect(url);
+			}
+		}
+
 		const listener = new EventSource(url);
-
-		listener.addEventListener('open', () => {
-			disconnect(url);
-
-			console.log('DraftModeClient: connected to channel');
+		const handleOpen = async (event: any) => {
+			//destroy(url);
+			console.log('DraftModeClient: connected to channel', url);
 
 			listeners.current[url] = {
+				url,
 				listener,
 				status: setInterval(async () => {
+					console.log('status', listener.readyState);
 					listener.readyState === 2 && listener.dispatchEvent(new Event('disconnect'));
 				}, 2000),
 				reconnect: setInterval(async () => {
-					//reconnect(url);
+					destroy(url);
+					reconnect(url);
 				}, 1000 * 20),
 			};
-		});
+		};
 
-		listener.addEventListener('update', async (event) => {
+		const handleDisconnect = async (event: any) => {
+			reconnect(url);
+		};
+
+		const handleUpdate = async (event: any) => {
 			if (++updates <= 1) {
 				return;
 			}
@@ -105,26 +128,27 @@ export default function DraftMode({
 				if (tags?.length) actions.revalidateTag(tags);
 				if (paths?.length) actions.revalidatePath(paths, 'page');
 			});
-		});
+		};
 
-		listener.addEventListener('channelError', (err) => {
+		const handleChannelError = async (err: any) => {
 			console.log('DraftModeClient: channel error');
 			reconnect(url);
-		});
+		};
 
-		listener.addEventListener('disconnect', async (event) => {
-			console.log('DraftModeClient: disconnect listener');
-			reconnect(url);
-		});
-
-		listener.addEventListener('close', async (event) => {
+		const handleClose = async (event: any) => {
 			console.log('DraftModeClient: for real close');
-		});
+		};
 
-		listener.addEventListener('error', async (err) => {
+		const handleError = async (err: any) => {
 			console.log('DraftModeClient: error', err);
-			//reconnect(url);
-		});
+		};
+
+		listener.addEventListener('open', handleOpen);
+		listener.addEventListener('update', handleUpdate);
+		listener.addEventListener('disconnect', handleDisconnect);
+		listener.addEventListener('channelError', handleChannelError);
+		listener.addEventListener('close', handleClose);
+		listener.addEventListener('error', handleError);
 	}
 
 	useEffect(() => {
