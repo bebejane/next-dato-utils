@@ -6,6 +6,7 @@ import { ContentLink } from 'react-datocms';
 import { useEffect, useTransition, useRef, useState } from 'react';
 import Modal from '../Modal.js';
 import { sleep } from '../../utils/index.js';
+import pckg from '../../../package.json' with { type: 'json' };
 
 export type DraftModeProps = {
 	enabled: boolean;
@@ -140,7 +141,7 @@ export default function DraftMode({
 		left: position === 'topleft' || position === 'bottomleft' ? '0px' : 'auto',
 		right: position === 'bottomright' || position === 'topright' ? '0px' : 'auto',
 	};
-	console.log({ contentEditingUrl, dev, enabled });
+	console.log({ contentEditingUrl, dev, enabled, version: pckg.version });
 	return (
 		<>
 			<Modal>

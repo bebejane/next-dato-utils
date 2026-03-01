@@ -6,6 +6,7 @@ import { ContentLink } from 'react-datocms';
 import { useEffect, useTransition, useRef, useState } from 'react';
 import Modal from '../Modal.js';
 import { sleep } from '../../utils/index.js';
+import pckg from '../../../package.json' with { type: 'json' };
 export default function DraftMode({ enabled, url: _url, tag, path, actions, position, secret, }) {
     const router = useRouter();
     const pathname = usePathname();
@@ -98,7 +99,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
         left: position === 'topleft' || position === 'bottomleft' ? '0px' : 'auto',
         right: position === 'bottomright' || position === 'topright' ? '0px' : 'auto',
     };
-    console.log({ contentEditingUrl, dev, enabled });
+    console.log({ contentEditingUrl, dev, enabled, version: pckg.version });
     return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [_jsxs("div", { className: s.draft, style: style, children: [((contentEditingUrl && dev) || (!dev && enabled)) && (_jsx("a", { href: `/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`, className: s.link, onClick: () => setReloading(true), children: _jsx("button", { "aria-checked": enabled, className: s.button, children: reloading || loading ? (_jsx("div", { className: s.reloading, "data-draft": enabled })) : ('Draft') }) })), loading && !dev && _jsx("div", { className: s.loading, "data-draft": enabled })] }), contentEditingUrl && (_jsx(ContentLink, { currentPath: pathname, enableClickToEdit: { hoverOnly: true }, onNavigateTo: () => {
                         console.log('DraftModeClient:', pathname);
                         router.push(pathname);
