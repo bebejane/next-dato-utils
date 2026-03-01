@@ -105,7 +105,7 @@ export default function DraftMode({
 
 		listener.addEventListener('channelError', (err) => {
 			console.log('DraftModeClient: channel error');
-			console.log(err);
+			reconnect(url);
 		});
 
 		listener.addEventListener('notice', (notice) => {
@@ -116,6 +116,10 @@ export default function DraftMode({
 		// listener.addEventListener('ping', (ping) => {
 		// 	console.log('DraftModeClient: ping', ping.timeStamp);
 		// });
+		listener.addEventListener('heartbeat', () => {
+			// Handle heartbeat events
+			console.log('Received heartbeat event');
+		});
 
 		listener.addEventListener('open', () => {
 			disconnect(url);
