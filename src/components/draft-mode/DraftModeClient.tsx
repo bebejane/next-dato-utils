@@ -47,6 +47,10 @@ export default function DraftMode({
 		(u) => u,
 	) as string[];
 
+	useEffect(() => {
+		setMounted(true);
+	}, []);
+
 	function disconnect(url: string) {
 		if (!listeners.current[url]) return;
 
@@ -56,38 +60,35 @@ export default function DraftMode({
 		listeners.current[url].listener.close();
 		delete listeners.current[url];
 		console.log('DraftModeClient: diconnected');
+		console.log(listeners.current);
 	}
 
 	async function reconnect(url: string) {
 		console.log('DraftModeClient: reconnect');
 		disconnect(url);
-		await sleep(2000);
+		await sleep(1000);
 		connect(url);
 	}
 
 	async function connect(url: string) {
 		console.log('DraftModeClient: connecting...');
-
-		disconnect(url);
-
 		let updates = 0;
 		const listener = new EventSource(url);
 
-		listener.addEventListener('disconnect', async (event) => {
-			console.log('DraftModeClient: disconnect');
-			reconnect(url);
-		});
+		listener.addEventListener('open', () => {
+			disconnect(url);
 
-		listener.addEventListener('close', async (event) => {
-			console.log('DraftModeClient: for real close');
-		});
+			console.log('DraftModeClient: connected to channel');
 
-		listener.addEventListener('error', async (err) => {
-			console.log('DraftModeClient: error', err);
-		});
-
-		listener.addEventListener('timeout', async (err) => {
-			console.log('DraftModeClient: timeout');
+			listeners.current[url] = {
+				listener,
+				status: setInterval(async () => {
+					listener.readyState === 2 && listener.dispatchEvent(new Event('disconnect'));
+				}, 2000),
+				reconnect: setInterval(async () => {
+					//reconnect(url);
+				}, 1000 * 20),
+			};
 		});
 
 		listener.addEventListener('update', async (event) => {
@@ -111,26 +112,20 @@ export default function DraftMode({
 			reconnect(url);
 		});
 
-		listener.addEventListener('open', () => {
-			disconnect(url);
+		listener.addEventListener('disconnect', async (event) => {
+			console.log('DraftModeClient: disconnect listener');
+			reconnect(url);
+		});
 
-			console.log('DraftModeClient: connected to channel');
+		listener.addEventListener('close', async (event) => {
+			console.log('DraftModeClient: for real close');
+		});
 
-			listeners.current[url] = {
-				listener,
-				status: setInterval(async () => {
-					listener.readyState === 2 && listener.dispatchEvent(new Event('disconnect'));
-				}, 2000),
-				reconnect: setInterval(async () => {
-					reconnect(url);
-				}, 1000 * 60),
-			};
+		listener.addEventListener('error', async (err) => {
+			console.log('DraftModeClient: error', err);
+			//reconnect(url);
 		});
 	}
-
-	useEffect(() => {
-		setMounted(true);
-	}, []);
 
 	useEffect(() => {
 		if (!urls?.length || !enabled || loading) return;

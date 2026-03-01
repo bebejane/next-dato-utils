@@ -19,6 +19,9 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
     const paths = path ? (Array.isArray(path) ? path : [path]) : [];
     const listeners = useRef({});
     const urls = (_url ? (Array.isArray(_url) ? _url : [_url]) : []).filter((u) => u);
+    useEffect(() => {
+        setMounted(true);
+    }, []);
     function disconnect(url) {
         if (!listeners.current[url])
             return;
@@ -27,30 +30,30 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
         listeners.current[url].listener.close();
         delete listeners.current[url];
         console.log('DraftModeClient: diconnected');
+        console.log(listeners.current);
     }
     async function reconnect(url) {
         console.log('DraftModeClient: reconnect');
         disconnect(url);
-        await sleep(2000);
+        await sleep(1000);
         connect(url);
     }
     async function connect(url) {
         console.log('DraftModeClient: connecting...');
-        disconnect(url);
         let updates = 0;
         const listener = new EventSource(url);
-        listener.addEventListener('disconnect', async (event) => {
-            console.log('DraftModeClient: disconnect');
-            reconnect(url);
-        });
-        listener.addEventListener('close', async (event) => {
-            console.log('DraftModeClient: for real close');
-        });
-        listener.addEventListener('error', async (err) => {
-            console.log('DraftModeClient: error', err);
-        });
-        listener.addEventListener('timeout', async (err) => {
-            console.log('DraftModeClient: timeout');
+        listener.addEventListener('open', () => {
+            disconnect(url);
+            console.log('DraftModeClient: connected to channel');
+            listeners.current[url] = {
+                listener,
+                status: setInterval(async () => {
+                    listener.readyState === 2 && listener.dispatchEvent(new Event('disconnect'));
+                }, 2000),
+                reconnect: setInterval(async () => {
+                    //reconnect(url);
+                }, 1000 * 20),
+            };
         });
         listener.addEventListener('update', async (event) => {
             if (++updates <= 1) {
@@ -71,23 +74,18 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
             console.log('DraftModeClient: channel error');
             reconnect(url);
         });
-        listener.addEventListener('open', () => {
-            disconnect(url);
-            console.log('DraftModeClient: connected to channel');
-            listeners.current[url] = {
-                listener,
-                status: setInterval(async () => {
-                    listener.readyState === 2 && listener.dispatchEvent(new Event('disconnect'));
-                }, 2000),
-                reconnect: setInterval(async () => {
-                    reconnect(url);
-                }, 1000 * 60),
-            };
+        listener.addEventListener('disconnect', async (event) => {
+            console.log('DraftModeClient: disconnect listener');
+            reconnect(url);
+        });
+        listener.addEventListener('close', async (event) => {
+            console.log('DraftModeClient: for real close');
+        });
+        listener.addEventListener('error', async (err) => {
+            console.log('DraftModeClient: error', err);
+            //reconnect(url);
         });
     }
-    useEffect(() => {
-        setMounted(true);
-    }, []);
     useEffect(() => {
         if (!urls?.length || !enabled || loading)
             return;

@@ -14,7 +14,7 @@
 		"postbuild": "copyfiles -u 1 dist/**/* ./ && copyfiles -u 1 src/**/*.css ./",
 		"push": "pnpm run prebuild && pnpm run build && git add . && git commit -m \"update\" && git push",
 		"release": "npm run push && npm version patch --force && git push && git push origin $(git describe --tags --abbrev=0) && git tag -f latest && git push origin latest --force && gh release create $(git describe --tags --abbrev=0) --generate-notes && pnpm run postrelease",
-		"postrelease": "cd ../next-dato-boiler && git add . && git commit --allow-empty -m \"update\" && git push && cd ../next-dato-utils",
+		"postrelease": "cd ../next-dato-boiler && git add . && git commit --allow-empty -m \"utils dev update\" && git push && cd ../next-dato-utils",
 		"dev:cli": "tsx src/cli/index.ts",
 		"tsc": "tsc -p tsconfig.json"
 	},
