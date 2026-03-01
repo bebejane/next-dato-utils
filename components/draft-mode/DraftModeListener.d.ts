@@ -1,13 +1,11 @@
 import EventEmitter from 'events';
-export declare class DraftModeClientListener extends EventEmitter {
+export declare class DraftModeListener extends EventEmitter {
     private url;
     private source;
     private status;
-    private paths;
-    private tags;
+    private timeout;
     private updates;
-    private actions;
-    constructor(url: string, paths: string[], tags: string[], actions: any);
+    constructor(url: string);
     connect(): void;
     reconnect(): void;
     disconnect(): void;

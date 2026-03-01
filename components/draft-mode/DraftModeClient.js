@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation.js';
 import { ContentLink } from 'react-datocms';
 import { useEffect, useTransition, useRef, useState } from 'react';
 import Modal from '../Modal.js';
-import { DraftModeClientListener } from './DraftModeClientListener.js';
+import { DraftModeListener } from './DraftModeListener.js';
 export default function DraftMode({ enabled, url: _url, tag, path, actions, position, secret, }) {
     const router = useRouter();
     const pathname = usePathname();
@@ -22,20 +22,36 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
     useEffect(() => {
         setMounted(true);
     }, []);
-    function connect(url) {
-        const listener = new DraftModeClientListener(url, paths, tags, actions);
-        //listener.on('connect', (url) => console.log('DraftModeClient: connected to channel', url));
-        //listener.on('disconnect', (url) => console.log('DraftModeClient: disconnect', url));
-        listener.on('update', (url) => console.log('DraftModeClient: update', url));
-        listeners.current[url] = listener;
-    }
     function disconnect(url) {
         listeners.current?.[url]?.destroy();
+        delete listeners.current?.[url];
+    }
+    function connect(url) {
+        const listener = new DraftModeListener(url);
+        listener.on('update', (url) => {
+            console.log('DraftModeClient: update', url);
+            if (tags?.length === 0 && paths?.length === 0)
+                return;
+            console.log('DraftModeClient: revalidate', 'paths', paths, 'tags', tags);
+            startTransition(() => {
+                if (tags?.length)
+                    actions.revalidateTag(tags);
+                if (paths?.length)
+                    actions.revalidatePath(paths, 'page');
+            });
+        });
+        listener.on('connect', (url) => {
+            console.log('DraftModeClient: connected to channel', url);
+            listeners.current[url] = listener;
+        });
+        listener.on('disconnect', (url) => {
+            console.log('DraftModeClient: disconnect', url);
+            delete listeners.current[url];
+        });
     }
     useEffect(() => {
         if (!urls?.length || !enabled || loading)
             return;
-        console.log('DraftModeClient (start):', urls, { loading, urls, tag, path, enabled });
         urls.forEach((u) => connect(u));
         return () => {
             console.log('unmount');
