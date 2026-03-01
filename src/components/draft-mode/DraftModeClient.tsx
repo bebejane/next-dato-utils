@@ -106,7 +106,7 @@ export default function DraftMode({
 
 		listener.addEventListener('open', () => {
 			console.log('DraftModeClient: connected to channel');
-			disconnect(url);
+			//disconnect(url);
 			listeners.current[url] = {
 				listener,
 				interval: setInterval(async () => {
