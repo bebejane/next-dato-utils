@@ -11,4 +11,4 @@ export type DraftModeProps = {
         disableDraftMode: (path: string) => void;
     };
 };
-export default function DraftMode({ enabled, url: _url, tag, path, actions, position, secret, }: DraftModeProps): import("react/jsx-runtime").JSX.Element | null;
+export default function DraftModeClient({ enabled, url: _url, tag, path, actions, position, secret, }: DraftModeProps): import("react/jsx-runtime").JSX.Element | null;

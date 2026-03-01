@@ -3,7 +3,7 @@
 import s from './DraftModeClient.module.css';
 import { usePathname, useRouter } from 'next/navigation.js';
 import { ContentLink } from 'react-datocms';
-import { useEffect, useTransition, useRef, useState } from 'react';
+import { useEffect, useTransition, useRef, useState, use } from 'react';
 import Modal from '../Modal.js';
 import { DraftModeListener } from './DraftModeListener.js';
 
@@ -21,7 +21,9 @@ export type DraftModeProps = {
 	};
 };
 
-export default function DraftMode({
+const refreshInterval = 1000 * 60 * 3;
+
+export default function DraftModeClient({
 	enabled,
 	url: _url,
 	tag,
@@ -35,12 +37,13 @@ export default function DraftMode({
 	const [loading, startTransition] = useTransition();
 	const [reloading, setReloading] = useState(false);
 	const [mounted, setMounted] = useState(false);
+	const [focused, setFocused] = useState<boolean | null>(null);
 	const insideiFrame = typeof window !== 'undefined' && window.location !== window.parent.location;
 	const dev = process.env.NODE_ENV === 'development';
 	const contentEditingUrl = process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
 	const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
 	const paths = path ? (Array.isArray(path) ? path : [path]) : [];
-	const refreshInterval = useRef<NodeJS.Timeout | null>(null);
+	const refreshRef = useRef<NodeJS.Timeout | null>(null);
 	const listeners = useRef<{ [key: string]: DraftModeListener }>({});
 	const urls: string[] = (_url ? (Array.isArray(_url) ? _url : [_url]) : []).filter(
 		(u) => u,
@@ -51,24 +54,49 @@ export default function DraftMode({
 	}, []);
 
 	useEffect(() => {
-		if (mounted) {
-			refreshInterval.current = setInterval(() => {
-				console.log('refresh');
-				router.refresh();
-			}, 1000 * 60);
-		}
+		if (!enabled) return;
+
+		console.log('setup focus');
+		const handleVisibilityChange = () => {
+			if (!document.hidden) {
+				if (focused !== true) {
+					console.log('refocused');
+					refresh();
+				}
+				setFocused(true);
+			} else setFocused(false);
+		};
+
+		window.addEventListener('focus', handleVisibilityChange);
 
 		return () => {
-			if (refreshInterval.current) {
-				clearInterval(refreshInterval.current);
-			}
+			window.removeEventListener('focus', handleVisibilityChange);
 		};
-	}, [mounted]);
+	}, [enabled]);
 
-	function disconnect(url: string) {
-		listeners.current?.[url]?.destroy();
-		delete listeners.current?.[url];
-	}
+	useEffect(() => {
+		if (!enabled) return;
+
+		const interval = refreshRef.current;
+		if (!focused && interval) clearInterval(interval);
+		else refreshRef.current = setInterval(() => refresh(), refreshInterval);
+
+		return () => {
+			if (interval) clearInterval(interval);
+		};
+	}, [enabled, focused]);
+
+	useEffect(() => {
+		if (!urls?.length || !enabled || loading) return;
+
+		urls.forEach((u) => connect(u));
+
+		return () => {
+			console.log('unmount');
+
+			urls.forEach((u) => disconnect(u));
+		};
+	}, [loading, urls, tag, path, enabled]);
 
 	function connect(url: string) {
 		const listener = new DraftModeListener(url);
@@ -86,31 +114,28 @@ export default function DraftMode({
 			});
 		});
 		listener.on('connect', (url) => {
-			console.log('DraftModeClient: connected to channel', url);
 			listeners.current[url] = listener;
 		});
 		listener.on('disconnect', (url) => {
-			console.log('DraftModeClient: disconnect', url);
 			delete listeners.current[url];
-			setTimeout(() => router.refresh(), 2000);
+			refresh();
 		});
 		listener.on('error', (url) => {
-			console.log('revalidate', url);
-			setTimeout(() => router.refresh(), 2000);
+			refresh();
 		});
 	}
 
-	useEffect(() => {
-		if (!urls?.length || !enabled || loading) return;
+	function disconnect(url: string) {
+		listeners.current?.[url]?.destroy();
+		delete listeners.current?.[url];
+	}
 
-		urls.forEach((u) => connect(u));
-
-		return () => {
-			console.log('unmount');
-
-			urls.forEach((u) => disconnect(u));
-		};
-	}, [loading, urls, tag, path, enabled]);
+	async function refresh() {
+		console.log('refresh....');
+		Object.keys(listeners.current).forEach((u) => disconnect(u));
+		await new Promise((r) => setTimeout(r, 2000));
+		router.refresh();
+	}
 
 	if (!mounted) return null;
 
