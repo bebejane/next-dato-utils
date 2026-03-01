@@ -10,14 +10,14 @@ export default async function draft(
 	searchParams = searchParams ?? new URL(request.url).searchParams;
 
 	const secret = searchParams.get('secret');
-	const slug = searchParams.get('slug') ?? searchParams.get('redirect');
+	const slug = searchParams.get('slug') ?? searchParams.get('redirect') ?? '/';
 	const maxAge = searchParams.get('max-age');
 	const exit = searchParams.get('exit');
 
 	if (exit !== null) {
 		console.log('draft mode:', 'exit', slug);
 		(await draftMode()).disable();
-		return new Response('OK', { status: 307, headers: { Location: slug || '/' } });
+		return new Response('OK', { status: 307, headers: { Location: slug } });
 	}
 
 	if (secret !== process.env.DATOCMS_PREVIEW_SECRET) {
