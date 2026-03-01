@@ -146,7 +146,7 @@ export default function DraftMode({
 		<>
 			<Modal>
 				<div className={s.draft} style={style}>
-					{contentEditingUrl && !insideiFrame && (
+					{contentEditingUrl && !insideiFrame && (dev || enabled) && (
 						<a
 							href={`/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`}
 							className={s.link}
