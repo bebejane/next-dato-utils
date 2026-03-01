@@ -35,7 +35,7 @@ export default function DraftMode({
 	const [loading, startTransition] = useTransition();
 	const [reloading, setReloading] = useState(false);
 	const [mounted, setMounted] = useState(false);
-	const iframe = typeof window !== 'undefined' && window.location !== window.parent.location;
+	const insideiFrame = typeof window !== 'undefined' && window.location !== window.parent.location;
 	const dev = process.env.NODE_ENV === 'development';
 	const contentEditingUrl = process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
 	const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
@@ -141,12 +141,12 @@ export default function DraftMode({
 		left: position === 'topleft' || position === 'bottomleft' ? '0px' : 'auto',
 		right: position === 'bottomright' || position === 'topright' ? '0px' : 'auto',
 	};
-	console.log({ contentEditingUrl, dev, enabled, path, pathname, secret, iframe });
+	console.log({ contentEditingUrl, dev, enabled, path, pathname, secret, insideiFrame });
 	return (
 		<>
 			<Modal>
 				<div className={s.draft} style={style}>
-					{((contentEditingUrl && dev) || (!dev && enabled && iframe)) && (
+					{contentEditingUrl && !insideiFrame && (
 						<a
 							href={`/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`}
 							className={s.link}
