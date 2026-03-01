@@ -9,7 +9,7 @@ export default async function draft(request, searchParams) {
     const maxAge = searchParams.get('max-age');
     const exit = searchParams.get('exit');
     if (exit !== null) {
-        console.log('draft mode:', 'disable', slug);
+        console.log('draft mode:', 'exit', slug);
         (await draftMode()).disable();
         return new Response('OK', { status: 307, headers: { Location: slug || '/' } });
     }
