@@ -109,11 +109,20 @@ export default function DraftMode({
 			console.log(notice);
 		});
 
+		listener.addEventListener('ping', (notice) => {
+			console.log('DraftModeClient: ping');
+		});
+
+		listener.addEventListener('pong', (notice) => {
+			console.log('DraftModeClient: pong');
+		});
+
 		listener.addEventListener('open', () => {
 			console.log('DraftModeClient: connected to channel');
-			//disconnect(url);
-			listeners.current[url] &&
+
+			if (listeners.current[url])
 				clearInterval(listeners.current[url].listener as unknown as NodeJS.Timeout);
+
 			listeners.current[url] = {
 				listener,
 				interval: setInterval(async () => {
