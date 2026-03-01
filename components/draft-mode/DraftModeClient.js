@@ -12,7 +12,8 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
     const [loading, startTransition] = useTransition();
     const [reloading, setReloading] = useState(false);
     const [mounted, setMounted] = useState(false);
-    const controls = process.env.NODE_ENV === 'development' && process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
+    const dev = process.env.NODE_ENV === 'development';
+    const contentEditingUrl = process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
     const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
     const paths = path ? (Array.isArray(path) ? path : [path]) : [];
     const listeners = useRef({});
@@ -46,13 +47,12 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
             console.log('DraftModeClient: error', err);
         });
         listener.addEventListener('update', async (event) => {
-            console.log('update', event);
-            if (++updates <= 1)
+            if (++updates <= 1) {
                 return;
-            console.log('DraftModeClient: update', event.type, event.timeStamp);
+            }
+            console.log('DraftModeClient: update', event);
             if (tags?.length === 0 && paths?.length === 0)
                 return;
-            disconnect(url);
             console.log('DraftModeClient: revalidate', 'paths', paths, 'tags', tags);
             startTransition(() => {
                 if (tags?.length)
@@ -73,7 +73,6 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
                 interval: setInterval(async () => {
                     listener.readyState === 1 && listener.dispatchEvent(new Event('ping'));
                     listener.readyState === 2 && reconnect(url);
-                    console.log(listener.readyState);
                 }, 2000),
             };
         });
@@ -82,14 +81,15 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
         setMounted(true);
     }, []);
     useEffect(() => {
-        if (!urls?.length || !enabled)
+        if (!urls?.length || !enabled || loading)
             return;
         console.log('DraftModeClient (start):', urls);
         urls.forEach((u) => connect(u));
         return () => {
+            console.log('unmount');
             urls.forEach((u) => disconnect(u));
         };
-    }, [urls, tag, path, enabled]);
+    }, [loading, urls, tag, path, enabled]);
     if (!mounted)
         return null;
     const style = {
@@ -98,7 +98,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
         left: position === 'topleft' || position === 'bottomleft' ? '0px' : 'auto',
         right: position === 'bottomright' || position === 'topright' ? '0px' : 'auto',
     };
-    return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [_jsxs("div", { className: s.draft, style: style, children: [controls && (_jsx("a", { href: `/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`, className: s.link, onClick: () => setReloading(true), children: _jsx("button", { "aria-checked": enabled, className: s.button, children: reloading || loading ? (_jsx("div", { className: s.reloading, "data-draft": enabled })) : ('Draft') }) })), loading && !controls && _jsx("div", { className: s.loading, "data-draft": enabled })] }), enabled && (_jsx(ContentLink, { currentPath: pathname, enableClickToEdit: { hoverOnly: true }, onNavigateTo: () => {
+    return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [_jsxs("div", { className: s.draft, style: style, children: [contentEditingUrl && (_jsx("a", { href: `/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`, className: s.link, onClick: () => setReloading(true), children: _jsx("button", { "aria-checked": enabled, className: s.button, children: reloading || loading ? (_jsx("div", { className: s.reloading, "data-draft": enabled })) : ('Draft') }) })), loading && !dev && _jsx("div", { className: s.loading, "data-draft": enabled })] }), enabled && (_jsx(ContentLink, { currentPath: pathname, enableClickToEdit: { hoverOnly: true }, onNavigateTo: () => {
                         console.log('DraftModeClient:', pathname);
                         router.push(pathname);
                     } }))] }) }));

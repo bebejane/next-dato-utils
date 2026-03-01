@@ -35,8 +35,8 @@ export default function DraftMode({
 	const [loading, startTransition] = useTransition();
 	const [reloading, setReloading] = useState(false);
 	const [mounted, setMounted] = useState(false);
-	const controls =
-		process.env.NODE_ENV === 'development' && process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
+	const dev = process.env.NODE_ENV === 'development';
+	const contentEditingUrl = process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
 	const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
 	const paths = path ? (Array.isArray(path) ? path : [path]) : [];
 	const listeners = useRef<{ [key: string]: { listener: EventSource; interval: NodeJS.Timeout } }>(
@@ -83,14 +83,12 @@ export default function DraftMode({
 		});
 
 		listener.addEventListener('update', async (event) => {
-			console.log('update', event);
-			if (++updates <= 1) return;
+			if (++updates <= 1) {
+				return;
+			}
 
-			console.log('DraftModeClient: update', event.type, event.timeStamp);
-
+			console.log('DraftModeClient: update', event);
 			if (tags?.length === 0 && paths?.length === 0) return;
-
-			disconnect(url);
 
 			console.log('DraftModeClient: revalidate', 'paths', paths, 'tags', tags);
 
@@ -113,7 +111,6 @@ export default function DraftMode({
 				interval: setInterval(async () => {
 					listener.readyState === 1 && listener.dispatchEvent(new Event('ping'));
 					listener.readyState === 2 && reconnect(url);
-					console.log(listener.readyState);
 				}, 2000),
 			};
 		});
@@ -124,15 +121,16 @@ export default function DraftMode({
 	}, []);
 
 	useEffect(() => {
-		if (!urls?.length || !enabled) return;
+		if (!urls?.length || !enabled || loading) return;
 
 		console.log('DraftModeClient (start):', urls);
 		urls.forEach((u) => connect(u));
 
 		return () => {
+			console.log('unmount');
 			urls.forEach((u) => disconnect(u));
 		};
-	}, [urls, tag, path, enabled]);
+	}, [loading, urls, tag, path, enabled]);
 
 	if (!mounted) return null;
 
@@ -146,7 +144,7 @@ export default function DraftMode({
 		<>
 			<Modal>
 				<div className={s.draft} style={style}>
-					{controls && (
+					{contentEditingUrl && (
 						<a
 							href={`/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`}
 							className={s.link}
@@ -161,7 +159,7 @@ export default function DraftMode({
 							</button>
 						</a>
 					)}
-					{loading && !controls && <div className={s.loading} data-draft={enabled} />}
+					{loading && !dev && <div className={s.loading} data-draft={enabled} />}
 				</div>
 				{enabled && (
 					<ContentLink
