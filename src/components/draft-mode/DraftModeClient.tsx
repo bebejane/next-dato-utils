@@ -145,7 +145,8 @@ export default function DraftMode({
 		<>
 			<Modal>
 				<div className={s.draft} style={style}>
-					{((contentEditingUrl && dev) || (!dev && enabled)) && (
+					{/* {((contentEditingUrl && dev) || (!dev && enabled)) && ( */}
+					{contentEditingUrl && (
 						<a
 							href={`/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`}
 							className={s.link}
@@ -162,7 +163,7 @@ export default function DraftMode({
 					)}
 					{loading && !dev && <div className={s.loading} data-draft={enabled} />}
 				</div>
-				{contentEditingUrl && (
+				{contentEditingUrl && enabled && (
 					<ContentLink
 						currentPath={pathname}
 						enableClickToEdit={{ hoverOnly: true }}
