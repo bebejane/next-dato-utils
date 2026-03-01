@@ -12,6 +12,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
     const [loading, startTransition] = useTransition();
     const [reloading, setReloading] = useState(false);
     const [mounted, setMounted] = useState(false);
+    const iframe = typeof window !== 'undefined' && window.self !== window.top;
     const dev = process.env.NODE_ENV === 'development';
     const contentEditingUrl = process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
     const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
@@ -99,7 +100,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
         right: position === 'bottomright' || position === 'topright' ? '0px' : 'auto',
     };
     console.log({ contentEditingUrl, dev, enabled, path, pathname, secret });
-    return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [_jsxs("div", { className: s.draft, style: style, children: [((contentEditingUrl && dev) || (!dev && enabled)) && (_jsx("a", { href: `/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`, className: s.link, onClick: () => setReloading(true), children: _jsx("button", { "aria-checked": enabled, className: s.button, children: reloading || loading ? (_jsx("div", { className: s.reloading, "data-draft": enabled })) : ('Draft') }) })), loading && !dev && _jsx("div", { className: s.loading, "data-draft": enabled })] }), contentEditingUrl && enabled && (_jsx(ContentLink, { currentPath: pathname, enableClickToEdit: { hoverOnly: true }, onNavigateTo: () => {
+    return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [_jsxs("div", { className: s.draft, style: style, children: [((contentEditingUrl && dev) || (!dev && enabled && iframe)) && (_jsx("a", { href: `/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`, className: s.link, onClick: () => setReloading(true), children: _jsx("button", { "aria-checked": enabled, className: s.button, children: reloading || loading ? (_jsx("div", { className: s.reloading, "data-draft": enabled })) : ('Draft') }) })), loading && !dev && _jsx("div", { className: s.loading, "data-draft": enabled })] }), contentEditingUrl && enabled && (_jsx(ContentLink, { currentPath: pathname, enableClickToEdit: { hoverOnly: true }, onNavigateTo: () => {
                         console.log('DraftModeClient:', pathname);
                         router.push(pathname);
                     } }))] }) }));

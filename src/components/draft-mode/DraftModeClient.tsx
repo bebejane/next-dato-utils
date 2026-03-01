@@ -35,6 +35,7 @@ export default function DraftMode({
 	const [loading, startTransition] = useTransition();
 	const [reloading, setReloading] = useState(false);
 	const [mounted, setMounted] = useState(false);
+	const iframe = typeof window !== 'undefined' && window.self !== window.top;
 	const dev = process.env.NODE_ENV === 'development';
 	const contentEditingUrl = process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
 	const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
@@ -145,7 +146,7 @@ export default function DraftMode({
 		<>
 			<Modal>
 				<div className={s.draft} style={style}>
-					{((contentEditingUrl && dev) || (!dev && enabled)) && (
+					{((contentEditingUrl && dev) || (!dev && enabled && iframe)) && (
 						<a
 							href={`/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`}
 							className={s.link}
