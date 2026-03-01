@@ -47,6 +47,9 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
         listener.addEventListener('error', async (err) => {
             console.log('DraftModeClient: error', err);
         });
+        listener.addEventListener('timeout', async (err) => {
+            console.log('DraftModeClient: timeout');
+        });
         listener.addEventListener('update', async (event) => {
             if (++updates <= 1) {
                 return;
@@ -70,20 +73,16 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
             console.log('DraftModeClient: notice');
             console.log(notice);
         });
-        listener.addEventListener('ping', (ping) => {
-            console.log('DraftModeClient: ping', ping.timeStamp);
-        });
-        listener.addEventListener('pong', (notice) => {
-            console.log('DraftModeClient: pong');
-        });
+        // listener.addEventListener('ping', (ping) => {
+        // 	console.log('DraftModeClient: ping', ping.timeStamp);
+        // });
         listener.addEventListener('open', () => {
+            disconnect(url);
             console.log('DraftModeClient: connected to channel');
-            if (listeners.current[url])
-                clearInterval(listeners.current[url].listener);
             listeners.current[url] = {
                 listener,
                 interval: setInterval(async () => {
-                    listener.readyState === 1 && listener.dispatchEvent(new Event('ping'));
+                    //listener.readyState === 1 && listener.dispatchEvent(new Event('ping'));
                     listener.readyState === 2 && reconnect(url);
                 }, 2000),
             };
