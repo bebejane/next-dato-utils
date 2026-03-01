@@ -40,6 +40,7 @@ export default function DraftMode({
 	const contentEditingUrl = process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
 	const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
 	const paths = path ? (Array.isArray(path) ? path : [path]) : [];
+	const refreshInterval = useRef<NodeJS.Timeout | null>(null);
 	const listeners = useRef<{ [key: string]: DraftModeListener }>({});
 	const urls: string[] = (_url ? (Array.isArray(_url) ? _url : [_url]) : []).filter(
 		(u) => u,
@@ -48,6 +49,21 @@ export default function DraftMode({
 	useEffect(() => {
 		setMounted(true);
 	}, []);
+
+	useEffect(() => {
+		if (mounted) {
+			refreshInterval.current = setInterval(() => {
+				console.log('refresh');
+				router.refresh();
+			}, 1000 * 60);
+		}
+
+		return () => {
+			if (refreshInterval.current) {
+				clearInterval(refreshInterval.current);
+			}
+		};
+	}, [mounted]);
 
 	function disconnect(url: string) {
 		listeners.current?.[url]?.destroy();
@@ -76,11 +92,11 @@ export default function DraftMode({
 		listener.on('disconnect', (url) => {
 			console.log('DraftModeClient: disconnect', url);
 			delete listeners.current[url];
-			actions.revalidatePath(url, 'page');
+			setTimeout(() => router.refresh(), 2000);
 		});
 		listener.on('error', (url) => {
 			console.log('revalidate', url);
-			actions.revalidatePath(url, 'page');
+			setTimeout(() => router.refresh(), 2000);
 		});
 	}
 
@@ -91,6 +107,7 @@ export default function DraftMode({
 
 		return () => {
 			console.log('unmount');
+
 			urls.forEach((u) => disconnect(u));
 		};
 	}, [loading, urls, tag, path, enabled]);

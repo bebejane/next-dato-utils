@@ -17,11 +17,25 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
     const contentEditingUrl = process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
     const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
     const paths = path ? (Array.isArray(path) ? path : [path]) : [];
+    const refreshInterval = useRef(null);
     const listeners = useRef({});
     const urls = (_url ? (Array.isArray(_url) ? _url : [_url]) : []).filter((u) => u);
     useEffect(() => {
         setMounted(true);
     }, []);
+    useEffect(() => {
+        if (mounted) {
+            refreshInterval.current = setInterval(() => {
+                console.log('refresh');
+                router.refresh();
+            }, 1000 * 60);
+        }
+        return () => {
+            if (refreshInterval.current) {
+                clearInterval(refreshInterval.current);
+            }
+        };
+    }, [mounted]);
     function disconnect(url) {
         listeners.current?.[url]?.destroy();
         delete listeners.current?.[url];
@@ -48,11 +62,11 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
         listener.on('disconnect', (url) => {
             console.log('DraftModeClient: disconnect', url);
             delete listeners.current[url];
-            actions.revalidatePath(url, 'page');
+            setTimeout(() => router.refresh(), 2000);
         });
         listener.on('error', (url) => {
             console.log('revalidate', url);
-            actions.revalidatePath(url, 'page');
+            setTimeout(() => router.refresh(), 2000);
         });
     }
     useEffect(() => {
