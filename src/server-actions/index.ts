@@ -10,7 +10,7 @@ export async function disableDraftMode(pathname?: string) {
 }
 
 export async function revalidateTag(tag: string | string[]): Promise<void> {
-	Array.isArray(tag) ? tag.forEach((t) => rt(t)) : rt(tag);
+	Array.isArray(tag) ? tag.forEach((t) => rt(t, 'max')) : rt(tag, 'max');
 }
 
 export async function revalidatePath(path: string | string[]): Promise<void> {

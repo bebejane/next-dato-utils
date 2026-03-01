@@ -7,7 +7,7 @@ export async function disableDraftMode(pathname) {
     redirect(pathname ?? `/`);
 }
 export async function revalidateTag(tag) {
-    Array.isArray(tag) ? tag.forEach((t) => rt(t)) : rt(tag);
+    Array.isArray(tag) ? tag.forEach((t) => rt(t, 'max')) : rt(tag, 'max');
 }
 export async function revalidatePath(path) {
     Array.isArray(path) ? path.forEach((p) => rp(p)) : rp(path);

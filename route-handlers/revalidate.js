@@ -6,7 +6,8 @@ export default async function revalidate(req, callback) {
     const { entity, related_entities, event_type, entity_type, environment } = payload;
     const api_key = entity_type === 'upload'
         ? 'upload'
-        : related_entities?.find(({ id }) => id === entity.relationships?.item_type?.data?.id)?.attributes?.api_key;
+        : related_entities?.find(({ id }) => id === entity.relationships?.item_type?.data?.id)
+            ?.attributes?.api_key;
     const delay = parseDelay(entity);
     const now = Date.now();
     let response = { revalidated: false, api_key, paths: [], tags: [], event_type, entity_type, delay, now };
@@ -22,7 +23,7 @@ export default async function revalidate(req, callback) {
             }
             else {
                 paths?.forEach((p) => revalidatePath(p));
-                tags?.forEach((t) => revalidateTag(t));
+                tags?.forEach((t) => revalidateTag(t, 'max-'));
                 response = { ...response, revalidated: true, paths, tags };
             }
             if (logs)

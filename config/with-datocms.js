@@ -8,7 +8,7 @@ export default async function withDatoCms(config) {
             return c;
         },
         turbopack: {
-            ...config.turbopacl,
+            ...config.turbopack,
             resolveAlias: {
                 ...config.turbopack?.resolveAlias,
                 'datocms.config': './datocms.config.ts',

@@ -140,11 +140,12 @@ export default function DraftMode({
 		left: position === 'topleft' || position === 'bottomleft' ? '0px' : 'auto',
 		right: position === 'bottomright' || position === 'topright' ? '0px' : 'auto',
 	};
+
 	return (
 		<>
 			<Modal>
 				<div className={s.draft} style={style}>
-					{contentEditingUrl && (
+					{((contentEditingUrl && dev) || (!dev && enabled)) && (
 						<a
 							href={`/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`}
 							className={s.link}

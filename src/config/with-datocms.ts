@@ -10,7 +10,7 @@ export default async function withDatoCms(config: NextConfig): Promise<NextConfi
 			return c;
 		},
 		turbopack: {
-			...config.turbopacl,
+			...config.turbopack,
 			resolveAlias: {
 				...config.turbopack?.resolveAlias,
 				'datocms.config': './datocms.config.ts',

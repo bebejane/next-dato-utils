@@ -4,18 +4,20 @@ export default async function revalidate(
 	req: Request,
 	callback: (
 		payload: RevalidatePayload,
-		revalidate: (paths: string[], tags: string[], logs?: boolean) => Promise<Response>
-	) => Promise<Response>
+		revalidate: (paths: string[], tags: string[], logs?: boolean) => Promise<Response>,
+	) => Promise<Response>,
 ) {
 	const payload = (await req.json()) as DatoWebhookPayload;
 
-	if (!payload || !payload?.entity) return new Response('Payload empty or missing entity', { status: 400 });
+	if (!payload || !payload?.entity)
+		return new Response('Payload empty or missing entity', { status: 400 });
 
 	const { entity, related_entities, event_type, entity_type, environment } = payload;
 	const api_key =
 		entity_type === 'upload'
 			? 'upload'
-			: related_entities?.find(({ id }) => id === entity.relationships?.item_type?.data?.id)?.attributes?.api_key;
+			: related_entities?.find(({ id }) => id === entity.relationships?.item_type?.data?.id)
+					?.attributes?.api_key;
 	const delay = parseDelay(entity);
 	const now = Date.now();
 
@@ -43,7 +45,7 @@ export default async function revalidate(
 				response = { ...response, revalidated: false, payload };
 			} else {
 				paths?.forEach((p) => revalidatePath(p));
-				tags?.forEach((t) => revalidateTag(t));
+				tags?.forEach((t) => revalidateTag(t, 'max-'));
 				response = { ...response, revalidated: true, paths, tags };
 			}
 
@@ -70,7 +72,11 @@ const parseDelay = (entity: DatoWebhookPayload['entity']): number => {
 	if (!updated_at && !published_at && !created_at) return 0;
 	return (
 		Date.now() -
-		Math.max(new Date(updated_at).getTime(), new Date(published_at).getTime(), new Date(created_at).getTime())
+		Math.max(
+			new Date(updated_at).getTime(),
+			new Date(published_at).getTime(),
+			new Date(created_at).getTime(),
+		)
 	);
 };
 
