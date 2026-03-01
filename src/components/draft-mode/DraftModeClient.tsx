@@ -140,7 +140,7 @@ export default function DraftMode({
 		left: position === 'topleft' || position === 'bottomleft' ? '0px' : 'auto',
 		right: position === 'bottomright' || position === 'topright' ? '0px' : 'auto',
 	};
-
+	console.log({ contentEditingUrl, dev, enabled });
 	return (
 		<>
 			<Modal>
