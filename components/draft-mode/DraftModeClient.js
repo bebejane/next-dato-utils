@@ -4,8 +4,8 @@ import s from './DraftModeClient.module.css';
 import { usePathname, useRouter } from 'next/navigation.js';
 import { ContentLink } from 'react-datocms';
 import { useEffect, useTransition, useRef, useState } from 'react';
-import Modal from '../Modal.js';
 import { sleep } from '../../utils/index.js';
+import Modal from '../Modal.js';
 export default function DraftMode({ enabled, url: _url, tag, path, actions, position, secret, }) {
     const router = useRouter();
     const pathname = usePathname();
@@ -22,7 +22,8 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
     function disconnect(url) {
         if (!listeners.current[url])
             return;
-        clearInterval(listeners.current[url].interval);
+        clearInterval(listeners.current[url].status);
+        clearInterval(listeners.current[url].reconnect);
         listeners.current[url].listener.close();
         delete listeners.current[url];
         console.log('DraftModeClient: diconnected');
@@ -39,7 +40,8 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
         let updates = 0;
         const listener = new EventSource(url);
         listener.addEventListener('disconnect', async (event) => {
-            console.log('DraftModeClient: for real disconnect');
+            console.log('DraftModeClient: disconnect');
+            reconnect(url);
         });
         listener.addEventListener('close', async (event) => {
             console.log('DraftModeClient: for real close');
@@ -54,7 +56,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
             if (++updates <= 1) {
                 return;
             }
-            console.log('DraftModeClient: update', event);
+            console.log('DraftModeClient: update', event.origin);
             if (tags?.length === 0 && paths?.length === 0)
                 return;
             console.log('DraftModeClient: revalidate', 'paths', paths, 'tags', tags);
@@ -69,26 +71,17 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
             console.log('DraftModeClient: channel error');
             reconnect(url);
         });
-        listener.addEventListener('notice', (notice) => {
-            console.log('DraftModeClient: notice');
-            console.log(notice);
-        });
-        // listener.addEventListener('ping', (ping) => {
-        // 	console.log('DraftModeClient: ping', ping.timeStamp);
-        // });
-        listener.addEventListener('heartbeat', () => {
-            // Handle heartbeat events
-            console.log('Received heartbeat event');
-        });
         listener.addEventListener('open', () => {
             disconnect(url);
             console.log('DraftModeClient: connected to channel');
             listeners.current[url] = {
                 listener,
-                interval: setInterval(async () => {
-                    //listener.readyState === 1 && listener.dispatchEvent(new Event('ping'));
-                    listener.readyState === 2 && reconnect(url);
+                status: setInterval(async () => {
+                    listener.readyState === 2 && listener.dispatchEvent(new Event('disconnect'));
                 }, 2000),
+                reconnect: setInterval(async () => {
+                    reconnect(url);
+                }, 1000 * 60),
             };
         });
     }
@@ -113,8 +106,8 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
         left: position === 'topleft' || position === 'bottomleft' ? '0px' : 'auto',
         right: position === 'bottomright' || position === 'topright' ? '0px' : 'auto',
     };
-    console.log({ contentEditingUrl, dev, enabled, path, pathname, secret, insideiFrame });
-    return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [_jsxs("div", { className: s.draft, style: style, children: [contentEditingUrl && !insideiFrame && (dev || enabled) && (_jsx("a", { href: `/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`, className: s.link, onClick: () => setReloading(true), children: _jsx("button", { "aria-checked": enabled, className: s.button, children: reloading || loading ? (_jsx("div", { className: s.reloading, "data-draft": enabled })) : ('Draft') }) })), loading && !dev && _jsx("div", { className: s.loading, "data-draft": enabled })] }), contentEditingUrl && enabled && (_jsx(ContentLink, { currentPath: pathname, enableClickToEdit: { hoverOnly: true }, onNavigateTo: () => {
+    //console.log({ contentEditingUrl, dev, enabled, path, pathname, secret, insideiFrame });
+    return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [_jsxs("div", { className: s.draft, style: style, children: [contentEditingUrl && !insideiFrame && (dev || enabled) && (_jsx("a", { href: `/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`, className: s.link, onClick: () => setReloading(true), children: _jsx("button", { "aria-checked": enabled, className: s.button, children: reloading || loading ? (_jsx("div", { className: s.reloading, "data-draft": enabled })) : ('Draft') }) })), loading && !dev && _jsx("div", { className: s.loading, "data-draft": enabled })] }), contentEditingUrl && enabled && path && (_jsx(ContentLink, { currentPath: pathname, enableClickToEdit: { hoverOnly: true }, onNavigateTo: () => {
                         console.log('DraftModeClient:', pathname);
                         router.push(pathname);
                     } }))] }) }));

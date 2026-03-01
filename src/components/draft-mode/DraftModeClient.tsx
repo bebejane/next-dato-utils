@@ -4,8 +4,8 @@ import s from './DraftModeClient.module.css';
 import { usePathname, useRouter } from 'next/navigation.js';
 import { ContentLink } from 'react-datocms';
 import { useEffect, useTransition, useRef, useState } from 'react';
-import Modal from '../Modal.js';
 import { sleep } from '../../utils/index.js';
+import Modal from '../Modal.js';
 
 export type DraftModeProps = {
 	enabled: boolean;
@@ -40,9 +40,9 @@ export default function DraftMode({
 	const contentEditingUrl = process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
 	const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
 	const paths = path ? (Array.isArray(path) ? path : [path]) : [];
-	const listeners = useRef<{ [key: string]: { listener: EventSource; interval: NodeJS.Timeout } }>(
-		{},
-	);
+	const listeners = useRef<{
+		[key: string]: { listener: EventSource; status: NodeJS.Timeout; reconnect: NodeJS.Timeout };
+	}>({});
 	const urls: string[] = (_url ? (Array.isArray(_url) ? _url : [_url]) : []).filter(
 		(u) => u,
 	) as string[];
@@ -50,7 +50,9 @@ export default function DraftMode({
 	function disconnect(url: string) {
 		if (!listeners.current[url]) return;
 
-		clearInterval(listeners.current[url].interval);
+		clearInterval(listeners.current[url].status);
+		clearInterval(listeners.current[url].reconnect);
+
 		listeners.current[url].listener.close();
 		delete listeners.current[url];
 		console.log('DraftModeClient: diconnected');
@@ -72,7 +74,8 @@ export default function DraftMode({
 		const listener = new EventSource(url);
 
 		listener.addEventListener('disconnect', async (event) => {
-			console.log('DraftModeClient: for real disconnect');
+			console.log('DraftModeClient: disconnect');
+			reconnect(url);
 		});
 
 		listener.addEventListener('close', async (event) => {
@@ -92,7 +95,7 @@ export default function DraftMode({
 				return;
 			}
 
-			console.log('DraftModeClient: update', event);
+			console.log('DraftModeClient: update', event.origin);
 			if (tags?.length === 0 && paths?.length === 0) return;
 
 			console.log('DraftModeClient: revalidate', 'paths', paths, 'tags', tags);
@@ -108,19 +111,6 @@ export default function DraftMode({
 			reconnect(url);
 		});
 
-		listener.addEventListener('notice', (notice) => {
-			console.log('DraftModeClient: notice');
-			console.log(notice);
-		});
-
-		// listener.addEventListener('ping', (ping) => {
-		// 	console.log('DraftModeClient: ping', ping.timeStamp);
-		// });
-		listener.addEventListener('heartbeat', () => {
-			// Handle heartbeat events
-			console.log('Received heartbeat event');
-		});
-
 		listener.addEventListener('open', () => {
 			disconnect(url);
 
@@ -128,10 +118,12 @@ export default function DraftMode({
 
 			listeners.current[url] = {
 				listener,
-				interval: setInterval(async () => {
-					//listener.readyState === 1 && listener.dispatchEvent(new Event('ping'));
-					listener.readyState === 2 && reconnect(url);
+				status: setInterval(async () => {
+					listener.readyState === 2 && listener.dispatchEvent(new Event('disconnect'));
 				}, 2000),
+				reconnect: setInterval(async () => {
+					reconnect(url);
+				}, 1000 * 60),
 			};
 		});
 	}
@@ -160,7 +152,7 @@ export default function DraftMode({
 		left: position === 'topleft' || position === 'bottomleft' ? '0px' : 'auto',
 		right: position === 'bottomright' || position === 'topright' ? '0px' : 'auto',
 	};
-	console.log({ contentEditingUrl, dev, enabled, path, pathname, secret, insideiFrame });
+	//console.log({ contentEditingUrl, dev, enabled, path, pathname, secret, insideiFrame });
 	return (
 		<>
 			<Modal>
@@ -182,7 +174,7 @@ export default function DraftMode({
 					)}
 					{loading && !dev && <div className={s.loading} data-draft={enabled} />}
 				</div>
-				{contentEditingUrl && enabled && (
+				{contentEditingUrl && enabled && path && (
 					<ContentLink
 						currentPath={pathname}
 						enableClickToEdit={{ hoverOnly: true }}
