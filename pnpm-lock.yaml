@@ -23,6 +23,9 @@ importers:
       dotenv:
         specifier: ^16.4.4
         version: 16.6.1
+      extended-eventsource:
+        specifier: ^2.1.0
+        version: 2.1.0
       get-tsconfig:
         specifier: ^4.13.0
         version: 4.13.6
@@ -44,6 +47,9 @@ importers:
       react-markdown:
         specifier: ^9.0.1
         version: 9.1.0(@types/react@19.2.14)(react@19.2.4)
+      reconnecting-eventsource:
+        specifier: ^1.6.5
+        version: 1.6.5
       remark-breaks:
         specifier: ^4.0.0
         version: 4.0.0
@@ -84,6 +90,9 @@ importers:
       datocms-listen:
         specifier: ^1.0.2
         version: 1.0.2(graphql@16.13.0)
+      eventsource-client:
+        specifier: ^1.2.0
+        version: 1.2.0
       glob:
         specifier: ^11.0.3
         version: 11.1.0
@@ -688,8 +697,19 @@ packages:
   event-stream@3.3.4:
     resolution: {integrity: sha512-QHpkERcGsR0T7Qm3HNJSyXKEEj8AHNxkY3PK8TS2KJvQ7NiSHe3DDpwVKKtoYprL/AreyzFBeIkBIWChAqn60g==}
 
+  eventsource-client@1.2.0:
+    resolution: {integrity: sha512-kDI75RSzO3TwyG/K9w1ap8XwqSPcwi6jaMkNulfVeZmSeUM49U8kUzk1s+vKNt0tGrXgK47i+620Yasn1ccFiw==}
+    engines: {node: '>=18.0.0'}
+
+  eventsource-parser@3.0.6:
+    resolution: {integrity: sha512-Vo1ab+QXPzZ4tCa8SwIHJFaSzy4R6SHf7BY79rFBDf0idraZWAkYrDjDj8uWaSm3S2TK+hJ7/t1CEmZ7jXw+pg==}
+    engines: {node: '>=18.0.0'}
+
   extend@3.0.2:
     resolution: {integrity: sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==}
+
+  extended-eventsource@2.1.0:
+    resolution: {integrity: sha512-0DX6gEWwfcDkglS7bdr6oH5jb6TR6BvsVvmOcsUzyl5ESqkze9XImyNZPLoZtaGi1kKGjH/+dNqd8O0SjD7KgQ==}
 
   fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
@@ -1211,6 +1231,10 @@ packages:
   readdirp@4.1.2:
     resolution: {integrity: sha512-GDhwkLfywWL2s6vEjyhri+eXmfH6j1L7JE27WhqLeYzoh/A3DBaYGEj2H/HFZCn/kMfim73FXxEJTw06WtxQwg==}
     engines: {node: '>= 14.18.0'}
+
+  reconnecting-eventsource@1.6.5:
+    resolution: {integrity: sha512-L7ADnbp7yA42vvjwx7cZFNmiyHNBu/UldL1NCEvB23xBkZhESF83s2cnD9sLfvcX9wMIzW1UpIS7EOq/iu3E2g==}
+    engines: {node: '>=12.0.0'}
 
   remark-breaks@4.0.0:
     resolution: {integrity: sha512-IjEjJOkH4FuJvHZVIW0QCDWxcG96kCq7An/KVH2NfJe6rKZU2AsHeB3OEjPNRxi4QC34Xdx7I2KGYn6IpT7gxQ==}
@@ -1958,7 +1982,15 @@ snapshots:
       stream-combiner: 0.0.4
       through: 2.3.8
 
+  eventsource-client@1.2.0:
+    dependencies:
+      eventsource-parser: 3.0.6
+
+  eventsource-parser@3.0.6: {}
+
   extend@3.0.2: {}
+
+  extended-eventsource@2.1.0: {}
 
   fast-deep-equal@3.1.3: {}
 
@@ -2703,6 +2735,8 @@ snapshots:
       picomatch: 2.3.1
 
   readdirp@4.1.2: {}
+
+  reconnecting-eventsource@1.6.5: {}
 
   remark-breaks@4.0.0:
     dependencies:

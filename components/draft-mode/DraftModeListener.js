@@ -1,4 +1,5 @@
 import EventEmitter from 'events';
+import { EventSource } from 'extended-eventsource';
 export class DraftModeListener extends EventEmitter {
     id;
     url;
@@ -17,7 +18,9 @@ export class DraftModeListener extends EventEmitter {
     }
     connect() {
         this.updates = 0;
-        this.source = new EventSource(this.url);
+        this.source = new EventSource(this.url, {
+            retry: 3000,
+        });
         this.source.addEventListener('open', this._handleOpen.bind(this));
         this.source.addEventListener('update', this._handleUpdate.bind(this));
         this.source.addEventListener('disconnect', this._handleDisconnect.bind(this));
@@ -81,7 +84,7 @@ export class DraftModeListener extends EventEmitter {
     }
     _handleError(err) {
         console.log('DraftModeListener: error', err);
-        this.destroy();
+        //this.destroy();
         this.emit('error', err);
     }
 }
