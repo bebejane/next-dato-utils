@@ -38,7 +38,7 @@
 }
 
 .button[aria-checked='false'] {
-	background-color: pink !important;
+	background-color: #fff !important;
 	color: #000 !important;
 }
 
