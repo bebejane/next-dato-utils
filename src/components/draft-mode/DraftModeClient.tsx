@@ -162,7 +162,7 @@ export default function DraftMode({
 					)}
 					{loading && !dev && <div className={s.loading} data-draft={enabled} />}
 				</div>
-				{contentEditingUrl && enabled && (
+				{contentEditingUrl && (
 					<ContentLink
 						currentPath={pathname}
 						enableClickToEdit={{ hoverOnly: true }}
