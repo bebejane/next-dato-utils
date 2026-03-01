@@ -76,8 +76,12 @@ export default function DraftMode({
 		listener.on('disconnect', (url) => {
 			console.log('DraftModeClient: disconnect', url);
 			delete listeners.current[url];
+			actions.revalidatePath(url, 'page');
 		});
-		listener.on('error', (url) => {});
+		listener.on('error', (url) => {
+			console.log('revalidate', url);
+			actions.revalidatePath(url, 'page');
+		});
 	}
 
 	useEffect(() => {

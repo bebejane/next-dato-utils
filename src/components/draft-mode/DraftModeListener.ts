@@ -1,5 +1,5 @@
 import EventEmitter from 'events';
-import { EventSource } from 'extended-eventsource';
+//import { EventSource } from 'extended-eventsource';
 
 import { sleep } from '../../utils/utilities.js';
 
@@ -23,16 +23,14 @@ export class DraftModeListener extends EventEmitter {
 
 	connect() {
 		this.updates = 0;
-		this.source = new EventSource(this.url, {
-			retry: 3000,
-		});
+		this.source = new EventSource(this.url);
 		this.source.addEventListener('open', this._handleOpen.bind(this));
 		this.source.addEventListener('update', this._handleUpdate.bind(this));
 		this.source.addEventListener('disconnect', this._handleDisconnect.bind(this));
 		this.source.addEventListener('channelError', this._handleChannelError.bind(this));
 		this.source.addEventListener('error', this._handleError.bind(this));
 		super.emit('connect', this.url);
-		console.log('DraftModeListener: setup', this.id);
+		console.log('DraftModeListener: setup', this.url);
 	}
 	async reconnect() {
 		if (this.reconnecting) return console.log('skipped reconnect');
@@ -81,6 +79,7 @@ export class DraftModeListener extends EventEmitter {
 	}
 	_handleUpdate(event: any) {
 		if (++this.updates <= 1) return;
+		console.log(event);
 		super.emit('update', this.url);
 	}
 	_handleChannelError(err: any) {
@@ -89,7 +88,7 @@ export class DraftModeListener extends EventEmitter {
 	}
 	_handleError(err: any) {
 		console.log('DraftModeListener: error', err);
-		//this.destroy();
+		this.destroy();
 		this.emit('error', err);
 	}
 }
