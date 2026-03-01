@@ -66,6 +66,10 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
             console.log('DraftModeClient: channel error');
             console.log(err);
         });
+        listener.addEventListener('notice', (notice) => {
+            console.log('DraftModeClient: notice');
+            console.log(notice);
+        });
         listener.addEventListener('open', () => {
             console.log('DraftModeClient: connected to channel');
             //disconnect(url);
