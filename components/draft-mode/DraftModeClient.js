@@ -49,7 +49,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
             console.log('update', event);
             if (++updates <= 1)
                 return;
-            console.log('DraftModeClient: update', event);
+            console.log('DraftModeClient: update', event.type, event.timeStamp);
             if (tags?.length === 0 && paths?.length === 0)
                 return;
             disconnect(url);
@@ -67,9 +67,14 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
         });
         listener.addEventListener('open', () => {
             console.log('DraftModeClient: connected to channel');
+            disconnect(url);
             listeners.current[url] = {
                 listener,
-                interval: setInterval(async () => listener.readyState === 2 && reconnect(url), 1000),
+                interval: setInterval(async () => {
+                    listener.readyState === 1 && listener.dispatchEvent(new Event('ping'));
+                    listener.readyState === 2 && reconnect(url);
+                    console.log(listener.readyState);
+                }, 2000),
             };
         });
     }
@@ -93,7 +98,7 @@ export default function DraftMode({ enabled, url: _url, tag, path, actions, posi
         left: position === 'topleft' || position === 'bottomleft' ? '0px' : 'auto',
         right: position === 'bottomright' || position === 'topright' ? '0px' : 'auto',
     };
-    return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [_jsx("div", { className: s.draft, style: style, children: controls && (_jsx("a", { href: `/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`, onClick: () => setReloading(true), className: s.link, children: _jsx("button", { "aria-checked": enabled, className: s.button, children: loading || reloading ? _jsx("div", { className: s.loader, "data-draft": enabled }) : 'Draft' }) })) }), enabled && (_jsx(ContentLink, { currentPath: pathname, enableClickToEdit: { hoverOnly: true }, onNavigateTo: () => {
+    return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [_jsxs("div", { className: s.draft, style: style, children: [controls && (_jsx("a", { href: `/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`, className: s.link, onClick: () => setReloading(true), children: _jsx("button", { "aria-checked": enabled, className: s.button, children: reloading ? _jsx("div", { className: s.reloading, "data-draft": enabled }) : 'Draft' }) })), loading && _jsx("div", { className: s.loading, "data-draft": enabled })] }), enabled && (_jsx(ContentLink, { currentPath: pathname, enableClickToEdit: { hoverOnly: true }, onNavigateTo: () => {
                         console.log('DraftModeClient:', pathname);
                         router.push(pathname);
                     } }))] }) }));

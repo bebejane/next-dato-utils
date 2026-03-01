@@ -86,7 +86,7 @@ export default function DraftMode({
 			console.log('update', event);
 			if (++updates <= 1) return;
 
-			console.log('DraftModeClient: update', event);
+			console.log('DraftModeClient: update', event.type, event.timeStamp);
 
 			if (tags?.length === 0 && paths?.length === 0) return;
 
@@ -107,9 +107,14 @@ export default function DraftMode({
 
 		listener.addEventListener('open', () => {
 			console.log('DraftModeClient: connected to channel');
+			disconnect(url);
 			listeners.current[url] = {
 				listener,
-				interval: setInterval(async () => listener.readyState === 2 && reconnect(url), 1000),
+				interval: setInterval(async () => {
+					listener.readyState === 1 && listener.dispatchEvent(new Event('ping'));
+					listener.readyState === 2 && reconnect(url);
+					console.log(listener.readyState);
+				}, 2000),
 			};
 		});
 	}
@@ -144,14 +149,15 @@ export default function DraftMode({
 					{controls && (
 						<a
 							href={`/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`}
-							onClick={() => setReloading(true)}
 							className={s.link}
+							onClick={() => setReloading(true)}
 						>
 							<button aria-checked={enabled} className={s.button}>
-								{loading || reloading ? <div className={s.loader} data-draft={enabled} /> : 'Draft'}
+								{reloading ? <div className={s.reloading} data-draft={enabled} /> : 'Draft'}
 							</button>
 						</a>
 					)}
+					{loading && <div className={s.loading} data-draft={enabled} />}
 				</div>
 				{enabled && (
 					<ContentLink
