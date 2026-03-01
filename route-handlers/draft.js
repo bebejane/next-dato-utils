@@ -17,6 +17,10 @@ export default async function draft(request, searchParams) {
         console.log('draft mode:', 'invalid token', slug, secret);
         return new Response('Invalid token', { status: 401 });
     }
+    if (!slug) {
+        console.log('draft mode:', 'invalid slug', slug);
+        return new Response('Invalid slug', { status: 400 });
+    }
     console.log('draft mode:', 'enable', slug);
     (await draftMode()).enable();
     if (maxAge) {
