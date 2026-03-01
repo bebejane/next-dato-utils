@@ -110,7 +110,7 @@ export default function DraftMode({
 		});
 
 		listener.addEventListener('ping', (ping) => {
-			console.log('DraftModeClient: ping');
+			console.log('DraftModeClient: ping', ping.timeStamp);
 			console.log(ping);
 		});
 
