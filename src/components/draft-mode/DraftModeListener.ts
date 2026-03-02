@@ -1,7 +1,4 @@
 import EventEmitter from 'events';
-//import { EventSource } from 'extended-eventsource';
-
-import { sleep } from '../../utils/utilities.js';
 
 export class DraftModeListener extends EventEmitter {
 	private id: string;
@@ -43,6 +40,7 @@ export class DraftModeListener extends EventEmitter {
 	disconnect() {
 		console.log('DraftModeListener: disconnect');
 		this.destroy();
+		this.emit('disconnect', this.url);
 	}
 	destroy() {
 		if (!this.source) return;

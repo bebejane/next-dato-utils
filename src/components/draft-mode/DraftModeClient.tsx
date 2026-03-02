@@ -75,7 +75,7 @@ export default function DraftModeClient({
 		if (!enabled) return;
 
 		const interval = refreshRef.current;
-		if (!focused && interval) clearInterval(interval);
+		if (!focused) interval && clearInterval(interval);
 		else refreshRef.current = setInterval(() => refresh(), refreshInterval);
 
 		return () => {
@@ -112,6 +112,7 @@ export default function DraftModeClient({
 			refresh();
 		});
 		listener.on('error', (url) => {
+			console.log('DraftModeClient:', 'error', url);
 			refresh();
 		});
 	}

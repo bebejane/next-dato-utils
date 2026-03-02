@@ -38,6 +38,7 @@ export class DraftModeListener extends EventEmitter {
     disconnect() {
         console.log('DraftModeListener: disconnect');
         this.destroy();
+        this.emit('disconnect', this.url);
     }
     destroy() {
         if (!this.source)

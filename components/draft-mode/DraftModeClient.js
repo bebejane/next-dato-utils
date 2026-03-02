@@ -47,8 +47,8 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
         if (!enabled)
             return;
         const interval = refreshRef.current;
-        if (!focused && interval)
-            clearInterval(interval);
+        if (!focused)
+            interval && clearInterval(interval);
         else
             refreshRef.current = setInterval(() => refresh(), refreshInterval);
         return () => {
@@ -85,6 +85,7 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
             refresh();
         });
         listener.on('error', (url) => {
+            console.log('DraftModeClient:', 'error', url);
             refresh();
         });
     }
