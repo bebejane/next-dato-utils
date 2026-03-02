@@ -3,10 +3,9 @@
 import s from './DraftModeClient.module.css';
 import { usePathname, useRouter } from 'next/navigation.js';
 import { ContentLink } from 'react-datocms';
-import { useEffect, useTransition, useRef, useState, use } from 'react';
+import { useEffect, useTransition, useRef, useState } from 'react';
 import Modal from '../Modal.js';
 import { DraftModeListener } from './DraftModeListener.js';
-import { createController } from '@datocms/content-link';
 
 export type DraftModeProps = {
 	enabled: boolean;
@@ -56,23 +55,16 @@ export default function DraftModeClient({
 
 	useEffect(() => {
 		if (!enabled) return;
-
-		console.log('setup focus');
 		const handleVisibilityChange = () => {
 			if (!document.hidden) {
-				if (focused !== true) {
-					console.log('refocused');
-					refresh();
-				}
+				focused !== true && refresh();
 				setFocused(true);
 			} else setFocused(false);
 		};
 
 		window.addEventListener('focus', handleVisibilityChange);
 
-		return () => {
-			window.removeEventListener('focus', handleVisibilityChange);
-		};
+		return () => window.removeEventListener('focus', handleVisibilityChange);
 	}, [enabled]);
 
 	useEffect(() => {
@@ -138,14 +130,14 @@ export default function DraftModeClient({
 		router.refresh();
 	}
 
-	if (!mounted) return null;
-
 	const style = {
 		top: position === 'topleft' || position === 'topright' ? '0px' : 'auto',
 		bottom: position === 'bottomleft' || position === 'bottomright' ? '0px' : 'auto',
 		left: position === 'topleft' || position === 'bottomleft' ? '0px' : 'auto',
 		right: position === 'bottomright' || position === 'topright' ? '0px' : 'auto',
 	};
+
+	if (!mounted) return null;
 
 	return (
 		<>
