@@ -8,7 +8,6 @@ export class DraftModeListener extends EventEmitter {
 	private url: string;
 	private source: EventSource | null = null;
 	private status: NodeJS.Timeout | null = null;
-	private timeout: NodeJS.Timeout | null = null;
 	private reconnecting = false;
 	private updates = 0;
 	private retry = 3000;
@@ -46,10 +45,8 @@ export class DraftModeListener extends EventEmitter {
 		this.destroy();
 	}
 	destroy() {
-		if (!this.source) return console.log('skip destroy');
+		if (!this.source) return;
 		this.status && clearInterval(this.status);
-		this.timeout && clearInterval(this.timeout);
-
 		this.source.removeEventListener('open', this._handleOpen);
 		this.source.removeEventListener('update', this._handleUpdate);
 		this.source.removeEventListener('disconnect', this._handleDisconnect);
@@ -62,16 +59,11 @@ export class DraftModeListener extends EventEmitter {
 	_handleOpen(event: any) {
 		console.log('DraftModeListener:', 'connected', this.id);
 		this.status && clearInterval(this.status);
-		this.timeout && clearInterval(this.timeout);
 
 		this.status = setInterval(async () => {
 			//console.log('.', this.id);
 			this.source?.readyState === 2 && this.source.dispatchEvent(new Event('disconnect'));
 		}, 2000);
-
-		this.timeout = setInterval(async () => {
-			//this.reconnect();
-		}, 1000 * 60);
 	}
 	_handleDisconnect(event: Event) {
 		console.log('DraftModeListener:', 'disconnect', this.id);

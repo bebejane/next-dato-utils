@@ -25,7 +25,7 @@
 	height: 20px !important;
 	white-space: nowrap;
 	text-transform: uppercase;
-	border: 1px solid rgba(0, 0, 0, 1) !important;
+	border: 1px solid rgba(0, 0, 0, 1);
 	font-size: 12px !important;
 	font-family: Arial, Helvetica, sans-serif !important;
 	background-color: #fff;
@@ -35,11 +35,13 @@
 .button[aria-checked='true'] {
 	background-color: #000 !important;
 	color: #fff !important;
+	border: 1px solid #fff !important;
 }
 
 .button[aria-checked='false'] {
 	background-color: #fff !important;
 	color: #000 !important;
+	border: 1px solid #000 !important;
 }
 
 .loading,

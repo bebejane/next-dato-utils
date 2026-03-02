@@ -4,7 +4,6 @@ export declare class DraftModeListener extends EventEmitter {
     private url;
     private source;
     private status;
-    private timeout;
     private reconnecting;
     private updates;
     private retry;

@@ -4,7 +4,6 @@ export class DraftModeListener extends EventEmitter {
     url;
     source = null;
     status = null;
-    timeout = null;
     reconnecting = false;
     updates = 0;
     retry = 3000;
@@ -42,9 +41,8 @@ export class DraftModeListener extends EventEmitter {
     }
     destroy() {
         if (!this.source)
-            return console.log('skip destroy');
+            return;
         this.status && clearInterval(this.status);
-        this.timeout && clearInterval(this.timeout);
         this.source.removeEventListener('open', this._handleOpen);
         this.source.removeEventListener('update', this._handleUpdate);
         this.source.removeEventListener('disconnect', this._handleDisconnect);
@@ -57,14 +55,10 @@ export class DraftModeListener extends EventEmitter {
     _handleOpen(event) {
         console.log('DraftModeListener:', 'connected', this.id);
         this.status && clearInterval(this.status);
-        this.timeout && clearInterval(this.timeout);
         this.status = setInterval(async () => {
             //console.log('.', this.id);
             this.source?.readyState === 2 && this.source.dispatchEvent(new Event('disconnect'));
         }, 2000);
-        this.timeout = setInterval(async () => {
-            //this.reconnect();
-        }, 1000 * 60);
     }
     _handleDisconnect(event) {
         console.log('DraftModeListener:', 'disconnect', this.id);
