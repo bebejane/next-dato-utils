@@ -56,11 +56,8 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
         if (!urls?.length || !enabled || loading)
             return;
         urls.forEach((u) => connect(u));
-        return () => {
-            console.log('unmount');
-            urls.forEach((u) => disconnect(u));
-        };
-    }, [loading, urls, tag, path, enabled]);
+        return () => urls.forEach((u) => disconnect(u));
+    }, [loading, urls, enabled]);
     function connect(url) {
         const listener = new DraftModeListener(url);
         listeners.current[url] = listener;

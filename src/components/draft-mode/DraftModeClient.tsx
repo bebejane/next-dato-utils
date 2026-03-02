@@ -81,15 +81,9 @@ export default function DraftModeClient({
 
 	useEffect(() => {
 		if (!urls?.length || !enabled || loading) return;
-
 		urls.forEach((u) => connect(u));
-
-		return () => {
-			console.log('unmount');
-
-			urls.forEach((u) => disconnect(u));
-		};
-	}, [loading, urls, tag, path, enabled]);
+		return () => urls.forEach((u) => disconnect(u));
+	}, [loading, urls, enabled]);
 
 	function connect(url: string) {
 		const listener = new DraftModeListener(url);
