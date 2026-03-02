@@ -1,6 +1,7 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { StructuredText, renderNodeRule, renderMarkRule } from 'react-datocms';
 import { isParagraph, isHeading, isRoot, isInlineBlock } from 'datocms-structured-text-utils';
+import { stripStega } from 'react-datocms/use-content-link';
 import React from 'react';
 export default function StructuredContent({ content, className, blocks, styles, options = {}, }) {
     if (!content)
@@ -31,6 +32,9 @@ export default function StructuredContent({ content, className, blocks, styles, 
                     return null;
             }
         }, renderText: (text) => {
+            // Strip stega if it exists
+            if (stripStega(text) !== text)
+                return text;
             // Replace nbsp, quotes and multiple spaces
             return text?.replace(/\s/g, ' ')?.replaceAll('"', '”');
         }, customMarkRules: customMarkRules, customNodeRules: [

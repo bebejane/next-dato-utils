@@ -1,5 +1,7 @@
 import { StructuredText, renderNodeRule, renderMarkRule } from 'react-datocms';
 import { isParagraph, isHeading, isRoot, isInlineBlock } from 'datocms-structured-text-utils';
+import { stripStega } from 'react-datocms/use-content-link';
+
 import React from 'react';
 
 export type Props = {
@@ -60,6 +62,8 @@ export default function StructuredContent({
 				}
 			}}
 			renderText={(text) => {
+				// Strip stega if it exists
+				if (stripStega(text) !== text) return text;
 				// Replace nbsp, quotes and multiple spaces
 				return text?.replace(/\s/g, ' ')?.replaceAll('"', '”');
 			}}

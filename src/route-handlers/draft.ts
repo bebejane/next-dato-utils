@@ -1,6 +1,4 @@
-//@ts-expect-error
 import { draftMode } from 'next/headers';
-//@ts-expect-error
 import { cookies } from 'next/headers';
 
 export default async function draft(
