@@ -65,7 +65,7 @@ export class DraftModeListener extends EventEmitter {
 		this.timeout && clearInterval(this.timeout);
 
 		this.status = setInterval(async () => {
-			console.log('.', this.id);
+			//console.log('.', this.id);
 			this.source?.readyState === 2 && this.source.dispatchEvent(new Event('disconnect'));
 		}, 2000);
 

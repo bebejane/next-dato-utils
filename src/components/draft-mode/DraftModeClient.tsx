@@ -6,6 +6,7 @@ import { ContentLink } from 'react-datocms';
 import { useEffect, useTransition, useRef, useState, use } from 'react';
 import Modal from '../Modal.js';
 import { DraftModeListener } from './DraftModeListener.js';
+import { createController } from '@datocms/content-link';
 
 export type DraftModeProps = {
 	enabled: boolean;
@@ -171,8 +172,8 @@ export default function DraftModeClient({
 					<ContentLink
 						currentPath={pathname}
 						enableClickToEdit={{ hoverOnly: true }}
-						onNavigateTo={() => {
-							console.log('DraftModeClient:', pathname);
+						onNavigateTo={(item) => {
+							console.log('DraftModeClient:', pathname, item);
 							router.push(pathname);
 						}}
 					/>
