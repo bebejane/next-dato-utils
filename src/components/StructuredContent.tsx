@@ -1,6 +1,6 @@
 import { StructuredText, renderNodeRule, renderMarkRule } from 'react-datocms';
 import { isParagraph, isHeading, isRoot, isInlineBlock } from 'datocms-structured-text-utils';
-import { stripStega } from 'react-datocms/use-content-link';
+import { stripStega } from '@datocms/content-link';
 
 import React from 'react';
 
