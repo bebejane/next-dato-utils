@@ -94,6 +94,24 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
         await new Promise((r) => setTimeout(r, delay));
         router.refresh();
     }
+    async function handleClick(e) {
+        e.preventDefault();
+        const { currentTarget: { href }, } = e;
+        try {
+            if (!href)
+                throw new Error('No href');
+            setReloading(true);
+            const res = await fetch(href, { method: 'GET' });
+            if (res.ok)
+                refresh(0);
+        }
+        catch (e) {
+            console.log('error', e);
+        }
+        finally {
+            setReloading(false);
+        }
+    }
     const style = {
         top: position === 'topleft' || position === 'topright' ? '0px' : 'auto',
         bottom: position === 'bottomleft' || position === 'bottomright' ? '0px' : 'auto',
@@ -102,7 +120,7 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
     };
     if (!mounted)
         return null;
-    return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [_jsxs("div", { className: s.draft, style: style, children: [contentEditingUrl && !insideiFrame && (dev || enabled) && (_jsx("a", { href: `/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`, className: s.link, onClick: () => setReloading(true), children: _jsx("button", { "aria-checked": enabled, className: s.button, children: reloading || loading ? (_jsx("div", { className: s.reloading, "data-draft": enabled })) : ('Draft') }) })), loading && !dev && _jsx("div", { className: s.loading, "data-draft": enabled })] }), contentEditingUrl && enabled && path && (_jsx(ContentLink, { currentPath: pathname, enableClickToEdit: { hoverOnly: true }, onNavigateTo: (item) => {
+    return (_jsx(_Fragment, { children: _jsxs(Modal, { children: [_jsxs("div", { className: s.draft, style: style, children: [contentEditingUrl && !insideiFrame && (dev || enabled) && (_jsx("a", { href: `/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`, className: s.link, onClick: handleClick, children: _jsx("button", { "aria-checked": enabled, className: s.button, children: reloading || loading ? (_jsx("div", { className: s.reloading, "data-draft": enabled })) : ('Draft') }) })), loading && !dev && _jsx("div", { className: s.loading, "data-draft": enabled })] }), contentEditingUrl && enabled && path && (_jsx(ContentLink, { currentPath: pathname, enableClickToEdit: { hoverOnly: true }, onNavigateTo: (item) => {
                         console.log('DraftModeClient:', pathname, item);
                         router.push(pathname);
                     } }))] }) }));
