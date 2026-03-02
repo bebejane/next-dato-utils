@@ -6,7 +6,7 @@ import { ContentLink } from 'react-datocms';
 import { useEffect, useTransition, useRef, useState } from 'react';
 import Modal from '../Modal.js';
 import { DraftModeListener } from './DraftModeListener.js';
-const refreshInterval = 1000 * 60 * 0.15;
+const refreshInterval = 1000 * 60 * 3;
 export default function DraftModeClient({ enabled, url: _url, tag, path, actions, position, secret, }) {
     const router = useRouter();
     const pathname = usePathname();
