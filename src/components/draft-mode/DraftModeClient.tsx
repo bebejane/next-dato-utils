@@ -51,6 +51,10 @@ export default function DraftModeClient({
 
 	useEffect(() => {
 		setMounted(true);
+
+		if (!path) return;
+		if (Array.isArray(path) ? path[0] !== pathname : path !== pathname)
+			console.warn('DraftModeClient: path does not match current path', path, pathname);
 	}, []);
 
 	useEffect(() => {

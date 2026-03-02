@@ -24,6 +24,10 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
     const urls = (_url ? (Array.isArray(_url) ? _url : [_url]) : []).filter((u) => u);
     useEffect(() => {
         setMounted(true);
+        if (!path)
+            return;
+        if (Array.isArray(path) ? path[0] !== pathname : path !== pathname)
+            console.warn('DraftModeClient: path does not match current path', path, pathname);
     }, []);
     useEffect(() => {
         if (!enabled)
