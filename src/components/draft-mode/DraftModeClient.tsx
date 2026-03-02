@@ -21,7 +21,7 @@ export type DraftModeProps = {
 	};
 };
 
-const refreshInterval = 1000 * 60 * 3;
+const refreshInterval = 1000 * 60 * 0.15;
 
 export default function DraftModeClient({
 	enabled,
@@ -73,10 +73,17 @@ export default function DraftModeClient({
 
 	useEffect(() => {
 		if (!enabled) return;
-
+		console.log('check', focused);
 		const interval = refreshRef.current;
-		if (!focused) interval && clearInterval(interval);
-		else refreshRef.current = setInterval(() => refresh(), refreshInterval);
+		if (interval) {
+			clearInterval(interval);
+			console.log('clear interval');
+		}
+
+		if (focused || focused === null) {
+			refreshRef.current = setInterval(() => refresh(), refreshInterval);
+			console.log('start interval');
+		}
 
 		return () => {
 			if (interval) clearInterval(interval);
