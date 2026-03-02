@@ -30,7 +30,7 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
             return;
         const handleVisibilityChange = () => {
             if (!document.hidden) {
-                focused !== true && refresh();
+                focused !== true && refresh(0);
                 setFocused(true);
             }
             else
@@ -88,10 +88,10 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
         listeners.current?.[url]?.destroy();
         delete listeners.current?.[url];
     }
-    async function refresh() {
+    async function refresh(delay = 2000) {
         console.log('refresh....');
         Object.keys(listeners.current).forEach((u) => disconnect(u));
-        await new Promise((r) => setTimeout(r, 2000));
+        await new Promise((r) => setTimeout(r, delay));
         router.refresh();
     }
     const style = {
