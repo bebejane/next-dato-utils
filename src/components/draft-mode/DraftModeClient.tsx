@@ -90,7 +90,7 @@ export default function DraftModeClient({
 
 		if (focused || focused === null) {
 			console.log('start interval');
-			refresh(0);
+			focused === true && refresh(0);
 			refreshRef.current = setInterval(() => refresh(0), refreshInterval);
 		} else if (focused === false) Object.keys(listeners.current).forEach((u) => disconnect(u));
 
@@ -101,7 +101,7 @@ export default function DraftModeClient({
 
 	useEffect(() => {
 		if (!enabled) return;
-		console.log('change', urls);
+		console.log('connect un url change');
 		urls?.forEach((u) => connect(u));
 		return () => urls?.forEach((u) => disconnect(u));
 	}, [enabled, JSON.stringify(urls)]);

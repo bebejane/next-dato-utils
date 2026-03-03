@@ -59,7 +59,7 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
         }
         if (focused || focused === null) {
             console.log('start interval');
-            refresh(0);
+            focused === true && refresh(0);
             refreshRef.current = setInterval(() => refresh(0), refreshInterval);
         }
         else if (focused === false)
@@ -72,7 +72,7 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
     useEffect(() => {
         if (!enabled)
             return;
-        console.log('change', urls);
+        console.log('connect un url change');
         urls?.forEach((u) => connect(u));
         return () => urls?.forEach((u) => disconnect(u));
     }, [enabled, JSON.stringify(urls)]);
