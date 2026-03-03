@@ -43,6 +43,7 @@ export default function DraftModeClient({
 	const contentEditingUrl = process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
 	const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
 	const paths = path ? (Array.isArray(path) ? path : [path]) : [];
+	const refreshing = useRef<boolean>(false);
 	const refreshRef = useRef<NodeJS.Timeout | null>(null);
 	const listeners = useRef<{ [key: string]: DraftModeListener }>({});
 	const urls: string[] = (_url ? (Array.isArray(_url) ? _url : [_url]) : []).filter(
@@ -51,17 +52,25 @@ export default function DraftModeClient({
 
 	useEffect(() => {
 		setMounted(true);
-
+		console.log('mount');
 		if (!path) return;
 		if (Array.isArray(path) ? path[0] !== pathname : path !== pathname)
 			console.warn('DraftModeClient: path does not match current path', path, pathname);
+
+		return () => {
+			console.log('unmount');
+		};
 	}, []);
 
 	useEffect(() => {
 		if (!enabled) return;
 		function handleVisibilityChange(e: any) {
+			console.log(e.type);
 			setFocused((f) => {
-				if (f !== true) refresh(1000);
+				if (f !== true && e.type === 'focus') {
+					console.log('refresh focus');
+					refresh(0);
+				}
 				return e.type === 'focus';
 			});
 		}
@@ -77,17 +86,18 @@ export default function DraftModeClient({
 
 	useEffect(() => {
 		if (!enabled) return;
-		console.log('check', focused);
+
 		const interval = refreshRef.current;
 		if (interval) {
-			clearInterval(interval);
 			console.log('clear interval');
+			clearInterval(interval);
 		}
 
 		if (focused || focused === null) {
-			refreshRef.current = setInterval(() => refresh(), refreshInterval);
 			console.log('start interval');
-		}
+			refresh();
+			refreshRef.current = setInterval(() => refresh(), refreshInterval);
+		} else if (focused === false) Object.keys(listeners.current).forEach((u) => disconnect(u));
 
 		return () => {
 			if (interval) clearInterval(interval);
@@ -95,10 +105,11 @@ export default function DraftModeClient({
 	}, [enabled, focused]);
 
 	useEffect(() => {
-		if (!urls?.length || !enabled || loading) return;
-		urls.forEach((u) => connect(u));
-		return () => urls.forEach((u) => disconnect(u));
-	}, [loading, urls, enabled]);
+		if (!enabled) return;
+		console.log('change', urls);
+		urls?.forEach((u) => connect(u));
+		return () => urls?.forEach((u) => disconnect(u));
+	}, [enabled, JSON.stringify(urls)]);
 
 	function connect(url: string) {
 		const listener = new DraftModeListener(url);
@@ -119,13 +130,13 @@ export default function DraftModeClient({
 			listeners.current[url] = listener;
 		});
 		listener.on('disconnect', (url) => {
-			delete listeners.current[url];
-			refresh();
+			console.log('DraftModeClient: disconnect', url);
 		});
 		listener.on('error', (url) => {
 			console.log('DraftModeClient:', 'error', url);
 			refresh();
 		});
+		listener.connect();
 	}
 
 	function disconnect(url: string) {
@@ -134,12 +145,15 @@ export default function DraftModeClient({
 	}
 
 	async function refresh(delay = 1000) {
+		if (refreshing.current) return;
 		console.log('refresh....');
+		refreshing.current = true;
 		setReloading(true);
-		Object.keys(listeners.current).forEach((u) => disconnect(u));
+		//Object.keys(listeners.current).forEach((u) => disconnect(u));
 		await new Promise((r) => setTimeout(r, delay));
 		router.refresh();
 		setReloading(false);
+		refreshing.current = false;
 	}
 
 	async function handleClick(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {

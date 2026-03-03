@@ -19,23 +19,31 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
     const contentEditingUrl = process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
     const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
     const paths = path ? (Array.isArray(path) ? path : [path]) : [];
+    const refreshing = useRef(false);
     const refreshRef = useRef(null);
     const listeners = useRef({});
     const urls = (_url ? (Array.isArray(_url) ? _url : [_url]) : []).filter((u) => u);
     useEffect(() => {
         setMounted(true);
+        console.log('mount');
         if (!path)
             return;
         if (Array.isArray(path) ? path[0] !== pathname : path !== pathname)
             console.warn('DraftModeClient: path does not match current path', path, pathname);
+        return () => {
+            console.log('unmount');
+        };
     }, []);
     useEffect(() => {
         if (!enabled)
             return;
         function handleVisibilityChange(e) {
+            console.log(e.type);
             setFocused((f) => {
-                if (f !== true)
-                    refresh(1000);
+                if (f !== true && e.type === 'focus') {
+                    console.log('refresh focus');
+                    refresh(0);
+                }
                 return e.type === 'focus';
             });
         }
@@ -49,27 +57,30 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
     useEffect(() => {
         if (!enabled)
             return;
-        console.log('check', focused);
         const interval = refreshRef.current;
         if (interval) {
-            clearInterval(interval);
             console.log('clear interval');
+            clearInterval(interval);
         }
         if (focused || focused === null) {
-            refreshRef.current = setInterval(() => refresh(), refreshInterval);
             console.log('start interval');
+            refresh();
+            refreshRef.current = setInterval(() => refresh(), refreshInterval);
         }
+        else if (focused === false)
+            Object.keys(listeners.current).forEach((u) => disconnect(u));
         return () => {
             if (interval)
                 clearInterval(interval);
         };
     }, [enabled, focused]);
     useEffect(() => {
-        if (!urls?.length || !enabled || loading)
+        if (!enabled)
             return;
-        urls.forEach((u) => connect(u));
-        return () => urls.forEach((u) => disconnect(u));
-    }, [loading, urls, enabled]);
+        console.log('change', urls);
+        urls?.forEach((u) => connect(u));
+        return () => urls?.forEach((u) => disconnect(u));
+    }, [enabled, JSON.stringify(urls)]);
     function connect(url) {
         const listener = new DraftModeListener(url);
         listeners.current[url] = listener;
@@ -89,25 +100,29 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
             listeners.current[url] = listener;
         });
         listener.on('disconnect', (url) => {
-            delete listeners.current[url];
-            refresh();
+            console.log('DraftModeClient: disconnect', url);
         });
         listener.on('error', (url) => {
             console.log('DraftModeClient:', 'error', url);
             refresh();
         });
+        listener.connect();
     }
     function disconnect(url) {
         listeners.current?.[url]?.destroy();
         delete listeners.current?.[url];
     }
     async function refresh(delay = 1000) {
+        if (refreshing.current)
+            return;
         console.log('refresh....');
+        refreshing.current = true;
         setReloading(true);
-        Object.keys(listeners.current).forEach((u) => disconnect(u));
+        //Object.keys(listeners.current).forEach((u) => disconnect(u));
         await new Promise((r) => setTimeout(r, delay));
         router.refresh();
         setReloading(false);
+        refreshing.current = false;
     }
     async function handleClick(e) {
         e.preventDefault();

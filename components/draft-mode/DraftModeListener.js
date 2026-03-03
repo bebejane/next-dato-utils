@@ -12,7 +12,6 @@ export class DraftModeListener extends EventEmitter {
         this.url = url;
         this.id = new URL(url).pathname.split('/').pop();
         this.updates = 0;
-        this.connect();
     }
     connect() {
         this.updates = 0;
@@ -22,8 +21,8 @@ export class DraftModeListener extends EventEmitter {
         this.source.addEventListener('disconnect', this._handleDisconnect.bind(this));
         this.source.addEventListener('channelError', this._handleChannelError.bind(this));
         this.source.addEventListener('error', this._handleError.bind(this));
+        console.log('DraftModeListener: connect', this.id);
         super.emit('connect', this.url);
-        console.log('DraftModeListener: setup', this.url);
     }
     async reconnect() {
         if (this.reconnecting)
