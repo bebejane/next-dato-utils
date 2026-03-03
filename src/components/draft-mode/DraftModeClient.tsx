@@ -21,7 +21,7 @@ export type DraftModeProps = {
 	};
 };
 
-const refreshInterval = 1000 * 60 * 3;
+const refreshInterval = 1000 * 60 * 1;
 
 export default function DraftModeClient({
 	enabled,
@@ -86,6 +86,12 @@ export default function DraftModeClient({
 		return () => urls?.forEach((u) => disconnect(u));
 	}, [enabled, JSON.stringify(urls)]);
 
+	useEffect(() => {
+		if (!enabled) return;
+		if (focused === true) refresh();
+		else if (focused === false) Object.keys(listeners.current).forEach((u) => disconnect(u));
+	}, [enabled, focused]);
+
 	function connect(url: string) {
 		const listener = new DraftModeListener(url);
 		listeners.current[url] = listener;
@@ -104,7 +110,10 @@ export default function DraftModeClient({
 		listener.on('connect', (url) => {
 			listeners.current[url] = listener;
 			refreshRef.current && clearInterval(refreshRef.current);
-			refreshRef.current = setInterval(() => refresh(0), refreshInterval);
+			refreshRef.current = setInterval(() => {
+				console.log('refresh interval');
+				refresh(0);
+			}, refreshInterval);
 		});
 		listener.on('disconnect', (url) => {
 			console.log('DraftModeClient: disconnect', url);
