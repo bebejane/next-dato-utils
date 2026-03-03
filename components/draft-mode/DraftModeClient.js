@@ -38,20 +38,15 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
         if (!enabled)
             return;
         function handleVisibilityChange(e) {
-            console.log(e.type);
-            setFocused((f) => {
-                if (f !== true && e.type === 'focus') {
-                    console.log('refresh focus');
-                    refresh(0);
-                }
-                return e.type === 'focus';
-            });
+            setFocused((f) => e.type === 'focus');
         }
         window.addEventListener('focus', handleVisibilityChange);
         window.addEventListener('blur', handleVisibilityChange);
+        window.addEventListener('visibilitychange', handleVisibilityChange);
         return () => {
             window.removeEventListener('focus', handleVisibilityChange);
             window.removeEventListener('blur', handleVisibilityChange);
+            window.removeEventListener('visibilitychange', handleVisibilityChange);
         };
     }, [enabled]);
     useEffect(() => {
@@ -64,8 +59,8 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
         }
         if (focused || focused === null) {
             console.log('start interval');
-            refresh();
-            refreshRef.current = setInterval(() => refresh(), refreshInterval);
+            refresh(0);
+            refreshRef.current = setInterval(() => refresh(0), refreshInterval);
         }
         else if (focused === false)
             Object.keys(listeners.current).forEach((u) => disconnect(u));
