@@ -35,7 +35,7 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
         function handleVisibilityChange(e) {
             setFocused((f) => {
                 if (f !== true)
-                    refresh(0);
+                    refresh(1000);
                 return e.type === 'focus';
             });
         }
