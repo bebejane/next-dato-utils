@@ -61,7 +61,7 @@ export default function DraftModeClient({
 		if (!enabled) return;
 		function handleVisibilityChange(e: any) {
 			setFocused((f) => {
-				if (f !== true) refresh(1000);
+				if (f !== true) refresh(0);
 				return e.type === 'focus';
 			});
 		}
