@@ -32,16 +32,19 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
     useEffect(() => {
         if (!enabled)
             return;
-        const handleVisibilityChange = () => {
-            if (!document.hidden) {
-                focused !== true && refresh(0);
-                setFocused(true);
-            }
-            else
-                setFocused(false);
-        };
+        function handleVisibilityChange(e) {
+            setFocused((f) => {
+                if (f !== true)
+                    refresh(1000);
+                return e.type === 'focus';
+            });
+        }
         window.addEventListener('focus', handleVisibilityChange);
-        return () => window.removeEventListener('focus', handleVisibilityChange);
+        window.addEventListener('blur', handleVisibilityChange);
+        return () => {
+            window.removeEventListener('focus', handleVisibilityChange);
+            window.removeEventListener('blur', handleVisibilityChange);
+        };
     }, [enabled]);
     useEffect(() => {
         if (!enabled)
@@ -98,11 +101,13 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
         listeners.current?.[url]?.destroy();
         delete listeners.current?.[url];
     }
-    async function refresh(delay = 2000) {
+    async function refresh(delay = 1000) {
         console.log('refresh....');
+        setReloading(true);
         Object.keys(listeners.current).forEach((u) => disconnect(u));
         await new Promise((r) => setTimeout(r, delay));
         router.refresh();
+        setReloading(false);
     }
     async function handleClick(e) {
         e.preventDefault();
