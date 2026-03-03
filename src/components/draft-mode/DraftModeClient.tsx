@@ -81,26 +81,6 @@ export default function DraftModeClient({
 
 	useEffect(() => {
 		if (!enabled) return;
-
-		const interval = refreshRef.current;
-		if (interval) {
-			console.log('clear interval');
-			clearInterval(interval);
-		}
-
-		if (focused || focused === null) {
-			console.log('start interval');
-			focused === true && refresh(0);
-			refreshRef.current = setInterval(() => refresh(0), refreshInterval);
-		} else if (focused === false) Object.keys(listeners.current).forEach((u) => disconnect(u));
-
-		return () => {
-			if (interval) clearInterval(interval);
-		};
-	}, [enabled, focused]);
-
-	useEffect(() => {
-		if (!enabled) return;
 		console.log('connect un url change');
 		urls?.forEach((u) => connect(u));
 		return () => urls?.forEach((u) => disconnect(u));
@@ -123,9 +103,12 @@ export default function DraftModeClient({
 		});
 		listener.on('connect', (url) => {
 			listeners.current[url] = listener;
+			refreshRef.current && clearInterval(refreshRef.current);
+			refreshRef.current = setInterval(() => refresh(0), refreshInterval);
 		});
 		listener.on('disconnect', (url) => {
 			console.log('DraftModeClient: disconnect', url);
+			refreshRef.current && clearInterval(refreshRef.current);
 		});
 		listener.on('error', (url) => {
 			console.log('DraftModeClient:', 'error', url);
