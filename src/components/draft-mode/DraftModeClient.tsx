@@ -68,14 +68,14 @@ export default function DraftModeClient({
 			setFocused((f) => !document.hidden);
 		}
 
-		//window.addEventListener('focus', handleVisibilityChange);
-		//window.addEventListener('blur', handleVisibilityChange);
-		window.addEventListener('visibilitychange', handleVisibilityChange);
+		// window.addEventListener('focus', handleVisibilityChange);
+		// window.addEventListener('blur', handleVisibilityChange);
+		document.addEventListener('visibilitychange', handleVisibilityChange);
 
 		return () => {
-			//window.removeEventListener('focus', handleVisibilityChange);
-			//window.removeEventListener('blur', handleVisibilityChange);
-			window.removeEventListener('visibilitychange', handleVisibilityChange);
+			// window.removeEventListener('focus', handleVisibilityChange);
+			// window.removeEventListener('blur', handleVisibilityChange);
+			document.removeEventListener('visibilitychange', handleVisibilityChange);
 		};
 	}, [enabled]);
 
