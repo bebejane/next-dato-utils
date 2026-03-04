@@ -59,19 +59,10 @@ export default function DraftModeClient({
 		if (Array.isArray(path) ? path[0] !== pathname : path !== pathname)
 			console.warn('DraftModeClient: path does not match current path', path, pathname);
 
-		if (!enabled) return;
-
-		controllerRef.current = createController({ onNavigateTo: (url) => router.push(url) });
-
-		if (!controllerRef.current.isClickToEditEnabled()) controllerRef.current.disableClickToEdit();
-
-		controllerRef.current.setCurrentPath(pathname);
-
 		return () => {
 			console.log('DraftModeClient:', 'unmount');
-			controllerRef.current?.dispose();
 		};
-	}, [enabled, pathname]);
+	}, [enabled]);
 
 	useEffect(() => {
 		if (!enabled) return;
