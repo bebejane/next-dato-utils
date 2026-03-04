@@ -105,13 +105,13 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
         if (refreshing.current)
             return;
         console.log('refresh....');
-        refreshing.current = true;
         setReloading(true);
-        //Object.keys(listeners.current).forEach((u) => disconnect(u));
+        refreshing.current = true;
+        refreshRef.current && clearInterval(refreshRef.current);
         await new Promise((r) => setTimeout(r, delay));
         router.refresh();
-        setReloading(false);
         refreshing.current = false;
+        setReloading(false);
     }
     async function handleClick(e) {
         e.preventDefault();
