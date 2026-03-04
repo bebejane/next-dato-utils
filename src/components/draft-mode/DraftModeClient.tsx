@@ -68,13 +68,13 @@ export default function DraftModeClient({
 			setFocused((f) => e.type === 'focus');
 		}
 
-		window.addEventListener('focus', handleVisibilityChange);
-		window.addEventListener('blur', handleVisibilityChange);
+		//window.addEventListener('focus', handleVisibilityChange);
+		//window.addEventListener('blur', handleVisibilityChange);
 		window.addEventListener('visibilitychange', handleVisibilityChange);
 
 		return () => {
-			window.removeEventListener('focus', handleVisibilityChange);
-			window.removeEventListener('blur', handleVisibilityChange);
+			//window.removeEventListener('focus', handleVisibilityChange);
+			//window.removeEventListener('blur', handleVisibilityChange);
 			window.removeEventListener('visibilitychange', handleVisibilityChange);
 		};
 	}, [enabled]);
@@ -153,36 +153,24 @@ export default function DraftModeClient({
 	if (!mounted) return null;
 
 	return (
-		<>
-			<Modal>
-				<div className={s.draft} style={style}>
-					{contentEditingUrl && !insideiFrame && (dev || enabled) && (
-						<a
-							className={s.link}
-							href={`/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`}
-						>
-							<button aria-checked={enabled} className={s.button}>
-								{reloading || loading ? (
-									<div className={s.reloading} data-draft={enabled} />
-								) : (
-									'Draft'
-								)}
-							</button>
-						</a>
-					)}
-					{loading && !dev && <div className={s.loading} data-draft={enabled} />}
-				</div>
-				{/*contentEditingUrl && enabled && path && (
-					<ContentLink
-						currentPath={pathname}
-						enableClickToEdit={{ hoverOnly: true }}
-						onNavigateTo={(item) => {
-							console.log('DraftModeClient:', pathname, item);
-							router.push(pathname);
-						}}
-					/>
-				)*/}
-			</Modal>
-		</>
+		<Modal>
+			<div className={s.draft} style={style}>
+				{contentEditingUrl && !insideiFrame && (dev || enabled) && (
+					<a
+						className={s.link}
+						href={`/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`}
+					>
+						<button aria-checked={enabled} className={s.button}>
+							{reloading || loading ? (
+								<div className={s.reloading} data-draft={enabled} />
+							) : (
+								'Draft'
+							)}
+						</button>
+					</a>
+				)}
+				{loading && !dev && <div className={s.loading} data-draft={enabled} />}
+			</div>
+		</Modal>
 	);
 }

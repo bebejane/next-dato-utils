@@ -1,5 +1,5 @@
 'use client';
-import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import s from './DraftModeClient.module.css';
 import { usePathname, useRouter } from 'next/navigation.js';
 import { useEffect, useTransition, useRef, useState } from 'react';
@@ -39,12 +39,12 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
         function handleVisibilityChange(e) {
             setFocused((f) => e.type === 'focus');
         }
-        window.addEventListener('focus', handleVisibilityChange);
-        window.addEventListener('blur', handleVisibilityChange);
+        //window.addEventListener('focus', handleVisibilityChange);
+        //window.addEventListener('blur', handleVisibilityChange);
         window.addEventListener('visibilitychange', handleVisibilityChange);
         return () => {
-            window.removeEventListener('focus', handleVisibilityChange);
-            window.removeEventListener('blur', handleVisibilityChange);
+            //window.removeEventListener('focus', handleVisibilityChange);
+            //window.removeEventListener('blur', handleVisibilityChange);
             window.removeEventListener('visibilitychange', handleVisibilityChange);
         };
     }, [enabled]);
@@ -120,6 +120,6 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
     };
     if (!mounted)
         return null;
-    return (_jsx(_Fragment, { children: _jsx(Modal, { children: _jsxs("div", { className: s.draft, style: style, children: [contentEditingUrl && !insideiFrame && (dev || enabled) && (_jsx("a", { className: s.link, href: `/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`, children: _jsx("button", { "aria-checked": enabled, className: s.button, children: reloading || loading ? (_jsx("div", { className: s.reloading, "data-draft": enabled })) : ('Draft') }) })), loading && !dev && _jsx("div", { className: s.loading, "data-draft": enabled })] }) }) }));
+    return (_jsx(Modal, { children: _jsxs("div", { className: s.draft, style: style, children: [contentEditingUrl && !insideiFrame && (dev || enabled) && (_jsx("a", { className: s.link, href: `/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`, children: _jsx("button", { "aria-checked": enabled, className: s.button, children: reloading || loading ? (_jsx("div", { className: s.reloading, "data-draft": enabled })) : ('Draft') }) })), loading && !dev && _jsx("div", { className: s.loading, "data-draft": enabled })] }) }));
 }
 //# sourceMappingURL=DraftModeClient.js.map
