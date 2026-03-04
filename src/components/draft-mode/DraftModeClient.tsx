@@ -190,7 +190,7 @@ export default function DraftModeClient({
 					)}
 					{loading && !dev && <div className={s.loading} data-draft={enabled} />}
 				</div>
-				{contentEditingUrl && enabled && path && (
+				{/*contentEditingUrl && enabled && path && (
 					<ContentLink
 						currentPath={pathname}
 						enableClickToEdit={{ hoverOnly: true }}
@@ -199,7 +199,7 @@ export default function DraftModeClient({
 							router.push(pathname);
 						}}
 					/>
-				)}
+				)*/}
 			</Modal>
 		</>
 	);
