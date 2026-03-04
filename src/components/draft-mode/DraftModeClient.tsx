@@ -143,23 +143,6 @@ export default function DraftModeClient({
 		setReloading(false);
 	}
 
-	async function handleClick(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
-		e.preventDefault();
-		const {
-			currentTarget: { href },
-		} = e;
-		try {
-			if (!href) throw new Error('No href');
-			setReloading(true);
-			const res = await fetch(href, { method: 'GET' });
-			if (res.ok) refresh(0);
-		} catch (e) {
-			console.log('error', e);
-		} finally {
-			setReloading(false);
-		}
-	}
-
 	const style = {
 		top: position === 'topleft' || position === 'topright' ? '0px' : 'auto',
 		bottom: position === 'bottomleft' || position === 'bottomright' ? '0px' : 'auto',
@@ -175,9 +158,8 @@ export default function DraftModeClient({
 				<div className={s.draft} style={style}>
 					{contentEditingUrl && !insideiFrame && (dev || enabled) && (
 						<a
-							href={`/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`}
 							className={s.link}
-							onClick={handleClick}
+							href={`/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`}
 						>
 							<button aria-checked={enabled} className={s.button}>
 								{reloading || loading ? (

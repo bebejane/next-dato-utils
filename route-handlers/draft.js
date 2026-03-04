@@ -2,14 +2,20 @@ import { draftMode } from 'next/headers';
 import { cookies } from 'next/headers';
 export default async function draft(request, searchParams) {
     searchParams = searchParams ?? new URL(request.url).searchParams;
+    const check = searchParams.get('check');
     const secret = searchParams.get('secret');
     const slug = searchParams.get('slug') ?? searchParams.get('redirect') ?? '/';
     const maxAge = searchParams.get('max-age');
     const exit = searchParams.get('exit');
+    const bypassCookie = (await cookies()).get('__prerender_bypass');
+    if (check) {
+        const enabled = (await draftMode()).isEnabled;
+        return new Response('ok', { status: enabled ? 200 : 404 });
+    }
     if (exit !== null) {
         console.log('draft mode:', 'exit', slug);
         (await draftMode()).disable();
-        return new Response('OK', { status: 307, headers: { Location: slug } });
+        return new Response('ok', { status: 307, headers: { Location: slug } });
     }
     if (secret !== process.env.DATOCMS_PREVIEW_SECRET) {
         console.log('draft mode:', 'invalid token', slug, secret);
@@ -22,7 +28,6 @@ export default async function draft(request, searchParams) {
     console.log('draft mode:', 'enable', slug);
     (await draftMode()).enable();
     if (maxAge) {
-        const bypassCookie = (await cookies()).get('__prerender_bypass');
         if (!bypassCookie) {
             throw new Error('No bypass cookie found');
         }
