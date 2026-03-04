@@ -52,13 +52,13 @@ export default function DraftModeClient({
 
 	useEffect(() => {
 		setMounted(true);
-		console.log('mount');
+		console.log('DraftModeClient:', 'mount');
 		if (!path) return;
 		if (Array.isArray(path) ? path[0] !== pathname : path !== pathname)
 			console.warn('DraftModeClient: path does not match current path', path, pathname);
 
 		return () => {
-			console.log('unmount');
+			console.log('DraftModeClient:', 'unmount');
 		};
 	}, []);
 
@@ -67,14 +67,9 @@ export default function DraftModeClient({
 		function handleVisibilityChange(e: any) {
 			setFocused((f) => !document.hidden);
 		}
-
-		// window.addEventListener('focus', handleVisibilityChange);
-		// window.addEventListener('blur', handleVisibilityChange);
 		document.addEventListener('visibilitychange', handleVisibilityChange);
 
 		return () => {
-			// window.removeEventListener('focus', handleVisibilityChange);
-			// window.removeEventListener('blur', handleVisibilityChange);
 			document.removeEventListener('visibilitychange', handleVisibilityChange);
 		};
 	}, [enabled]);
@@ -159,6 +154,7 @@ export default function DraftModeClient({
 					<a
 						className={s.link}
 						href={`/api/draft?secret=${secret ?? ''}&slug=${path}${!enabled ? '' : '&exit=1'}`}
+						onClick={() => setReloading(true)}
 					>
 						<button aria-checked={enabled} className={s.button}>
 							{reloading || loading ? (
