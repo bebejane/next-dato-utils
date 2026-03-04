@@ -61,9 +61,8 @@ export default function DraftModeClient({
 
 		if (!enabled) return;
 
-		console.log(controllerRef.current, 'controller');
 		controllerRef.current = createController({ onNavigateTo: (url) => router.push(url) });
-		controllerRef.current.enableClickToEdit();
+		//controllerRef.current.enableClickToEdit();
 		controllerRef.current.setCurrentPath(pathname);
 
 		return () => {

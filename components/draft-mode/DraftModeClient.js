@@ -33,9 +33,8 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
             console.warn('DraftModeClient: path does not match current path', path, pathname);
         if (!enabled)
             return;
-        console.log(controllerRef.current, 'controller');
         controllerRef.current = createController({ onNavigateTo: (url) => router.push(url) });
-        controllerRef.current.enableClickToEdit();
+        //controllerRef.current.enableClickToEdit();
         controllerRef.current.setCurrentPath(pathname);
         return () => {
             console.log('DraftModeClient:', 'unmount');
