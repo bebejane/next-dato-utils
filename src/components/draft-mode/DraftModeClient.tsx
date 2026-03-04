@@ -65,7 +65,7 @@ export default function DraftModeClient({
 	useEffect(() => {
 		if (!enabled) return;
 		function handleVisibilityChange(e: any) {
-			setFocused((f) => e.type === 'focus');
+			setFocused((f) => !document.hidden);
 		}
 
 		//window.addEventListener('focus', handleVisibilityChange);
