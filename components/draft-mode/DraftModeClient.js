@@ -34,7 +34,8 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
         if (!enabled)
             return;
         controllerRef.current = createController({ onNavigateTo: (url) => router.push(url) });
-        //controllerRef.current.enableClickToEdit();
+        if (!controllerRef.current.isClickToEditEnabled())
+            controllerRef.current.disableClickToEdit();
         controllerRef.current.setCurrentPath(pathname);
         return () => {
             console.log('DraftModeClient:', 'unmount');
