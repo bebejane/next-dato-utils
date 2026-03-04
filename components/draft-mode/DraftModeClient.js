@@ -2,6 +2,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import s from './DraftModeClient.module.css';
 import { usePathname, useRouter } from 'next/navigation.js';
+import { createController } from '@datocms/content-link';
 import { useEffect, useTransition, useRef, useState } from 'react';
 import Modal from '../Modal.js';
 import { DraftModeListener } from './DraftModeListener.js';
@@ -13,13 +14,14 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
     const [reloading, setReloading] = useState(false);
     const [mounted, setMounted] = useState(false);
     const [focused, setFocused] = useState(null);
+    const refreshRef = useRef(null);
+    const controllerRef = useRef(null);
     const insideiFrame = typeof window !== 'undefined' && window.location !== window.parent.location;
     const dev = process.env.NODE_ENV === 'development';
     const contentEditingUrl = process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
     const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
     const paths = path ? (Array.isArray(path) ? path : [path]) : [];
     const refreshing = useRef(false);
-    const refreshRef = useRef(null);
     const listeners = useRef({});
     const urls = (_url ? (Array.isArray(_url) ? _url : [_url]) : []).filter((u) => u);
     useEffect(() => {
@@ -29,10 +31,16 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
             return;
         if (Array.isArray(path) ? path[0] !== pathname : path !== pathname)
             console.warn('DraftModeClient: path does not match current path', path, pathname);
+        if (!enabled)
+            return;
+        controllerRef.current = createController({ onNavigateTo: (url) => router.push(url) });
+        controllerRef.current.enableClickToEdit();
+        controllerRef.current.setCurrentPath(pathname);
         return () => {
             console.log('DraftModeClient:', 'unmount');
+            controllerRef.current?.dispose();
         };
-    }, []);
+    }, [enabled, pathname]);
     useEffect(() => {
         if (!enabled)
             return;
