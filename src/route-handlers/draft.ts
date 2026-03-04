@@ -16,7 +16,7 @@ export default async function draft(
 
 	if (check) {
 		const enabled = (await draftMode()).isEnabled;
-		return new Response('ok', { status: enabled ? 200 : 404 });
+		return new Response(enabled ? '1' : '0', { status: 200 });
 	}
 
 	if (exit !== null) {

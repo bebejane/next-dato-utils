@@ -12,8 +12,8 @@ export default function ContentLink() {
 
 	useEffect(() => {
 		fetch('/api/draft?check=1')
-			.then((res) => {
-				setIsDraft(res.ok);
+			.then(async (res) => {
+				setIsDraft((await res.text()) === '1');
 			})
 			.catch((e) => {
 				setIsDraft(false);
