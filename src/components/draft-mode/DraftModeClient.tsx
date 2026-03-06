@@ -21,7 +21,7 @@ export type DraftModeProps = {
 	};
 };
 
-const refreshInterval = 1000 * 60 * 1;
+const refreshInterval = 1000 * 60 * 3;
 
 export default function DraftModeClient({
 	enabled,
