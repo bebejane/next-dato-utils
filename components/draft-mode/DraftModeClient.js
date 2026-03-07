@@ -14,7 +14,6 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
     const [mounted, setMounted] = useState(false);
     const [focused, setFocused] = useState(null);
     const refreshRef = useRef(null);
-    const controllerRef = useRef(null);
     const insideiFrame = typeof window !== 'undefined' && window.location !== window.parent.location;
     const dev = process.env.NODE_ENV === 'development';
     const contentEditingUrl = process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
@@ -79,7 +78,7 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
             listeners.current[url] = listener;
             refreshRef.current && clearInterval(refreshRef.current);
             refreshRef.current = setInterval(() => {
-                console.log('refresh interval');
+                console.log('DraftModeClient: refresh (interval)');
                 refresh(0);
             }, refreshInterval);
         });
