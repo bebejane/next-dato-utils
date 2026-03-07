@@ -16,19 +16,6 @@ export default function ContentLink() {
             setIsDraft(false);
         });
     }, [pathname]);
-    useEffect(() => {
-        function handleMouseEnter(e) {
-            document.body.focus();
-            console.log('focus');
-            if (!e.altKey)
-                return;
-            document.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, cancelable: true, keyCode: 18, key: 'Alt' }));
-        }
-        document.addEventListener('mouseenter', handleMouseEnter);
-        return () => {
-            document.removeEventListener('mouseenter', handleMouseEnter);
-        };
-    }, [pathname]);
     if (!isDraft)
         return null;
     return (_jsx(DatoContentLink, { onNavigateTo: (path) => router.push(path), currentPath: pathname, enableClickToEdit: { hoverOnly: true } }));
