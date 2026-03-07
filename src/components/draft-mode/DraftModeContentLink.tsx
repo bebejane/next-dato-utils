@@ -26,7 +26,7 @@ export default function ContentLink() {
 			console.log('focus');
 			if (!e.altKey) return;
 
-			document.body.dispatchEvent(
+			document.dispatchEvent(
 				new KeyboardEvent('keydown', { bubbles: true, cancelable: true, keyCode: 18 }),
 			);
 		}

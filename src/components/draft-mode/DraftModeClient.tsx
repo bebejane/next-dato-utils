@@ -2,7 +2,6 @@
 
 import s from './DraftModeClient.module.css';
 import { usePathname, useRouter } from 'next/navigation.js';
-import { Controller, createController } from '@datocms/content-link';
 import { useEffect, useTransition, useRef, useState } from 'react';
 import Modal from '../Modal.js';
 import { DraftModeListener } from './DraftModeListener.js';
