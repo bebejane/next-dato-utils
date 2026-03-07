@@ -22,7 +22,7 @@ export default function ContentLink() {
             console.log('focus');
             if (!e.altKey)
                 return;
-            document.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, cancelable: true, keyCode: 18 }));
+            document.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, cancelable: true, keyCode: 18, key: 'Alt' }));
         }
         document.addEventListener('mouseenter', handleMouseEnter);
         return () => {

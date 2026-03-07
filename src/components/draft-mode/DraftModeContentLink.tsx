@@ -27,7 +27,7 @@ export default function ContentLink() {
 			if (!e.altKey) return;
 
 			document.dispatchEvent(
-				new KeyboardEvent('keydown', { bubbles: true, cancelable: true, keyCode: 18 }),
+				new KeyboardEvent('keydown', { bubbles: true, cancelable: true, keyCode: 18, key: 'Alt' }),
 			);
 		}
 
