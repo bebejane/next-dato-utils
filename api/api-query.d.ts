@@ -21,6 +21,7 @@ export type ApiQueryOptions<V = void> = {
     environment?: string;
     contentLink?: string;
     baseEditingUrl?: string;
+    stripStega?: boolean;
 };
 export type DefaultApiQueryOptions = ApiQueryOptions & {
     variables: undefined;
@@ -36,6 +37,7 @@ export type DefaultApiQueryOptions = ApiQueryOptions & {
     environment?: string;
     contentLink?: string;
     baseEditingUrl?: string;
+    stripStega?: boolean;
 };
 export default function apiQuery<TResult = any, TVariables = Record<string, any>>(query: TypedDocumentNode<TResult, TVariables>, options?: ApiQueryOptions<TVariables>): Promise<TResult & {
     draftUrl: string | null;
@@ -53,4 +55,5 @@ export type DedupeOptions = {
     logs: boolean;
     apiToken?: string;
     environment?: string;
+    stripStega?: boolean;
 };

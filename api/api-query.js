@@ -1,5 +1,6 @@
 import { draftMode } from 'next/headers.js';
 import { print } from 'graphql/language/printer.js';
+import { stripStega as stripStegaContent } from '@datocms/content-link';
 const defaultOptions = {
     variables: undefined,
     tags: undefined,
@@ -14,6 +15,7 @@ const defaultOptions = {
     all: false,
     apiToken: undefined,
     environment: process.env.DATOCMS_ENVIRONMENT ?? process.env.NEXT_PUBLIC_DATOCMS_ENVIRONMENT ?? 'main',
+    stripStega: false,
 };
 export default async function apiQuery(query, options) {
     const opt = { ...defaultOptions, ...(options ?? {}) };
@@ -98,7 +100,7 @@ const paginatedQuery = async (query, options, data, queryId) => {
     }
 };
 const dedupedFetch = async (options) => {
-    const { url, body, includeDrafts, excludeInvalid, cacheTags, revalidate, queryId, logs, apiToken, environment, } = options;
+    const { url, body, includeDrafts, excludeInvalid, cacheTags, revalidate, queryId, logs, apiToken, environment, stripStega, } = options;
     const apiKey = apiToken || process.env.DATOCMS_API_TOKEN || process.env.NEXT_PUBLIC_DATOCMS_API_TOKEN;
     const baseEditingUrl = process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
     const visualEditing = baseEditingUrl ? 'vercel-v1' : undefined;
@@ -130,6 +132,8 @@ const dedupedFetch = async (options) => {
     const _cacheTags = response.headers.get('X-Cache-Tags')
         ? response.headers.get('X-Cache-Tags')?.split(' ')
         : [];
-    return { ...responseBody, _cacheTags };
+    return stripStega
+        ? { ...stripStegaContent(responseBody), _cacheTags }
+        : { ...responseBody, _cacheTags };
 };
 //# sourceMappingURL=api-query.js.map

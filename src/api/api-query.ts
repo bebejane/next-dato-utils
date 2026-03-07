@@ -1,6 +1,8 @@
 import { draftMode } from 'next/headers.js';
 import type { RequestInit } from 'next/dist/server/web/spec-extension/request.js';
 import { print } from 'graphql/language/printer.js';
+import { stripStega as stripStegaContent } from '@datocms/content-link';
+
 import type {
 	DocumentNode,
 	FieldNode,
@@ -30,6 +32,7 @@ export type ApiQueryOptions<V = void> = {
 	environment?: string;
 	contentLink?: string;
 	baseEditingUrl?: string;
+	stripStega?: boolean;
 };
 
 export type DefaultApiQueryOptions = ApiQueryOptions & {
@@ -46,6 +49,7 @@ export type DefaultApiQueryOptions = ApiQueryOptions & {
 	environment?: string;
 	contentLink?: string;
 	baseEditingUrl?: string;
+	stripStega?: boolean;
 };
 
 const defaultOptions: DefaultApiQueryOptions = {
@@ -63,6 +67,7 @@ const defaultOptions: DefaultApiQueryOptions = {
 	apiToken: undefined,
 	environment:
 		process.env.DATOCMS_ENVIRONMENT ?? process.env.NEXT_PUBLIC_DATOCMS_ENVIRONMENT ?? 'main',
+	stripStega: false,
 };
 
 export default async function apiQuery<TResult = any, TVariables = Record<string, any>>(
@@ -210,6 +215,7 @@ export type DedupeOptions = {
 	logs: boolean;
 	apiToken?: string;
 	environment?: string;
+	stripStega?: boolean;
 };
 
 const dedupedFetch = async (options: DedupeOptions) => {
@@ -224,6 +230,7 @@ const dedupedFetch = async (options: DedupeOptions) => {
 		logs,
 		apiToken,
 		environment,
+		stripStega,
 	} = options;
 
 	const apiKey =
@@ -269,5 +276,8 @@ const dedupedFetch = async (options: DedupeOptions) => {
 	const _cacheTags = response.headers.get('X-Cache-Tags')
 		? response.headers.get('X-Cache-Tags')?.split(' ')
 		: [];
-	return { ...responseBody, _cacheTags };
+
+	return stripStega
+		? { ...stripStegaContent(responseBody), _cacheTags }
+		: { ...responseBody, _cacheTags };
 };
