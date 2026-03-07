@@ -7,21 +7,15 @@ export default async function draft(
 ): Promise<Response> {
 	searchParams = searchParams ?? new URL(request.url).searchParams;
 
-	const check = searchParams.get('check');
 	const secret = searchParams.get('secret');
 	const slug = searchParams.get('slug') ?? searchParams.get('redirect') ?? '/';
 	const maxAge = searchParams.get('max-age');
 	const exit = searchParams.get('exit');
-	const bypassCookie = (await cookies()).get('__prerender_bypass');
-
-	if (check) {
-		const enabled = (await draftMode()).isEnabled;
-		return new Response(enabled ? '1' : '0', { status: 200 });
-	}
 
 	if (exit !== null) {
-		console.log('draft mode:', 'exit', slug);
 		(await draftMode()).disable();
+		(await cookies()).delete('draft');
+		console.log('draft mode:', 'exit', slug);
 		return new Response('ok', { status: 307, headers: { Location: slug } });
 	}
 
@@ -37,8 +31,15 @@ export default async function draft(
 
 	console.log('draft mode:', 'enable', slug);
 	(await draftMode()).enable();
+	(await cookies()).set('draft', '1', {
+		httpOnly: false,
+		sameSite: 'lax',
+		secure: true,
+		path: '/',
+	});
 
 	if (maxAge) {
+		const bypassCookie = (await cookies()).get('__prerender_bypass');
 		if (!bypassCookie) {
 			throw new Error('No bypass cookie found');
 		}

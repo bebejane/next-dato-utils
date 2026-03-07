@@ -8,22 +8,26 @@ export default function ContentLink() {
     const pathname = usePathname();
     const [isDraft, setIsDraft] = useState(false);
     useEffect(() => {
-        fetch('/api/draft?check=1')
-            .then(async (res) => {
-            setIsDraft((await res.text()) === '1');
-        })
-            .catch((e) => {
-            setIsDraft(false);
-        });
+        const cookies = document.cookie.split(';').reduce((res, c) => {
+            const [key, val] = c.trim().split('=').map(decodeURIComponent);
+            try {
+                return Object.assign(res, { [key]: JSON.parse(val) });
+            }
+            catch (e) {
+                return Object.assign(res, { [key]: val });
+            }
+        }, {});
+        setIsDraft(cookies.draft === '1' || cookies.draft === 1);
     }, [pathname]);
     useEffect(() => {
-        function handleMouse() {
-            document.body.focus();
-            console.log('focus');
+        function handleMouseEnter(e) {
+            if (!e.altKey)
+                return;
+            document.body.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, cancelable: true, keyCode: 18 }));
         }
-        document.addEventListener('mouseenter', handleMouse);
+        document.addEventListener('mouseenter', handleMouseEnter);
         return () => {
-            document.removeEventListener('mouseenter', handleMouse);
+            document.removeEventListener('mouseenter', handleMouseEnter);
         };
     }, [pathname]);
     if (!isDraft)
