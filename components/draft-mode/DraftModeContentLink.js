@@ -16,6 +16,16 @@ export default function ContentLink() {
             setIsDraft(false);
         });
     }, [pathname]);
+    useEffect(() => {
+        function handleMouse() {
+            document.body.focus();
+            console.log('focus');
+        }
+        document.addEventListener('mouseenter', handleMouse);
+        return () => {
+            document.removeEventListener('mouseenter', handleMouse);
+        };
+    }, [pathname]);
     if (!isDraft)
         return null;
     return (_jsx(DatoContentLink, { onNavigateTo: (path) => router.push(path), currentPath: pathname, enableClickToEdit: { hoverOnly: true } }));

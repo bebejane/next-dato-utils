@@ -20,6 +20,19 @@ export default function ContentLink() {
 			});
 	}, [pathname]);
 
+	useEffect(() => {
+		function handleMouse() {
+			document.body.focus();
+			console.log('focus');
+		}
+
+		document.addEventListener('mouseenter', handleMouse);
+
+		return () => {
+			document.removeEventListener('mouseenter', handleMouse);
+		};
+	}, [pathname]);
+
 	if (!isDraft) return null;
 
 	return (
