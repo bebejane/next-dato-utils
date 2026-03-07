@@ -19,6 +19,7 @@ export default function ContentLink() {
     useEffect(() => {
         function handleMouseEnter(e) {
             document.body.focus();
+            console.log('focus');
             if (!e.altKey)
                 return;
             document.body.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, cancelable: true, keyCode: 18 }));
