@@ -1,6 +1,6 @@
 {
 	"name": "next-dato-utils",
-	"version": "2.0.251",
+	"version": "2.0.252",
 	"description": "",
 	"type": "module",
 	"main": "./index.js",
