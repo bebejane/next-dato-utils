@@ -22,6 +22,7 @@ export default function ContentLink() {
 
 	useEffect(() => {
 		function handleMouseEnter(e: MouseEvent) {
+			document.body.focus();
 			if (!e.altKey) return;
 
 			document.body.dispatchEvent(
