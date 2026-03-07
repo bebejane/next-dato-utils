@@ -11,19 +11,13 @@ export default function ContentLink() {
 	const [isDraft, setIsDraft] = useState(false);
 
 	useEffect(() => {
-		const cookies = document.cookie.split(';').reduce(
-			(res, c) => {
-				const [key, val] = c.trim().split('=').map(decodeURIComponent);
-				try {
-					return Object.assign(res, { [key]: JSON.parse(val) });
-				} catch (e) {
-					return Object.assign(res, { [key]: val });
-				}
-			},
-			{} as Record<string, string | boolean | number>,
-		);
-
-		setIsDraft(cookies.draft === '1' || cookies.draft === 1);
+		fetch('/api/draft?check=1')
+			.then(async (res) => {
+				setIsDraft((await res.text()) === '1');
+			})
+			.catch((e) => {
+				setIsDraft(false);
+			});
 	}, [pathname]);
 
 	useEffect(() => {

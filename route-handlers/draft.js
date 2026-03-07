@@ -2,14 +2,18 @@ import { draftMode } from 'next/headers';
 import { cookies } from 'next/headers';
 export default async function draft(request, searchParams) {
     searchParams = searchParams ?? new URL(request.url).searchParams;
+    const check = searchParams.get('check');
     const secret = searchParams.get('secret');
     const slug = searchParams.get('slug') ?? searchParams.get('redirect') ?? '/';
     const maxAge = searchParams.get('max-age');
     const exit = searchParams.get('exit');
+    if (check) {
+        const enabled = (await draftMode()).isEnabled;
+        return new Response(enabled ? '1' : '0', { status: 200 });
+    }
     if (exit !== null) {
-        (await draftMode()).disable();
-        (await cookies()).delete('draft');
         console.log('draft mode:', 'exit', slug);
+        (await draftMode()).disable();
         return new Response('ok', { status: 307, headers: { Location: slug } });
     }
     if (secret !== process.env.DATOCMS_PREVIEW_SECRET) {
@@ -22,17 +26,10 @@ export default async function draft(request, searchParams) {
     }
     console.log('draft mode:', 'enable', slug);
     (await draftMode()).enable();
-    (await cookies()).set('draft', '1', {
-        httpOnly: false,
-        sameSite: 'lax',
-        secure: true,
-        path: '/',
-    });
     if (maxAge) {
         const bypassCookie = (await cookies()).get('__prerender_bypass');
-        if (!bypassCookie) {
+        if (!bypassCookie)
             throw new Error('No bypass cookie found');
-        }
         (await cookies()).set(bypassCookie.name, bypassCookie.value, {
             httpOnly: true,
             sameSite: 'none',
