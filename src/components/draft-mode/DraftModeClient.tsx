@@ -78,7 +78,7 @@ export default function DraftModeClient({
 
 	useEffect(() => {
 		if (!enabled) return;
-		console.log('connect un url change');
+		console.log('DraftModeClient: urls change');
 		urls?.forEach((u) => connect(u));
 		return () => urls?.forEach((u) => disconnect(u));
 	}, [enabled, JSON.stringify(urls)]);
@@ -130,28 +130,29 @@ export default function DraftModeClient({
 
 	async function refresh(delay = 1000) {
 		if (refreshing.current) return;
-		console.log('refresh....');
 		setReloading(true);
 		refreshing.current = true;
 		refreshRef.current && clearInterval(refreshRef.current);
+		console.log('DraftModeClient: refresh', delay);
 		await new Promise((r) => setTimeout(r, delay));
 		router.refresh();
 		refreshing.current = false;
 		setReloading(false);
 	}
 
-	const style = {
-		top: position === 'topleft' || position === 'topright' ? '0px' : 'auto',
-		bottom: position === 'bottomleft' || position === 'bottomright' ? '0px' : 'auto',
-		left: position === 'topleft' || position === 'bottomleft' ? '0px' : 'auto',
-		right: position === 'bottomright' || position === 'topright' ? '0px' : 'auto',
-	};
-
 	if (!mounted) return null;
 
 	return (
 		<Modal>
-			<div className={s.draft} style={style}>
+			<div
+				className={s.draft}
+				style={{
+					top: position === 'topleft' || position === 'topright' ? '0px' : 'auto',
+					bottom: position === 'bottomleft' || position === 'bottomright' ? '0px' : 'auto',
+					left: position === 'topleft' || position === 'bottomleft' ? '0px' : 'auto',
+					right: position === 'bottomright' || position === 'topright' ? '0px' : 'auto',
+				}}
+			>
 				{contentEditingUrl && !insideiFrame && (dev || enabled) && (
 					<a
 						className={s.link}
