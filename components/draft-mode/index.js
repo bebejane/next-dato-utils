@@ -8,6 +8,8 @@ export default async function DraftMode({ url, tag, path, position = 'bottomrigh
         throw new Error('DraftMode: tag or path is required');
     const enabled = (await draftMode()).isEnabled;
     const secret = process.env.NODE_ENV === 'development' ? process.env.DATOCMS_PREVIEW_SECRET : undefined;
+    if (process.env.NODE_ENV === 'development' && !process.env.DATOCMS_VISUAL_EDITING_PREVIEW)
+        return null;
     return (_jsx(DraftModeClient, { enabled: enabled, url: url, tag: tag, path: path, position: position, secret: secret, actions: { revalidateTag, revalidatePath, disableDraftMode } }));
 }
 //# sourceMappingURL=index.js.map

@@ -74,7 +74,7 @@
 		"nextdato": "./cli/index.js"
 	},
 	"engines": {
-		"node": ">=0.18"
+		"node": ">=0.22"
 	},
 	"keywords": [],
 	"author": "",
