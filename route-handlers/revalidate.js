@@ -23,7 +23,7 @@ export default async function revalidate(req, callback) {
             }
             else {
                 paths?.forEach((p) => revalidatePath(p));
-                tags?.forEach((t) => revalidateTag(t, 'max-'));
+                tags?.forEach((t) => revalidateTag(t, 'max'));
                 response = { ...response, revalidated: true, paths, tags };
             }
             if (logs)
