@@ -52,6 +52,7 @@ const POST: RouteHandler = async (req, { params }, config) => {
 			case 'web-previews':
 				return webPreviews(req, async (payload) => {
 					const { item, itemType, locale } = payload;
+					if (!item || !itemType) throw new Error('No item or itemType found');
 					const record = { id: item.id, ...item.attributes };
 					if (config.webPreviews) return config.webPreviews(record, locale);
 					const path = config.route
