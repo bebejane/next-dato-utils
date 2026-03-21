@@ -9,6 +9,20 @@ const client = buildClient({
 	environment: process.env.DATOCMS_ENVIRONMENT,
 });
 
+export function getItemApiKey(item: any): string | null {
+	if (!item || typeof item !== 'object') return null;
+	const apiKey =
+		item._modelApiKey ??
+		item.__typename
+			?.replace('Record', '')
+			.split(/\.?(?=[A-Z])/)
+			.join('_')
+			.toLowerCase() ??
+		null;
+	if (!apiKey) return null;
+	return apiKey;
+}
+
 export async function getItemReferenceRoutes(
 	itemId: string,
 	locales?: string[],

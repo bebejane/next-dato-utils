@@ -1,5 +1,6 @@
 export { type DatoCmsConfig } from './config.js';
 export {
+	getItemApiKey,
 	getItemReferenceRoutes,
 	getUploadReferenceRoutes,
 	getItemWithLinked,
