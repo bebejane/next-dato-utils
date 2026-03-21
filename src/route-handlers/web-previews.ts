@@ -5,7 +5,7 @@ export type PreviewLink = {
 
 export default async function webPreviews(
 	req: Request,
-	generatePreviewUrl: (record: any) => Promise<string | null>
+	generatePreviewUrl: (record: any) => Promise<string | null>,
 ): Promise<Response> {
 	if (!process.env.NEXT_PUBLIC_SITE_URL && !process.env.SITE_URL)
 		throw new Error('NEXT_PUBLIC_SITE_URL is not set in .env');
@@ -20,7 +20,7 @@ export default async function webPreviews(
 	const previewLinks = [];
 	let path = await generatePreviewUrl(payload);
 	let baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL;
-	const isExternal = path?.startsWith('https://');
+	const isExternal = path?.startsWith('https://') || path?.startsWith('http://');
 
 	if (isExternal && path) {
 		const url = new URL(path);

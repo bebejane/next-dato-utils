@@ -9,7 +9,7 @@ export default async function webPreviews(req, generatePreviewUrl) {
     const previewLinks = [];
     let path = await generatePreviewUrl(payload);
     let baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL;
-    const isExternal = path?.startsWith('https://');
+    const isExternal = path?.startsWith('https://') || path?.startsWith('http://');
     if (isExternal && path) {
         const url = new URL(path);
         baseUrl = url.origin;
