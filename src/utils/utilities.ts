@@ -20,7 +20,7 @@ export const parseDatoError = (err: any): string => {
 	return errors
 		.map(
 			({ code, field, message, detailsCode, errors }) =>
-				`${code} ${field ? `(${field})` : ''} ${message || ''} ${detailsCode || ''} ${errors ? `(${errors})` : ''}`
+				`${code} ${field ? `(${field})` : ''} ${message || ''} ${detailsCode || ''} ${errors ? `(${errors})` : ''}`,
 		)
 		.join('\n');
 };
@@ -39,7 +39,7 @@ export const parseDatoCMSApiError = (e: any): string => {
 					errors.push(
 						Object.keys(e)
 							.map((k) => `${k}: ${e[k]}`)
-							.join(', ')
+							.join(', '),
 					);
 				});
 			}
@@ -48,10 +48,13 @@ export const parseDatoCMSApiError = (e: any): string => {
 		.join('\n');
 };
 
-export const isEmpty = (obj: any) => Object.keys(obj).filter((k) => obj[k] !== undefined).length === 0;
+export const isEmpty = (obj: any) =>
+	Object.keys(obj).filter((k) => obj[k] !== undefined).length === 0;
 
 export const capitalize = (str: string, lower: boolean = false) => {
-	return (lower ? str.toLowerCase() : str).replace(/(?:^|\s|["'([{])+\S/g, (match) => match.toUpperCase());
+	return (lower ? str.toLowerCase() : str).replace(/(?:^|\s|["'([{])+\S/g, (match) =>
+		match.toUpperCase(),
+	);
 };
 
 export const sleep = (ms: number) => new Promise((resolve, refject) => setTimeout(resolve, ms));
@@ -66,7 +69,7 @@ export const truncateParagraph = (
 	s: string,
 	sentances: number = 1,
 	ellipsis: boolean = true,
-	minLength = 200
+	minLength = 200,
 ): string => {
 	if (!s || s.length < minLength) return s;
 
@@ -100,6 +103,31 @@ export const truncateWords = (text: string, maxLength: number): string => {
 		truncatedText = truncatedText.substr(0, lastSpaceIndex);
 	}
 	return truncatedText + '...';
+};
+
+export const truncateText = (
+	text: string,
+	options: {
+		sentences: number;
+		useEllipsis: boolean;
+		minLength: number;
+	},
+): string => {
+	if (!text) return '';
+	let { sentences = 1, useEllipsis = false, minLength = 0 } = options;
+	const sentencesArr = text.match(/[^\.!\?]+[\.!\?]+/g);
+	if (!sentencesArr || sentencesArr.length <= sentences) return text;
+
+	let truncatedText = sentencesArr.slice(0, sentences).join(' ');
+
+	while (truncatedText.length < minLength && truncatedText.search(/[!?]/) > -1) {
+		if (!sentencesArr[sentences]) break;
+		truncatedText = truncatedText.concat(
+			sentencesArr[sentences].match(/^[^!.?]+[!.?]+/)?.[0] ?? '',
+		);
+		sentences++;
+	}
+	return `${truncatedText}${useEllipsis ? '...' : ''}`;
 };
 
 export const sortSwedish = <T>(arr: T[], key: string): T[] => {

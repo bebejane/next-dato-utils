@@ -78,6 +78,22 @@ export const truncateWords = (text, maxLength) => {
     }
     return truncatedText + '...';
 };
+export const truncateText = (text, options) => {
+    if (!text)
+        return '';
+    let { sentences = 1, useEllipsis = false, minLength = 0 } = options;
+    const sentencesArr = text.match(/[^\.!\?]+[\.!\?]+/g);
+    if (!sentencesArr || sentencesArr.length <= sentences)
+        return text;
+    let truncatedText = sentencesArr.slice(0, sentences).join(' ');
+    while (truncatedText.length < minLength && truncatedText.search(/[!?]/) > -1) {
+        if (!sentencesArr[sentences])
+            break;
+        truncatedText = truncatedText.concat(sentencesArr[sentences].match(/^[^!.?]+[!.?]+/)?.[0] ?? '');
+        sentences++;
+    }
+    return `${truncatedText}${useEllipsis ? '...' : ''}`;
+};
 export const sortSwedish = (arr, key) => {
     const sorter = new Intl.Collator('sv', { usage: 'sort' });
     return arr.sort((a, b) => sorter.compare(a[key], b[key]));
