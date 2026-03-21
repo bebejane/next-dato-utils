@@ -27,6 +27,8 @@ const POST = async (req, { params }, config) => {
                 return webPreviews(req, async (payload) => {
                     const { item, itemType, locale } = payload;
                     const record = { id: item.id, ...item.attributes };
+                    if (config.webPreviews)
+                        return config.webPreviews(record);
                     const path = config.route
                         ? await config.route(record, locale)
                         : (await config.routes[itemType.attributes.api_key]?.(record, locale))?.[0];
