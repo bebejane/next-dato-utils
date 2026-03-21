@@ -9,16 +9,6 @@ const client = buildClient({
 	environment: process.env.DATOCMS_ENVIRONMENT,
 });
 
-export async function getRoute(
-	record: any,
-	locale: string | undefined | null,
-	config: DatoCmsConfig,
-) {
-	const key = record._modelApiKey as keyof DatoCmsConfig['routes'];
-	const routes = await config.routes[key]?.(record, locale, true);
-	return routes?.[0] ?? null;
-}
-
 export async function getItemReferenceRoutes(
 	itemId: string,
 	locales?: string[],

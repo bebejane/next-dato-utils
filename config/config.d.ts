@@ -6,7 +6,7 @@ export type DatoCmsConfig = {
     };
     route: (record: any, locale?: string | undefined | null) => Promise<string | null>;
     routes: {
-        [api_key: string]: (record: any, locale?: string | undefined | null, main?: boolean) => Promise<typeof main extends true ? string | null : string[] | null>;
+        [api_key: string]: (record: any, locale?: string | undefined | null) => Promise<string[] | null>;
         upload: (record: any) => Promise<string[] | null>;
     };
     manifest?: (props?: any) => Promise<MetadataRoute.Manifest>;

@@ -1,6 +1,5 @@
 import 'dotenv/config';
 import { DatoCmsConfig } from './config.js';
-export declare function getRoute(record: any, locale: string | undefined | null, config: DatoCmsConfig): Promise<string | null>;
 export declare function getItemReferenceRoutes(itemId: string, locales?: string[]): Promise<string[]>;
 export declare function getUploadReferenceRoutes(uploadId: string, locales?: string[]): Promise<string[]>;
 export declare function getItemWithLinked(id: string): Promise<any>;
