@@ -60,7 +60,8 @@ const POST: RouteHandler = async (req, { params }, config) => {
 						: (await config.routes[itemType.attributes.api_key]?.(record, locale))?.[0];
 					return path ?? null;
 				});
-
+			case 'search':
+				return search(req);
 			default:
 				return new Response('Not Found', { status: 404 });
 		}
@@ -75,8 +76,6 @@ const GET: RouteHandler = async (req, { params }, config) => {
 		const searchParams = (req as NextRequest).nextUrl.searchParams;
 
 		switch (route) {
-			case 'search':
-				return search(req);
 			case 'search-index':
 				return searchIndex(req);
 			case 'test':
