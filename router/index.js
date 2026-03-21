@@ -27,8 +27,10 @@ const POST = async (req, { params }, config) => {
                 return webPreviews(req, async (payload) => {
                     const { item, itemType, locale } = payload;
                     const record = { id: item.id, ...item.attributes };
-                    const paths = await config.routes[itemType.attributes.api_key]?.(record, locale);
-                    return paths?.[0] ?? null;
+                    const path = config.route
+                        ? await config.route(record, locale)
+                        : (await config.routes[itemType.attributes.api_key]?.(record, locale))?.[0];
+                    return path ?? null;
                 });
             default:
                 return new Response('Not Found', { status: 404 });

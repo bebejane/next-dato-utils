@@ -14,7 +14,7 @@ import {
 export type RouteHandler = (
 	req: Request,
 	{ params }: { params: Promise<{ route: string }> },
-	config: DatoCmsConfig
+	config: DatoCmsConfig,
 ) => Promise<Response>;
 
 export type DatoCmsRouter = {
@@ -47,14 +47,16 @@ const POST: RouteHandler = async (req, { params }, config) => {
 
 						const tags: string[] = [api_key, id].filter((t) => t);
 						return await revalidate(paths, tags, true);
-					})
+					}),
 				);
 			case 'web-previews':
 				return webPreviews(req, async (payload) => {
 					const { item, itemType, locale } = payload;
 					const record = { id: item.id, ...item.attributes };
-					const paths = await config.routes[itemType.attributes.api_key]?.(record, locale);
-					return paths?.[0] ?? null;
+					const path = config.route
+						? await config.route(record, locale)
+						: (await config.routes[itemType.attributes.api_key]?.(record, locale))?.[0];
+					return path ?? null;
 				});
 
 			default:
