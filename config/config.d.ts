@@ -4,10 +4,10 @@ export type DatoCmsConfig = {
         locales: string[];
         defaultLocale: string;
     };
+    route: (record: any, locale: string | undefined | null) => Promise<string | null>;
     routes: {
-        [api_key: string]: (record: any, locale?: string) => Promise<string[] | null>;
+        [api_key: string]: (record: any, locale?: string | undefined | null, main?: boolean) => Promise<typeof main extends true ? string | null : string[] | null>;
     };
-    route: (record: any, locale?: string) => Promise<string | null>;
     manifest?: (props?: any) => Promise<MetadataRoute.Manifest>;
     sitemap?: (props?: any) => Promise<MetadataRoute.Sitemap>;
     robots?: (props?: any) => Promise<MetadataRoute.Robots>;
