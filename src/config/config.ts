@@ -18,3 +18,13 @@ export type DatoCmsConfig = {
 	sitemap?: (props?: any) => Promise<MetadataRoute.Sitemap>;
 	robots?: (props?: any) => Promise<MetadataRoute.Robots>;
 };
+
+export async function getRoute(
+	record: any,
+	locale: string | undefined | null,
+	config: DatoCmsConfig,
+) {
+	const key = record._modelApiKey as keyof DatoCmsConfig['routes'];
+	const routes = await config.routes[key]?.(record, locale, true);
+	return routes?.[0] ?? null;
+}
