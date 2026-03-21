@@ -5,11 +5,15 @@ const client = buildClient({
     apiToken: process.env.DATOCMS_API_TOKEN,
     environment: process.env.DATOCMS_ENVIRONMENT,
 });
-export function getItemApiKey(item) {
-    if (!item || typeof item !== 'object')
+export function getItemApiKey(itemOrApiKey) {
+    if (!itemOrApiKey)
         return null;
-    const apiKey = item._modelApiKey ??
-        item.__typename
+    if (typeof itemOrApiKey === 'string')
+        return itemOrApiKey;
+    if (typeof itemOrApiKey !== 'object')
+        return null;
+    const apiKey = itemOrApiKey._modelApiKey ??
+        itemOrApiKey.__typename
             ?.replace('Record', '')
             .split(/\.?(?=[A-Z])/)
             .join('_')
