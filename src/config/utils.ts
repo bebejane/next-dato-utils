@@ -9,7 +9,20 @@ const client = buildClient({
 	environment: process.env.DATOCMS_ENVIRONMENT,
 });
 
-export async function getItemReferenceRoutes(itemId: string, locales?: string[]): Promise<string[]> {
+export async function getRoute(
+	record: any,
+	locale: string | undefined | null,
+	config: DatoCmsConfig,
+) {
+	const key = record._modelApiKey as keyof DatoCmsConfig['routes'];
+	const routes = await config.routes[key]?.(record, locale, true);
+	return routes?.[0] ?? null;
+}
+
+export async function getItemReferenceRoutes(
+	itemId: string,
+	locales?: string[],
+): Promise<string[]> {
 	if (!itemId) throw new Error('datocms.config: Missing reference: itemId');
 	const pathnames: string[] = [];
 
@@ -32,7 +45,10 @@ export async function getItemReferenceRoutes(itemId: string, locales?: string[])
 	return pathnames;
 }
 
-export async function getUploadReferenceRoutes(uploadId: string, locales?: string[]): Promise<string[]> {
+export async function getUploadReferenceRoutes(
+	uploadId: string,
+	locales?: string[],
+): Promise<string[]> {
 	if (!uploadId) throw new Error('datocms.config: Missing reference: uploadId');
 	const pathnames: string[] = [];
 

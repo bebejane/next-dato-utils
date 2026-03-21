@@ -13,4 +13,3 @@ export type DatoCmsConfig = {
     sitemap?: (props?: any) => Promise<MetadataRoute.Sitemap>;
     robots?: (props?: any) => Promise<MetadataRoute.Robots>;
 };
-export declare function getRoute(record: any, locale: string | undefined | null, config: DatoCmsConfig): Promise<string | null>;

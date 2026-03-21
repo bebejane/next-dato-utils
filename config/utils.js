@@ -5,6 +5,11 @@ const client = buildClient({
     apiToken: process.env.DATOCMS_API_TOKEN,
     environment: process.env.DATOCMS_ENVIRONMENT,
 });
+export async function getRoute(record, locale, config) {
+    const key = record._modelApiKey;
+    const routes = await config.routes[key]?.(record, locale, true);
+    return routes?.[0] ?? null;
+}
 export async function getItemReferenceRoutes(itemId, locales) {
     if (!itemId)
         throw new Error('datocms.config: Missing reference: itemId');
