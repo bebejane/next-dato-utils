@@ -12,6 +12,7 @@ export type DatoCmsConfig = {
 			locale?: string | undefined | null,
 			main?: boolean,
 		) => Promise<typeof main extends true ? string | null : string[] | null>;
+		upload: (record: any) => Promise<string[] | null>;
 	};
 	manifest?: (props?: any) => Promise<MetadataRoute.Manifest>;
 	sitemap?: (props?: any) => Promise<MetadataRoute.Sitemap>;
