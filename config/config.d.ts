@@ -4,7 +4,7 @@ export type DatoCmsConfig = {
         locales: string[];
         defaultLocale: string;
     };
-    route: (record: any, locale: string | undefined | null) => Promise<string | null>;
+    route: (record: any, locale?: string | undefined | null) => Promise<string | null>;
     routes: {
         [api_key: string]: (record: any, locale?: string | undefined | null, main?: boolean) => Promise<typeof main extends true ? string | null : string[] | null>;
         upload: (record: any) => Promise<string[] | null>;
