@@ -8,6 +8,7 @@ export type DatoCmsConfig = {
 	routes: {
 		[api_key: string]: (record: any, locale?: string) => Promise<string[] | null>;
 	};
+	route: (record: any, locale?: string) => Promise<string | null>;
 	manifest?: (props?: any) => Promise<MetadataRoute.Manifest>;
 	sitemap?: (props?: any) => Promise<MetadataRoute.Sitemap>;
 	robots?: (props?: any) => Promise<MetadataRoute.Robots>;
