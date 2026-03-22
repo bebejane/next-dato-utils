@@ -6,7 +6,7 @@ import remarkBreaks from 'remark-breaks';
 import type { UrlObject } from 'url';
 
 export type MarkdownProps = {
-	content?: string;
+	content?: string | null;
 	allowedElements?: string[];
 	truncate?: number;
 	className?: string;
@@ -37,12 +37,14 @@ export default function Markdown({
 	scroll = true,
 	disableBreaks = false,
 }: MarkdownProps) {
+	if (!content) return null;
+
 	const truncatedContent: string = (
 		!truncate
 			? content && truncate
 				? truncateSentances(content as string, sentances)
 				: content
-			: markdownTruncate(content, { limit: truncate, ellipsis: true })
+			: markdownTruncate(content as string, { limit: truncate, ellipsis: true })
 	) as string;
 
 	return (

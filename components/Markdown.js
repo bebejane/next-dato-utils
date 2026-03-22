@@ -11,6 +11,8 @@ const truncateSentances = (markdown, limit) => {
     return sentances.length >= limit ? sentances.slice(0, limit).join(' ') + '...' : markdown;
 };
 export default function Markdown({ content, truncate, className, components, sentances = 1, allowedElements, scroll = true, disableBreaks = false, }) {
+    if (!content)
+        return null;
     const truncatedContent = (!truncate
         ? content && truncate
             ? truncateSentances(content, sentances)
