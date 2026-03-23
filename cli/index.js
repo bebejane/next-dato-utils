@@ -11,11 +11,12 @@ const program = new Command();
 program
     .version(version)
     .description(`next-dato-utils v${version}`)
-    .option("-i, --info", "Info DatoCMS project")
-    .option("-u, --usage", "Usage DatoCMS project")
-    .option("-g, --gql", "Generate GQL")
-    .option("-to, --token <value>", "Api token")
-    .option("-t, --test <value>", "Test DatoCMS project")
+    .option('-i, --info', 'Info DatoCMS project')
+    .option('-u, --usage', 'Usage DatoCMS project')
+    .option('-s, --storage', 'Storage DatoCMS environment')
+    .option('-g, --gql', 'Generate GQL')
+    .option('-to, --token <value>', 'Api token')
+    .option('-t, --test <value>', 'Test DatoCMS project')
     .parse(process.argv);
 const options = program.opts();
 const apiToken = options.token ?? process.env.DATOCMS_API_TOKEN;
@@ -31,6 +32,8 @@ if (options.usage)
     usage();
 if (options.gql)
     generateGqlFiles();
+if (options.storage)
+    storage();
 async function info() {
     const [site, itemTypes, webhooks, plugins, buildTriggers] = await Promise.all([
         client.site.find(),
@@ -41,7 +44,7 @@ async function info() {
     ]);
     const text = dedent(`
     ${site.name}
-    ${buildTriggers.find(t => t.frontend_url)?.frontend_url ?? 'No frontend url'}
+    ${buildTriggers.find((t) => t.frontend_url)?.frontend_url ?? 'No frontend url'}
 
     -------------------------------
     Timezone: ${site.timezone}
@@ -49,31 +52,37 @@ async function info() {
 
     Models
     -------------------------------
-    ${itemTypes.filter(el => !el.modular_block).map(itemType => itemType.api_key).join('\n')}
+    ${itemTypes
+        .filter((el) => !el.modular_block)
+        .map((itemType) => itemType.api_key)
+        .join('\n')}
 
     Blocks
     -------------------------------
-    ${itemTypes.filter(el => el.modular_block).map(itemType => itemType.api_key).join('\n')}
+    ${itemTypes
+        .filter((el) => el.modular_block)
+        .map((itemType) => itemType.api_key)
+        .join('\n')}
 
     Webhooks
     -------------------------------
-    ${webhooks.map(webhook => `${webhook.name}\n${webhook.url}`).join('\n\n')}
+    ${webhooks.map((webhook) => `${webhook.name}\n${webhook.url}`).join('\n\n')}
 
     Build Triggers
     -------------------------------
-    ${buildTriggers.map(t => `${t.name}\n${t.frontend_url}`).join('\n')}
+    ${buildTriggers.map((t) => `${t.name}\n${t.frontend_url}`).join('\n')}
 
     Plugins
     -------------------------------
-    ${plugins.map(plugin => `${plugin.name}`).join('\n')}
+    ${plugins.map((plugin) => `${plugin.name}`).join('\n')}
   `);
     console.log(text);
 }
 async function usage() {
     const [site, usage] = await Promise.all([client.site.find(), client.dailyUsages.list()]);
     const fNumber = (num) => !num ? 0 : num.toLocaleString('en-US', { maximumFractionDigits: 0 });
-    const usageLast = usage.filter(el => new Date(el.date).getMonth() < new Date().getMonth());
-    const usageCurrent = usage.filter(el => new Date(el.date).getMonth() === new Date().getMonth());
+    const usageLast = usage.filter((el) => new Date(el.date).getMonth() < new Date().getMonth());
+    const usageCurrent = usage.filter((el) => new Date(el.date).getMonth() === new Date().getMonth());
     const usageTotal = {
         last: {
             days: usageLast.length,
@@ -86,21 +95,37 @@ async function usage() {
             cda: usageCurrent.reduce((acc, el) => acc + el.cda_api_calls + el.cma_api_calls, 0),
             cma: usageCurrent.reduce((acc, el) => acc + el.cma_api_calls, 0),
             bytes: usageCurrent.reduce((acc, el) => acc + el.assets_traffic_bytes, 0),
-        }
+        },
     };
     const usageTable = [
-        ['Date', 'CDA', 'CMA', "Traffic"],
-        ...usage.filter(el => new Date(el.date).getMonth() === new Date().getMonth()).map(el => [
+        ['Date', 'CDA', 'CMA', 'Traffic'],
+        ...usage
+            .filter((el) => new Date(el.date).getMonth() === new Date().getMonth())
+            .map((el) => [
             el.date,
             fNumber(el.cda_api_calls),
             fNumber(el.cma_api_calls),
-            prettyBytes(el.assets_traffic_bytes, { maximumFractionDigits: 1 })
-        ])
+            prettyBytes(el.assets_traffic_bytes, { maximumFractionDigits: 1 }),
+        ]),
     ];
     const totalTable = [
         ['Period', 'CDA', 'CDA (avg)', 'CMA', 'CMA (avg)', 'Traffic'],
-        ['Last month', fNumber(usageTotal.last.cda), fNumber(usageTotal.last.cda / usageTotal.last.days), fNumber(usageTotal.last.cma), fNumber(usageTotal.last.cma / usageTotal.last.days), prettyBytes(usageTotal.last.bytes, { maximumFractionDigits: 1 })],
-        ['Current', fNumber(usageTotal.current.cda), fNumber(usageTotal.current.cda / usageTotal.current.days), fNumber(usageTotal.current.cma), fNumber(usageTotal.current.cma / usageTotal.current.days), prettyBytes(usageTotal.current.bytes, { maximumFractionDigits: 1 })]
+        [
+            'Last month',
+            fNumber(usageTotal.last.cda),
+            fNumber(usageTotal.last.cda / usageTotal.last.days),
+            fNumber(usageTotal.last.cma),
+            fNumber(usageTotal.last.cma / usageTotal.last.days),
+            prettyBytes(usageTotal.last.bytes, { maximumFractionDigits: 1 }),
+        ],
+        [
+            'Current',
+            fNumber(usageTotal.current.cda),
+            fNumber(usageTotal.current.cda / usageTotal.current.days),
+            fNumber(usageTotal.current.cma),
+            fNumber(usageTotal.current.cma / usageTotal.current.days),
+            prettyBytes(usageTotal.current.bytes, { maximumFractionDigits: 1 }),
+        ],
     ];
     const text = dedent(`
     ${site.name}
@@ -110,5 +135,30 @@ async function usage() {
 
   `);
     console.log(text);
+}
+async function storage() {
+    const uploads = [];
+    const items = [];
+    const environments = await client.environments.list();
+    console.log(`Checking storage for ${environments.length} environmnets`);
+    for (const { id: environment } of environments) {
+        process.stdout.write(`.`);
+        const c = buildClient({
+            apiToken: process.env.DATOCMS_API_TOKEN,
+            environment,
+        });
+        for await (const upload of c.uploads.listPagedIterator())
+            uploads.push(upload);
+        for await (const item of c.items.listPagedIterator())
+            items.push(item);
+    }
+    const uploadsSize = uploads.reduce((acc, upload) => acc + upload.size, 0);
+    const itemsSize = new TextEncoder().encode(JSON.stringify(items)).length;
+    const total = uploadsSize + itemsSize;
+    console.log('--------------------------');
+    console.log('Environments:', environments.length);
+    console.log('Uploads:', prettyBytes(uploadsSize), uploads.length);
+    console.log('Items:', prettyBytes(itemsSize), items.length);
+    console.log('Total:', prettyBytes(total));
 }
 //# sourceMappingURL=index.js.map
