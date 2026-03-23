@@ -1,7 +1,12 @@
+'use client';
 import ReactDOM from 'react-dom';
 import React from 'react';
 const Modal = React.forwardRef((props, ref) => {
-    if (typeof window === 'undefined')
+    const [mounted, setMounted] = React.useState(false);
+    React.useEffect(() => {
+        setMounted(true);
+    }, [mounted]);
+    if (!mounted)
         return null;
     const target = props.targetId ? document.getElementById(props.targetId) : document.body;
     if (!target)
