@@ -152,7 +152,7 @@ async function storage() {
 	const items: Item[] = [];
 	const environments = await client.environments.list();
 
-	console.log(`Checking storage for ${environments.length} environmnets`);
+	console.log(`Checking storage for ${environments.length} environments...`);
 
 	for (const { id: environment } of environments) {
 		process.stdout.write(`.`);
