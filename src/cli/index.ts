@@ -170,7 +170,7 @@ async function storage() {
 	const itemsSize = new TextEncoder().encode(JSON.stringify(items)).length;
 	const total = uploadsSize + itemsSize;
 
-	console.log('--------------------------');
+	console.log('\n--------------------------');
 	console.log('Environments:', environments.length);
 	console.log('Uploads:', prettyBytes(uploadsSize), uploads.length);
 	console.log('Items:', prettyBytes(itemsSize), items.length);
