@@ -151,3 +151,19 @@ export const awaitElement = async <T>(selector: string, ms: number = 1000): Prom
 
 	return null;
 };
+
+export const haveStructuredContent = (content: any): boolean => {
+	if (!content) return false;
+	if (Array.isArray(content?.blocks) && content.blocks.length > 0) return true;
+	if (Array.isArray(content?.inlineBlocks) && content.inlineBlocks.length > 0) return true;
+
+	const document = content?.value?.document;
+	const visit = (node: any): boolean => {
+		if (!node) return false;
+		if (typeof node?.value === 'string' && node.value.trim().length > 0) return true;
+		const children = node?.children;
+		return Array.isArray(children) ? children.some(visit) : false;
+	};
+
+	return visit(document);
+};
