@@ -35,6 +35,7 @@ export default async function draft(
 	}
 
 	console.log('draft mode:', 'enable', slug);
+
 	(await draftMode()).enable();
 
 	if (maxAge) {
@@ -50,6 +51,7 @@ export default async function draft(
 		});
 	}
 
-	if (slug) return new Response('OK', { status: 307, headers: { Location: slug } });
+	if (slug)
+		return new Response('OK', { status: 307, headers: { Location: `${slug}?secret=${secret}` } });
 	else return new Response('OK', { status: 200 });
 }
