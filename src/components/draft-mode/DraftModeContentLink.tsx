@@ -13,7 +13,7 @@ export default function ContentLink({ color }: { color?: string }) {
 	const [isDraft, setIsDraft] = useState<boolean | null>(null);
 	const [inIframe, setInIframe] = useState(false);
 	const [secret, setSecret] = useState<string | null>(null);
-	const [clickToEdit, setClickToEdit] = useState(false);
+	const [clickToEdit, setClickToEdit] = useState(true);
 	const { isClickToEditEnabled } = useContentLink();
 
 	async function check() {
