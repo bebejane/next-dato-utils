@@ -2,13 +2,15 @@
 
 import { ContentLink as DatoContentLink, useContentLink } from 'react-datocms';
 import { useRouter, usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { boolean } from 'zod/v4';
 
 export default function ContentLink() {
 	const router = useRouter();
 	const pathname = usePathname();
 	const [isDraft, setIsDraft] = useState(false);
 	const { isClickToEditEnabled } = useContentLink();
+	const isEnabledRef = useRef<boolean | null>(null);
 	const isEnabled = isClickToEditEnabled();
 
 	async function check() {
@@ -21,8 +23,10 @@ export default function ContentLink() {
 		}
 	}
 
-	async function toggle(enable: boolean) {
+	async function toggle() {
 		try {
+			const enable = isEnabledRef.current;
+			if (enable === null) return;
 			const url = new URL(window.location.href);
 			const secret = url.searchParams.get('secret');
 
@@ -49,7 +53,8 @@ export default function ContentLink() {
 	}, [pathname]);
 
 	useEffect(() => {
-		toggle(isEnabled);
+		toggle();
+		isEnabledRef.current = isEnabled;
 	}, [isEnabled]);
 
 	if (!isDraft) return null;
