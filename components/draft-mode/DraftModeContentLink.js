@@ -23,7 +23,7 @@ export default function ContentLink() {
         try {
             const url = new URL(window.location.href);
             const secret = url.searchParams.get('secret');
-            console.log('secret', secret);
+            console.log('toggle', { secret, enable });
             if (!secret)
                 return;
             if (!enable) {
@@ -35,6 +35,8 @@ export default function ContentLink() {
             else {
                 console.log('enable draft', secret, `/api/draft?secret=${secret}&slug=${pathname}`);
                 const res = await fetch(`/api/draft?secret=${secret}&slug=${pathname}`);
+                if (res.ok)
+                    router.refresh();
             }
         }
         catch (e) {
