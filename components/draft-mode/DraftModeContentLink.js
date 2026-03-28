@@ -3,6 +3,7 @@ import { jsx as _jsx } from "react/jsx-runtime";
 import { ContentLink as DatoContentLink, useContentLink } from 'react-datocms';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { hexToHsl } from '../../utils';
 const basePath = '/api/draft';
 export default function ContentLink({ heu }) {
     const router = useRouter();
@@ -64,6 +65,6 @@ export default function ContentLink({ heu }) {
     useEffect(() => setInIframe(window.self !== window.top), []);
     if (!inIframe && !isDraft)
         return null;
-    return (_jsx(DatoContentLink, { onNavigateTo: router.push, currentPath: pathname, enableClickToEdit: { hoverOnly: true }, hue: heu }));
+    return (_jsx(DatoContentLink, { onNavigateTo: router.push, currentPath: pathname, enableClickToEdit: { hoverOnly: true }, hue: heu ? hexToHsl(heu)[0] : undefined }));
 }
 //# sourceMappingURL=DraftModeContentLink.js.map

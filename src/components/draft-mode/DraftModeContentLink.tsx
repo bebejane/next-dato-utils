@@ -3,10 +3,11 @@
 import { ContentLink as DatoContentLink, useContentLink } from 'react-datocms';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { hexToHsl } from '../../utils';
 
 const basePath = '/api/draft';
 
-export default function ContentLink({ heu }: { heu?: number }) {
+export default function ContentLink({ heu }: { heu?: string }) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const [isDraft, setIsDraft] = useState(false);
@@ -71,7 +72,7 @@ export default function ContentLink({ heu }: { heu?: number }) {
 			onNavigateTo={router.push}
 			currentPath={pathname}
 			enableClickToEdit={{ hoverOnly: true }}
-			hue={heu}
+			hue={heu ? hexToHsl(heu)[0] : undefined}
 		/>
 	);
 }
