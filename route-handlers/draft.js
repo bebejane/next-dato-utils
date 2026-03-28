@@ -9,7 +9,7 @@ export default async function draft(request, searchParams) {
     const exit = searchParams.get('exit');
     if (check) {
         const enabled = (await draftMode()).isEnabled;
-        const secret = (await cookies()).get('secret');
+        const secret = (await cookies()).get('secret')?.value;
         return new Response(JSON.stringify({ secret, enabled }), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
