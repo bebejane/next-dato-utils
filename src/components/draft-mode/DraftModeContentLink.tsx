@@ -65,7 +65,7 @@ export default function ContentLink({ color }: { color?: string }) {
 
 	useEffect(() => setInIframe(window.self !== window.top), []);
 
-	if (!inIframe && !isDraft) return null;
+	//if (!inIframe) return null;
 
 	return (
 		<DatoContentLink

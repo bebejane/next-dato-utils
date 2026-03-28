@@ -65,8 +65,7 @@ export default function ContentLink({ color }) {
         check();
     }, [pathname]);
     useEffect(() => setInIframe(window.self !== window.top), []);
-    if (!inIframe && !isDraft)
-        return null;
+    //if (!inIframe) return null;
     return (_jsx(DatoContentLink, { onNavigateTo: router.push, currentPath: pathname, enableClickToEdit: { hoverOnly: true }, hue: color ? hexToHsl(color)[0] : undefined }));
 }
 //# sourceMappingURL=DraftModeContentLink.js.map
