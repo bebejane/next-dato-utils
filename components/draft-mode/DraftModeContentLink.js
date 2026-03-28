@@ -23,6 +23,7 @@ export default function ContentLink() {
     async function toggle() {
         try {
             const enable = isEnabledRef.current;
+            console.log({ enable });
             if (enable === null)
                 return;
             const url = new URL(window.location.href);
@@ -54,8 +55,7 @@ export default function ContentLink() {
         toggle();
         isEnabledRef.current = isEnabled;
     }, [isEnabled]);
-    if (!isDraft)
-        return null;
+    //if (!isDraft) return null;
     return (_jsx(DatoContentLink, { onNavigateTo: (path) => router.push(path), currentPath: pathname, enableClickToEdit: { hoverOnly: true } }));
 }
 //# sourceMappingURL=DraftModeContentLink.js.map

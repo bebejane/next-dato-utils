@@ -25,6 +25,7 @@ export default function ContentLink() {
 	async function toggle() {
 		try {
 			const enable = isEnabledRef.current;
+			console.log({ enable });
 			if (enable === null) return;
 			const url = new URL(window.location.href);
 			const secret = url.searchParams.get('secret');
@@ -56,7 +57,7 @@ export default function ContentLink() {
 		isEnabledRef.current = isEnabled;
 	}, [isEnabled]);
 
-	if (!isDraft) return null;
+	//if (!isDraft) return null;
 
 	return (
 		<DatoContentLink
