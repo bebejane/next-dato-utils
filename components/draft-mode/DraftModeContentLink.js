@@ -55,7 +55,7 @@ export default function ContentLink({ color }) {
         check();
     }, [pathname]);
     useEffect(() => {
-        if (!inIframe)
+        if (!inIframe || isDraft === null)
             return;
         toggle(clickToEdit);
     }, [clickToEdit]);
