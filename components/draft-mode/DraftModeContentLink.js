@@ -19,6 +19,7 @@ export default function ContentLink({ color }) {
     const router = useRouter();
     const pathname = usePathname();
     const inIframe = isCrossOriginFrame();
+    const heu = color ? hexToHsl(color)[0] : undefined;
     const [isDraft, setIsDraft] = useState(null);
     const [secret, setSecret] = useState(null);
     const [clickToEdit, setClickToEdit] = useState(true);
@@ -77,6 +78,9 @@ export default function ContentLink({ color }) {
     }, [inIframe]);
     console.log({ clickToEdit, isDraft });
     //if (!inIframe) return null;
-    return (_jsx(DatoContentLink, { onNavigateTo: router.push, currentPath: pathname, enableClickToEdit: { hoverOnly: true }, hue: color ? hexToHsl(color)[0] : undefined }));
+    return (_jsx(DatoContentLink, { onNavigateTo: (path) => {
+            console.log('navigate', pathname, path);
+            router.push(path);
+        }, currentPath: pathname, enableClickToEdit: { hoverOnly: true }, hue: heu }));
 }
 //# sourceMappingURL=DraftModeContentLink.js.map

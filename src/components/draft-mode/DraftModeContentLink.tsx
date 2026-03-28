@@ -20,6 +20,7 @@ export default function ContentLink({ color }: { color?: string }) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const inIframe = isCrossOriginFrame();
+	const heu = color ? hexToHsl(color)[0] : undefined;
 	const [isDraft, setIsDraft] = useState<boolean | null>(null);
 	const [secret, setSecret] = useState<string | null>(null);
 	const [clickToEdit, setClickToEdit] = useState(true);
@@ -81,10 +82,13 @@ export default function ContentLink({ color }: { color?: string }) {
 
 	return (
 		<DatoContentLink
-			onNavigateTo={router.push}
+			onNavigateTo={(path) => {
+				console.log('navigate', pathname, path);
+				router.push(path);
+			}}
 			currentPath={pathname}
 			enableClickToEdit={{ hoverOnly: true }}
-			hue={color ? hexToHsl(color)[0] : undefined}
+			hue={heu}
 		/>
 	);
 }
