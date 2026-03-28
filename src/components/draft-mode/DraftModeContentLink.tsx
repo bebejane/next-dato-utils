@@ -34,7 +34,6 @@ export default function ContentLink({ color }: { color?: string }) {
 	async function toggle(draft: boolean) {
 		try {
 			if (!secret) return;
-
 			const params = new URLSearchParams({ secret });
 			if (draft) params.append('slug', pathname);
 			else params.append('exit', '1');

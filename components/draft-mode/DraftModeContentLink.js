@@ -34,7 +34,6 @@ export default function ContentLink({ color }) {
         try {
             if (!secret)
                 return;
-            console.log('togle');
             const params = new URLSearchParams({ secret });
             if (draft)
                 params.append('slug', pathname);
