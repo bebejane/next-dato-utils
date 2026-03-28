@@ -56,7 +56,7 @@ export default function ContentLink({ color }: { color?: string }) {
 			console.log('refresh');
 			router.refresh();
 		},
-		[isDraft, secret, pathname, inIframe],
+		[isDraft, secret, pathname, inIframe, clickToEdit],
 	);
 
 	useEffect(() => setInIframe(isCrossOriginFrame()), []);
