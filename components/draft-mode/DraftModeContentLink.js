@@ -56,6 +56,8 @@ export default function ContentLink() {
             isEnabledRef.current = true;
         else if (isEnabledRef.current === true && !isEnabled)
             isEnabledRef.current = false;
+        else if (isEnabledRef.current === false && isEnabled)
+            isEnabledRef.current = true;
         toggle();
     }, [isEnabled]);
     //if (!isDraft) return null;
