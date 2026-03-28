@@ -9,7 +9,7 @@ export default function ContentLink() {
 	const pathname = usePathname();
 	const [isDraft, setIsDraft] = useState(false);
 	const [secret, setSecret] = useState<string | null>(null);
-	const { isClickToEditEnabled } = useContentLink();
+	const { isClickToEditEnabled, controller } = useContentLink();
 	const isEnabled = isClickToEditEnabled();
 
 	async function check() {
@@ -40,10 +40,12 @@ export default function ContentLink() {
 				console.log('disable draft');
 				const res = await fetch(`/api/draft?exit=1&secret=${secret}`);
 				if (!res.ok) return;
+				controller?.disableClickToEdit();
 			} else {
 				console.log('enable draft');
 				const res = await fetch(`/api/draft?secret=${secret}&slug=${path}`);
 				if (!res.ok) return;
+				controller?.enableClickToEdit();
 			}
 		} catch (e) {
 			console.log(e);
@@ -61,7 +63,7 @@ export default function ContentLink() {
 	}, [isEnabled, secret, pathname]);
 
 	//if (!isDraft) return null;
-	console.log({ isEnabled });
+	console.log({ isEnabled, isDraft });
 	return (
 		<DatoContentLink
 			onNavigateTo={(path) => router.push(path)}

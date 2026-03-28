@@ -8,7 +8,7 @@ export default function ContentLink() {
     const pathname = usePathname();
     const [isDraft, setIsDraft] = useState(false);
     const [secret, setSecret] = useState(null);
-    const { isClickToEditEnabled } = useContentLink();
+    const { isClickToEditEnabled, controller } = useContentLink();
     const isEnabled = isClickToEditEnabled();
     async function check() {
         try {
@@ -39,12 +39,14 @@ export default function ContentLink() {
                 const res = await fetch(`/api/draft?exit=1&secret=${secret}`);
                 if (!res.ok)
                     return;
+                controller?.disableClickToEdit();
             }
             else {
                 console.log('enable draft');
                 const res = await fetch(`/api/draft?secret=${secret}&slug=${path}`);
                 if (!res.ok)
                     return;
+                controller?.enableClickToEdit();
             }
         }
         catch (e) {
@@ -60,7 +62,7 @@ export default function ContentLink() {
         toggle(isEnabled);
     }, [isEnabled, secret, pathname]);
     //if (!isDraft) return null;
-    console.log({ isEnabled });
+    console.log({ isEnabled, isDraft });
     return (_jsx(DatoContentLink, { onNavigateTo: (path) => router.push(path), currentPath: pathname, enableClickToEdit: { hoverOnly: true } }));
 }
 //# sourceMappingURL=DraftModeContentLink.js.map
