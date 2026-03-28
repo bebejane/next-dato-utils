@@ -1,7 +1,9 @@
 'use client';
-import { createController } from '@datocms/content-link';
+import { jsx as _jsx } from "react/jsx-runtime";
+import { ContentLink as DatoContentLink, useContentLink } from 'react-datocms';
 import { useRouter, usePathname } from 'next/navigation';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { hexToHsl } from '../../utils';
 const basePath = '/api/draft';
 function isCrossOriginFrame() {
     if (typeof window === 'undefined')
@@ -20,7 +22,7 @@ export default function ContentLink({ color }) {
     const [isDraft, setIsDraft] = useState(null);
     const [secret, setSecret] = useState(null);
     const [clickToEdit, setClickToEdit] = useState(true);
-    const controller = useRef(null);
+    const { isClickToEditEnabled } = useContentLink();
     async function check() {
         try {
             const res = await fetch(`${basePath}?check=1`);
@@ -58,41 +60,23 @@ export default function ContentLink({ color }) {
         }
         console.log('refresh');
         router.refresh();
-    }, [isDraft, secret, pathname, inIframe]);
-    useEffect(() => {
-        if (!inIframe || controller.current)
-            return;
-        console.log('init controller');
-        controller.current = createController({ onNavigateTo: router.push });
-        return () => controller.current?.dispose();
-    }, []);
+    }, [isDraft, secret, pathname, inIframe, clickToEdit]);
     useEffect(() => {
         check();
-        // if (clickToEdit) controller.current?.enableClickToEdit();
-        // else controller.current?.disableClickToEdit();
-        controller.current?.setCurrentPath(pathname);
     }, [pathname, clickToEdit]);
     useEffect(() => {
         toggle(clickToEdit);
     }, [clickToEdit]);
     useEffect(() => {
-        if (!inIframe || !controller.current)
+        if (!inIframe)
             return;
         const interval = setInterval(() => {
-            setClickToEdit(controller.current?.isClickToEditEnabled() ?? false);
+            setClickToEdit(isClickToEditEnabled());
         }, 400);
         return () => clearInterval(interval);
     }, [inIframe]);
     console.log({ clickToEdit, isDraft });
     //if (!inIframe) return null;
-    return null;
-    // 	return (
-    // 		// <DatoContentLink
-    // 		// 	onNavigateTo={router.push}
-    // 		// 	currentPath={pathname}
-    // 		// 	enableClickToEdit={{ hoverOnly: true }}
-    // 		// 	hue={color ? hexToHsl(color)[0] : undefined}
-    // 		// />
-    // 	);
+    return (_jsx(DatoContentLink, { onNavigateTo: router.push, currentPath: pathname, enableClickToEdit: { hoverOnly: true }, hue: color ? hexToHsl(color)[0] : undefined }));
 }
 //# sourceMappingURL=DraftModeContentLink.js.map

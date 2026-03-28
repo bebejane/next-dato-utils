@@ -1,3 +1,3 @@
 export default function ContentLink({ color }: {
     color?: string;
-}): null;
+}): import("react/jsx-runtime").JSX.Element;
