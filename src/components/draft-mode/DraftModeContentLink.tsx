@@ -10,9 +10,10 @@ export default function ContentLink({ heu }: { heu?: number }) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const [isDraft, setIsDraft] = useState(false);
+	const [inIframe, setInIframe] = useState(false);
 	const [secret, setSecret] = useState<string | null>(null);
 	const [clickToEdit, setClickToEdit] = useState(false);
-	const { isClickToEditEnabled, controller } = useContentLink();
+	const { isClickToEditEnabled } = useContentLink();
 
 	async function check() {
 		try {
@@ -47,21 +48,24 @@ export default function ContentLink({ heu }: { heu?: number }) {
 	}
 
 	useEffect(() => {
+		toggle(clickToEdit);
+	}, [clickToEdit, secret, pathname]);
+
+	useEffect(() => {
+		if (!inIframe) return;
 		const interval = setInterval(() => {
 			setClickToEdit(isClickToEditEnabled());
 		}, 300);
 		return () => clearInterval(interval);
-	}, []);
+	}, [inIframe]);
 
 	useEffect(() => {
 		check();
 	}, [pathname]);
 
-	useEffect(() => {
-		toggle(clickToEdit);
-	}, [clickToEdit, secret, pathname]);
+	useEffect(() => setInIframe(window.self !== window.top), []);
 
-	if (isDraft) return null;
+	if (!inIframe && !isDraft) return null;
 
 	return (
 		<DatoContentLink
