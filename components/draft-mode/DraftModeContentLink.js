@@ -8,6 +8,7 @@ export default function ContentLink() {
     const pathname = usePathname();
     const [isDraft, setIsDraft] = useState(false);
     const { isClickToEditEnabled } = useContentLink();
+    const isEnabled = isClickToEditEnabled();
     async function check() {
         try {
             const res = await fetch('/api/draft?check=1');
@@ -18,11 +19,11 @@ export default function ContentLink() {
             setIsDraft(false);
         }
     }
-    async function toggle() {
+    async function toggle(enable) {
         try {
             const url = new URL(window.location.href);
             //const res = await fetch('/api/draft?exit=1');
-            console.log(url);
+            console.log(enable, url);
             //setIsDraft(false);
         }
         catch (e) {
@@ -33,8 +34,8 @@ export default function ContentLink() {
         check();
     }, [pathname]);
     useEffect(() => {
-        toggle();
-    }, [isClickToEditEnabled]);
+        toggle(isEnabled);
+    }, [isEnabled]);
     if (!isDraft)
         return null;
     return (_jsx(DatoContentLink, { onNavigateTo: (path) => router.push(path), currentPath: pathname, enableClickToEdit: { hoverOnly: true } }));

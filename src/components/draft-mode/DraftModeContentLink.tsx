@@ -9,6 +9,7 @@ export default function ContentLink() {
 	const pathname = usePathname();
 	const [isDraft, setIsDraft] = useState(false);
 	const { isClickToEditEnabled } = useContentLink();
+	const isEnabled = isClickToEditEnabled();
 
 	async function check() {
 		try {
@@ -20,11 +21,11 @@ export default function ContentLink() {
 		}
 	}
 
-	async function toggle() {
+	async function toggle(enable: boolean) {
 		try {
 			const url = new URL(window.location.href);
 			//const res = await fetch('/api/draft?exit=1');
-			console.log(url);
+			console.log(enable, url);
 			//setIsDraft(false);
 		} catch (e) {
 			//console.log(e);
@@ -36,8 +37,8 @@ export default function ContentLink() {
 	}, [pathname]);
 
 	useEffect(() => {
-		toggle();
-	}, [isClickToEditEnabled]);
+		toggle(isEnabled);
+	}, [isEnabled]);
 
 	if (!isDraft) return null;
 
