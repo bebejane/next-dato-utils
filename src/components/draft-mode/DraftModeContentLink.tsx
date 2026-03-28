@@ -57,7 +57,6 @@ export default function ContentLink({ color }: { color?: string }) {
 	}, [pathname]);
 
 	useEffect(() => {
-		if (!inIframe || isDraft === null) return;
 		toggle(clickToEdit);
 	}, [clickToEdit]);
 
@@ -69,7 +68,7 @@ export default function ContentLink({ color }: { color?: string }) {
 		return () => clearInterval(interval);
 	}, [inIframe]);
 
-	console.log({ clickToEdit });
+	console.log({ clickToEdit, isDraft });
 	//if (!inIframe) return null;
 
 	return (

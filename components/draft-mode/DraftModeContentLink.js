@@ -55,8 +55,6 @@ export default function ContentLink({ color }) {
         check();
     }, [pathname]);
     useEffect(() => {
-        if (!inIframe || isDraft === null)
-            return;
         toggle(clickToEdit);
     }, [clickToEdit]);
     useEffect(() => {
@@ -67,7 +65,7 @@ export default function ContentLink({ color }) {
         }, 400);
         return () => clearInterval(interval);
     }, [inIframe]);
-    console.log({ clickToEdit });
+    console.log({ clickToEdit, isDraft });
     //if (!inIframe) return null;
     return (_jsx(DatoContentLink, { onNavigateTo: router.push, currentPath: pathname, enableClickToEdit: { hoverOnly: true }, hue: color ? hexToHsl(color)[0] : undefined }));
 }
