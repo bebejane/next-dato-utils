@@ -4,13 +4,13 @@ import { ContentLink as DatoContentLink, useContentLink } from 'react-datocms';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
-export default function ContentLink() {
+export default function ContentLink({ heu }: { heu?: number }) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const [isDraft, setIsDraft] = useState(false);
 	const [secret, setSecret] = useState<string | null>(null);
+	const [clickToEdit, setClickToEdit] = useState(false);
 	const { isClickToEditEnabled, controller } = useContentLink();
-	const isEnabled = isClickToEditEnabled();
 
 	async function check() {
 		try {
@@ -32,7 +32,7 @@ export default function ContentLink() {
 			const url = new URL(window.location.href);
 			const path = url.pathname;
 
-			console.log('toggle', { secret, enable, pathname, path, isEnabled });
+			console.log('toggle', { secret, enable, pathname, path, clickToEdit });
 
 			if (!secret) return;
 
@@ -55,20 +55,29 @@ export default function ContentLink() {
 	}
 
 	useEffect(() => {
-		check();
-	}, [pathname]);
+		const interval = setInterval(() => {
+			setClickToEdit(isClickToEditEnabled());
+		}, 1000);
+		return () => clearInterval(interval);
+	}, []);
 
-	useEffect(() => {
-		toggle(isEnabled);
-	}, [isEnabled, secret, pathname]);
+	// useEffect(() => {
+	// 	check();
+	// }, [pathname]);
 
+	// useEffect(() => {
+	// 	toggle(isEnabled);
+	// }, [isEnabled, secret, pathname]);
+
+	console.log({ clickToEdit, isDraft });
 	//if (!isDraft) return null;
-	console.log({ isEnabled, isDraft });
+
 	return (
 		<DatoContentLink
-			onNavigateTo={(path) => router.push(path)}
+			onNavigateTo={router.push}
 			currentPath={pathname}
 			enableClickToEdit={{ hoverOnly: true }}
+			hue={heu}
 		/>
 	);
 }

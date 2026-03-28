@@ -1,1 +1,3 @@
-export default function ContentLink(): import("react/jsx-runtime").JSX.Element;
+export default function ContentLink({ heu }: {
+    heu?: number;
+}): import("react/jsx-runtime").JSX.Element;

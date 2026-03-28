@@ -3,13 +3,13 @@ import { jsx as _jsx } from "react/jsx-runtime";
 import { ContentLink as DatoContentLink, useContentLink } from 'react-datocms';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-export default function ContentLink() {
+export default function ContentLink({ heu }) {
     const router = useRouter();
     const pathname = usePathname();
     const [isDraft, setIsDraft] = useState(false);
     const [secret, setSecret] = useState(null);
+    const [clickToEdit, setClickToEdit] = useState(false);
     const { isClickToEditEnabled, controller } = useContentLink();
-    const isEnabled = isClickToEditEnabled();
     async function check() {
         try {
             const res = await fetch('/api/draft?check=1');
@@ -31,7 +31,7 @@ export default function ContentLink() {
         try {
             const url = new URL(window.location.href);
             const path = url.pathname;
-            console.log('toggle', { secret, enable, pathname, path, isEnabled });
+            console.log('toggle', { secret, enable, pathname, path, clickToEdit });
             if (!secret)
                 return;
             if (!enable) {
@@ -56,13 +56,19 @@ export default function ContentLink() {
         //router.refresh();
     }
     useEffect(() => {
-        check();
-    }, [pathname]);
-    useEffect(() => {
-        toggle(isEnabled);
-    }, [isEnabled, secret, pathname]);
+        const interval = setInterval(() => {
+            setClickToEdit(isClickToEditEnabled());
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
+    // useEffect(() => {
+    // 	check();
+    // }, [pathname]);
+    // useEffect(() => {
+    // 	toggle(isEnabled);
+    // }, [isEnabled, secret, pathname]);
+    console.log({ clickToEdit, isDraft });
     //if (!isDraft) return null;
-    console.log({ isEnabled, isDraft });
-    return (_jsx(DatoContentLink, { onNavigateTo: (path) => router.push(path), currentPath: pathname, enableClickToEdit: { hoverOnly: true } }));
+    return (_jsx(DatoContentLink, { onNavigateTo: router.push, currentPath: pathname, enableClickToEdit: { hoverOnly: true }, hue: heu }));
 }
 //# sourceMappingURL=DraftModeContentLink.js.map

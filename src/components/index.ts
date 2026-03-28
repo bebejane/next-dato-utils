@@ -5,3 +5,4 @@ export { default as StructuredContent } from './StructuredContent.js';
 export { default as Block } from './Block.js';
 export { default as VideoPlayer } from './VideoPlayer.js';
 export { default as Modal, ModalProps } from './Modal.js';
+export { default as InfiniteScroll } from './InfiniteScroll.js';
