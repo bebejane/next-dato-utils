@@ -5,7 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { hexToHsl } from '../../utils';
 const basePath = '/api/draft';
-export default function ContentLink({ heu }) {
+export default function ContentLink({ color }) {
     const router = useRouter();
     const pathname = usePathname();
     const [isDraft, setIsDraft] = useState(false);
@@ -65,6 +65,6 @@ export default function ContentLink({ heu }) {
     useEffect(() => setInIframe(window.self !== window.top), []);
     if (!inIframe && !isDraft)
         return null;
-    return (_jsx(DatoContentLink, { onNavigateTo: router.push, currentPath: pathname, enableClickToEdit: { hoverOnly: true }, hue: heu ? hexToHsl(heu)[0] : undefined }));
+    return (_jsx(DatoContentLink, { onNavigateTo: router.push, currentPath: pathname, enableClickToEdit: { hoverOnly: true }, hue: color ? hexToHsl(color)[0] : undefined }));
 }
 //# sourceMappingURL=DraftModeContentLink.js.map

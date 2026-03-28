@@ -7,7 +7,7 @@ import { hexToHsl } from '../../utils';
 
 const basePath = '/api/draft';
 
-export default function ContentLink({ heu }: { heu?: string }) {
+export default function ContentLink({ color }: { color?: string }) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const [isDraft, setIsDraft] = useState(false);
@@ -72,7 +72,7 @@ export default function ContentLink({ heu }: { heu?: string }) {
 			onNavigateTo={router.push}
 			currentPath={pathname}
 			enableClickToEdit={{ hoverOnly: true }}
-			hue={heu ? hexToHsl(heu)[0] : undefined}
+			hue={color ? hexToHsl(color)[0] : undefined}
 		/>
 	);
 }
