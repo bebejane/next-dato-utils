@@ -2,7 +2,7 @@
 
 import { ContentLink as DatoContentLink, useContentLink } from 'react-datocms';
 import { useRouter, usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { hexToHsl } from '../../utils';
 
 const basePath = '/api/draft';
@@ -10,7 +10,7 @@ const basePath = '/api/draft';
 export default function ContentLink({ color }: { color?: string }) {
 	const router = useRouter();
 	const pathname = usePathname();
-	const [isDraft, setIsDraft] = useState(false);
+	const [isDraft, setIsDraft] = useState<boolean | null>(null);
 	const [inIframe, setInIframe] = useState(false);
 	const [secret, setSecret] = useState<string | null>(null);
 	const [clickToEdit, setClickToEdit] = useState(false);
@@ -31,41 +31,45 @@ export default function ContentLink({ color }: { color?: string }) {
 		}
 	}
 
-	async function toggle(draft: boolean) {
-		if (!secret) return;
-		console.log('toggle');
-		try {
-			const params = new URLSearchParams({ secret });
-			if (draft) params.append('slug', pathname);
-			else params.append('exit', '1');
-			const res = await fetch(`${basePath}?${params}`);
-			if (!res.ok) return;
-		} catch (e) {
-			console.log(e);
-		}
-		console.log('refresh');
-		router.refresh();
-	}
+	const toggle = useCallback(
+		async (draft: boolean) => {
+			if (!secret || !inIframe || isDraft === null || (isDraft && clickToEdit)) return;
+			console.log('toggle');
+			try {
+				const params = new URLSearchParams({ secret });
+				if (draft) params.append('slug', pathname);
+				else params.append('exit', '1');
+				const res = await fetch(`${basePath}?${params}`);
+				if (!res.ok) return;
+			} catch (e) {
+				console.log(e);
+			}
+			console.log('refresh');
+			router.refresh();
+		},
+		[isDraft, secret, pathname, inIframe],
+	);
 
 	useEffect(() => setInIframe(window.self !== window.top), []);
-
-	useEffect(() => {
-		if (!inIframe) return;
-		toggle(clickToEdit);
-	}, [inIframe, secret, pathname, clickToEdit]);
-
-	useEffect(() => {
-		if (!inIframe) return;
-		const interval = setInterval(() => {
-			setClickToEdit(isClickToEditEnabled());
-		}, 200);
-		return () => clearInterval(interval);
-	}, [inIframe]);
 
 	useEffect(() => {
 		check();
 	}, [pathname]);
 
+	useEffect(() => {
+		if (!inIframe) return;
+		toggle(clickToEdit);
+	}, [clickToEdit]);
+
+	useEffect(() => {
+		if (!inIframe) return;
+		const interval = setInterval(() => {
+			setClickToEdit(isClickToEditEnabled());
+		}, 400);
+		return () => clearInterval(interval);
+	}, [inIframe]);
+
+	console.log({ clickToEdit });
 	//if (!inIframe) return null;
 
 	return (
