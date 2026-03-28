@@ -50,8 +50,8 @@ export default function ContentLink() {
 		} catch (e) {
 			console.log(e);
 		}
-		console.log('refresh router');
-		router.refresh();
+		//console.log('refresh router');
+		//router.refresh();
 	}
 
 	useEffect(() => {
