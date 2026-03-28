@@ -40,34 +40,32 @@ export default function ContentLink({ heu }: { heu?: number }) {
 				console.log('disable draft');
 				const res = await fetch(`/api/draft?exit=1&secret=${secret}`);
 				if (!res.ok) return;
-				controller?.disableClickToEdit();
 			} else {
 				console.log('enable draft');
-				const res = await fetch(`/api/draft?secret=${secret}&slug=${path}`);
+				const res = await fetch(`/api/draft?secret=${secret}&slug=${pathname}`);
 				if (!res.ok) return;
-				controller?.enableClickToEdit();
 			}
 		} catch (e) {
 			console.log(e);
 		}
-		//console.log('refresh router');
+		console.log('refresh router');
 		//router.refresh();
 	}
 
 	useEffect(() => {
 		const interval = setInterval(() => {
 			setClickToEdit(isClickToEditEnabled());
-		}, 1000);
+		}, 300);
 		return () => clearInterval(interval);
 	}, []);
 
-	// useEffect(() => {
-	// 	check();
-	// }, [pathname]);
+	useEffect(() => {
+		check();
+	}, [pathname]);
 
-	// useEffect(() => {
-	// 	toggle(isEnabled);
-	// }, [isEnabled, secret, pathname]);
+	useEffect(() => {
+		toggle(clickToEdit);
+	}, [clickToEdit, secret, pathname]);
 
 	console.log({ clickToEdit, isDraft });
 	//if (!isDraft) return null;
