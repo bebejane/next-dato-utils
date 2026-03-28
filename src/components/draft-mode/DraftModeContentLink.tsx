@@ -7,6 +7,14 @@ import { hexToHsl } from '../../utils';
 
 const basePath = '/api/draft';
 
+function isCrossOriginFrame() {
+	try {
+		return document.location.hostname !== window.parent.location.hostname;
+	} catch (e) {
+		return true;
+	}
+}
+
 export default function ContentLink({ color }: { color?: string }) {
 	const router = useRouter();
 	const pathname = usePathname();
@@ -51,7 +59,7 @@ export default function ContentLink({ color }: { color?: string }) {
 		[isDraft, secret, pathname, inIframe],
 	);
 
-	useEffect(() => setInIframe(window.self !== window.top), []);
+	useEffect(() => setInIframe(isCrossOriginFrame()), []);
 
 	useEffect(() => {
 		check();

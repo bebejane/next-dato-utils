@@ -5,6 +5,14 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { hexToHsl } from '../../utils';
 const basePath = '/api/draft';
+function isCrossOriginFrame() {
+    try {
+        return document.location.hostname !== window.parent.location.hostname;
+    }
+    catch (e) {
+        return true;
+    }
+}
 export default function ContentLink({ color }) {
     const router = useRouter();
     const pathname = usePathname();
@@ -51,7 +59,7 @@ export default function ContentLink({ color }) {
         console.log('refresh');
         router.refresh();
     }, [isDraft, secret, pathname, inIframe]);
-    useEffect(() => setInIframe(window.self !== window.top), []);
+    useEffect(() => setInIframe(isCrossOriginFrame()), []);
     useEffect(() => {
         check();
     }, [pathname]);
