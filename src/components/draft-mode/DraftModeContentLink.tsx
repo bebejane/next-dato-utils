@@ -49,7 +49,7 @@ export default function ContentLink({ heu }: { heu?: number }) {
 			console.log(e);
 		}
 		console.log('refresh router');
-		//router.refresh();
+		router.refresh();
 	}
 
 	useEffect(() => {

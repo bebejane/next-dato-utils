@@ -51,7 +51,7 @@ export default function ContentLink({ heu }) {
             console.log(e);
         }
         console.log('refresh router');
-        //router.refresh();
+        router.refresh();
     }
     useEffect(() => {
         const interval = setInterval(() => {
