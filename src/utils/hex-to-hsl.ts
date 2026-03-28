@@ -1,39 +1,42 @@
 export default function hexToHsl(hex: string): number[] {
-	const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-	if (!result || result.length !== 3) throw 'Failed to parse hex';
+	// Convert hex to RGB first
+	let r: number;
+	let g: number;
+	let b: number;
 
-	let r = parseInt(result[1], 16);
-	let g = parseInt(result[2], 16);
-	let b = parseInt(result[3], 16);
-	let cssString = '';
-	((r /= 255), (g /= 255), (b /= 255));
-	const max = Math.max(r, g, b),
-		min = Math.min(r, g, b);
-	let h = (max + min) / 2;
-	let s = (max + min) / 2;
-	let l = (max + min) / 2;
-	if (max === min) {
-		h = s = 0; // achromatic
-	} else {
-		const d = max - min;
-		s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-		switch (max) {
-			case r:
-				h = (g - b) / d + (g < b ? 6 : 0);
-				break;
-			case g:
-				h = (b - r) / d + 2;
-				break;
-			case b:
-				h = (r - g) / d + 4;
-				break;
-		}
-		h /= 6;
-	}
+	if (hex.length === 4) {
+		r = parseInt('0x' + hex[1] + hex[1]);
+		g = parseInt('0x' + hex[2] + hex[2]);
+		b = parseInt('0x' + hex[3] + hex[3]);
+	} else if (hex.length === 7) {
+		r = parseInt('0x' + hex[1] + hex[2]);
+		g = parseInt('0x' + hex[3] + hex[4]);
+		b = parseInt('0x' + hex[5] + hex[6]);
+	} else throw new Error('Bad Hex');
+	// Then to hexSL
+	r /= 255;
+	g /= 255;
+	b /= 255;
+	let cmin = Math.min(r, g, b),
+		cmax = Math.max(r, g, b),
+		delta = cmax - cmin,
+		h = 0,
+		s = 0,
+		l = 0;
 
-	h = Math.round(h * 360);
-	s = Math.round(s * 100);
-	l = Math.round(l * 100);
+	if (delta === 0) h = 0;
+	else if (cmax === r) h = ((g - b) / delta) % 6;
+	else if (cmax === g) h = (b - r) / delta + 2;
+	else h = (r - g) / delta + 4;
+
+	h = Math.round(h * 60);
+
+	if (h < 0) h += 360;
+
+	l = (cmax + cmin) / 2;
+	s = delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+	s = +(s * 100).toFixed(1);
+	l = +(l * 100).toFixed(1);
 
 	return [h, s, l];
 }
