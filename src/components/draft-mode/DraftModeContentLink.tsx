@@ -24,9 +24,18 @@ export default function ContentLink() {
 	async function toggle(enable: boolean) {
 		try {
 			const url = new URL(window.location.href);
-			//const res = await fetch('/api/draft?exit=1');
-			console.log(enable, url);
-			//setIsDraft(false);
+			const secret = url.searchParams.get('secret');
+			console.log('secret', secret);
+			if (!secret) return;
+
+			if (!enable) {
+				console.log('disable draft', secret);
+				const res = await fetch(`/api/draft?exit=1&secret=${secret}`);
+				if (res.ok) router.refresh();
+			} else {
+				console.log('enable draft', secret, `/api/draft?secret=${secret}&slug=${pathname}`);
+				const res = await fetch(`/api/draft?secret=${secret}&slug=${pathname}`);
+			}
 		} catch (e) {
 			//console.log(e);
 		}
