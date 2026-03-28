@@ -31,9 +31,10 @@ export default function ContentLink({ color }) {
         }
     }
     async function toggle(draft) {
+        if (!secret)
+            return;
+        console.log('toggle');
         try {
-            if (!secret)
-                return;
             const params = new URLSearchParams({ secret });
             if (draft)
                 params.append('slug', pathname);
@@ -46,13 +47,15 @@ export default function ContentLink({ color }) {
         catch (e) {
             console.log(e);
         }
+        console.log('refresh');
         router.refresh();
     }
+    useEffect(() => setInIframe(window.self !== window.top), []);
     useEffect(() => {
         if (!inIframe)
             return;
         toggle(clickToEdit);
-    }, [inIframe, clickToEdit, secret, pathname]);
+    }, [inIframe, secret, pathname, clickToEdit]);
     useEffect(() => {
         if (!inIframe)
             return;
@@ -64,7 +67,6 @@ export default function ContentLink({ color }) {
     useEffect(() => {
         check();
     }, [pathname]);
-    useEffect(() => setInIframe(window.self !== window.top), []);
     //if (!inIframe) return null;
     return (_jsx(DatoContentLink, { onNavigateTo: router.push, currentPath: pathname, enableClickToEdit: { hoverOnly: true }, hue: color ? hexToHsl(color)[0] : undefined }));
 }

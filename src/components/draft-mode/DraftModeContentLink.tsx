@@ -32,8 +32,9 @@ export default function ContentLink({ color }: { color?: string }) {
 	}
 
 	async function toggle(draft: boolean) {
+		if (!secret) return;
+		console.log('toggle');
 		try {
-			if (!secret) return;
 			const params = new URLSearchParams({ secret });
 			if (draft) params.append('slug', pathname);
 			else params.append('exit', '1');
@@ -42,14 +43,16 @@ export default function ContentLink({ color }: { color?: string }) {
 		} catch (e) {
 			console.log(e);
 		}
-
+		console.log('refresh');
 		router.refresh();
 	}
+
+	useEffect(() => setInIframe(window.self !== window.top), []);
 
 	useEffect(() => {
 		if (!inIframe) return;
 		toggle(clickToEdit);
-	}, [inIframe, clickToEdit, secret, pathname]);
+	}, [inIframe, secret, pathname, clickToEdit]);
 
 	useEffect(() => {
 		if (!inIframe) return;
@@ -62,8 +65,6 @@ export default function ContentLink({ color }: { color?: string }) {
 	useEffect(() => {
 		check();
 	}, [pathname]);
-
-	useEffect(() => setInIframe(window.self !== window.top), []);
 
 	//if (!inIframe) return null;
 
