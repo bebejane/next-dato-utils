@@ -60,6 +60,7 @@ export default function ContentLink() {
         toggle(isEnabled);
     }, [isEnabled, secret, pathname]);
     //if (!isDraft) return null;
+    console.log({ isEnabled });
     return (_jsx(DatoContentLink, { onNavigateTo: (path) => router.push(path), currentPath: pathname, enableClickToEdit: { hoverOnly: true } }));
 }
 //# sourceMappingURL=DraftModeContentLink.js.map

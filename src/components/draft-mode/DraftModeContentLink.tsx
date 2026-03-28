@@ -61,7 +61,7 @@ export default function ContentLink() {
 	}, [isEnabled, secret, pathname]);
 
 	//if (!isDraft) return null;
-
+	console.log({ isEnabled });
 	return (
 		<DatoContentLink
 			onNavigateTo={(path) => router.push(path)}
