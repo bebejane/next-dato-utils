@@ -3,7 +3,6 @@
 import { ContentLink as DatoContentLink, useContentLink } from 'react-datocms';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { boolean } from 'zod/v4';
 
 export default function ContentLink() {
 	const router = useRouter();
