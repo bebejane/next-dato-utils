@@ -62,7 +62,6 @@ export default async function draft(
 		});
 	}
 
-	if (slug)
-		return new Response('OK', { status: 307, headers: { Location: `${slug}?secret=${secret}` } });
+	if (slug) return new Response('OK', { status: 307, headers: { Location: slug } });
 	else return new Response('OK', { status: 200 });
 }

@@ -31,7 +31,7 @@ export default function ContentLink() {
         try {
             const url = new URL(window.location.href);
             const path = url.pathname;
-            console.log('toggle', { secret, enable, pathname, path });
+            console.log('toggle', { secret, enable, pathname, path, isEnabled });
             if (!secret)
                 return;
             if (!enable) {
