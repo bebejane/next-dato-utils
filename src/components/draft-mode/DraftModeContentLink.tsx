@@ -19,8 +19,8 @@ function isCrossOriginFrame() {
 export default function ContentLink({ color }: { color?: string }) {
 	const router = useRouter();
 	const pathname = usePathname();
+	const inIframe = isCrossOriginFrame();
 	const [isDraft, setIsDraft] = useState<boolean | null>(null);
-	const [inIframe, setInIframe] = useState(isCrossOriginFrame());
 	const [secret, setSecret] = useState<string | null>(null);
 	const [clickToEdit, setClickToEdit] = useState(true);
 	const { isClickToEditEnabled } = useContentLink();
@@ -60,11 +60,9 @@ export default function ContentLink({ color }: { color?: string }) {
 		[isDraft, secret, pathname, inIframe, clickToEdit],
 	);
 
-	//useEffect(() => setInIframe(isCrossOriginFrame()), []);
-
 	useEffect(() => {
 		check();
-	}, [pathname]);
+	}, [pathname, clickToEdit]);
 
 	useEffect(() => {
 		toggle(clickToEdit);
