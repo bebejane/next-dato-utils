@@ -8,9 +8,15 @@ export type InfiniteScrollProps<ComponetProps> = {
 	params?: Record<string, any>;
 	next(offset: number, params?: Record<string, any>): Promise<ComponetProps[]>;
 	children: React.JSXElementConstructor<ComponetProps>;
-	loader?: React.ReactNode;
+	loader?: React.JSXElementConstructor<any>;
+	error?: React.JSXElementConstructor<any>;
 	rootMargin?: string;
 };
+
+const storage =
+	typeof window !== 'undefined' && typeof window.sessionStorage !== 'undefined'
+		? window.sessionStorage
+		: null;
 
 export default function InfiniteScroll<ComponetProps>({
 	id,
@@ -18,7 +24,8 @@ export default function InfiniteScroll<ComponetProps>({
 	params,
 	next: _next,
 	children: Component,
-	loader,
+	loader: Loader,
+	error: Error,
 	rootMargin,
 }: InfiniteScrollProps<ComponetProps>): React.ReactNode {
 	const [data, setData] = useState<ComponetProps[]>([]);
@@ -36,7 +43,7 @@ export default function InfiniteScroll<ComponetProps>({
 			const newData = await _next(data.length, params);
 			setData((oldData) => {
 				const d = [...oldData, ...newData];
-				sessionStorage.setItem(id, JSON.stringify(d));
+				storage?.setItem(id, JSON.stringify(d));
 				return d;
 			});
 			if (!newData.length) return setEnd(true);
@@ -48,7 +55,7 @@ export default function InfiniteScroll<ComponetProps>({
 	}
 
 	useLayoutEffect(() => {
-		const cached = sessionStorage.getItem(id);
+		const cached = storage?.getItem(id) ?? null;
 		const cachedData = cached ? JSON.parse(cached as string) : null;
 		setData(cachedData ?? initial);
 	}, [initial]);
@@ -72,7 +79,7 @@ export default function InfiniteScroll<ComponetProps>({
 
 	useEffect(() => {
 		function unload() {
-			sessionStorage.removeItem(id);
+			storage?.removeItem(id);
 		}
 
 		window.addEventListener('beforeunload', unload);
@@ -87,9 +94,13 @@ export default function InfiniteScroll<ComponetProps>({
 				<Component key={index} {...item} ref={index === data.length - 1 ? ref : null} />
 			))}
 			<div ref={ref} style={{ all: 'unset' }}>
-				{loading && loader}
+				{loading && Loader && <Loader />}
 			</div>
-			{error && <div style={{ color: 'red', marginTop: '1em' }}>{error}</div>}
+			{error && Error ? (
+				<Error>{error}</Error>
+			) : (
+				<div style={{ color: 'red', marginTop: '1em' }}>{error}</div>
+			)}
 		</>
 	);
 }

@@ -2,7 +2,7 @@
 
 import { ContentLink as DatoContentLink, useContentLink } from 'react-datocms';
 import { useRouter, usePathname } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const basePath = '/api/draft';
 
@@ -37,13 +37,12 @@ export default function ContentLink({ heu }: { heu?: number }) {
 			const params = new URLSearchParams({ secret });
 			if (draft) params.append('slug', pathname);
 			else params.append('exit', '1');
-			console.log(`${basePath}?${params}`);
 			const res = await fetch(`${basePath}?${params}`);
 			if (!res.ok) return;
 		} catch (e) {
 			console.log(e);
 		}
-		console.log('refresh router');
+
 		router.refresh();
 	}
 
@@ -55,7 +54,7 @@ export default function ContentLink({ heu }: { heu?: number }) {
 		if (!inIframe) return;
 		const interval = setInterval(() => {
 			setClickToEdit(isClickToEditEnabled());
-		}, 300);
+		}, 200);
 		return () => clearInterval(interval);
 	}, [inIframe]);
 

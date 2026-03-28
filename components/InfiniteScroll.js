@@ -1,7 +1,10 @@
 'use client';
 import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-export default function InfiniteScroll({ id, initial, params, next: _next, children: Component, loader, rootMargin, }) {
+const storage = typeof window !== 'undefined' && typeof window.sessionStorage !== 'undefined'
+    ? window.sessionStorage
+    : null;
+export default function InfiniteScroll({ id, initial, params, next: _next, children: Component, loader: Loader, error: Error, rootMargin, }) {
     const [data, setData] = useState([]);
     const ref = useRef(null);
     const [loading, setLoading] = useState(false);
@@ -16,7 +19,7 @@ export default function InfiniteScroll({ id, initial, params, next: _next, child
             const newData = await _next(data.length, params);
             setData((oldData) => {
                 const d = [...oldData, ...newData];
-                sessionStorage.setItem(id, JSON.stringify(d));
+                storage?.setItem(id, JSON.stringify(d));
                 return d;
             });
             if (!newData.length)
@@ -30,7 +33,7 @@ export default function InfiniteScroll({ id, initial, params, next: _next, child
         }
     }
     useLayoutEffect(() => {
-        const cached = sessionStorage.getItem(id);
+        const cached = storage?.getItem(id) ?? null;
         const cachedData = cached ? JSON.parse(cached) : null;
         setData(cachedData ?? initial);
     }, [initial]);
@@ -50,13 +53,13 @@ export default function InfiniteScroll({ id, initial, params, next: _next, child
     }, [data, rootMargin, end]);
     useEffect(() => {
         function unload() {
-            sessionStorage.removeItem(id);
+            storage?.removeItem(id);
         }
         window.addEventListener('beforeunload', unload);
         return () => {
             window.removeEventListener('beforeunload', unload);
         };
     }, []);
-    return (_jsxs(_Fragment, { children: [data.map((item, index) => (_jsx(Component, { ...item, ref: index === data.length - 1 ? ref : null }, index))), _jsx("div", { ref: ref, style: { all: 'unset' }, children: loading && loader }), error && _jsx("div", { style: { color: 'red', marginTop: '1em' }, children: error })] }));
+    return (_jsxs(_Fragment, { children: [data.map((item, index) => (_jsx(Component, { ...item, ref: index === data.length - 1 ? ref : null }, index))), _jsx("div", { ref: ref, style: { all: 'unset' }, children: loading && Loader && _jsx(Loader, {}) }), error && Error ? (_jsx(Error, { children: error })) : (_jsx("div", { style: { color: 'red', marginTop: '1em' }, children: error }))] }));
 }
 //# sourceMappingURL=InfiniteScroll.js.map

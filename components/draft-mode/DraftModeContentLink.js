@@ -38,7 +38,6 @@ export default function ContentLink({ heu }) {
                 params.append('slug', pathname);
             else
                 params.append('exit', '1');
-            console.log(`${basePath}?${params}`);
             const res = await fetch(`${basePath}?${params}`);
             if (!res.ok)
                 return;
@@ -46,7 +45,6 @@ export default function ContentLink({ heu }) {
         catch (e) {
             console.log(e);
         }
-        console.log('refresh router');
         router.refresh();
     }
     useEffect(() => {
@@ -57,7 +55,7 @@ export default function ContentLink({ heu }) {
             return;
         const interval = setInterval(() => {
             setClickToEdit(isClickToEditEnabled());
-        }, 300);
+        }, 200);
         return () => clearInterval(interval);
     }, [inIframe]);
     useEffect(() => {
