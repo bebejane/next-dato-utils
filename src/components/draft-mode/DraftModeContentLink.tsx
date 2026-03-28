@@ -53,8 +53,9 @@ export default function ContentLink() {
 	}, [pathname]);
 
 	useEffect(() => {
+		if (isEnabledRef.current === null && isEnabled) isEnabledRef.current = true;
+		else if (isEnabledRef.current === true && !isEnabled) isEnabledRef.current = false;
 		toggle();
-		isEnabledRef.current = isEnabled;
 	}, [isEnabled]);
 
 	//if (!isDraft) return null;

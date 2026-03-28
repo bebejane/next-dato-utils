@@ -52,8 +52,11 @@ export default function ContentLink() {
         check();
     }, [pathname]);
     useEffect(() => {
+        if (isEnabledRef.current === null && isEnabled)
+            isEnabledRef.current = true;
+        else if (isEnabledRef.current === true && !isEnabled)
+            isEnabledRef.current = false;
         toggle();
-        isEnabledRef.current = isEnabled;
     }, [isEnabled]);
     //if (!isDraft) return null;
     return (_jsx(DatoContentLink, { onNavigateTo: (path) => router.push(path), currentPath: pathname, enableClickToEdit: { hoverOnly: true } }));
