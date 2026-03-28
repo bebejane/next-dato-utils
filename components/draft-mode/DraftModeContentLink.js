@@ -42,7 +42,7 @@ export default function ContentLink({ color }) {
     }
     const toggle = useCallback(async (draft) => {
         console.log({ secret, inIframe, isDraft, clickToEdit });
-        if (!secret || !inIframe || isDraft === null || (isDraft && clickToEdit))
+        if (!secret || !inIframe || isDraft === null)
             return;
         console.log('toggle');
         try {
