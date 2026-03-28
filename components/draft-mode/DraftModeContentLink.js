@@ -34,6 +34,7 @@ export default function ContentLink({ color }) {
         try {
             if (!secret)
                 return;
+            console.log('togle');
             const params = new URLSearchParams({ secret });
             if (draft)
                 params.append('slug', pathname);
@@ -49,8 +50,10 @@ export default function ContentLink({ color }) {
         router.refresh();
     }
     useEffect(() => {
+        if (!inIframe)
+            return;
         toggle(clickToEdit);
-    }, [clickToEdit, secret, pathname]);
+    }, [inIframe, clickToEdit, secret, pathname]);
     useEffect(() => {
         if (!inIframe)
             return;

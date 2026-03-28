@@ -5,6 +5,7 @@ export type DraftModeProps = {
     path?: string | string[] | null | undefined;
     position: 'topleft' | 'topright' | 'bottomleft' | 'bottomright';
     secret?: string;
+    preview?: boolean;
     actions: {
         revalidateTag: (tag: string | string[]) => void;
         revalidatePath: (path: string | string[], type: 'page' | 'layout') => void;
