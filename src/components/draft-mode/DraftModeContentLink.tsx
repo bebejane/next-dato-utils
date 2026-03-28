@@ -4,6 +4,8 @@ import { ContentLink as DatoContentLink, useContentLink } from 'react-datocms';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
+const basePath = '/api/draft';
+
 export default function ContentLink({ heu }: { heu?: number }) {
 	const router = useRouter();
 	const pathname = usePathname();
@@ -14,7 +16,7 @@ export default function ContentLink({ heu }: { heu?: number }) {
 
 	async function check() {
 		try {
-			const res = await fetch('/api/draft?check=1');
+			const res = await fetch(`${basePath}?check=1`);
 			if (res.ok) {
 				const { secret, enabled } = await res.json();
 				setSecret(secret);
@@ -27,24 +29,16 @@ export default function ContentLink({ heu }: { heu?: number }) {
 		}
 	}
 
-	async function toggle(enable: boolean) {
+	async function toggle(draft: boolean) {
 		try {
-			const url = new URL(window.location.href);
-			const path = url.pathname;
-
-			console.log('toggle', { secret, enable, pathname, path, clickToEdit });
-
 			if (!secret) return;
 
-			if (!enable) {
-				console.log('disable draft');
-				const res = await fetch(`/api/draft?exit=1&secret=${secret}`);
-				if (!res.ok) return;
-			} else {
-				console.log('enable draft');
-				const res = await fetch(`/api/draft?secret=${secret}&slug=${pathname}`);
-				if (!res.ok) return;
-			}
+			const params = new URLSearchParams({ secret });
+			if (draft) params.append('slug', pathname);
+			else params.append('exit', '1');
+			console.log(`${basePath}?${params}`);
+			const res = await fetch(`${basePath}?${params}`);
+			if (!res.ok) return;
 		} catch (e) {
 			console.log(e);
 		}
@@ -67,8 +61,7 @@ export default function ContentLink({ heu }: { heu?: number }) {
 		toggle(clickToEdit);
 	}, [clickToEdit, secret, pathname]);
 
-	console.log({ clickToEdit, isDraft });
-	//if (!isDraft) return null;
+	if (isDraft) return null;
 
 	return (
 		<DatoContentLink
