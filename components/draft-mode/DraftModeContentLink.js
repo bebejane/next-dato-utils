@@ -60,8 +60,9 @@ export default function ContentLink({ color }) {
         router.refresh();
     }, [isDraft, secret, pathname, inIframe]);
     useEffect(() => {
-        if (!inIframe)
+        if (!inIframe || controller.current)
             return;
+        console.log('init controller');
         controller.current = createController({ onNavigateTo: router.push });
         return () => controller.current?.dispose();
     }, []);
