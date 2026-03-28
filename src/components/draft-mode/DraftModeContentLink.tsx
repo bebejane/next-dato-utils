@@ -1,8 +1,9 @@
 'use client';
 
 import { ContentLink as DatoContentLink, useContentLink } from 'react-datocms';
+import { createController } from '@datocms/content-link';
 import { useRouter, usePathname } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { hexToHsl } from '../../utils';
 
 const basePath = '/api/draft';
@@ -23,7 +24,7 @@ export default function ContentLink({ color }: { color?: string }) {
 	const [isDraft, setIsDraft] = useState<boolean | null>(null);
 	const [secret, setSecret] = useState<string | null>(null);
 	const [clickToEdit, setClickToEdit] = useState(true);
-	const { isClickToEditEnabled } = useContentLink();
+	const controller = useRef<ReturnType<typeof createController> | null>(null);
 
 	async function check() {
 		try {
@@ -57,11 +58,22 @@ export default function ContentLink({ color }: { color?: string }) {
 			console.log('refresh');
 			router.refresh();
 		},
-		[isDraft, secret, pathname, inIframe, clickToEdit],
+		[isDraft, secret, pathname, inIframe],
 	);
 
 	useEffect(() => {
+		if (!inIframe) return;
+		controller.current = createController({ onNavigateTo: router.push });
+		return () => controller.current?.dispose();
+	}, []);
+
+	useEffect(() => {
 		check();
+
+		// if (clickToEdit) controller.current?.enableClickToEdit();
+		// else controller.current?.disableClickToEdit();
+
+		controller.current?.setCurrentPath(pathname);
 	}, [pathname, clickToEdit]);
 
 	useEffect(() => {
@@ -69,22 +81,22 @@ export default function ContentLink({ color }: { color?: string }) {
 	}, [clickToEdit]);
 
 	useEffect(() => {
-		if (!inIframe) return;
+		if (!inIframe || !controller.current) return;
 		const interval = setInterval(() => {
-			setClickToEdit(isClickToEditEnabled());
+			setClickToEdit(controller.current?.isClickToEditEnabled() ?? false);
 		}, 400);
 		return () => clearInterval(interval);
 	}, [inIframe]);
 
 	console.log({ clickToEdit, isDraft });
 	//if (!inIframe) return null;
-
-	return (
-		<DatoContentLink
-			onNavigateTo={router.push}
-			currentPath={pathname}
-			enableClickToEdit={{ hoverOnly: true }}
-			hue={color ? hexToHsl(color)[0] : undefined}
-		/>
-	);
+	return null;
+	// 	return (
+	// 		// <DatoContentLink
+	// 		// 	onNavigateTo={router.push}
+	// 		// 	currentPath={pathname}
+	// 		// 	enableClickToEdit={{ hoverOnly: true }}
+	// 		// 	hue={color ? hexToHsl(color)[0] : undefined}
+	// 		// />
+	// 	);
 }
