@@ -2,64 +2,63 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { ContentLink as DatoContentLink, useContentLink } from 'react-datocms';
 import { useRouter, usePathname } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 export default function ContentLink() {
     const router = useRouter();
     const pathname = usePathname();
     const [isDraft, setIsDraft] = useState(false);
+    const [secret, setSecret] = useState(null);
     const { isClickToEditEnabled } = useContentLink();
-    const isEnabledRef = useRef(null);
     const isEnabled = isClickToEditEnabled();
     async function check() {
         try {
             const res = await fetch('/api/draft?check=1');
-            setIsDraft((await res.text()) === '1');
+            if (res.ok) {
+                const { secret, enabled } = await res.json();
+                setSecret(secret);
+                setIsDraft(enabled);
+            }
+            else
+                throw new Error('check failed');
         }
         catch (e) {
             console.log(e);
             setIsDraft(false);
+            setSecret(null);
         }
     }
-    async function toggle() {
+    async function toggle(enable) {
         try {
-            const enable = isEnabledRef.current;
-            console.log({ enable });
-            if (enable === null)
-                return;
             const url = new URL(window.location.href);
-            const secret = url.searchParams.get('secret');
-            console.log('toggle', { secret, enable });
+            const path = url.pathname;
+            console.log('toggle', { secret, enable, pathname, path });
             if (!secret)
                 return;
             if (!enable) {
-                console.log('disable draft', secret);
+                console.log('disable draft');
                 const res = await fetch(`/api/draft?exit=1&secret=${secret}`);
-                if (res.ok)
-                    router.refresh();
+                if (!res.ok)
+                    return;
             }
             else {
-                console.log('enable draft', secret, `/api/draft?secret=${secret}&slug=${pathname}`);
-                const res = await fetch(`/api/draft?secret=${secret}&slug=${pathname}`);
-                if (res.ok)
-                    router.refresh();
+                console.log('enable draft');
+                const res = await fetch(`/api/draft?secret=${secret}&slug=${path}`);
+                if (!res.ok)
+                    return;
             }
         }
         catch (e) {
-            //console.log(e);
+            console.log(e);
         }
+        console.log('refresh router');
+        router.refresh();
     }
     useEffect(() => {
         check();
     }, [pathname]);
     useEffect(() => {
-        if (isEnabledRef.current === null && isEnabled)
-            isEnabledRef.current = true;
-        else if (isEnabledRef.current === true && !isEnabled)
-            isEnabledRef.current = false;
-        else if (isEnabledRef.current === false && isEnabled)
-            isEnabledRef.current = true;
-        toggle();
-    }, [isEnabled]);
+        toggle(isEnabled);
+    }, [isEnabled, secret, pathname]);
     //if (!isDraft) return null;
     return (_jsx(DatoContentLink, { onNavigateTo: (path) => router.push(path), currentPath: pathname, enableClickToEdit: { hoverOnly: true } }));
 }

@@ -9,7 +9,11 @@ export default async function draft(request, searchParams) {
     const exit = searchParams.get('exit');
     if (check) {
         const enabled = (await draftMode()).isEnabled;
-        return new Response(enabled ? '1' : '0', { status: 200 });
+        const secret = (await cookies()).get('secret');
+        return new Response(JSON.stringify({ secret, enabled }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+        });
     }
     if (exit !== null) {
         console.log('draft mode:', 'exit', slug);
@@ -19,6 +23,14 @@ export default async function draft(request, searchParams) {
     if (secret !== process.env.DATOCMS_PREVIEW_SECRET) {
         console.log('draft mode:', 'invalid token', slug, secret);
         return new Response('Invalid token', { status: 401 });
+    }
+    else {
+        (await cookies()).set('secret', secret, {
+            httpOnly: true,
+            sameSite: 'none',
+            secure: true,
+            path: '/',
+        });
     }
     if (!slug) {
         console.log('draft mode:', 'invalid slug', slug);
