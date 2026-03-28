@@ -8,6 +8,7 @@ import { hexToHsl } from '../../utils';
 const basePath = '/api/draft';
 
 function isCrossOriginFrame() {
+	if (typeof window === 'undefined') return false;
 	try {
 		return document.location.hostname !== window.parent.location.hostname;
 	} catch (e) {
@@ -19,7 +20,7 @@ export default function ContentLink({ color }: { color?: string }) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const [isDraft, setIsDraft] = useState<boolean | null>(null);
-	const [inIframe, setInIframe] = useState(false);
+	const [inIframe, setInIframe] = useState(isCrossOriginFrame());
 	const [secret, setSecret] = useState<string | null>(null);
 	const [clickToEdit, setClickToEdit] = useState(true);
 	const { isClickToEditEnabled } = useContentLink();
@@ -59,7 +60,7 @@ export default function ContentLink({ color }: { color?: string }) {
 		[isDraft, secret, pathname, inIframe, clickToEdit],
 	);
 
-	useEffect(() => setInIframe(isCrossOriginFrame()), []);
+	//useEffect(() => setInIframe(isCrossOriginFrame()), []);
 
 	useEffect(() => {
 		check();

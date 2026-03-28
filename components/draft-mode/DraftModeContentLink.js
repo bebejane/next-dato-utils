@@ -6,6 +6,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { hexToHsl } from '../../utils';
 const basePath = '/api/draft';
 function isCrossOriginFrame() {
+    if (typeof window === 'undefined')
+        return false;
     try {
         return document.location.hostname !== window.parent.location.hostname;
     }
@@ -17,7 +19,7 @@ export default function ContentLink({ color }) {
     const router = useRouter();
     const pathname = usePathname();
     const [isDraft, setIsDraft] = useState(null);
-    const [inIframe, setInIframe] = useState(false);
+    const [inIframe, setInIframe] = useState(isCrossOriginFrame());
     const [secret, setSecret] = useState(null);
     const [clickToEdit, setClickToEdit] = useState(true);
     const { isClickToEditEnabled } = useContentLink();
@@ -59,7 +61,7 @@ export default function ContentLink({ color }) {
         console.log('refresh');
         router.refresh();
     }, [isDraft, secret, pathname, inIframe, clickToEdit]);
-    useEffect(() => setInIframe(isCrossOriginFrame()), []);
+    //useEffect(() => setInIframe(isCrossOriginFrame()), []);
     useEffect(() => {
         check();
     }, [pathname]);
