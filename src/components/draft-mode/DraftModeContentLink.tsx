@@ -43,6 +43,7 @@ export default function ContentLink({ color }: { color?: string }) {
 
 	const toggle = useCallback(
 		async (draft: boolean) => {
+			console.log('toggle', { secret, inIframe, isDraft, draft });
 			if (!secret || !inIframe || isDraft === null) return;
 			console.log('toggle', draft);
 			try {
@@ -62,9 +63,9 @@ export default function ContentLink({ color }: { color?: string }) {
 	);
 
 	useEffect(() => {
-		function handleVisibilityChange(e: any) {
+		async function handleVisibilityChange(e: any) {
 			console.log('visibility', !document.hidden);
-			toggle(!document.hidden);
+			await toggle(!document.hidden);
 		}
 		document.addEventListener('visibilitychange', handleVisibilityChange);
 

@@ -42,6 +42,7 @@ export default function ContentLink({ color }) {
         }
     }
     const toggle = useCallback(async (draft) => {
+        console.log('toggle', { secret, inIframe, isDraft, draft });
         if (!secret || !inIframe || isDraft === null)
             return;
         console.log('toggle', draft);
@@ -63,9 +64,9 @@ export default function ContentLink({ color }) {
         router.refresh();
     }, [isDraft, secret, pathname, inIframe, clickToEdit]);
     useEffect(() => {
-        function handleVisibilityChange(e) {
+        async function handleVisibilityChange(e) {
             console.log('visibility', !document.hidden);
-            toggle(!document.hidden);
+            await toggle(!document.hidden);
         }
         document.addEventListener('visibilitychange', handleVisibilityChange);
         return () => {
