@@ -62,9 +62,14 @@ export default function ContentLink({ color }: { color?: string }) {
 	);
 
 	useEffect(() => {
+		function handleVisibilityChange(e: any) {
+			console.log('visibility', !document.hidden);
+			toggle(!document.hidden);
+		}
+		document.addEventListener('visibilitychange', handleVisibilityChange);
+
 		return () => {
-			console.log('unmount');
-			toggle(false);
+			document.removeEventListener('visibilitychange', handleVisibilityChange);
 		};
 	}, []);
 

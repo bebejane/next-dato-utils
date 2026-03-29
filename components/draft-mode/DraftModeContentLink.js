@@ -63,9 +63,13 @@ export default function ContentLink({ color }) {
         router.refresh();
     }, [isDraft, secret, pathname, inIframe, clickToEdit]);
     useEffect(() => {
+        function handleVisibilityChange(e) {
+            console.log('visibility', !document.hidden);
+            toggle(!document.hidden);
+        }
+        document.addEventListener('visibilitychange', handleVisibilityChange);
         return () => {
-            console.log('unmount');
-            toggle(false);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
         };
     }, []);
     useEffect(() => {
