@@ -77,7 +77,8 @@ export default function DraftModeClient({
 
 	useEffect(() => {
 		if (!enabled) return;
-		console.log('DraftModeClient: urls change');
+		console.log('DraftModeClient: urls change', urls);
+
 		urls?.forEach((u) => connect(u));
 		return () => urls?.forEach((u) => disconnect(u));
 	}, [enabled, JSON.stringify(urls)]);

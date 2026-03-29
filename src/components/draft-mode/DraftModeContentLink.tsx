@@ -43,17 +43,17 @@ export default function ContentLink({ color }: { color?: string }) {
 
 	const toggle = useCallback(
 		async (draft: boolean) => {
-			console.log({ secret, inIframe, isDraft, clickToEdit });
 			if (!secret || !inIframe || isDraft === null) return;
-			console.log('toggle');
+			console.log('toggle', draft);
 			try {
 				const params = new URLSearchParams({ secret });
 				if (draft) params.append('slug', pathname);
 				else params.append('exit', '1');
 				const res = await fetch(`${basePath}?${params}`);
-				if (!res.ok) return;
+				if (!res.ok) throw new Error('toggle failed');
 			} catch (e) {
 				console.log(e);
+				return;
 			}
 			console.log('refresh');
 			router.refresh();
@@ -76,9 +76,6 @@ export default function ContentLink({ color }: { color?: string }) {
 		}, 400);
 		return () => clearInterval(interval);
 	}, [inIframe]);
-
-	console.log({ clickToEdit, isDraft });
-	//if (!inIframe) return null;
 
 	return (
 		<DatoContentLink
