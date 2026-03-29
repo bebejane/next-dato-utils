@@ -2,7 +2,7 @@
 
 import { ContentLink as DatoContentLink, useContentLink } from 'react-datocms';
 import { useRouter, usePathname } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import { use, useCallback, useEffect, useState } from 'react';
 import { hexToHsl } from '../../utils';
 
 const basePath = '/api/draft';
@@ -62,6 +62,13 @@ export default function ContentLink({ color }: { color?: string }) {
 	);
 
 	useEffect(() => {
+		return () => {
+			console.log('unmount');
+			toggle(false);
+		};
+	}, []);
+
+	useEffect(() => {
 		check();
 	}, [pathname, clickToEdit]);
 
@@ -74,16 +81,8 @@ export default function ContentLink({ color }: { color?: string }) {
 		const interval = setInterval(() => {
 			setClickToEdit(isClickToEditEnabled());
 		}, 400);
-
-		function handleUnload() {
-			toggle(false);
-		}
-
-		window.addEventListener('beforeunload', handleUnload);
-
 		return () => {
 			clearInterval(interval);
-			window.removeEventListener('beforeunload', handleUnload);
 		};
 	}, [inIframe]);
 

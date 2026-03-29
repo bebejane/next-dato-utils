@@ -63,6 +63,12 @@ export default function ContentLink({ color }) {
         router.refresh();
     }, [isDraft, secret, pathname, inIframe, clickToEdit]);
     useEffect(() => {
+        return () => {
+            console.log('unmount');
+            toggle(false);
+        };
+    }, []);
+    useEffect(() => {
         check();
     }, [pathname, clickToEdit]);
     useEffect(() => {
@@ -74,13 +80,8 @@ export default function ContentLink({ color }) {
         const interval = setInterval(() => {
             setClickToEdit(isClickToEditEnabled());
         }, 400);
-        function handleUnload() {
-            toggle(false);
-        }
-        window.addEventListener('beforeunload', handleUnload);
         return () => {
             clearInterval(interval);
-            window.removeEventListener('beforeunload', handleUnload);
         };
     }, [inIframe]);
     return (_jsx(DatoContentLink, { onNavigateTo: (path) => {
