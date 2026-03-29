@@ -7,7 +7,7 @@ export type InfiniteScrollProps<ComponetProps> = {
 	id: string;
 	initial: ComponetProps[];
 	query: TypedDocumentNode;
-	params?: Record<string, any>;
+	variables?: Record<string, any>;
 	children: React.JSXElementConstructor<ComponetProps>;
 	loader?: React.JSXElementConstructor<any>;
 	error?: React.JSXElementConstructor<any>;
@@ -23,7 +23,7 @@ export default function InfiniteScroll<ComponetProps>({
 	id,
 	initial,
 	query,
-	params,
+	variables,
 	children: Component,
 	loader: Loader,
 	error: Error,
@@ -41,8 +41,7 @@ export default function InfiniteScroll<ComponetProps>({
 		setError(null);
 
 		try {
-			const variables = { ...(params ?? {}), skip: data.length };
-			const res = await apiQuery(query, { variables });
+			const res = await apiQuery(query, { variables: { ...(variables ?? {}), skip: data.length } });
 			const k = Object.keys(res).find((k) => !k.startsWith('_') && k !== 'draftUrl');
 
 			if (!k) throw 'No data found';
