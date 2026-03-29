@@ -90,6 +90,8 @@ export default function ContentLink({ color }: { color?: string }) {
 		};
 	}, [inIframe]);
 
+	if (!isDraft && !inIframe) return null;
+
 	return (
 		<DatoContentLink
 			onNavigateTo={(path) => {
