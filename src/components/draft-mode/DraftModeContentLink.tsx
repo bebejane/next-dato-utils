@@ -27,6 +27,7 @@ export default function ContentLink({ color }: { color?: string }) {
 	const { isClickToEditEnabled } = useContentLink();
 
 	async function check() {
+		if (!inIframe) return;
 		try {
 			const res = await fetch(`${basePath}?check=1`);
 			if (res.ok) {
@@ -43,7 +44,6 @@ export default function ContentLink({ color }: { color?: string }) {
 
 	const toggle = useCallback(
 		async (draft: boolean) => {
-			console.log('toggle', { secret, inIframe, isDraft, draft });
 			if (!secret || !inIframe || isDraft === null) return;
 			console.log('toggle', draft);
 			try {
@@ -63,6 +63,7 @@ export default function ContentLink({ color }: { color?: string }) {
 	);
 
 	useEffect(() => {
+		if (!inIframe) return;
 		async function handleVisibilityChange(e: any) {
 			await fetch(`${basePath}?exit=1`);
 		}
@@ -70,7 +71,7 @@ export default function ContentLink({ color }: { color?: string }) {
 		return () => {
 			document.removeEventListener('visibilitychange', handleVisibilityChange);
 		};
-	}, []);
+	}, [inIframe]);
 
 	useEffect(() => {
 		check();

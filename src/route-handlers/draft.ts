@@ -16,7 +16,7 @@ export default async function draft(
 	if (check) {
 		const enabled = (await draftMode()).isEnabled;
 		const secret = (await cookies()).get('secret')?.value;
-		console.log('draft mode', 'check', enabled, secret);
+		//console.log('draft mode', 'check', enabled, secret);
 		return new Response(JSON.stringify({ secret, enabled }), {
 			status: 200,
 			headers: { 'Content-Type': 'application/json' },
