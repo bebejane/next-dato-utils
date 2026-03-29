@@ -49,7 +49,6 @@ export default function DraftModeClient({
 	const urls: string[] = (_url ? (Array.isArray(_url) ? _url : [_url]) : []).filter(
 		(u) => u,
 	) as string[];
-	enabled = true;
 
 	useEffect(() => {
 		setMounted(true);
