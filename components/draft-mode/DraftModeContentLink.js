@@ -4,17 +4,8 @@ import { ContentLink as DatoContentLink, useContentLink } from 'react-datocms';
 import { useRouter, usePathname } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { hexToHsl } from '../../utils';
+import { isCrossOriginFrame } from './DraftModeClient';
 const basePath = '/api/draft';
-function isCrossOriginFrame() {
-    if (typeof window === 'undefined')
-        return false;
-    try {
-        return document.location.hostname !== window.parent.location.hostname;
-    }
-    catch (e) {
-        return true;
-    }
-}
 export default function ContentLink({ color }) {
     const router = useRouter();
     const pathname = usePathname();
@@ -93,9 +84,6 @@ export default function ContentLink({ color }) {
     }, [inIframe]);
     if (!isDraft && !inIframe)
         return null;
-    return (_jsx(DatoContentLink, { onNavigateTo: (path) => {
-            console.log('navigate', pathname, path);
-            router.push(path);
-        }, currentPath: pathname, enableClickToEdit: { hoverOnly: true }, hue: heu }));
+    return (_jsx(DatoContentLink, { onNavigateTo: (path) => router.push(path), currentPath: pathname, enableClickToEdit: { hoverOnly: true }, hue: heu }));
 }
 //# sourceMappingURL=DraftModeContentLink.js.map

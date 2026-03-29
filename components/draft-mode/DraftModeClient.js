@@ -6,6 +6,16 @@ import { useEffect, useTransition, useRef, useState } from 'react';
 import Modal from '../Modal.js';
 import { DraftModeListener } from './DraftModeListener.js';
 const refreshInterval = 1000 * 60 * 3;
+export function isCrossOriginFrame() {
+    if (typeof window === 'undefined')
+        return false;
+    try {
+        return document.location.hostname !== window.parent.location.hostname;
+    }
+    catch (e) {
+        return true;
+    }
+}
 export default function DraftModeClient({ enabled, url: _url, tag, path, actions, position, secret, }) {
     const router = useRouter();
     const pathname = usePathname();
@@ -14,7 +24,7 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
     const [mounted, setMounted] = useState(false);
     const [focused, setFocused] = useState(null);
     const refreshRef = useRef(null);
-    const insideiFrame = typeof window !== 'undefined' && window.location !== window.parent.location;
+    const insideiFrame = isCrossOriginFrame();
     const dev = process.env.NODE_ENV === 'development';
     const contentEditingUrl = process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
     const tags = tag ? (Array.isArray(tag) ? tag : [tag]) : [];
