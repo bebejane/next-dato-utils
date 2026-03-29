@@ -22,6 +22,7 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
     const refreshing = useRef(false);
     const listeners = useRef({});
     const urls = (_url ? (Array.isArray(_url) ? _url : [_url]) : []).filter((u) => u);
+    enabled = true;
     useEffect(() => {
         setMounted(true);
         console.log('DraftModeClient:', 'mount');
