@@ -74,7 +74,17 @@ export default function ContentLink({ color }: { color?: string }) {
 		const interval = setInterval(() => {
 			setClickToEdit(isClickToEditEnabled());
 		}, 400);
-		return () => clearInterval(interval);
+
+		function handleUnload() {
+			toggle(false);
+		}
+
+		window.addEventListener('beforeunload', handleUnload);
+
+		return () => {
+			clearInterval(interval);
+			window.removeEventListener('beforeunload', handleUnload);
+		};
 	}, [inIframe]);
 
 	return (

@@ -74,7 +74,14 @@ export default function ContentLink({ color }) {
         const interval = setInterval(() => {
             setClickToEdit(isClickToEditEnabled());
         }, 400);
-        return () => clearInterval(interval);
+        function handleUnload() {
+            toggle(false);
+        }
+        window.addEventListener('beforeunload', handleUnload);
+        return () => {
+            clearInterval(interval);
+            window.removeEventListener('beforeunload', handleUnload);
+        };
     }, [inIframe]);
     return (_jsx(DatoContentLink, { onNavigateTo: (path) => {
             console.log('navigate', pathname, path);
