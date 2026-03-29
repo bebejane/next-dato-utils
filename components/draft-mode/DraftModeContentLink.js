@@ -65,8 +65,7 @@ export default function ContentLink({ color }) {
     }, [isDraft, secret, pathname, inIframe, clickToEdit]);
     useEffect(() => {
         async function handleVisibilityChange(e) {
-            console.log('visibility', !document.hidden);
-            await toggle(!document.hidden);
+            await fetch(`${basePath}?exit=1`);
         }
         document.addEventListener('visibilitychange', handleVisibilityChange);
         return () => {

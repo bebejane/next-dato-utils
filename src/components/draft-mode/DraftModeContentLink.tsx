@@ -64,11 +64,9 @@ export default function ContentLink({ color }: { color?: string }) {
 
 	useEffect(() => {
 		async function handleVisibilityChange(e: any) {
-			console.log('visibility', !document.hidden);
-			await toggle(!document.hidden);
+			await fetch(`${basePath}?exit=1`);
 		}
 		document.addEventListener('visibilitychange', handleVisibilityChange);
-
 		return () => {
 			document.removeEventListener('visibilitychange', handleVisibilityChange);
 		};
