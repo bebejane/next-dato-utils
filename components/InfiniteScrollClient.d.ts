@@ -1,4 +1,4 @@
-import { TypedDocumentNode } from '../api';
+import { TypedDocumentNode } from 'next-dato-utils/api';
 export type InfiniteScrollProps<ComponetProps> = {
     id: string;
     initial: ComponetProps[];

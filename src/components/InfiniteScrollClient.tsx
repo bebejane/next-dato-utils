@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { apiQuery, TypedDocumentNode } from '../api';
+import { useEffect, useRef, useState } from 'react';
+import { apiQuery, TypedDocumentNode } from 'next-dato-utils/api';
 
 export type InfiniteScrollProps<ComponetProps> = {
 	id: string;
@@ -29,7 +29,9 @@ export default function InfiniteScroll<ComponetProps>({
 	error: Error,
 	rootMargin,
 }: InfiniteScrollProps<ComponetProps>): React.ReactNode {
-	const [data, setData] = useState<ComponetProps[]>([]);
+	const [data, setData] = useState<ComponetProps[]>(
+		storage?.getItem(id) ? JSON.parse(storage?.getItem(id) as string) : initial,
+	);
 	const ref = useRef<HTMLDivElement | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [end, setEnd] = useState(false);
@@ -59,12 +61,6 @@ export default function InfiniteScroll<ComponetProps>({
 			setLoading(false);
 		}
 	}
-
-	useLayoutEffect(() => {
-		const cached = storage?.getItem(id) ?? null;
-		const cachedData = cached ? JSON.parse(cached as string) : null;
-		setData(cachedData ?? initial);
-	}, [initial]);
 
 	useEffect(() => {
 		if (!ref.current || end) return;

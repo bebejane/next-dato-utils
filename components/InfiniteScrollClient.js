@@ -1,12 +1,12 @@
 'use client';
 import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { apiQuery } from '../api';
+import { useEffect, useRef, useState } from 'react';
+import { apiQuery } from 'next-dato-utils/api';
 const storage = typeof window !== 'undefined' && typeof window.sessionStorage !== 'undefined'
     ? window.sessionStorage
     : null;
 export default function InfiniteScroll({ id, initial, query, variables, children: Component, loader: Loader, error: Error, rootMargin, }) {
-    const [data, setData] = useState([]);
+    const [data, setData] = useState(storage?.getItem(id) ? JSON.parse(storage?.getItem(id)) : initial);
     const ref = useRef(null);
     const [loading, setLoading] = useState(false);
     const [end, setEnd] = useState(false);
@@ -37,11 +37,6 @@ export default function InfiniteScroll({ id, initial, query, variables, children
             setLoading(false);
         }
     }
-    useLayoutEffect(() => {
-        const cached = storage?.getItem(id) ?? null;
-        const cachedData = cached ? JSON.parse(cached) : null;
-        setData(cachedData ?? initial);
-    }, [initial]);
     useEffect(() => {
         if (!ref.current || end)
             return;

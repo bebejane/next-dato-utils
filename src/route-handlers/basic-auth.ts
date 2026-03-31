@@ -4,7 +4,7 @@ const p = process.env.BASIC_AUTH_PASSWORD;
 export default async function basicAuth(
 	req: Request,
 	callback?: (req: Request) => Promise<Response>,
-	options?: { username: string; password: string }
+	options?: { username: string; password: string },
 ): Promise<Response> {
 	if (req.method === 'OPTIONS') return new Response('OK', { status: 200 });
 
