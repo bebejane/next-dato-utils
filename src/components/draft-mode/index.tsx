@@ -14,9 +14,13 @@ export type Props = {
 export default async function DraftMode({ url, tag, path, position = 'bottomright' }: Props) {
 	if (!tag && !path) throw new Error('DraftMode: tag or path is required');
 
-	const isDev = process.env.NODE_ENV === 'development';
+	const isDevPreview =
+		process.env.NODE_ENV === 'development' &&
+		process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL !== undefined &&
+		process.env.NEXT_PUBLIC_DATOCMS_VISUAL_EDITING_PREVIEW !== undefined;
+
 	const enabled = (await draftMode()).isEnabled;
-	const secret = isDev ? process.env.DATOCMS_PREVIEW_SECRET : undefined;
+	const secret = isDevPreview ? process.env.DATOCMS_PREVIEW_SECRET : undefined;
 
 	if (!process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL) return null;
 

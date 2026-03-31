@@ -7,7 +7,9 @@ import { hexToHsl } from '../../utils';
 import { isCrossOriginFrame } from './DraftModeClient';
 const basePath = '/api/draft';
 export default function ContentLink({ color }) {
-    const isDev = process.env.NODE_ENV === 'development' && process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
+    const isDevPreview = process.env.NODE_ENV === 'development' &&
+        process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL !== undefined &&
+        process.env.NEXT_PUBLIC_DATOCMS_VISUAL_EDITING_PREVIEW !== undefined;
     const router = useRouter();
     const pathname = usePathname();
     const inIframe = isCrossOriginFrame();
@@ -84,7 +86,8 @@ export default function ContentLink({ color }) {
             clearInterval(interval);
         };
     }, [inIframe]);
-    //if (!inIframe && !(isDev || isDraft)) return null;
+    if (!inIframe || !isDevPreview)
+        return null;
     return (_jsx(DatoContentLink, { onNavigateTo: (path) => {
             console.log('navigate', path);
             router.push(path);
