@@ -11,7 +11,7 @@ const POST = async (req, { params }, config) => {
                     if (!api_key)
                         throw new Error('No api_key found');
                     let paths = [];
-                    const record = { ...attributes, id };
+                    const record = { api_key, ...attributes, id };
                     if (config.revalidate)
                         paths = await config.revalidate(record);
                     else if (config.i18n) {

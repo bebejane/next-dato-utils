@@ -12,7 +12,8 @@ export function getItemApiKey(itemOrApiKey) {
         return itemOrApiKey;
     if (typeof itemOrApiKey !== 'object')
         return null;
-    const apiKey = itemOrApiKey._modelApiKey ??
+    const apiKey = itemOrApiKey._api_key ??
+        itemOrApiKey._modelApiKey ??
         itemOrApiKey.__typename
             ?.replace('Record', '')
             .split(/\.?(?=[A-Z])/)
