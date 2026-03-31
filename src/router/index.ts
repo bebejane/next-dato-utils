@@ -37,8 +37,8 @@ const POST: RouteHandler = async (req, { params }, config) => {
 						let paths: string[] = [];
 
 						const record = { ...attributes, id };
-
-						if (config.i18n) {
+						if (config.revalidate) paths = await config.revalidate(record);
+						else if (config.i18n) {
 							for (const locale of config.i18n.locales) {
 								const p = await config.routes?.[api_key]?.(record, locale);
 								p && paths.push.apply(paths, p);

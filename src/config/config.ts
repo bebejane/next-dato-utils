@@ -10,6 +10,7 @@ export type DatoCmsConfig = {
 	sitemap?: (props?: any) => Promise<MetadataRoute.Sitemap>;
 	robots?: (props?: any) => Promise<MetadataRoute.Robots>;
 	webPreviews?: (record: any, locale?: string | null) => Promise<string | null>;
+	revalidate?: (record: any, locale?: string) => Promise<string[]>;
 	i18n?: {
 		locales: string[];
 		defaultLocale: string;
