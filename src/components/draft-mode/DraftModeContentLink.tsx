@@ -9,10 +9,13 @@ import { isCrossOriginFrame } from './DraftModeClient';
 const basePath = '/api/draft';
 
 export default function ContentLink({ color }: { color?: string }) {
+	const isDev =
+		process.env.NODE_ENV === 'development' && process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL;
 	const router = useRouter();
 	const pathname = usePathname();
 	const inIframe = isCrossOriginFrame();
 	const heu = color ? hexToHsl(color)[0] : undefined;
+
 	const [isDraft, setIsDraft] = useState<boolean | null>(null);
 	const [secret, setSecret] = useState<string | null>(null);
 	const [clickToEdit, setClickToEdit] = useState(false);
@@ -84,7 +87,7 @@ export default function ContentLink({ color }: { color?: string }) {
 		};
 	}, [inIframe]);
 
-	if (!inIframe && !isDraft) return null;
+	if (!inIframe && !isDev) return null;
 
 	return (
 		<DatoContentLink
