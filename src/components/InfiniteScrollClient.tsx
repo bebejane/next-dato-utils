@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { apiQuery, TypedDocumentNode } from 'next-dato-utils/api';
+import { sleep } from '../utils';
 
 export type InfiniteScrollProps<ComponetProps> = {
 	id: string;
@@ -12,6 +13,7 @@ export type InfiniteScrollProps<ComponetProps> = {
 	loader?: React.JSXElementConstructor<any>;
 	error?: React.JSXElementConstructor<any>;
 	rootMargin?: string;
+	sleep?: number;
 };
 
 const storage =
@@ -28,6 +30,7 @@ export default function InfiniteScroll<ComponetProps>({
 	loader: Loader,
 	error: Error,
 	rootMargin,
+	sleep: _sleep,
 }: InfiniteScrollProps<ComponetProps>): React.ReactNode {
 	const [data, setData] = useState<ComponetProps[]>(
 		storage?.getItem(id) ? JSON.parse(storage?.getItem(id) as string) : initial,
@@ -43,6 +46,7 @@ export default function InfiniteScroll<ComponetProps>({
 		setError(null);
 
 		try {
+			if (_sleep) await sleep(_sleep); // simulate loading
 			const res = await apiQuery(query, { variables: { ...(variables ?? {}), skip: data.length } });
 			const k = Object.keys(res).find((k) => !k.startsWith('_') && k !== 'draftUrl');
 
