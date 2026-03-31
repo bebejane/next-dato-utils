@@ -15,8 +15,8 @@ export default function ContentLink({ color }: { color?: string }) {
 	const heu = color ? hexToHsl(color)[0] : undefined;
 	const [isDraft, setIsDraft] = useState<boolean | null>(null);
 	const [secret, setSecret] = useState<string | null>(null);
-	const [clickToEdit, setClickToEdit] = useState(true);
-	const { isClickToEditEnabled } = useContentLink();
+	const [clickToEdit, setClickToEdit] = useState(false);
+	const { isClickToEditEnabled, setCurrentPath } = useContentLink();
 
 	async function check() {
 		if (!inIframe) return;
@@ -66,6 +66,7 @@ export default function ContentLink({ color }: { color?: string }) {
 	}, [inIframe]);
 
 	useEffect(() => {
+		setCurrentPath(pathname);
 		check();
 	}, [pathname, clickToEdit]);
 
@@ -83,11 +84,14 @@ export default function ContentLink({ color }: { color?: string }) {
 		};
 	}, [inIframe]);
 
-	if (!isDraft && !inIframe) return null;
+	if (!inIframe && !isDraft) return null;
 
 	return (
 		<DatoContentLink
-			onNavigateTo={(path) => router.push(path)}
+			onNavigateTo={(path) => {
+				console.log('navigate', path);
+				router.push(path);
+			}}
 			currentPath={pathname}
 			enableClickToEdit={{ hoverOnly: true }}
 			hue={heu}

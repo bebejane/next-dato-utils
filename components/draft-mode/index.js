@@ -9,7 +9,7 @@ export default async function DraftMode({ url, tag, path, position = 'bottomrigh
     const isDev = process.env.NODE_ENV === 'development';
     const enabled = (await draftMode()).isEnabled;
     const secret = isDev ? process.env.DATOCMS_PREVIEW_SECRET : undefined;
-    if (isDev && !process.env.DATOCMS_VISUAL_EDITING_PREVIEW)
+    if (!process.env.DATOCMS_VISUAL_EDITING_PREVIEW)
         return null;
     return (_jsx(DraftModeClient, { enabled: enabled, url: url, tag: tag, path: path, position: position, secret: secret, actions: { revalidateTag, revalidatePath, disableDraftMode } }));
 }

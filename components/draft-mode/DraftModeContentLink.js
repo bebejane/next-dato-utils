@@ -13,8 +13,8 @@ export default function ContentLink({ color }) {
     const heu = color ? hexToHsl(color)[0] : undefined;
     const [isDraft, setIsDraft] = useState(null);
     const [secret, setSecret] = useState(null);
-    const [clickToEdit, setClickToEdit] = useState(true);
-    const { isClickToEditEnabled } = useContentLink();
+    const [clickToEdit, setClickToEdit] = useState(false);
+    const { isClickToEditEnabled, setCurrentPath } = useContentLink();
     async function check() {
         if (!inIframe)
             return;
@@ -67,6 +67,7 @@ export default function ContentLink({ color }) {
         };
     }, [inIframe]);
     useEffect(() => {
+        setCurrentPath(pathname);
         check();
     }, [pathname, clickToEdit]);
     useEffect(() => {
@@ -82,8 +83,11 @@ export default function ContentLink({ color }) {
             clearInterval(interval);
         };
     }, [inIframe]);
-    if (!isDraft && !inIframe)
+    if (!inIframe && !isDraft)
         return null;
-    return (_jsx(DatoContentLink, { onNavigateTo: (path) => router.push(path), currentPath: pathname, enableClickToEdit: { hoverOnly: true }, hue: heu }));
+    return (_jsx(DatoContentLink, { onNavigateTo: (path) => {
+            console.log('navigate', path);
+            router.push(path);
+        }, currentPath: pathname, enableClickToEdit: { hoverOnly: true }, hue: heu }));
 }
 //# sourceMappingURL=DraftModeContentLink.js.map

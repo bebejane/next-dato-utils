@@ -18,7 +18,7 @@ export default async function DraftMode({ url, tag, path, position = 'bottomrigh
 	const enabled = (await draftMode()).isEnabled;
 	const secret = isDev ? process.env.DATOCMS_PREVIEW_SECRET : undefined;
 
-	if (isDev && !process.env.DATOCMS_VISUAL_EDITING_PREVIEW) return null;
+	if (!process.env.DATOCMS_VISUAL_EDITING_PREVIEW) return null;
 
 	return (
 		<DraftModeClient
