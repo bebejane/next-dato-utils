@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { apiQuery, TypedDocumentNode } from 'next-dato-utils/api';
-import { sleep } from '../utils';
+import { sleep } from 'next-dato-utils/utils';
 
 export type InfiniteScrollProps<ComponetProps> = {
 	id: string;
@@ -10,7 +10,7 @@ export type InfiniteScrollProps<ComponetProps> = {
 	query: TypedDocumentNode;
 	variables?: Record<string, any>;
 	children: React.JSXElementConstructor<ComponetProps>;
-	loader?: React.ElementType<any>;
+	loader?: React.JSX.Element | null;
 	error?: React.JSXElementConstructor<any>;
 	rootMargin?: string;
 	sleep?: number;
@@ -99,13 +99,11 @@ export default function InfiniteScroll<ComponetProps>({
 			{data.map((item, index) => (
 				<Component key={index} {...item} ref={index === data.length - 1 ? ref : null} />
 			))}
-			<div ref={ref} style={{ all: 'unset' }}>
-				{loading && Loader && <Loader />}
-			</div>
+			<div ref={ref}>{loading && Loader}</div>
 			{error && Error ? (
 				<Error>{error}</Error>
 			) : (
-				<div style={{ color: 'red', marginTop: '1em' }}>{error}</div>
+				error && <div style={{ color: 'red', marginTop: '1em' }}>{error}</div>
 			)}
 		</>
 	);

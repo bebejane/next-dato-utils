@@ -2,7 +2,7 @@
 import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
 import { useEffect, useRef, useState } from 'react';
 import { apiQuery } from 'next-dato-utils/api';
-import { sleep } from '../utils';
+import { sleep } from 'next-dato-utils/utils';
 const storage = typeof window !== 'undefined' && typeof window.sessionStorage !== 'undefined'
     ? window.sessionStorage
     : null;
@@ -63,6 +63,6 @@ export default function InfiniteScroll({ id, initial, query, variables, children
             window.removeEventListener('beforeunload', unload);
         };
     }, []);
-    return (_jsxs(_Fragment, { children: [data.map((item, index) => (_jsx(Component, { ...item, ref: index === data.length - 1 ? ref : null }, index))), _jsx("div", { ref: ref, style: { all: 'unset' }, children: loading && Loader && _jsx(Loader, {}) }), error && Error ? (_jsx(Error, { children: error })) : (_jsx("div", { style: { color: 'red', marginTop: '1em' }, children: error }))] }));
+    return (_jsxs(_Fragment, { children: [data.map((item, index) => (_jsx(Component, { ...item, ref: index === data.length - 1 ? ref : null }, index))), _jsx("div", { ref: ref, children: loading && Loader }), error && Error ? (_jsx(Error, { children: error })) : (error && _jsx("div", { style: { color: 'red', marginTop: '1em' }, children: error }))] }));
 }
 //# sourceMappingURL=InfiniteScrollClient.js.map

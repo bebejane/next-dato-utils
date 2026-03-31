@@ -5,7 +5,7 @@ export type InfiniteScrollProps<ComponetProps> = {
     query: TypedDocumentNode;
     variables?: Record<string, any>;
     children: React.JSXElementConstructor<ComponetProps>;
-    loader?: React.ElementType<any>;
+    loader?: React.JSX.Element | null;
     error?: React.JSXElementConstructor<any>;
     rootMargin?: string;
     sleep?: number;
