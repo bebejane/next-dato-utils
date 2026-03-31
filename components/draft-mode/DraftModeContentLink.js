@@ -84,8 +84,7 @@ export default function ContentLink({ color }) {
             clearInterval(interval);
         };
     }, [inIframe]);
-    if (!inIframe && !(isDev || isDraft))
-        return null;
+    //if (!inIframe && !(isDev || isDraft)) return null;
     return (_jsx(DatoContentLink, { onNavigateTo: (path) => {
             console.log('navigate', path);
             router.push(path);

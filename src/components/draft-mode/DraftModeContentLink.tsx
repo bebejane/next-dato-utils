@@ -87,7 +87,7 @@ export default function ContentLink({ color }: { color?: string }) {
 		};
 	}, [inIframe]);
 
-	if (!inIframe && !(isDev || isDraft)) return null;
+	//if (!inIframe && !(isDev || isDraft)) return null;
 
 	return (
 		<DatoContentLink
