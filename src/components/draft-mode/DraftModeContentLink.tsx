@@ -2,7 +2,7 @@
 
 import { ContentLink as DatoContentLink, useContentLink } from 'react-datocms';
 import { useRouter, usePathname } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { hexToHsl } from '../../utils';
 import { isCrossOriginFrame } from './DraftModeClient';
 
@@ -17,77 +17,11 @@ export default function ContentLink({ color }: { color?: string }) {
 	const pathname = usePathname();
 	const inIframe = isCrossOriginFrame();
 	const heu = color ? hexToHsl(color)[0] : undefined;
-
-	const [isDraft, setIsDraft] = useState<boolean | null>(null);
-	const [secret, setSecret] = useState<string | null>(null);
-	const [clickToEdit, setClickToEdit] = useState(false);
-	const { isClickToEditEnabled, setCurrentPath } = useContentLink();
-
-	async function check() {
-		if (!inIframe) return;
-		try {
-			const res = await fetch(`${basePath}?check=1`);
-			if (res.ok) {
-				const { secret, enabled } = await res.json();
-				setSecret(secret);
-				setIsDraft(enabled);
-			} else throw new Error('check failed');
-		} catch (e) {
-			console.log(e);
-			setIsDraft(false);
-			setSecret(null);
-		}
-	}
-
-	const toggle = useCallback(
-		async (draft: boolean) => {
-			if (!secret || !inIframe || isDraft === null) return;
-			console.log('toggle', draft);
-			try {
-				const params = new URLSearchParams({ secret });
-				if (draft) params.append('slug', pathname);
-				else params.append('exit', '1');
-				const res = await fetch(`${basePath}?${params}`);
-				if (!res.ok) throw new Error('toggle failed');
-			} catch (e) {
-				console.log(e);
-				return;
-			}
-			console.log('refresh');
-			router.refresh();
-		},
-		[isDraft, secret, pathname, inIframe, clickToEdit],
-	);
-
-	useEffect(() => {
-		if (!inIframe) return;
-		async function handleVisibilityChange(e: any) {
-			await fetch(`${basePath}?exit=1`);
-		}
-		document.addEventListener('visibilitychange', handleVisibilityChange);
-		return () => {
-			document.removeEventListener('visibilitychange', handleVisibilityChange);
-		};
-	}, [inIframe]);
+	const { setCurrentPath } = useContentLink();
 
 	useEffect(() => {
 		setCurrentPath(pathname);
-		check();
-	}, [pathname, clickToEdit]);
-
-	useEffect(() => {
-		toggle(clickToEdit);
-	}, [clickToEdit]);
-
-	useEffect(() => {
-		if (!inIframe) return;
-		const interval = setInterval(() => {
-			setClickToEdit(isClickToEditEnabled());
-		}, 400);
-		return () => {
-			clearInterval(interval);
-		};
-	}, [inIframe]);
+	}, [pathname]);
 
 	if (!inIframe || !isDevPreview) return null;
 
