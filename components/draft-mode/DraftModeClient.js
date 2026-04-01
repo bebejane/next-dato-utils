@@ -34,13 +34,13 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
     const urls = (_url ? (Array.isArray(_url) ? _url : [_url]) : []).filter((u) => u);
     useEffect(() => {
         setMounted(true);
-        console.log('DraftModeClient:', 'mount');
+        //console.log('DraftModeClient:', 'mount');
         if (!path)
             return;
         if (Array.isArray(path) ? path[0] !== pathname : path !== pathname)
             console.warn('DraftModeClient: path does not match current path', path, pathname);
         return () => {
-            console.log('DraftModeClient:', 'unmount');
+            //console.log('DraftModeClient:', 'unmount');
         };
     }, [enabled]);
     useEffect(() => {
@@ -57,7 +57,7 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
     useEffect(() => {
         if (!enabled)
             return;
-        console.log('DraftModeClient: urls change', urls);
+        //console.log('DraftModeClient: urls change', urls);
         urls?.forEach((u) => connect(u));
         return () => urls?.forEach((u) => disconnect(u));
     }, [enabled, JSON.stringify(urls)]);
@@ -73,10 +73,10 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
         const listener = new DraftModeListener(url);
         listeners.current[url] = listener;
         listener.on('update', (url) => {
-            console.log('DraftModeClient: update', url);
+            //console.log('DraftModeClient: update', url);
             if (tags?.length === 0 && paths?.length === 0)
                 return;
-            console.log('DraftModeClient: revalidate', 'paths', paths, 'tags', tags);
+            //console.log('DraftModeClient: revalidate', 'paths', paths, 'tags', tags);
             startTransition(() => {
                 if (tags?.length)
                     actions.revalidateTag(tags);
@@ -88,16 +88,16 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
             listeners.current[url] = listener;
             refreshRef.current && clearInterval(refreshRef.current);
             refreshRef.current = setInterval(() => {
-                console.log('DraftModeClient: refresh (interval)');
+                //console.log('DraftModeClient: refresh (interval)');
                 refresh(0);
             }, refreshInterval);
         });
         listener.on('disconnect', (url) => {
-            console.log('DraftModeClient: disconnect', url);
+            //console.log('DraftModeClient: disconnect', url);
             refreshRef.current && clearInterval(refreshRef.current);
         });
         listener.on('error', (url) => {
-            console.log('DraftModeClient:', 'error', url);
+            //console.log('DraftModeClient:', 'error', url);
             refresh();
         });
         listener.connect();
@@ -112,7 +112,7 @@ export default function DraftModeClient({ enabled, url: _url, tag, path, actions
         setReloading(true);
         refreshing.current = true;
         refreshRef.current && clearInterval(refreshRef.current);
-        console.log('DraftModeClient: refresh', delay);
+        //console.log('DraftModeClient: refresh', delay);
         await new Promise((r) => setTimeout(r, delay));
         router.refresh();
         refreshing.current = false;
