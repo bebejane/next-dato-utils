@@ -13,6 +13,8 @@ export default async function DraftMode({ url, tag, path, position = 'bottomrigh
     const secret = isDevPreview ? process.env.DATOCMS_PREVIEW_SECRET : undefined;
     if (!process.env.NEXT_PUBLIC_DATOCMS_BASE_EDITING_URL)
         return null;
+    if (isDevPreview && !enabled)
+        return null;
     return (_jsx(DraftModeClient, { enabled: enabled, url: url, tag: tag, path: path, position: position, secret: secret, actions: { revalidateTag, revalidatePath, disableDraftMode } }));
 }
 //# sourceMappingURL=index.js.map

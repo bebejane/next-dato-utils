@@ -12,11 +12,12 @@ export default async function draft(
 	const slug = searchParams.get('slug') ?? searchParams.get('redirect') ?? '/';
 	const maxAge = searchParams.get('max-age');
 	const exit = searchParams.get('exit');
+	const host = request.headers.get('host');
+	console.log(host);
 
 	if (check) {
 		const enabled = (await draftMode()).isEnabled;
 		const secret = (await cookies()).get('secret')?.value;
-		//console.log('draft mode', 'check', enabled, secret);
 		return new Response(JSON.stringify({ secret, enabled }), {
 			status: 200,
 			headers: { 'Content-Type': 'application/json' },
@@ -30,7 +31,6 @@ export default async function draft(
 	}
 
 	if (secret !== process.env.DATOCMS_PREVIEW_SECRET) {
-		console.log('draft mode:', 'invalid token', slug, secret);
 		return new Response('Invalid token', { status: 401 });
 	} else {
 		(await cookies()).set('secret', secret, {
@@ -42,11 +42,9 @@ export default async function draft(
 	}
 
 	if (!slug) {
-		console.log('draft mode:', 'invalid slug', slug);
 		return new Response('Invalid slug', { status: 400 });
 	}
 
-	console.log('draft mode:', 'enable', slug);
 	(await draftMode()).enable();
 
 	if (maxAge) {
