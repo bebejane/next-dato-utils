@@ -6,7 +6,7 @@ import { sleep } from 'next-dato-utils/utils';
 const storage = typeof window !== 'undefined' && typeof window.sessionStorage !== 'undefined'
     ? window.sessionStorage
     : null;
-export default function InfiniteScroll({ id, initial, query, variables, children: Component, loader: Loader, error: Error, rootMargin, oprions = {}, sleep: _sleep, }) {
+export default function InfiniteScroll({ id, initial, query, variables, children: Component, loader: Loader, error: Error, rootMargin, options = {}, sleep: _sleep, }) {
     const [data, setData] = useState(storage?.getItem(id) ? JSON.parse(storage?.getItem(id)) : initial);
     const ref = useRef(null);
     const [loading, setLoading] = useState(false);
@@ -22,7 +22,7 @@ export default function InfiniteScroll({ id, initial, query, variables, children
                 await sleep(_sleep); // simulate loading
             const res = await apiQuery(query, {
                 variables: { ...(variables ?? {}), skip: data.length },
-                ...oprions,
+                ...options,
             });
             const k = Object.keys(res).find((k) => !k.startsWith('_') && k !== 'draftUrl');
             if (!k)
