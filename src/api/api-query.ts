@@ -244,7 +244,7 @@ const dedupedFetch = async (options: DedupeOptions) => {
 		...(excludeInvalid ? { 'X-Exclude-Invalid': 'true' } : {}),
 		...(cacheTags ? { 'X-Cache-Tags': 'true' } : {}),
 		...(includeDrafts ? { 'X-Include-Drafts': 'true' } : {}),
-		...(visualEditing ? { 'X-Visual-Editing': 'vercel-v1' } : {}),
+		...(includeDrafts && visualEditing ? { 'X-Visual-Editing': 'vercel-v1' } : {}),
 		...(baseEditingUrl ? { 'X-Base-Editing-Url': baseEditingUrl } : {}),
 	} as unknown as HeadersInit;
 

@@ -110,7 +110,7 @@ const dedupedFetch = async (options) => {
         ...(excludeInvalid ? { 'X-Exclude-Invalid': 'true' } : {}),
         ...(cacheTags ? { 'X-Cache-Tags': 'true' } : {}),
         ...(includeDrafts ? { 'X-Include-Drafts': 'true' } : {}),
-        ...(visualEditing ? { 'X-Visual-Editing': 'vercel-v1' } : {}),
+        ...(includeDrafts && visualEditing ? { 'X-Visual-Editing': 'vercel-v1' } : {}),
         ...(baseEditingUrl ? { 'X-Base-Editing-Url': baseEditingUrl } : {}),
     };
     const response = await fetch(url ?? 'https://graphql.datocms.com/', {

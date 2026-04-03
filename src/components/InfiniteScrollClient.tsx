@@ -3,12 +3,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { apiQuery, TypedDocumentNode } from 'next-dato-utils/api';
 import { sleep } from 'next-dato-utils/utils';
+import { ApiQueryOptions } from '../api/api-query';
 
 export type InfiniteScrollProps<ComponetProps> = {
 	id: string;
 	initial: ComponetProps[];
 	query: TypedDocumentNode;
 	variables?: Record<string, any>;
+	oprions?: ApiQueryOptions;
 	children: React.JSXElementConstructor<ComponetProps>;
 	loader?: React.JSX.Element | null;
 	error?: React.JSXElementConstructor<any>;
@@ -30,6 +32,7 @@ export default function InfiniteScroll<ComponetProps>({
 	loader: Loader,
 	error: Error,
 	rootMargin,
+	oprions = {},
 	sleep: _sleep,
 }: InfiniteScrollProps<ComponetProps>): React.ReactNode {
 	const [data, setData] = useState<ComponetProps[]>(
@@ -47,7 +50,10 @@ export default function InfiniteScroll<ComponetProps>({
 
 		try {
 			if (_sleep) await sleep(_sleep); // simulate loading
-			const res = await apiQuery(query, { variables: { ...(variables ?? {}), skip: data.length } });
+			const res = await apiQuery(query, {
+				variables: { ...(variables ?? {}), skip: data.length },
+				...oprions,
+			});
 			const k = Object.keys(res).find((k) => !k.startsWith('_') && k !== 'draftUrl');
 
 			if (!k) throw 'No data found';
