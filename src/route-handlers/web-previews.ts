@@ -35,7 +35,7 @@ export default async function webPreviews(
 		});
 		previewLinks.push({
 			label: 'Draft',
-			url: `${baseUrl}/api/draft?slug=${path}&secret=${process.env.DATOCMS_PREVIEW_SECRET}`,
+			url: `${baseUrl}/api/draft?slug=${path}&secret=${process.env.DATOCMS_PREVIEW_SECRET}&origin=${encodeURIComponent(baseUrl)}`,
 		});
 	}
 

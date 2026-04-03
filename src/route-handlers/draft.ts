@@ -12,8 +12,6 @@ export default async function draft(
 	const slug = searchParams.get('slug') ?? searchParams.get('redirect') ?? '/';
 	const maxAge = searchParams.get('max-age');
 	const exit = searchParams.get('exit');
-	const host = request.headers.get('host');
-	console.log(host);
 
 	if (check) {
 		const enabled = (await draftMode()).isEnabled;
