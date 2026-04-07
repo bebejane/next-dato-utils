@@ -1,4 +1,4 @@
-import { backup, revalidate, test, webPreviews, draft, basicAuth, search, searchIndex, } from '../route-handlers/index.js';
+import { backup, revalidate, test, webPreviews, draft, basicAuth, search, searchIndex, assetManager, } from '../route-handlers/index.js';
 const POST = async (req, { params }, config) => {
     const { route } = await params;
     try {
@@ -44,6 +44,8 @@ const POST = async (req, { params }, config) => {
                 });
             case 'search':
                 return search(req);
+            case 'asset-manager':
+                return assetManager(req, config);
             default:
                 return new Response('Not Found', { status: 404 });
         }

@@ -19,4 +19,10 @@ export type DatoCmsConfig = {
 		main: string;
 		tenants: string[];
 	};
+	assets?: {
+		maxWidth: number;
+		maxHeight: number;
+		quality: number;
+		maxSize: number;
+	};
 };

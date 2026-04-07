@@ -10,3 +10,4 @@ export { default as draft } from './draft.js';
 export { default as favicon } from './favicon.js';
 export { default as searchIndex } from './search-index.js';
 export { default as search } from './search.js';
+export { default as assetManager } from './asset-manager.js';

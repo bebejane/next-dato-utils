@@ -9,6 +9,7 @@ import {
 	basicAuth,
 	search,
 	searchIndex,
+	assetManager,
 } from '../route-handlers/index.js';
 
 export type RouteHandler = (
@@ -66,6 +67,8 @@ const POST: RouteHandler = async (req, { params }, config) => {
 				});
 			case 'search':
 				return search(req);
+			case 'asset-manager':
+				return assetManager(req, config);
 			default:
 				return new Response('Not Found', { status: 404 });
 		}
