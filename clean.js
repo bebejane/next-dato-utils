@@ -7,6 +7,7 @@ const packages = [
 	'route-handlers',
 	'server-actions',
 	'utils',
+	'server-utils',
 	'cli',
 	'config',
 	'router',

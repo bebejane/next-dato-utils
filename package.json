@@ -27,6 +27,11 @@
 			"import": "./utils/index.js",
 			"bun": "./utils/index.js"
 		},
+		"./server-utils": {
+			"types": "./server-utils/index.d.ts",
+			"import": "./server-utils/index.js",
+			"bun": "./server-utils/index.js"
+		},
 		"./config": {
 			"types": "./config/index.d.ts",
 			"import": "./config/index.js",
@@ -117,6 +122,7 @@
 		"react": "^19.2.0",
 		"react-datocms": "^8.0.2",
 		"react-dom": "^19.2.0",
+		"sharp": "^0.34.5",
 		"tsc-watch": "^7.2.0",
 		"zod": "^3.25.76"
 	},
@@ -135,6 +141,7 @@
 		"react-datocms": ">=8.0.0",
 		"react-dom": "19.x",
 		"sass": ">=1.69.0",
+		"sharp": ">=0.34.5",
 		"zod": ">=3.0.0"
 	}
 }
