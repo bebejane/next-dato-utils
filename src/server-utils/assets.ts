@@ -17,15 +17,11 @@ export async function resizeAndUpload(upload: Upload, config: DatoCmsConfig) {
 
 	console.log('resize and upload', upload.filename);
 
+	const id = upload.id;
 	const start = Date.now();
-	const data = await resizeImage(upload, config);
-	const { newFilePath, newFilename } = data;
+	const { newFilePath, newFilename } = await resizeImage(upload, config);
 	const replace_strategy = upload.filename !== newFilename ? 'create_new_url' : 'keep_url';
-	const newUpload = await client.uploads.update(
-		upload.id,
-		{ path: newFilePath },
-		{ replace_strategy },
-	);
+	const newUpload = await client.uploads.update(id, { path: newFilePath }, { replace_strategy });
 	const res = {
 		success: true,
 		id: newUpload.id,

@@ -26,7 +26,7 @@ export default async function assetManager(req: Request, config: DatoCmsConfig) 
 
 			if (isValid) {
 				waitUntil(
-					resizeAndUpload(upload, config)
+					resizeAndUpload({ ...upload }, config)
 						.then((res) => console.log(res))
 						.catch((err) => console.error(err)),
 				);
