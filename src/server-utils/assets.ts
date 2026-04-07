@@ -15,9 +15,8 @@ export async function resizeAndUpload(upload: Upload, config: DatoCmsConfig) {
 
 	if (!isValidateForResize(upload, config)) return null;
 
-	console.log('resize and upload', upload.filename);
-
-	const id = upload.id;
+	const { id, filename } = upload;
+	console.log('resize and upload', id, filename);
 	const start = Date.now();
 	const { newFilePath, newFilename } = await resizeImage(upload, config);
 	const replace_strategy = upload.filename !== newFilename ? 'create_new_url' : 'keep_url';
