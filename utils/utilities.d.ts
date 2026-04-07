@@ -18,3 +18,4 @@ export declare const sortSwedish: <T>(arr: T[], key: string) => T[];
 export declare const awaitElement: <T>(selector: string, ms?: number) => Promise<T | null>;
 export declare const haveStructuredContent: (content: any) => boolean;
 export declare const isEmail: (email?: string) => boolean;
+export declare function formatBytes(bytes: number, decimals?: number): string;
