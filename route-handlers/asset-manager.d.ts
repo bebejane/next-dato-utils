@@ -1,16 +1,10 @@
 import { DatoCmsConfig } from '../config';
 export default function assetManager(req: Request, config: DatoCmsConfig): Promise<Response>;
-export declare function resizeImage(asset: Asset, config: AssetConfig): Promise<{
+export declare function resizeImage(asset: Asset, config: NonNullable<DatoCmsConfig['assets']>): Promise<{
     newFilePath: string;
     newFilename: string;
     buffer: Buffer<ArrayBufferLike>;
 }>;
-export type AssetConfig = {
-    maxWidth: number;
-    maxHeight: number;
-    maxSize: number;
-    quality: number;
-};
 export type WebookEvent = {
     webhook_call_id: string;
     event_triggered_at: string;

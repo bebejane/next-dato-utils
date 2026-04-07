@@ -86,20 +86,22 @@ export default async function assetManager(req: Request, config: DatoCmsConfig) 
 	});
 }
 
-function validateAsset(asset: Asset, config: AssetConfig): boolean {
+function validateAsset(
+	asset: Asset,
+	{ maxWidth, maxHeight }: NonNullable<DatoCmsConfig['assets']>,
+): boolean {
 	const format = asset.filename.split('.').pop();
 	const formats = ['jpg', 'jpeg', 'tiff', 'tif'];
 	if (!format) return false;
 	if (!asset.is_image) return false;
 	if (!formats.includes(format ?? '')) return false;
-	if (asset.size < config.maxSize) return false;
-	if (asset.width <= config.maxWidth && asset.height <= config.maxHeight) return false;
+	if (asset.width <= maxWidth && asset.height <= maxHeight) return false;
 	return true;
 }
 
 export async function resizeImage(
 	asset: Asset,
-	config: AssetConfig,
+	config: NonNullable<DatoCmsConfig['assets']>,
 ): Promise<{ newFilePath: string; newFilename: string; buffer: Buffer<ArrayBufferLike> }> {
 	const { url, filename, width, height } = asset;
 	const { quality, maxHeight, maxWidth } = config;
@@ -127,13 +129,6 @@ export async function resizeImage(
 	fs.rmSync(filePath);
 	return { newFilePath, newFilename, buffer };
 }
-
-export type AssetConfig = {
-	maxWidth: number;
-	maxHeight: number;
-	maxSize: number;
-	quality: number;
-};
 
 export type WebookEvent = {
 	webhook_call_id: string;

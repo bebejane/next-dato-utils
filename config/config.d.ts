@@ -22,6 +22,5 @@ export type DatoCmsConfig = {
         maxWidth: number;
         maxHeight: number;
         quality: number;
-        maxSize: number;
     };
 };

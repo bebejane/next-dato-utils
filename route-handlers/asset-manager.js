@@ -76,7 +76,7 @@ export default async function assetManager(req, config) {
         }
     });
 }
-function validateAsset(asset, config) {
+function validateAsset(asset, { maxWidth, maxHeight }) {
     const format = asset.filename.split('.').pop();
     const formats = ['jpg', 'jpeg', 'tiff', 'tif'];
     if (!format)
@@ -85,9 +85,7 @@ function validateAsset(asset, config) {
         return false;
     if (!formats.includes(format ?? ''))
         return false;
-    if (asset.size < config.maxSize)
-        return false;
-    if (asset.width <= config.maxWidth && asset.height <= config.maxHeight)
+    if (asset.width <= maxWidth && asset.height <= maxHeight)
         return false;
     return true;
 }
