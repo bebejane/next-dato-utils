@@ -35,6 +35,7 @@ export function isValidateForResize(upload, config) {
         throw new Error('Missing upload config');
     const format = upload.filename.split('.').pop();
     const formats = ['jpg', 'jpeg', 'tiff', 'tif'];
+    const isTiff = format === 'tiff' || format === 'tif';
     if (!format)
         return false;
     if (!upload.is_image)
@@ -43,7 +44,7 @@ export function isValidateForResize(upload, config) {
         return false;
     if (!formats.includes(format ?? ''))
         return false;
-    if (upload.width <= config.assets.maxWidth && upload.height <= config.assets.maxHeight)
+    if (upload.width <= config.assets.maxWidth && upload.height <= config.assets.maxHeight && !isTiff)
         return false;
     return true;
 }
