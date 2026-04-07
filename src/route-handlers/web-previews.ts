@@ -31,7 +31,7 @@ export default async function webPreviews(
 	if (path) {
 		previewLinks.push({
 			label: 'Live',
-			url: `${baseUrl}${path}?secret=${process.env.DATOCMS_PREVIEW_SECRET}`,
+			url: `${baseUrl}${path}`,
 		});
 		previewLinks.push({
 			label: 'Draft',
