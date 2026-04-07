@@ -21,7 +21,7 @@ export default async function assetManager(req, config) {
             const start = Date.now();
             const isValid = isValidateForResize(upload, config);
             if (isValid) {
-                waitUntil(resizeAndUpload({ ...upload }, config)
+                waitUntil(resizeAndUpload({ ...upload, id }, config)
                     .then((res) => console.log(res))
                     .catch((err) => console.error(err)));
             }
