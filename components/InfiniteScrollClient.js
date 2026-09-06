@@ -66,6 +66,6 @@ export default function InfiniteScroll({ id, initial, query, variables, children
             window.removeEventListener('beforeunload', unload);
         };
     }, []);
-    return (_jsxs(_Fragment, { children: [data.map((item, index) => (_jsx(Component, { ...item, ref: index === data.length - 1 ? ref : null }))), _jsx("div", { ref: ref, children: loading && Loader }), error && Error ? (_jsx(Error, { children: error })) : (error && _jsx("div", { style: { color: 'red', marginTop: '1em' }, children: error }))] }));
+    return (_jsxs(_Fragment, { children: [data.map((item, index) => (_jsx(Component, { ...item, ref: index === data.length - 1 ? ref : null }, item?.id ?? index))), _jsx("div", { ref: ref, children: loading && Loader }), error && Error ? (_jsx(Error, { children: error })) : (error && _jsx("div", { style: { color: 'red', marginTop: '1em' }, children: error }))] }));
 }
 //# sourceMappingURL=InfiniteScrollClient.js.map

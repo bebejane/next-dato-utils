@@ -102,8 +102,12 @@ export default function InfiniteScroll<ComponetProps>({
 
 	return (
 		<>
-			{data.map((item: ComponetProps, index: number) => (
-				<Component {...item} ref={index === data.length - 1 ? ref : null} />
+			{data.map((item, index) => (
+				<Component
+					key={(item as any)?.id ?? index}
+					{...item}
+					ref={index === data.length - 1 ? ref : null}
+				/>
 			))}
 			<div ref={ref}>{loading && Loader}</div>
 			{error && Error ? (
