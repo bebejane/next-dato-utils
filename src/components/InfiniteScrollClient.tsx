@@ -59,7 +59,7 @@ export default function InfiniteScroll<ComponetProps>({
 			if (!k) throw 'No data found';
 			const newData = res[k] as ComponetProps[];
 
-			setData((oldData) => {
+			setData((oldData: any) => {
 				const d = [...oldData, ...newData];
 				storage?.setItem(id, JSON.stringify(d));
 				return d;
@@ -102,7 +102,7 @@ export default function InfiniteScroll<ComponetProps>({
 
 	return (
 		<>
-			{data.map((item, index) => (
+			{data.map((item: ComponetProps, index: number) => (
 				<Component {...item} ref={index === data.length - 1 ? ref : null} />
 			))}
 			<div ref={ref}>{loading && Loader}</div>
