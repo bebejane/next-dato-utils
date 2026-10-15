@@ -1,5 +1,5 @@
 import { z } from 'zod';
-export async function signupCampaignMonitorNewsletter(email) {
+export default async function signupCampaignMonitorNewsletter(email) {
     if (!process.env.CAMPAIGN_MONITOR_API_KEY || !process.env.CAMPAIGN_MONITOR_LIST_ID)
         throw new Error('Newsletter signup is not configured');
     try {

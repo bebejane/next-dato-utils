@@ -1,1 +1,1 @@
-export declare function signupCampaignMonitorNewsletter(email: string): Promise<void>;
+export default function signupCampaignMonitorNewsletter(email: string): Promise<void>;
