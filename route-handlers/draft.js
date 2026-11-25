@@ -35,6 +35,7 @@ export default async function draft(request, searchParams) {
         return new Response('Invalid slug', { status: 400 });
     }
     (await draftMode()).enable();
+    console.log('enabled draft mode', slug);
     if (maxAge) {
         const bypassCookie = (await cookies()).get('__prerender_bypass');
         if (!bypassCookie)

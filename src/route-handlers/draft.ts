@@ -44,7 +44,7 @@ export default async function draft(
 	}
 
 	(await draftMode()).enable();
-
+	console.log('enabled draft mode', slug);
 	if (maxAge) {
 		const bypassCookie = (await cookies()).get('__prerender_bypass');
 		if (!bypassCookie) throw new Error('No bypass cookie found');
