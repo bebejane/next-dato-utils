@@ -24,7 +24,7 @@ export default function ContentLink({ color }: { color?: string }) {
 	}, [pathname]);
 
 	console.log({ inIframe, isDevPreview });
-	if (!inIframe || !isDevPreview) return null;
+	if (!inIframe && !isDevPreview) return null;
 
 	return (
 		<DatoContentLink

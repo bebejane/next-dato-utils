@@ -19,7 +19,7 @@ export default function ContentLink({ color }) {
         setCurrentPath(pathname);
     }, [pathname]);
     console.log({ inIframe, isDevPreview });
-    if (!inIframe || !isDevPreview)
+    if (!inIframe && !isDevPreview)
         return null;
     return (_jsx(DatoContentLink, { onNavigateTo: (path) => {
             console.log('navigate', path);
