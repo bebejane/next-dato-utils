@@ -18,6 +18,7 @@ export default function ContentLink({ color }) {
     useEffect(() => {
         setCurrentPath(pathname);
     }, [pathname]);
+    console.log({ inIframe, isDevPreview });
     if (!inIframe || !isDevPreview)
         return null;
     return (_jsx(DatoContentLink, { onNavigateTo: (path) => {

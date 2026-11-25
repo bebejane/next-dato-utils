@@ -23,6 +23,7 @@ export default function ContentLink({ color }: { color?: string }) {
 		setCurrentPath(pathname);
 	}, [pathname]);
 
+	console.log({ inIframe, isDevPreview });
 	if (!inIframe || !isDevPreview) return null;
 
 	return (
